@@ -15,6 +15,7 @@ public class ProyectoFinalDam1 {
      */
     public static void main(String[] args) {
         System.out.println("Proyecto Final");
+        System.out.println("");
                 
     }
     
