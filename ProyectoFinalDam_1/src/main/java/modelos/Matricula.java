@@ -9,5 +9,6 @@ package modelos;
  * @author isard
  */
 public class Matricula {
-    
+    // Aqui va la creacion del objeto Matricula, el cual deberemos meter en la base de datos 
+
 }

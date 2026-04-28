@@ -8,7 +8,7 @@ package pantallas;
  *
  * @author isard
  */
-public class Principal extends javax.swing.JFrame {
+public class Principal extends javax.swing.JFrame { // Aqui va la logica de la Pantalla con Swing 
 
     /**
      * Creates new form Principal

@@ -9,5 +9,6 @@ package modelos;
  * @author isard
  */
 public class LineaMatricula {
-    
+    // Aqui va la creacion del objeto LineaMatricula, el cual deberemos meter en la base de datos 
+
 }

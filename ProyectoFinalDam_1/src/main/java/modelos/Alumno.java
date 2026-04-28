@@ -9,5 +9,5 @@ package modelos;
  * @author isard
  */
 public class Alumno {
-    
+    // Aqui va la creacion del objeto Alumno, el cual deberemos meter en la base de datos 
 }

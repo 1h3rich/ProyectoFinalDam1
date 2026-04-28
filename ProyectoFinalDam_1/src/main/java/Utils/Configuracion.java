@@ -9,5 +9,5 @@ package Utils;
  * @author isard
  */
 public class Configuracion {
-    
+    //Aqui van las constantes del proyecto, por ejemplo las rutas de los ficheros
 }

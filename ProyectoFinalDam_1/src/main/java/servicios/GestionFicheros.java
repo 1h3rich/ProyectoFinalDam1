@@ -9,5 +9,5 @@ package servicios;
  * @author isard
  */
 public class GestionFicheros {
-    
+    // En esta clase se va a encontrar todos los metodos necesarios para la gestion de ficheros (csv, txt, json, etc)
 }

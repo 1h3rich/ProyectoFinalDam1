@@ -9,5 +9,6 @@ package modelos;
  * @author isard
  */
 public class Ciclo {
-    
+    // Aqui va la creacion del objeto Ciclo, el cual deberemos meter en la base de datos 
+
 }
