@@ -2,13 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Utils;
+package interfaces;
 
 /**
  *
  * @author isard
  */
-public class Configuracion {
-    //Aqui van las constantes del proyecto, por ejemplo las rutas de los ficheros
-
+public interface ConvertirTexto {
+    public void convertirCSV();
+    public void convertirJSON();
+    public void convertirBinario();
+    public void convertirTXT();
 }
