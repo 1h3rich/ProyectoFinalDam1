@@ -38,7 +38,8 @@ public class Modulo implements persistenciaSQL{
     }
     
     public int obtenerCodigoSQL(){
-     return 0 ; //Aqui habra que devolver el codigo del modulo de la base de datos
+     int codigoSQL = 0;
+     return codigoSQL; //Aqui habra que devolver el codigo del modulo de la base de datos
     }
     
     

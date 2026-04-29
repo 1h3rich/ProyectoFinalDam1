@@ -15,7 +15,7 @@ public class Matricula {
     private int codigo;
     private int codigo_alumno ;
     private Alumno alumno;
-    private LocalDate año_academico;
+    private int año_academico;
     private String estado;
     private double importe;
 
@@ -25,7 +25,7 @@ public class Matricula {
      * @param estado
      * @param importe
      */
-    public Matricula(LocalDate año_academico, String estado, double importe) {
+    public Matricula(int año_academico, String estado, double importe) {
         this.año_academico = año_academico;
         this.estado = estado;
         this.importe = importe;
@@ -35,7 +35,8 @@ public class Matricula {
     
     
     public int obtenerCodigoSQL(){
-     return 0 ; //Aqui habra que devolver el codigo del Matricula de la base de datos
+     int codigoSQL = 0;
+     return codigoSQL; //Aqui habra que devolver el codigo del Matricula de la base de datos
     }
     
 }
