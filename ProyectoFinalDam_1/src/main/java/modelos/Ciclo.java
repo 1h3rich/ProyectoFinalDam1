@@ -20,8 +20,17 @@ public class Ciclo implements persistenciaSQL{
     private final int horasCiclo;
     private final int añoCurricular;
 
+    /**
+     * Aqui habra que igualar el codigo al de la base de datos con el metodo 
+     * @param codigo
+     * @param nombre
+     * @param denominacion
+     * @param familiaProfesional
+     * @param horasCiclo
+     * @param añoCurricular
+     */
     public Ciclo(int codigo, String nombre, String denominacion, String familiaProfesional, int horasCiclo, int añoCurricular) {
-        this.codigo = codigo;
+        this.codigo = codigo; 
         this.nombre = nombre;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
