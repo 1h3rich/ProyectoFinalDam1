@@ -5,13 +5,12 @@
 package modelos;
 
 import interfaces.interpolaridadDeDatos;
-import interfaces.persistenciaSQL;
 
 /**
  *
  * @author isard
  */
-public class Modulo implements persistenciaSQL{
+public class Modulo{
     // Aqui va la creacion del objeto Modulo, el cual deberemos meter en la base de datos 
     private int codigo;
     private int codigo_ciclo;
@@ -35,19 +34,7 @@ public class Modulo implements persistenciaSQL{
         this.horas = horas;
         //this.codigo = this.obtenerCodigoSQL();
         //this.codigo_ciclo = ciclo.obtenerCodigoSQL();
-    }
-    
-    @Override
-    public int obtenerCodigoSQL(){
-     int codigoSQL = 0;
-     
-     
-     return codigoSQL; //Aqui habra que devolver el codigo del modulo de la base de datos
-     
-     
-     
-    }
-    
+    }    
     
          
 }

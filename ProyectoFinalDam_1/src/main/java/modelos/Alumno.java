@@ -3,15 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelos;
-
-import interfaces.persistenciaSQL;
 import java.time.LocalDate;
+import servicios.GestionBaseDeDatos;
 
 /**
  *
  * @author isard
  */
-public class Alumno implements persistenciaSQL{
+public class Alumno{
     // Aqui va la creacion del objeto Alumno, el cual deberemos meter en la base de datos 
     
     private final int codigo;
@@ -22,22 +21,12 @@ public class Alumno implements persistenciaSQL{
     private final String correo;
 
     public Alumno(String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
-        this.codigo = obtenerCodigoSQL(); 
+        this.codigo = GestionBaseDeDatos.leerCodigoBDD("alumno");
         this.nombre = nombre;
         this.fecha_nacimiento = fecha_nacimiento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
-    }
-    
-    /**
-     * Obtiene el codigo y devuelve el codigo para mantener los mismos codigos entre el programa y la BDD.
-     * @return 
-     */
-    @Override
-    public final int obtenerCodigoSQL() {
-        int codigoSQL = 0;
-        return codigoSQL;
     }
     
     

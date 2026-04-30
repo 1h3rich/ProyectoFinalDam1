@@ -4,8 +4,6 @@
  */
 package modelos;
 
-import java.time.LocalDate;
-
 /**
  *
  * @author isard
@@ -20,7 +18,7 @@ public class Matricula {
     private double importe;
 
     /**
-     *
+     * AÑADIR MATRICULA MANUAL
      * @param año_academico
      * @param estado
      * @param importe
@@ -32,11 +30,49 @@ public class Matricula {
         //this.codigo = this.obtenerCodigoSQL();
         //this.codigo_alumno = alumno.obtenerCodigoSQL();
     }
-    
-    
-    public int obtenerCodigoSQL(){
-     int codigoSQL = 0;
-     return codigoSQL; //Aqui habra que devolver el codigo del Matricula de la base de datos
+
+    /**
+     * Constructor automatico para los datos obtenidos desde la base de datos
+     * @param codigo
+     * @param codigo_alumno
+     * @param año_academico
+     * @param estado
+     * @param importe 
+     */
+    public Matricula(int codigo, int codigo_alumno, int año_academico, String estado, double importe) {
+        this.codigo = codigo;
+        this.codigo_alumno = codigo_alumno;
+        this.año_academico = año_academico;
+        this.estado = estado;
+        this.importe = importe;
     }
+    
+    //Getters
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public int getCodigo_alumno() {
+        return codigo_alumno;
+    }
+
+    public Alumno getAlumno() {
+        return alumno;
+    }
+
+    public int getAño_academico() {
+        return año_academico;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public double getImporte() {
+        return importe;
+    }
+    
+    
     
 }
