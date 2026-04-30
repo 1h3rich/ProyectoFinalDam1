@@ -3,9 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelos;
-
-import interfaces.interpolaridadDeDatos;
-
+import servicios.GestionBaseDeDatos;
 /**
  *
  * @author isard
@@ -21,7 +19,7 @@ public class Modulo{
     private int horas;
 
     /**
-     *
+     * Creacion manual de nuevos modulos desde el programa
      * @param nombre
      * @param curso
      * @param creditos_ects
@@ -32,9 +30,29 @@ public class Modulo{
         this.curso = curso;
         this.creditos_ects = creditos_ects;
         this.horas = horas;
-        //this.codigo = this.obtenerCodigoSQL();
-        //this.codigo_ciclo = ciclo.obtenerCodigoSQL();
+        this.codigo = GestionBaseDeDatos.leerCodigoBDD("modulo");
+        this.codigo_ciclo = GestionBaseDeDatos.leerCodigoBDD("ciclo");
     }    
+
+    /**
+     * Creacion automatica desde la base de datos
+     * @param codigo
+     * @param codigo_ciclo
+     * @param nombre
+     * @param curso
+     * @param creditos_ects
+     * @param horas 
+     */
+    public Modulo(int codigo, int codigo_ciclo, String nombre, String curso, int creditos_ects, int horas) {
+        this.codigo = codigo;
+        this.codigo_ciclo = codigo_ciclo;
+        this.nombre = nombre;
+        this.curso = curso;
+        this.creditos_ects = creditos_ects;
+        this.horas = horas;
+    }
+    
+    
     
          
 }

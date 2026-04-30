@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.Matricula;
+import modelos.Modulo;
 
 /**
  *
@@ -17,10 +18,12 @@ import modelos.Matricula;
 public class GestionBaseDeDatos {
 
     private static Connection con;
+
     /**
-     * Aunque no es necesario, se comprubea el driver e informa, además despues prueba la conexion, confirma y entonces se queda abierta
-     * hasta que un metodo posterior la cierre.
-     * 
+     * Aunque no es necesario, se comprubea el driver e informa, además despues
+     * prueba la conexion, confirma y entonces se queda abierta hasta que un
+     * metodo posterior la cierre.
+     *
      * Si algo falla, salta el try catch.
      */
     public static void vincularBDD() {
@@ -32,7 +35,7 @@ public class GestionBaseDeDatos {
             try {
                 con = DriverManager.getConnection(Configuracion.urlSQL, Configuracion.nombreUsuarioSQL, Configuracion.contraseñaSQL);
                 System.out.println("Conexion exitosa");
-                
+
             } catch (SQLException e) {
                 System.out.println("Fallo en la conexion, error: " + e.getMessage());
             }
@@ -42,71 +45,117 @@ public class GestionBaseDeDatos {
 
     }
 
+    
+    /**
+     * Lee todas las matriculas y las crea en el programa
+     */
     public static void leerMatriculaBDD() {
-        try{
-            String consulta = "Select * from matricula";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(consulta);
-            
-            while(rs.next()){
+        try {
+            PreparedStatement pstm = con.prepareCall("Select * from matricula");
+            ResultSet rs = pstm.executeQuery();
+
+            while (rs.next()) {
                 int codigo = rs.getInt("codigo");
                 int codigoAlumno = rs.getInt("codigo_alumno");
                 int anyoAcademico = rs.getInt("año_academico");
                 String estado = rs.getString("estado");
                 double importe = rs.getDouble("importe");
-                
+
                 Matricula matricula = new Matricula(codigo, codigoAlumno, anyoAcademico, estado, importe);
-                
-                System.out.println(matricula.getCodigo());
             }
-            
-        }catch(SQLException e){
-            
+
+        } catch (SQLException e) {
+            System.out.println("Error en la lectura, error: " + e);
         }
     }
 
+    /**
+     * Lee todos los modulos y los crea en el programa
+     */
     public static void leerModulosBDD() {
+        try {
+            PreparedStatement pstm = con.prepareCall("Select * from modulo");
+            ResultSet rs = pstm.executeQuery();
 
+            while (rs.next()) {
+                int codigo = rs.getInt("codigo");
+                int codigoCiclo = rs.getInt("codigo_ciclo");
+                String nombre = rs.getString("nombre");
+                String curso = rs.getString("curso");
+                int creditosEtcs = rs.getInt("creditos_ects");
+                int horas = rs.getInt("horas");
+
+                Modulo Modulo = new Modulo(codigo, codigoCiclo, nombre, curso, creditosEtcs, horas);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error en la lectura, error: " + e);
+        }
     }
 
+    
+    /**
+     * Lee todos los ciclos y los crea en el programa
+     */
     public static void leerCiclosBDD() {
 
     }
-
+    /**
+     * Lee todos los alumnos y los crea en el programa
+     */
     public static void leerAlumnosBDD() {
 
     }
 
+    /**
+     * Lee todas las lineas de la lineaMatricula y las crea en el programa
+     */
     public static void leerLineaMatriculaBDD() {
-        
+
     }
-    
-    public static int leerCodigoBDD(String string){
+
+    /**
+     * Lee el codigo del parametro dado.
+     * @param string
+     * @return 
+     */
+    public static int leerCodigoBDD(String string) {
         String temp = "";
         int codigo = -1;
-        if(string.equalsIgnoreCase("alumno")) temp = "alumno";
-        if(string.equalsIgnoreCase("ciclo")) temp = "ciclo";
-        if(string.equalsIgnoreCase("lineamatricula")) temp = "linea_matricula";
-        if(string.equalsIgnoreCase("matricula")) temp = "matricula";
-        if(string.equalsIgnoreCase("modulo")) temp = "modulo";
+        if (string.equalsIgnoreCase("alumno")) {
+            temp = "alumno";
+        }
+        if (string.equalsIgnoreCase("ciclo")) {
+            temp = "ciclo";
+        }
+        if (string.equalsIgnoreCase("lineamatricula")) {
+            temp = "linea_matricula";
+        }
+        if (string.equalsIgnoreCase("matricula")) {
+            temp = "matricula";
+        }
+        if (string.equalsIgnoreCase("modulo")) {
+            temp = "modulo";
+        }
 
-        try{
-            //String consulta = "Select count(codigo) from" + temp;
+        try {
             PreparedStatement stmt = con.prepareStatement("Select count(codigo) from ?");
             stmt.setString(1, temp);
             ResultSet rs = stmt.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 codigo = rs.getInt("codigo");
             }
-            
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Ha ocurrido un error: " + e);
         }
         return codigo++;
     }
-    
-    public static void cerrarBDD(){
+
+    /**
+     * Cierra la conexion
+     */
+    public static void cerrarBDD() {
         try {
             con.close();
         } catch (SQLException ex) {

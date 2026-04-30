@@ -4,6 +4,7 @@
  */
 package modelos;
 import java.time.LocalDate;
+import java.util.HashSet;
 import servicios.GestionBaseDeDatos;
 
 /**
@@ -11,7 +12,6 @@ import servicios.GestionBaseDeDatos;
  * @author isard
  */
 public class Alumno{
-    // Aqui va la creacion del objeto Alumno, el cual deberemos meter en la base de datos 
     
     private final int codigo;
     private final String nombre;
@@ -19,9 +19,36 @@ public class Alumno{
     private final String domicilio;
     private final int telefono;
     private final String correo;
+    private HashSet<Matricula> matriculas;
 
+    /**
+     * Creacion automatica desde la base de datos
+     * @param nombre
+     * @param fecha_nacimiento
+     * @param domicilio
+     * @param telefono
+     * @param correo 
+     */
     public Alumno(String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
         this.codigo = GestionBaseDeDatos.leerCodigoBDD("alumno");
+        this.nombre = nombre;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.domicilio = domicilio;
+        this.telefono = telefono;
+        this.correo = correo;
+    }
+
+    /**
+     * Creacion automatica desde la base de datos
+     * @param codigo
+     * @param nombre
+     * @param fecha_nacimiento
+     * @param domicilio
+     * @param telefono
+     * @param correo 
+     */
+    public Alumno(int codigo, String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
+        this.codigo = codigo;
         this.nombre = nombre;
         this.fecha_nacimiento = fecha_nacimiento;
         this.domicilio = domicilio;

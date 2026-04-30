@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelos;
-
+import java.util.ArrayList;
+import servicios.GestionBaseDeDatos;
 /**
  *
  * @author isard
@@ -16,9 +17,10 @@ public class Matricula {
     private int año_academico;
     private String estado;
     private double importe;
+    private ArrayList<LineaMatricula> lineasMatriculas;
 
     /**
-     * AÑADIR MATRICULA MANUAL
+     * Creador manual de nuevas matriculas desde el programa
      * @param año_academico
      * @param estado
      * @param importe
@@ -27,12 +29,12 @@ public class Matricula {
         this.año_academico = año_academico;
         this.estado = estado;
         this.importe = importe;
-        //this.codigo = this.obtenerCodigoSQL();
-        //this.codigo_alumno = alumno.obtenerCodigoSQL();
+        this.codigo = GestionBaseDeDatos.leerCodigoBDD("matricula");
+        this.codigo_alumno = GestionBaseDeDatos.leerCodigoBDD("alumno");
     }
 
     /**
-     * Constructor automatico para los datos obtenidos desde la base de datos
+     * Creacion automatica de matriculas registradas en la BDD
      * @param codigo
      * @param codigo_alumno
      * @param año_academico
