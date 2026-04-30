@@ -5,10 +5,12 @@
 package Utils;
 
 /**
- *
+ * Aqui se almacenan las constantes necesarias para el correcto funcionamiento de la aplicación.
  * @author isard
  */
 public class Configuracion {
-    //Aqui van las constantes del proyecto, por ejemplo las rutas de los ficheros
-
+    public static String urlSQL = "root@127.0.0.1:3306";
+    public static String nombreUsuarioSQL = "root";
+    public static String contraseñaSQL = "alumno";
+    
 }
