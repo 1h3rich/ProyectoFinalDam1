@@ -14,23 +14,18 @@ public class LineaMatricula { // En esta clase no hace falta implementar la inte
     private Matricula matricula;
     private int codigo_modulo;
     private Modulo modulo;
-    private int año_academico;
-    private String estado;
-    private double importe;
+    private int repeticion;
+    private double calificacion_primera;
+    private double calificacion_segunda;
 
-    /**
-     *
-     * @param año_academico
-     * @param estado
-     * @param importe
-     */
-    public LineaMatricula(int año_academico, String estado, double importe) {
-        this.año_academico = año_academico;
-        this.estado = estado;
-        this.importe = importe;
+    public LineaMatricula(int repeticion, double calificacion_primera, double calificacion_segunda) {
+        this.repeticion = repeticion;
+        this.calificacion_primera = calificacion_primera;
+        this.calificacion_segunda = calificacion_segunda;
         //this.codigo_modulo = modulo.obtenerCodigoSQL();
         //this.codigo_matricula = matricula.obtenerCodigoSQL();
     }
+
     
     
     

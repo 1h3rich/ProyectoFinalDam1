@@ -21,7 +21,7 @@ public class Alumno implements persistenciaSQL{
     private final int telefono;
     private final String correo;
 
-    public Alumno(int codigo, String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
+    public Alumno(String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
         this.codigo = obtenerCodigoSQL(); 
         this.nombre = nombre;
         this.fecha_nacimiento = fecha_nacimiento;

@@ -9,6 +9,7 @@ package Utils;
  * @author isard
  */
 public class Configuracion {
+    
     public static String urlSQL = "root@127.0.0.1:3306";
     public static String nombreUsuarioSQL = "root";
     public static String contraseñaSQL = "alumno";

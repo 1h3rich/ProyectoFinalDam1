@@ -29,8 +29,8 @@ public class Ciclo implements persistenciaSQL{
      * @param horasCiclo
      * @param añoCurricular
      */
-    public Ciclo(int codigo, String nombre, String denominacion, String familiaProfesional, int horasCiclo, int añoCurricular) {
-        this.codigo = codigo; 
+    public Ciclo(String nombre, String denominacion, String familiaProfesional, int horasCiclo, int añoCurricular) {
+        this.codigo = obtenerCodigoSQL(); 
         this.nombre = nombre;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
