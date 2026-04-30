@@ -28,6 +28,7 @@ public class ProyectoFinalDam1 {
         GestionBaseDeDatos.vincularBDD();
         
         //Pruebas modelos
+        
         //Alumno alumno_1 = new Alumno(nombre, LocalDate.MIN, domicilio, 0, correo);
         //Ciclo cilo_1 = new Ciclo(0, nombre, denominacion, familiaProfesional, 0, 0);
         //LineaMatricula lineaMatricula_1 = new LineaMatricula(0, 0, 0);
