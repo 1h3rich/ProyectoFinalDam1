@@ -37,6 +37,7 @@ public class Modulo implements persistenciaSQL{
         //this.codigo_ciclo = ciclo.obtenerCodigoSQL();
     }
     
+    @Override
     public int obtenerCodigoSQL(){
      int codigoSQL = 0;
      
