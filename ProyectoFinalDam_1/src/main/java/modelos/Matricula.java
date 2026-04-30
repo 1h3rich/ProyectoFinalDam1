@@ -72,6 +72,10 @@ public class Matricula {
     public double getImporte() {
         return importe;
     }
+
+    public void setAlumno(Alumno alumno) {
+        this.alumno = alumno;
+    }
     
     
     
