@@ -4,6 +4,7 @@
  */
 package Utils;
 
+import Config.appConfig;
 import java.io.File;
 
 /**
@@ -13,7 +14,7 @@ import java.io.File;
 public class Validadores {
     
      public static boolean comprobarFichero(String temp) {
-        File archivo = new File(Configuracion.ficheroAlumno + temp);
+        File archivo = new File(appConfig.ficheroAlumno + temp);
 
         if (archivo.exists() && archivo.length() == 0) {
             System.out.println("El archivo está vacio");

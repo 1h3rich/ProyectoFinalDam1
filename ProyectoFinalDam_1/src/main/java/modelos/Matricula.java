@@ -13,7 +13,6 @@ public class Matricula {
     // Aqui va la creacion del objeto Matricula, el cual deberemos meter en la base de datos 
     private int codigo;
     private int codigo_alumno ;
-    private Alumno alumno;
     private int año_academico;
     private String estado;
     private double importe;
@@ -31,6 +30,7 @@ public class Matricula {
         this.importe = importe;
         this.codigo = GestionBaseDeDatos.leerCodigoBDD("matricula");
         this.codigo_alumno = GestionBaseDeDatos.leerCodigoBDD("alumno");
+        this.lineasMatriculas = new ArrayList<>();
     }
 
     /**
@@ -47,6 +47,13 @@ public class Matricula {
         this.año_academico = año_academico;
         this.estado = estado;
         this.importe = importe;
+        this.lineasMatriculas = new ArrayList<>();
+    }
+    
+    //Metodos
+    
+    public void agregarLineaMatriculas(LineaMatricula lineasMatriculas){
+        this.lineasMatriculas.add(lineasMatriculas);
     }
     
     //Getters
@@ -59,10 +66,6 @@ public class Matricula {
         return codigo_alumno;
     }
 
-    public Alumno getAlumno() {
-        return alumno;
-    }
-
     public int getAño_academico() {
         return año_academico;
     }
@@ -73,10 +76,6 @@ public class Matricula {
 
     public double getImporte() {
         return importe;
-    }
-
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
     }
     
     

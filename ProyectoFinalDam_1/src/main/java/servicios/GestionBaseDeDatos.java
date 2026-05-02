@@ -4,12 +4,11 @@
  */
 package servicios;
 
-import Utils.Configuracion;
+import Config.appConfig;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelos.Matricula;
-import modelos.Modulo;
+import modelos.*;
 
 /**
  *
@@ -33,7 +32,7 @@ public class GestionBaseDeDatos {
 
             System.out.println("Probando conexion...");
             try {
-                con = DriverManager.getConnection(Configuracion.urlSQL, Configuracion.nombreUsuarioSQL, Configuracion.contraseñaSQL);
+                con = DriverManager.getConnection(appConfig.urlSQL, appConfig.nombreUsuarioSQL, appConfig.contraseñaSQL);
                 System.out.println("Conexion exitosa");
 
             } catch (SQLException e) {
@@ -45,7 +44,6 @@ public class GestionBaseDeDatos {
 
     }
 
-    
     /**
      * Lee todas las matriculas y las crea en el programa
      */
@@ -93,13 +91,13 @@ public class GestionBaseDeDatos {
         }
     }
 
-    
     /**
      * Lee todos los ciclos y los crea en el programa
      */
     public static void leerCiclosBDD() {
 
     }
+
     /**
      * Lee todos los alumnos y los crea en el programa
      */
@@ -116,8 +114,9 @@ public class GestionBaseDeDatos {
 
     /**
      * Lee el codigo del parametro dado.
+     *
      * @param string
-     * @return 
+     * @return
      */
     public static int leerCodigoBDD(String string) {
         String temp = "";
@@ -150,6 +149,34 @@ public class GestionBaseDeDatos {
             System.out.println("Ha ocurrido un error: " + e);
         }
         return codigo++;
+    }
+
+    public static void insertarBDD(Object obj) {
+        vincularBDD();
+        try {
+            if (obj instanceof Alumno alumno) {
+                String query = inserciones.insertarAlumno(alumno);
+                PreparedStatement ps = con.prepareStatement(query);
+            }
+            if (obj instanceof Matricula matricula) {
+                String query = inserciones.insertarMatricula(matricula);
+                PreparedStatement ps = con.prepareStatement(query);
+            }
+            if (obj instanceof LineaMatricula lineaMatricula) {
+                String query = inserciones.insertarLineaMatricula(lineaMatricula);
+                PreparedStatement ps = con.prepareStatement(query);
+            }
+            if (obj instanceof Ciclo ciclo) {
+                String query = inserciones.insertarCiclo(ciclo);
+                PreparedStatement ps = con.prepareStatement(query);
+            }
+            if (obj instanceof Modulo modulo) {
+                String query = inserciones.insertarModulo(modulo);
+                PreparedStatement ps = con.prepareStatement(query);
+            }
+        } catch(SQLException e)  {
+
+        }
     }
 
     /**

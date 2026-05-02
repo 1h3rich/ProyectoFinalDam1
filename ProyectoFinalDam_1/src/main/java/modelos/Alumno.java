@@ -7,7 +7,7 @@ package modelos;
 import java.util.HashSet;
 import servicios.GestionBaseDeDatos;
 import servicios.GestionFicheros;
-import Utils.Configuracion;
+import Config.appConfig;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.io.FileReader;
  *
  * @author isard
  */
-public class Alumno implements interfaces.interpolaridadDeDatos{
+public class Alumno implements interfaces.interpolaridadDeDatos {
 
     private final int codigo;
     private final String nombre;
@@ -33,7 +33,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
     private HashSet<Matricula> matriculas;
 
     /**
-     * Creacion automatica desde la base de datos
+     * Creacion manual
      *
      * @param nombre
      * @param fechaNacimiento
@@ -48,10 +48,11 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
+        this.matriculas = new HashSet<>();
     }
 
     /**
-     * Creacion manual desde la aplicacion
+     * Creacion desde la base de datos
      *
      * @param codigo
      * @param nombre
@@ -67,6 +68,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
+        this.matriculas = new HashSet<>();
     }
 
     /**
@@ -74,10 +76,10 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
      */
     @Override
     public void saveToCSV() {
-        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".csv");
+        GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".csv");
 
         try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(Configuracion.ficheroAlumno + ".csv", true))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroAlumno + ".csv", true))) {
                 bw.write(toCSV());
                 bw.newLine();
                 bw.close();
@@ -93,8 +95,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
      */
     @Override
     public void saveToJSON() {
-        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".json");
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Configuracion.ficheroAlumno + ".json", true))) {
+        GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".json");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroAlumno + ".json", true))) {
 
             bw.write(toJSON());
             bw.newLine();
@@ -110,8 +112,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
      */
     @Override
     public void saveToBinario() {
-        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".dat");
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(Configuracion.ficheroAlumno + ".dat", true))) {
+        GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".dat");
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(appConfig.ficheroAlumno + ".dat", true))) {
 
             dos.writeInt(codigo);
             dos.writeUTF(nombre);
@@ -119,6 +121,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
             dos.writeUTF(domicilio);
             dos.writeInt(telefono);
             dos.writeUTF(correo);
+            dos.close();
 
         } catch (IOException e) {
             System.out.println("Error al guardar JSON: " + e.getMessage());
@@ -130,10 +133,10 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
      */
     @Override
     public void saveToTXT() {
-        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".txt");
+        GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".txt");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(Configuracion.ficheroAlumno + ".txt", true))) {
+                new FileWriter(appConfig.ficheroAlumno + ".txt", true))) {
 
             bw.write(toTXT());
             bw.close();
@@ -150,17 +153,17 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
         if (Utils.Validadores.comprobarFichero(".csv")) {
             String linea;
             try {
-                BufferedReader br = new BufferedReader(new FileReader(Configuracion.ficheroAlumno + ".txt"));
-                while((linea = br.readLine()) != null){
+                BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroAlumno + ".txt"));
+                while ((linea = br.readLine()) != null) {
                     String[] datos = linea.split(";");
-                    
+
                     int tempCode = Integer.parseInt(datos[0]);
                     String tempName = datos[1];
                     String tempFechaNacimiento = datos[2];
                     String tempDomicilio = datos[3];
                     String tempTelefono = datos[4];
                     String tempCorreo = datos[5];
-                    
+
                     System.out.println("Codigo: " + tempCode);
                     System.out.println("Codigo: " + tempName);
                     System.out.println("Codigo: " + tempFechaNacimiento);
@@ -168,15 +171,19 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
                     System.out.println("Codigo: " + tempTelefono);
                     System.out.println("Codigo: " + tempCorreo);
                     System.out.println("-----------------");
+
+                    Alumno alumno = new Alumno(codigo, nombre, fechaNacimiento, domicilio, telefono, correo);
                     
+
                 }
             } catch (IOException e) {
                 System.out.println("Error al leer el archivo CSV");
             }
-           
+
         }
     }
 
+    //Override's
     @Override
     public void objFromJSON() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -238,4 +245,20 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
                 + "Correo: " + correo + "\n"
                 + "------------------------------\n";
     }
+
+    //Metodos de la clase
+    public void agregarMatriculas(Matricula matriculas) {
+        this.matriculas.add(matriculas);
+    }
+
+    //Getters
+    
+    public HashSet<Matricula> getMatriculas() {
+        return matriculas;
+    }
+    
+    public int getCodigo() {
+        return codigo;
+    }
+
 }

@@ -12,7 +12,6 @@ public class Modulo{
     // Aqui va la creacion del objeto Modulo, el cual deberemos meter en la base de datos 
     private int codigo;
     private int codigo_ciclo;
-    private Ciclo ciclo;
     private String nombre;
     private String curso;
     private int creditos_ects;
@@ -52,6 +51,12 @@ public class Modulo{
         this.horas = horas;
     }
     
+    
+    // Getters
+
+    public int getCodigo() {
+        return codigo;
+    }
     
     
          

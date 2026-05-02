@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Utils;
+package Config;
 
 /**
  * Aqui se almacenan las constantes necesarias para el correcto funcionamiento de la aplicación.
  * @author isard
  */
-public class Configuracion {
+public class appConfig {
     
     // SQL
     public static String urlSQL = "jdbc:mysql://127.0.0.1:3306/centro_formacion";
@@ -18,5 +18,4 @@ public class Configuracion {
     // Ficheros
     
     public static String ficheroAlumno = "alumno";
-    
 }
