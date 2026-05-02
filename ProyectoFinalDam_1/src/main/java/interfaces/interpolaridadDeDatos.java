@@ -12,19 +12,26 @@ package interfaces;
  */
 public interface interpolaridadDeDatos {
     
-    //Conversiones a distintos tipos de ficheros
+    //Guardar a distintos tipos de ficheros
     
-    public void convertirToCSV();
-    public void convertirToJSON();
-    public void convertirtToBinario();
-    public void convertirToTXT();
+    public void saveToCSV();
+    public void saveToJSON();
+    public void saveToBinario();
+    public void saveToTXT();
     
     //Conversion de fichero a objetos
     
-    public void convertirFromCSV();
-    public void convertirFromJSON();
-    public void convertirFromBinario();
-    public void convertirFromTXT();
+    public void objFromCSV();
+    public void objFromJSON();
+    public void objFromBinario();
+    public void objFromTXT();
+    
+    //Conversion de datos
+    
+    public String toCSV();
+    public String toJSON();
+    public String toTXT();
+    
     
     //Obtener datos de la BDD y convertir en TXT (Por ejemplo)
     

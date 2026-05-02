@@ -6,12 +6,17 @@ package modelos;
 import java.time.LocalDate;
 import java.util.HashSet;
 import servicios.GestionBaseDeDatos;
+import servicios.GestionFicheros;
+import Utils.Configuracion;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  *
  * @author isard
  */
-public class Alumno{
+public class Alumno implements interfaces.interpolaridadDeDatos{
     
     private final int codigo;
     private final String nombre;
@@ -54,6 +59,81 @@ public class Alumno{
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
+    }
+
+    @Override
+    public void saveToCSV() {
+        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".csv");
+        
+        try {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(Configuracion.ficheroAlumno + ".csv", true))) {
+                bw.write(toCSV());
+                bw.newLine();
+            }
+            
+        } catch (IOException e) {
+            System.out.println("Ha ocurrido un error inesperado " + e);
+        }
+    }
+
+    @Override
+    public void saveToJSON() {
+        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".json");
+    }
+
+    @Override
+    public void saveToBinario() {
+        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".dat");
+    }
+
+    @Override
+    public void saveToTXT() {
+        GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".txt");
+    }
+
+    @Override
+    public void objFromCSV() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void objFromJSON() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void objFromBinario() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void objFromTXT() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String SQLtoTXT() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String TXTtoSQL() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String toCSV() {
+        return codigo + ";" + nombre + ";" + fecha_nacimiento + ";" + domicilio + ";" + telefono + ";" + correo;
+    }
+
+    @Override
+    public String toJSON() {
+         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String toTXT() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

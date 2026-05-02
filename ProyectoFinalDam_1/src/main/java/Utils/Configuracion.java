@@ -10,8 +10,13 @@ package Utils;
  */
 public class Configuracion {
     
+    // SQL
     public static String urlSQL = "jdbc:mysql://127.0.0.1:3306/centro_formacion";
     public static String nombreUsuarioSQL = "root";
     public static String contraseñaSQL = "alumno";
+    
+    // Ficheros
+    
+    public static String ficheroAlumno = "alumno";
     
 }

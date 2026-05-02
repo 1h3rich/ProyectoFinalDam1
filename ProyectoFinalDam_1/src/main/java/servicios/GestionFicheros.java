@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package servicios;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,7 +22,12 @@ public class GestionFicheros {
     public static void crearFichero(String ruta){
         File f = new File(ruta);
         try {
-            f.createNewFile();
+            if(f.createNewFile()){
+                System.out.println("Fichero creado correctamente");                        
+            }else{
+                System.out.println("Fichero ya existente");
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
         }
