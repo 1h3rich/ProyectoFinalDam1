@@ -10,9 +10,10 @@ package interfaces;
  * @autor Luis
  * @autor David
  */
-public interface interpolaridadDeDatos {
+public abstract interface interpolaridadDeDatos {
     
     //Guardar a distintos tipos de ficheros
+    
     
     public void saveToCSV();
     public void saveToJSON();

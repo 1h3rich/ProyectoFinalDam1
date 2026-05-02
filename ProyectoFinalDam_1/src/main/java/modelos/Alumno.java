@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelos;
-import java.time.LocalDate;
+
 import java.util.HashSet;
 import servicios.GestionBaseDeDatos;
 import servicios.GestionFicheros;
@@ -11,16 +11,22 @@ import Utils.Configuracion;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 
 /**
  *
  * @author isard
  */
 public class Alumno implements interfaces.interpolaridadDeDatos{
-    
+
     private final int codigo;
     private final String nombre;
-    private final LocalDate fecha_nacimiento;
+    private final String fechaNacimiento;
     private final String domicilio;
     private final int telefono;
     private final String correo;
@@ -28,72 +34,147 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
 
     /**
      * Creacion automatica desde la base de datos
+     *
      * @param nombre
-     * @param fecha_nacimiento
+     * @param fechaNacimiento
      * @param domicilio
      * @param telefono
-     * @param correo 
+     * @param correo
      */
-    public Alumno(String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
+    public Alumno(String nombre, String fechaNacimiento, String domicilio, int telefono, String correo) {
         this.codigo = GestionBaseDeDatos.leerCodigoBDD("alumno");
         this.nombre = nombre;
-        this.fecha_nacimiento = fecha_nacimiento;
+        this.fechaNacimiento = fechaNacimiento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
     }
 
     /**
-     * Creacion automatica desde la base de datos
+     * Creacion manual desde la aplicacion
+     *
      * @param codigo
      * @param nombre
-     * @param fecha_nacimiento
+     * @param fechaNacimiento
      * @param domicilio
      * @param telefono
-     * @param correo 
+     * @param correo
      */
-    public Alumno(int codigo, String nombre, LocalDate fecha_nacimiento, String domicilio, int telefono, String correo) {
+    public Alumno(int codigo, String nombre, String fechaNacimiento, String domicilio, int telefono, String correo) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.fecha_nacimiento = fecha_nacimiento;
+        this.fechaNacimiento = fechaNacimiento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
     }
 
+    /**
+     * Guarda los alumnos en un archivo CSV
+     */
     @Override
     public void saveToCSV() {
         GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".csv");
-        
+
         try {
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(Configuracion.ficheroAlumno + ".csv", true))) {
                 bw.write(toCSV());
                 bw.newLine();
+                bw.close();
             }
-            
+
         } catch (IOException e) {
             System.out.println("Ha ocurrido un error inesperado " + e);
         }
     }
 
+    /**
+     * Guarda los alumnos en un archivo JSON
+     */
     @Override
     public void saveToJSON() {
         GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".json");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Configuracion.ficheroAlumno + ".json", true))) {
+
+            bw.write(toJSON());
+            bw.newLine();
+            bw.close();
+
+        } catch (IOException e) {
+            System.out.println("Error al guardar JSON: " + e.getMessage());
+        }
     }
 
+    /**
+     * Guarda los alumnos en un archivo binario
+     */
     @Override
     public void saveToBinario() {
         GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".dat");
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(Configuracion.ficheroAlumno + ".dat", true))) {
+
+            dos.writeInt(codigo);
+            dos.writeUTF(nombre);
+            dos.writeUTF(fechaNacimiento);
+            dos.writeUTF(domicilio);
+            dos.writeInt(telefono);
+            dos.writeUTF(correo);
+
+        } catch (IOException e) {
+            System.out.println("Error al guardar JSON: " + e.getMessage());
+        }
     }
 
+    /**
+     * Guarda los alumnos en un archivo TXT
+     */
     @Override
     public void saveToTXT() {
         GestionFicheros.crearFichero(Configuracion.ficheroAlumno + ".txt");
+
+        try (BufferedWriter bw = new BufferedWriter(
+                new FileWriter(Configuracion.ficheroAlumno + ".txt", true))) {
+
+            bw.write(toTXT());
+            bw.close();
+
+        } catch (IOException e) {
+            System.out.println("Error al guardar TXT: " + e.getMessage());
+        }
+
     }
 
     @Override
     public void objFromCSV() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        if (Utils.Validadores.comprobarFichero(".csv")) {
+            String linea;
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(Configuracion.ficheroAlumno + ".txt"));
+                while((linea = br.readLine()) != null){
+                    String[] datos = linea.split(";");
+                    
+                    int tempCode = Integer.parseInt(datos[0]);
+                    String tempName = datos[1];
+                    String tempFechaNacimiento = datos[2];
+                    String tempDomicilio = datos[3];
+                    String tempTelefono = datos[4];
+                    String tempCorreo = datos[5];
+                    
+                    System.out.println("Codigo: " + tempCode);
+                    System.out.println("Codigo: " + tempName);
+                    System.out.println("Codigo: " + tempFechaNacimiento);
+                    System.out.println("Codigo: " + tempDomicilio);
+                    System.out.println("Codigo: " + tempTelefono);
+                    System.out.println("Codigo: " + tempCorreo);
+                    System.out.println("-----------------");
+                    
+                }
+            } catch (IOException e) {
+                System.out.println("Error al leer el archivo CSV");
+            }
+           
+        }
     }
 
     @Override
@@ -121,21 +202,40 @@ public class Alumno implements interfaces.interpolaridadDeDatos{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    /**
+     * Convierte la informacion a un String csv
+     *
+     * @return
+     */
     @Override
     public String toCSV() {
-        return codigo + ";" + nombre + ";" + fecha_nacimiento + ";" + domicilio + ";" + telefono + ";" + correo;
+        return codigo + ";" + nombre + ";" + fechaNacimiento + ";" + domicilio + ";" + telefono + ";" + correo;
     }
 
+    /**
+     * Convierte la informacion a un String json
+     *
+     * @return
+     */
     @Override
     public String toJSON() {
-         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
 
+    /**
+     * Convierte la informacion a un String TXT
+     *
+     * @return
+     */
     @Override
     public String toTXT() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "Código: " + codigo + "\n"
+                + "Nombre: " + nombre + "\n"
+                + "Fecha nacimiento: " + fechaNacimiento + "\n"
+                + "Domicilio: " + domicilio + "\n"
+                + "Teléfono: " + telefono + "\n"
+                + "Correo: " + correo + "\n"
+                + "------------------------------\n";
     }
-    
-    
-    
 }
