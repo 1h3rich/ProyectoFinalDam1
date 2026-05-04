@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelos;
-import servicios.GestionBaseDeDatos;
+import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.Multitable;
 /**
  *
  * @author isard
@@ -29,8 +30,8 @@ public class Modulo{
         this.curso = curso;
         this.creditos_ects = creditos_ects;
         this.horas = horas;
-        this.codigo = GestionBaseDeDatos.leerCodigoBDD("modulo");
-        this.codigo_ciclo = GestionBaseDeDatos.leerCodigoBDD("ciclo");
+        this.codigo = ConsultasEspecificas.leerCodigoBDD("modulo");
+        this.codigo_ciclo = ConsultasEspecificas.leerCodigoBDD("ciclo");
     }    
 
     /**

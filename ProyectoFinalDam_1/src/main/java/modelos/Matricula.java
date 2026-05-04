@@ -4,7 +4,9 @@
  */
 package modelos;
 import java.util.ArrayList;
-import servicios.GestionBaseDeDatos;
+import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
+import servicios.BaseDeDatos.Multitable;
 /**
  *
  * @author isard
@@ -28,8 +30,8 @@ public class Matricula {
         this.año_academico = año_academico;
         this.estado = estado;
         this.importe = importe;
-        this.codigo = GestionBaseDeDatos.leerCodigoBDD("matricula");
-        this.codigo_alumno = GestionBaseDeDatos.leerCodigoBDD("alumno");
+        this.codigo = ConsultasEspecificas.leerCodigoBDD("matricula");
+        this.codigo_alumno = ConsultasEspecificas.leerCodigoBDD("alumno");
         this.lineasMatriculas = new ArrayList<>();
     }
 

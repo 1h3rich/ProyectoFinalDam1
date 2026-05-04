@@ -1,6 +1,6 @@
 package Main;
 
-import servicios.*;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
 import modelos.*;
 import java.time.LocalDate;
 
@@ -27,8 +27,6 @@ public class ProyectoFinalDam1 {
         GestionBaseDeDatos.vincularBDD();
         
         //Pruebas modelos
-        
-        GestionBaseDeDatos.leerMatriculaBDD();
         
         //Alumno alumno_1 = new Alumno(nombre, LocalDate.MIN, domicilio, 0, correo);
         //Ciclo cilo_1 = new Ciclo(0, nombre, denominacion, familiaProfesional, 0, 0);

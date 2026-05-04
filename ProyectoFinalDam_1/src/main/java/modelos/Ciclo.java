@@ -4,9 +4,9 @@
  */
 package modelos;
 import java.util.HashMap;
-import servicios.GestionBaseDeDatos;
-/**
- *
+import servicios.BaseDeDatos.*;
+
+ /*
  * @author isard
  */
 public class Ciclo{
@@ -29,7 +29,7 @@ public class Ciclo{
      * @param añoCurricular
      */
     public Ciclo(String nombre, String denominacion, String familiaProfesional, int horasCiclo, int añoCurricular) {
-        this.codigo = GestionBaseDeDatos.leerCodigoBDD("ciclo");
+        this.codigo = ConsultasEspecificas.leerCodigoBDD("Ciclo");
         this.nombre = nombre;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;

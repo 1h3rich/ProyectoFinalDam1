@@ -5,12 +5,17 @@
 package modelos;
 
 import java.util.HashSet;
-import servicios.GestionBaseDeDatos;
-import servicios.GestionFicheros;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
+import servicios.Ficheros.GestionFicheros;
 import Config.appConfig;
 import Utils.Validadores;
 import com.google.gson.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.Insert;
+import servicios.BaseDeDatos.Multitable;
 
 /**
  *
@@ -36,7 +41,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
      * @param correo
      */
     public Alumno(String nombre, String fechaNacimiento, String domicilio, int telefono, String correo) {
-        this.codigo = GestionBaseDeDatos.leerCodigoBDD("alumno");
+        this.codigo = ConsultasEspecificas.leerCodigoBDD("alumno");
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.domicilio = domicilio;
@@ -64,9 +69,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         this.correo = correo;
         this.matriculas = new HashSet<>();
     }
-    
-    //Getters
 
+    //Getters
     public String getNombre() {
         return nombre;
     }
@@ -88,8 +92,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     }
     
     
-
-    //Override's
+//=============SaveTo================
+    
     /**
      * Guarda los alumnos en un archivo CSV
      */
@@ -171,7 +175,6 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void objFromCSV() {
-
         if (Utils.Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv")) {
             String linea;
             try {
@@ -204,6 +207,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         }
     }
 
+    
+//===========FromX===============
     /**
      * Convierte de JSON a objeto
      */
@@ -211,8 +216,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     public void objFromJSON() {
 
         File f = new File(appConfig.ficheroAlumno + ".json");
-
-        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv");
+        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".json");
 
         Gson gson = new Gson();
         String linea;
@@ -235,29 +239,118 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
                 }
             }
         } catch (JsonSyntaxException | IOException e) {
-            System.out.println("Ha ocurrido un error al crear el objeto desde JSON");
+            System.out.println("Ha ocurrido un error al crear el objeto desde JSON, error: " + e);
         }
 
     }
 
+    /**
+     * 
+     */
     @Override
     public void objFromBinario() {
 
-        File f = new File(appConfig.ficheroAlumno + appConfig.terminacionesFicheros[1]);
+        File f = new File(appConfig.ficheroAlumno + ".dat");
+        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".dat");
+
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
+
+            while (dis.available() > 0) {
+
+                int tempCodigo = dis.readInt();
+                String tempNombre = dis.readUTF();
+                String tempFechaNacimiento = dis.readUTF();
+                String tempDomicilio = dis.readUTF();
+                int tempTelefono = dis.readInt();
+                String tempCorreo = dis.readUTF();
+
+                Alumno alumno = new Alumno(
+                        tempCodigo,
+                        tempNombre,
+                        tempFechaNacimiento,
+                        tempDomicilio,
+                        tempTelefono,
+                        tempCorreo
+                );
+
+                System.out.println("Código: " + alumno.getCodigo());
+                System.out.println("Nombre: " + alumno.getNombre());
+                System.out.println("Fecha nacimiento: " + alumno.getFechaNacimiento());
+                System.out.println("Domicilio: " + alumno.getDomicilio());
+                System.out.println("Teléfono: " + alumno.getTelefono());
+                System.out.println("Correo: " + alumno.getCorreo());
+                System.out.println("-----------------");
+            }
+        } catch (IOException ex) {
+            System.out.println("Ha ocurrido un error al crear el objeto desde binario, error: " + ex);
+        }
     }
 
+    /**
+     * 
+     */
     @Override
     public void objFromTXT() {
+        File f = new File(appConfig.ficheroAlumno + ".txt");
+        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".txt");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+
+                if (linea.isBlank()) {
+                    continue;
+                }
+
+                String[] datos = linea.split(";");
+
+                int tempCodigo = Integer.parseInt(datos[0]);
+                String tempNombre = datos[1];
+                String tempFechaNacimiento = datos[2];
+                String tempDomicilio = datos[3];
+                int tempTelefono = Integer.parseInt(datos[4]);
+                String tempCorreo = datos[5];
+
+                Alumno alumno = new Alumno(
+                        tempCodigo,
+                        tempNombre,
+                        tempFechaNacimiento,
+                        tempDomicilio,
+                        tempTelefono,
+                        tempCorreo
+                );
+
+                System.out.println("Código: " + alumno.getCodigo());
+                System.out.println("Nombre: " + alumno.getNombre());
+                System.out.println("Fecha nacimiento: " + alumno.getFechaNacimiento());
+                System.out.println("Domicilio: " + alumno.getDomicilio());
+                System.out.println("Teléfono: " + alumno.getTelefono());
+                System.out.println("Correo: " + alumno.getCorreo());
+                System.out.println("-----------------");
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    
+//=========SQL=============
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String SqlToObj() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public String SQLtoTXT() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public String TXTtoSQL() {
+    public String ObjToSql() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -289,16 +382,15 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public String toTXT() {
-        return "Código: " + codigo + "\n"
-                + "Nombre: " + nombre + "\n"
-                + "Fecha nacimiento: " + fechaNacimiento + "\n"
-                + "Domicilio: " + domicilio + "\n"
-                + "Teléfono: " + telefono + "\n"
-                + "Correo: " + correo + "\n"
-                + "------------------------------\n";
+        return codigo + ";"
+                + nombre + ";"
+                + fechaNacimiento + ";"
+                + domicilio + ";"
+                + telefono + ";"
+                + correo;
     }
-
     //Metodos de la clase
+
     public void agregarMatriculas(Matricula matriculas) {
         this.matriculas.add(matriculas);
     }

@@ -4,6 +4,8 @@
  */
 package Config;
 
+import java.sql.Connection;
+
 /**
  * Aqui se almacenan las constantes necesarias para el correcto funcionamiento de la aplicación.
  * @author isard
@@ -18,8 +20,4 @@ public class appConfig {
     // Ficheros
     
     public static String ficheroAlumno = "alumno";
-    
-    //enum
-    
-    public static String[] terminacionesFicheros = {".csv", ".json", ".dat", ".txt"};
 }
