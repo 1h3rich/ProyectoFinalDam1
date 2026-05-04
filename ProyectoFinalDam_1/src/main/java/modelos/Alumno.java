@@ -8,15 +8,9 @@ import java.util.HashSet;
 import servicios.GestionBaseDeDatos;
 import servicios.GestionFicheros;
 import Config.appConfig;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import Utils.Validadores;
+import com.google.gson.*;
+import java.io.*;
 
 /**
  *
@@ -70,7 +64,32 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         this.correo = correo;
         this.matriculas = new HashSet<>();
     }
+    
+    //Getters
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public int getTelefono() {
+        return telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+    
+    
+
+    //Override's
     /**
      * Guarda los alumnos en un archivo CSV
      */
@@ -147,13 +166,16 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
     }
 
+    /**
+     * Convierte de CSV a objeto
+     */
     @Override
     public void objFromCSV() {
 
-        if (Utils.Validadores.comprobarFichero(".csv")) {
+        if (Utils.Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv")) {
             String linea;
             try {
-                BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroAlumno + ".txt"));
+                BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroAlumno + ".csv"));
                 while ((linea = br.readLine()) != null) {
                     String[] datos = linea.split(";");
 
@@ -161,7 +183,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
                     String tempName = datos[1];
                     String tempFechaNacimiento = datos[2];
                     String tempDomicilio = datos[3];
-                    String tempTelefono = datos[4];
+                    int tempTelefono = Integer.parseInt(datos[4]);
                     String tempCorreo = datos[5];
 
                     System.out.println("Codigo: " + tempCode);
@@ -172,8 +194,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
                     System.out.println("Codigo: " + tempCorreo);
                     System.out.println("-----------------");
 
-                    Alumno alumno = new Alumno(codigo, nombre, fechaNacimiento, domicilio, telefono, correo);
-                    
+                    Alumno alumno = new Alumno(tempCode, tempName, tempFechaNacimiento, tempDomicilio, tempTelefono, tempCorreo);
 
                 }
             } catch (IOException e) {
@@ -183,15 +204,46 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         }
     }
 
-    //Override's
+    /**
+     * Convierte de JSON a objeto
+     */
     @Override
     public void objFromJSON() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        File f = new File(appConfig.ficheroAlumno + ".json");
+
+        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv");
+
+        Gson gson = new Gson();
+        String linea;
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(f));
+
+            while ((linea = br.readLine()) != null) {
+                if (!linea.isBlank()) {
+
+                    Alumno alumno = gson.fromJson(linea, Alumno.class);
+
+                    System.out.println("Código: " + alumno.getCodigo());
+                    System.out.println("Nombre: " + alumno.getNombre());
+                    System.out.println("Fecha nacimiento: " + alumno.getFechaNacimiento());
+                    System.out.println("Domicilio: " + alumno.getDomicilio());
+                    System.out.println("Teléfono: " + alumno.getTelefono());
+                    System.out.println("Correo: " + alumno.getCorreo());
+                    System.out.println("-----------------");
+                }
+            }
+        } catch (JsonSyntaxException | IOException e) {
+            System.out.println("Ha ocurrido un error al crear el objeto desde JSON");
+        }
+
     }
 
     @Override
     public void objFromBinario() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        File f = new File(appConfig.ficheroAlumno + appConfig.terminacionesFicheros[1]);
     }
 
     @Override
@@ -226,7 +278,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public String toJSON() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new Gson();
         return gson.toJson(this);
     }
 
@@ -252,11 +304,10 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     }
 
     //Getters
-    
     public HashSet<Matricula> getMatriculas() {
         return matriculas;
     }
-    
+
     public int getCodigo() {
         return codigo;
     }

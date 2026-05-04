@@ -18,4 +18,8 @@ public class appConfig {
     // Ficheros
     
     public static String ficheroAlumno = "alumno";
+    
+    //enum
+    
+    public static String[] terminacionesFicheros = {".csv", ".json", ".dat", ".txt"};
 }

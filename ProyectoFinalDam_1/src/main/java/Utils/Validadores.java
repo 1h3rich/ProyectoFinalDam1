@@ -13,8 +13,8 @@ import java.io.File;
  */
 public class Validadores {
     
-     public static boolean comprobarFichero(String temp) {
-        File archivo = new File(appConfig.ficheroAlumno + temp);
+     public static boolean comprobarFichero(String type, String temp) {
+        File archivo = new File(type + temp);
 
         if (archivo.exists() && archivo.length() == 0) {
             System.out.println("El archivo está vacio");
