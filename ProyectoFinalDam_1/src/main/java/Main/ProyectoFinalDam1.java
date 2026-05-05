@@ -25,7 +25,7 @@ public class ProyectoFinalDam1 {
         
         // Pruebas Base de datos
         GestionBaseDeDatos.vincularBDD();
-        
+         
         //Pruebas modelos
         
         //Alumno alumno_1 = new Alumno(nombre, LocalDate.MIN, domicilio, 0, correo);
