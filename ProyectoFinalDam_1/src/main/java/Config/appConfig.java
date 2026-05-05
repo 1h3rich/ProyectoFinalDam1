@@ -20,4 +20,5 @@ public class appConfig {
     // Ficheros
     
     public static String ficheroAlumno = "alumno";
+    public static String ficheroModulo = "modulo";
 }
