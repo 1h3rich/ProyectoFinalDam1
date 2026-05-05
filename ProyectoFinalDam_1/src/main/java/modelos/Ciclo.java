@@ -343,12 +343,10 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
      *
      * @return
      */
-    @Override
     public String SqlToObj() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
     public String ObjToSql() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

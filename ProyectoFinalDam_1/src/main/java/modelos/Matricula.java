@@ -5,8 +5,6 @@
 package modelos;
 import java.util.ArrayList;
 import servicios.BaseDeDatos.ConsultasEspecificas;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
-import servicios.BaseDeDatos.Multitable;
 /**
  *
  * @author isard

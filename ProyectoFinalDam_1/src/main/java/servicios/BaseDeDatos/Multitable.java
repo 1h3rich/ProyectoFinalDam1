@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import modelos.Alumno;
 import modelos.Matricula;
 import modelos.Modulo;
 
@@ -16,10 +19,9 @@ import modelos.Modulo;
  * @author 1DAM
  */
 public class Multitable {
-    
+
     private static Connection con;
-    
-    
+
     //===========LECTURA===============
     /**
      * Lee todas las matriculas y las crea en el programa
@@ -77,9 +79,26 @@ public class Multitable {
 
     /**
      * Lee todos los alumnos y los crea en el programa
+     * @return 
      */
-    public static void leerAlumnosBDD() {
+    public static List<Alumno> leerAlumnosBDD() {
+        
+        List<Alumno> alumnos = new ArrayList<>() ;
+        try {
+            PreparedStatement pstm = con.prepareCall("Select * from alumno");
+            ResultSet rs = pstm.executeQuery();
 
+            while (rs.next()) {
+                Alumno alumno = Alumno.SqlToObj(rs);
+                alumnos.add(alumno);                
+            }
+            
+            return alumnos;
+
+        } catch (SQLException e) {
+            System.out.println("Error en la lectura, error: " + e);
+            return null;
+        }
     }
 
     /**
@@ -89,5 +108,4 @@ public class Multitable {
 
     }
 
-    
 }

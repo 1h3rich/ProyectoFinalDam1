@@ -6,10 +6,7 @@ package modelos;
 import Config.appConfig;
 import Utils.Validadores;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import servicios.BaseDeDatos.ConsultasEspecificas;
-import servicios.BaseDeDatos.Multitable;
 import servicios.Ficheros.GestionFicheros;
 /**
  *
@@ -237,12 +234,10 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
     public String SqlToObj() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
     public String ObjToSql() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

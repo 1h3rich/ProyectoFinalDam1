@@ -5,16 +5,17 @@
 package modelos;
 
 import java.util.HashSet;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 import Config.appConfig;
 import Utils.Validadores;
 import com.google.gson.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.logging.*;
 import servicios.BaseDeDatos.ConsultasEspecificas;
-import servicios.BaseDeDatos.Insert;
 import servicios.BaseDeDatos.Multitable;
 
 /**
@@ -25,9 +26,9 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
     private final int codigo;
     private final String nombre;
-    private final String fechaNacimiento;
+    private final LocalDate fechaNacimiento;
     private final String domicilio;
-    private final int telefono;
+    private final String telefono;
     private final String correo;
     private HashSet<Matricula> matriculas;
 
@@ -40,7 +41,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
      * @param telefono
      * @param correo
      */
-    public Alumno(String nombre, String fechaNacimiento, String domicilio, int telefono, String correo) {
+    public Alumno(String nombre, LocalDate fechaNacimiento, String domicilio, String telefono, String correo) {
         this.codigo = ConsultasEspecificas.leerCodigoBDD("alumno");
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
@@ -60,7 +61,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
      * @param telefono
      * @param correo
      */
-    public Alumno(int codigo, String nombre, String fechaNacimiento, String domicilio, int telefono, String correo) {
+    public Alumno(int codigo, String nombre, LocalDate fechaNacimiento, String domicilio, String telefono, String correo) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
@@ -75,7 +76,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         return nombre;
     }
 
-    public String getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -83,17 +84,15 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         return domicilio;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
     public String getCorreo() {
         return correo;
     }
-    
-    
+
 //=============SaveTo================
-    
     /**
      * Guarda los alumnos en un archivo CSV
      */
@@ -140,9 +139,9 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
             dos.writeInt(codigo);
             dos.writeUTF(nombre);
-            dos.writeUTF(fechaNacimiento);
+            dos.writeUTF(fechaNacimiento.toString());
             dos.writeUTF(domicilio);
-            dos.writeInt(telefono);
+            dos.writeUTF(telefono);
             dos.writeUTF(correo);
             dos.close();
 
@@ -184,9 +183,9 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
                     int tempCode = Integer.parseInt(datos[0]);
                     String tempName = datos[1];
-                    String tempFechaNacimiento = datos[2];
+                    LocalDate tempFechaNacimiento = LocalDate.parse(datos[2]);
                     String tempDomicilio = datos[3];
-                    int tempTelefono = Integer.parseInt(datos[4]);
+                    String tempTelefono = datos[4];
                     String tempCorreo = datos[5];
 
                     System.out.println("Codigo: " + tempCode);
@@ -207,7 +206,6 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         }
     }
 
-    
 //===========FromX===============
     /**
      * Convierte de JSON a objeto
@@ -245,7 +243,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void objFromBinario() {
@@ -259,9 +257,9 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
                 int tempCodigo = dis.readInt();
                 String tempNombre = dis.readUTF();
-                String tempFechaNacimiento = dis.readUTF();
+                LocalDate tempFechaNacimiento = LocalDate.parse(dis.readUTF());
                 String tempDomicilio = dis.readUTF();
-                int tempTelefono = dis.readInt();
+                String tempTelefono = dis.readUTF();
                 String tempCorreo = dis.readUTF();
 
                 Alumno alumno = new Alumno(
@@ -287,7 +285,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void objFromTXT() {
@@ -308,9 +306,9 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
                 int tempCodigo = Integer.parseInt(datos[0]);
                 String tempNombre = datos[1];
-                String tempFechaNacimiento = datos[2];
+                LocalDate tempFechaNacimiento = LocalDate.parse(datos[2]);
                 String tempDomicilio = datos[3];
-                int tempTelefono = Integer.parseInt(datos[4]);
+                String tempTelefono = datos[4];
                 String tempCorreo = datos[5];
 
                 Alumno alumno = new Alumno(
@@ -337,23 +335,32 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
     }
 
-    
 //=========SQL=============
-    
     /**
-     * 
-     * @return 
+     *
+     * @param rs
+     * @return
+     * @throws java.sql.SQLException
      */
-    @Override
-    public String SqlToObj() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public static Alumno SqlToObj(ResultSet rs) throws SQLException {
+        
+        int codigo = rs.getInt("codigo");
+        String nombre = rs.getNString("nombre");
+        LocalDate fechaNacimiento = rs.getDate("fecha_nacimiento").toLocalDate();
+        String domicilio = rs.getNString("domicilio");
+        String telefono = rs.getNString("telefono");
+        String correo = rs.getNString("correo");
+        
+        return new Alumno(codigo, nombre, fechaNacimiento, domicilio, telefono, correo);
     }
 
-    @Override
     public String ObjToSql() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        return null;
+        
     }
 
+//================Convertidores=======================
     /**
      * Convierte la informacion a un String csv
      *
@@ -389,8 +396,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
                 + telefono + ";"
                 + correo;
     }
-    //Metodos de la clase
 
+    //Metodos de la clase
     public void agregarMatriculas(Matricula matriculas) {
         this.matriculas.add(matriculas);
     }

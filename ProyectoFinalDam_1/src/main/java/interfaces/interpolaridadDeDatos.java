@@ -34,13 +34,4 @@ public abstract interface interpolaridadDeDatos {
     public String toTXT();
     
     
-    //Obtener datos de la BDD y convertir en Objeto 
-    
-    public String SqlToObj();
-    
-    //Los datos a la BDD
-    
-    public String ObjToSql();
-    
-    
 }
