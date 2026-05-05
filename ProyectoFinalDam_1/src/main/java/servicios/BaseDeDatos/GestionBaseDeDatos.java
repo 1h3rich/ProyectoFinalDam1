@@ -31,11 +31,16 @@ public class GestionBaseDeDatos {
 
             System.out.println("Probando conexion...");
             try {
-                con = DriverManager.getConnection(appConfig.urlSQL, appConfig.nombreUsuarioSQL, appConfig.contraseñaSQL);
+                con = DriverManager.getConnection(appConfig.urlSQL, appConfig.nombreUsuarioSQL, appConfig.contraseñaSQL[0]);
                 System.out.println("Conexion exitosa");
 
             } catch (SQLException e) {
-                System.out.println("Fallo en la conexion, error: " + e.getMessage());
+                try {
+                    con = DriverManager.getConnection(appConfig.urlSQL, appConfig.nombreUsuarioSQL, appConfig.contraseñaSQL[1]);
+                    System.out.println("Conexion exitosa");
+                } catch (SQLException ex) {
+                    System.out.println("Error en la contraseña del WorkBench");
+                }
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error al vincular la base de datos, introduzca los parametros correctos en SQL WORKBENCH");
