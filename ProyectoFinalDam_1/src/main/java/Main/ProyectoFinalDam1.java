@@ -3,6 +3,7 @@ package Main;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import modelos.*;
 import java.time.LocalDate;
+import servicios.BaseDeDatos.ConsultasMultiTabla;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
