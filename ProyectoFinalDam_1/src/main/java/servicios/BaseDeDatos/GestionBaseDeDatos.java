@@ -6,6 +6,7 @@ package servicios.BaseDeDatos;
 
 import Config.appConfig;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,4 +59,47 @@ public class GestionBaseDeDatos {
             Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Metodo con el cual ejecutas por consola la consulta que quieras, pasandole un array con la consulta y las columnas que tiene, un boolean 
+     * que indica si necesita parametros de entrada la consulta y los parametros que necesita con un maximo de 3
+     * @param datosConsulta
+     * @param entradaBoolean
+     * @param entrada1
+     * @param entrada2
+     * @param entrada3
+     */
+    public static void realizarConsulta(String[] datosConsulta, boolean entradaBoolean, String entrada1, String entrada2, String entrada3){
+        try {
+           PreparedStatement pst = con.prepareStatement(datosConsulta[0]); 
+           
+           
+            
+            if(entradaBoolean){
+                pst.setString(1, entrada1);
+                if(entrada2 != null){
+                    pst.setString(2, entrada2);
+                }
+                if(entrada3 != null){
+                pst.setString(3, entrada3);
+                }
+                
+            }
+            ResultSet rs = pst.executeQuery(); 
+           
+            
+            
+           while (rs.next()) { //Salta a la siguiente línea de la tabla
+               for (int i = 1; i < datosConsulta.length; i++) {
+                   System.out.print(rs.getString(datosConsulta[i]) + " "); 
+               }
+                System.out.println("");
+           } 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+   
 }

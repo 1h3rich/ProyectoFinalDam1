@@ -4,6 +4,8 @@
  */
 package servicios.BaseDeDatos;
 
+import java.util.HashMap;
+
 /**
  *
  * @author isard
@@ -16,12 +18,16 @@ public class ConsultasMultiTabla {
     indicando para cada ciclo, los nombres y las horas de sus módulos.
     Este informe deberá estar ordenado por la denominación del ciclo de forma ascendente. 
      */
-    public static String consulta1 = """
+    
+    private static String consulta1 = """
                                      Select c.denominacion, c.familia_profesional, c.nivel, m.nombre 
-                                     as 'nombre modulo', m.horas as 'horas modulo'
+                                     as 'nombre modulo', c.horas as 'horas modulo'
                                      from ciclo c join modulo m on c.codigo= m.codigo_ciclo
                                      order by c.denominacion asc;
                                      """;
+
+    //public static HashMap<String,String> consulta_1 = new HashMap();
+    public static String [] datosConsulta1 = {consulta1,"denominacion", "familia_profesional", "nivel","nombre modulo", "horas modulo"};
 
     /*
     Solicitará al usuario un nivel de ciclo y un curso de módulo. Consultar el nombre 
@@ -29,7 +35,7 @@ public class ConsultasMultiTabla {
     en un curso dado, indicando para cada módulo, la denominación del ciclo al que pertenece
     y el número de alumnos matriculados. Este informe deberá estar ordenado por el nombre del módulo de forma ascendente. 
      */
-    public static String consulta2 = """
+    private static String consulta2 = """
                                     Select m.nombre, m.horas , c.denominacion 
                                     as ' denominacion ciclo', count(a.codigo) as 'numero de alumnos matriculados'
                                     from modulo m join ciclo c on c.codigo=m.codigo_ciclo
@@ -40,23 +46,25 @@ public class ConsultasMultiTabla {
                                     group by  m.nombre, m.horas , c.denominacion;
                                      """ // En esta consulta hay dos parametros que hay que pasarle
             ;
-
+    public static String [] datosConsulta2 = {consulta2,"nombre", "horas", "denominacion ciclo","numero de alumnos matriculados"};
+    
     /*
     Solicitará al usuario un año académico de matrícula. Consultar el nombre 
     y la fecha de nacimiento de todos los alumnos, indicando para cada alumno, 
     los nombres de los módulos en los que está matriculado en un año académico dado. 
     Este informe deberá estar ordenado por el nombre del alumno de forma ascendente. 
      */
-    public static String consulta3 = """
+    private static String consulta3 = """
                                     Select a.nombre, a.fecha_nacimiento , m.nombre 
                                     from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                     join matricula ma on ma.codigo = lm.codigo_matricula
                                     join alumno a on a.codigo = ma.codigo_alumno
-                                    where ma.anio_academico = ?
+                                    where ma.año_academico = ?
                                     order by a.nombre asc;
                                     """;
 
+    public static String [] datosConsulta3 = {consulta3, "nombre", "fecha_nacimiento","nombre"}; 
     /*
     Solicitará al usuario una denominación de ciclo, un curso de módulo 
     y un año académico de matrícula. Consultar el nombre y la fecha de nacimiento 
@@ -64,7 +72,7 @@ public class ConsultasMultiTabla {
     indicando para cada alumno, la calificación primera y la calificación segunda de los módulos en los que está matriculado.
     Este informe deberá estar ordenado por el nombre del alumno de forma ascendente.
      */
-    public static String consulta4 = """
+    private static String consulta4 = """
                                     select a.nombre, a.fecha_nacimiento , lm.calificacion_primera, lm.calificacion_segunda
                                     from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
@@ -75,29 +83,34 @@ public class ConsultasMultiTabla {
                                     order by a.nombre asc;
                                     """;
 
+    public static String [] datosConsulta4 = {consulta4, "nombre", "fecha_nacimineto","califiacion_primera","calificacion_segunda"}; 
+    
     /*
     Consultar la denominación, la familia profesional y el nivel de todos los ciclos, 
     indicando para cada ciclo, el importe total de las matrículas de cada año académico.
     Este informe deberá estar ordenado por la denominación del ciclo de forma ascendente.
 
      */
-    public static String consulta5 = """
+    private static String consulta5 = """
                                      Select c.denominacion, c.familia_profesional, c.nivel, 
-                                     sum(ma.importe) as 'importe total de cada a\u00f1o academico'
+                                     sum(ma.importe) as 'importe total'
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                      join matricula ma on ma.codigo = lm.codigo_matricula
-                                     group by c.denominacion, c.familia_profesional, c.nivel, ma.anio_academico
+                                     group by c.denominacion, c.familia_profesional, c.nivel, ma.año_academico
                                      order by c.denominacion asc;
                                      """;
 
+    public static String[] datosConsulta5 = {consulta5,"denominacion", "familia_profesional","nivel", "importe total"};
+    
     /*
+    
     Consultar el nombre del alumno y el año académico, indicando el total de créditos ECTS 
     y el total de horas en las que se ha matriculado. Este informe deberá estar ordenado por
     el total de créditos de forma descendente.
      */
-    public static String consulta6 = """
-                                     select a.nombre, ma.anio_academico, sum(m.creditos_ects) as 'total de creditos',
+    private static String consulta6 = """
+                                     select a.nombre, ma.año_academico, sum(m.creditos_ects) as 'total de creditos',
                                      sum(c.horas) as 'total de horas matriculadas'
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
@@ -107,13 +120,15 @@ public class ConsultasMultiTabla {
                                      order by sum(m.creditos_ects) asc;
                                      """;
 
+     public static String [] datosConsulta6 = {consulta6, "nombre", "año_academico","total de creditos", "total de horas matriculadas"}; 
+    
     /*
     Consultar el nombre del alumno, el nombre del módulo y el año académico de 
     aquellos registros donde la "calificación_primera" todavía sea nula. 
     Este informe deberá estar ordenado por el año académico de forma ascendente.
      */
-    public static String consulta7 = """
-                                     select a.nombre as 'nombre alumno', m.nombre as 'nombre moudlo'  , ma.anio_academico 
+    private static String consulta7 = """
+                                     select a.nombre as 'nombre alumno', m.nombre as 'nombre modulo'  , ma.año_academico 
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                      join matricula ma on ma.codigo = lm.codigo_matricula
@@ -122,12 +137,14 @@ public class ConsultasMultiTabla {
                                      order by ma.anio_academico asc;
                                      """;
 
+     public static String [] datosConsulta7 = {consulta7, "nombre alumno", "nombre modulo","año_academico"}; 
+    
     /*
     Consultar el nombre del módulo y la denominación del ciclo,
     indicando cuántos alumnos están matriculados con un número de "repetición" superior a 1.
     Solo se mostrarán los módulos que tengan más de 3 alumnos repetidores.
      */
-    public static String consulta8 = """
+    private static String consulta8 = """
                                      select 
                                      m.nombre as nombre_modulo, 
                                      c.denominacion as denominacion_ciclo, 
@@ -139,8 +156,18 @@ public class ConsultasMultiTabla {
                                      group by  m.codigo, m.nombre, c.denominacion
                                      having count(lm.codigo_matricula) > 3;
                                      """;
+    
+    
+    public static String [] datosConsulta8 = {consulta8, "nombre_modulo", "denominacion_ciclo","alumnos_repetidores"}; 
+    
+    
+    /*
+    Consultar el nombre, teléfono y correo de aquellos alumnos registrados que no tengan 
+    ninguna matrícula asociada en el sistema o cuya matrícula esté en estado "anulada". 
+    Este informe deberá estar ordenado por el nombre del alumno de forma ascendente.
 
-    public static String consulta9 = """
+    */
+    private static String consulta9 = """
                                      select distinct 
                                      a.nombre, 
                                      a.telefono, 
@@ -152,4 +179,6 @@ public class ConsultasMultiTabla {
                                      order by a.nombre asc;
                                      """;
 
+    
+    public static String [] datosConsulta9 = {consulta9, "nombre", "telefono","correo"}; 
 }
