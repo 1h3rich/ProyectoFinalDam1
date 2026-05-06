@@ -4,8 +4,8 @@
  */
 package Utils;
 
-import Config.appConfig;
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -13,18 +13,50 @@ import java.io.File;
  */
 public class Validadores {
     
-     public static boolean comprobarFichero(String type, String temp) {
+    /**
+     * Comprueba que el fichero se pueda leer, se le pasa la direccion y la extension
+     * Si no, no permite leerlo.
+     * @param type
+     * @param temp
+     * @return 
+     */
+         public static boolean comprobarFicheroLectura(String type, String temp) {
         File archivo = new File(type + temp);
 
-        if (archivo.exists() && archivo.length() == 0) {
-            System.out.println("El archivo está vacio");
-            return false;
-        } else if (archivo.exists()) {
-            return true;
-        } else {
+        if (!archivo.exists()) {
             System.out.println("El archivo no existe");
             return false;
         }
+
+        if (archivo.length() == 0) {
+            System.out.println("El archivo está vacío");
+            return false;
+        }
+
+        return true;
     }
-     
+
+         /**
+          * Compruba que se pueda escribir, sino, lo crea.
+          * @param type
+          * @param temp
+          * @return 
+          */
+    public static boolean comprobarFicheroEscritura(String type, String temp) {
+        File archivo = new File(type + temp);
+
+        try {
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+
+            return true;
+
+        } catch (IOException e) {
+            System.out.println("No se pudo crear el archivo: " + e.getMessage());
+            return false;
+        }
+    }
 }
+     
+

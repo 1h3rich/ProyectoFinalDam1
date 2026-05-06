@@ -19,13 +19,13 @@ import servicios.Ficheros.GestionFicheros;
 /*
  * @author isard
  */
-public class Ciclo implements interfaces.interpolaridadDeDatos {
+public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     // Aqui va la creacion del objeto Ciclo, el cual deberemos meter en la base de datos 
 
     private int codigo;
-    private String nombre;
     private String denominacion;
     private String familiaProfesional;
+    private String nivel;
     private int horasCiclo;
     private int añoCurricular;
     private HashMap<Integer, Modulo> modulos;
@@ -33,17 +33,17 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
     /**
      * Creador manual de Ciclos desde el programa (Swing)
      *
-     * @param nombre
      * @param denominacion
      * @param familiaProfesional
+     * @param nivel
      * @param horasCiclo
      * @param añoCurricular
      */
-    public Ciclo(String nombre, String denominacion, String familiaProfesional, int horasCiclo, int añoCurricular) {
+    public Ciclo(String denominacion, String familiaProfesional, String nivel, int horasCiclo, int añoCurricular) {
         this.codigo = ConsultasEspecificas.leerCodigoBDD("Ciclo");
-        this.nombre = nombre;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
+        this.nivel = nivel;
         this.horasCiclo = horasCiclo;
         this.añoCurricular = añoCurricular;
     }
@@ -52,23 +52,19 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
      * Creador automatico de ciclos desde la BDD
      *
      * @param codigo
-     * @param nombre
      * @param denominacion
      * @param familiaProfesional
+     * @param nivel
      * @param horasCiclo
      * @param añoCurricular
      */
-    public Ciclo(int codigo, String nombre, String denominacion, String familiaProfesional, int horasCiclo, int añoCurricular) {
+    public Ciclo(int codigo, String denominacion, String familiaProfesional, String nivel, int horasCiclo, int añoCurricular) {
         this.codigo = codigo;
-        this.nombre = nombre;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
+        this.nivel = nivel;
         this.horasCiclo = horasCiclo;
         this.añoCurricular = añoCurricular;
-    }
-
-    public String getNombre() {
-        return nombre;
     }
 
     public String getDenominacion() {
@@ -94,8 +90,13 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
     public int getCodigo() {
         return codigo;
     }
+    public String getNivel() {
+        return nivel;
+    }
 
-    //=============SaveTo================
+    // ============================================================================================================================================================================
+    // ==================== SAVE ==================================================================================================================================================
+    // ============================================================================================================================================================================
     /**
      * Guarda los ciclos en un archivo CSV
      */
@@ -107,7 +108,6 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
             try ( BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroCiclo + ".csv", true))) {
                 bw.write(toCSV());
                 bw.newLine();
-                bw.close();
             }
 
         } catch (IOException e) {
@@ -141,7 +141,6 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
         try ( DataOutputStream dos = new DataOutputStream(new FileOutputStream(appConfig.ficheroCiclo + ".dat", true))) {
 
             dos.writeInt(codigo);
-            dos.writeUTF(nombre);
             dos.writeUTF(denominacion);
             dos.writeUTF(familiaProfesional);
             dos.writeInt(horasCiclo);
@@ -171,13 +170,17 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
         }
 
     }
+    
+    // ============================================================================================================================================================================
+    // ==================== LOAD ==================================================================================================================================================
+    // ============================================================================================================================================================================
 
     /**
      * Convierte de CSV a objeto
      */
     @Override
     public void objFromCSV() {
-        if (Utils.Validadores.comprobarFichero(appConfig.ficheroCiclo, ".csv")) {
+        if (Utils.Validadores.comprobarFicheroLectura(appConfig.ficheroCiclo, ".csv")) {
             String linea;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroCiclo + ".csv"));
@@ -185,21 +188,20 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
                     String[] datos = linea.split(";");
 
                     int tempCode = Integer.parseInt(datos[0]);
-                    String tempNombre = datos[1];
-                    String tempDenominacion = datos[2];
-                    String tempFamiliaProfesional = datos[3];
+                    String tempDenominacion = datos[1];
+                    String tempFamiliaProfesional = datos[2];
+                    String niv = datos[3];
                     int tempHorasCiclo = Integer.parseInt(datos[4]);
                     int tempAñoCurricular = Integer.parseInt(datos[5]);
 
                     System.out.println("Codigo: " + tempCode);
-                    System.out.println("Nombre: " + tempNombre);
                     System.out.println("Denominacion: " + tempDenominacion);
                     System.out.println("Familia Profesional: " + tempFamiliaProfesional);
                     System.out.println("Horas Ciclo: " + tempHorasCiclo);
                     System.out.println("Año Curricular: " + tempAñoCurricular);
                     System.out.println("-----------------");
 
-                    Ciclo ciclo = new Ciclo(tempCode, tempNombre, tempDenominacion, tempFamiliaProfesional, tempHorasCiclo, tempAñoCurricular);
+                    Ciclo ciclo = new Ciclo(tempCode, tempDenominacion, tempFamiliaProfesional, niv, tempHorasCiclo, tempAñoCurricular);
 
                 }
             } catch (IOException e) {
@@ -209,7 +211,9 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
         }
     }
 
-//===========FromX===============
+    // ============================================================================================================================================================================
+    // ================= CONVERTIDORES ============================================================================================================================================
+    // ============================================================================================================================================================================
     /**
      * Convierte de JSON a objeto
      */
@@ -217,7 +221,7 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
     public void objFromJSON() {
 
         File f = new File(appConfig.ficheroCiclo + ".json");
-        Validadores.comprobarFichero(appConfig.ficheroCiclo, ".json");
+        Validadores.comprobarFicheroLectura(appConfig.ficheroCiclo, ".json");
 
         Gson gson = new Gson();
         String linea;
@@ -231,7 +235,6 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
                     Ciclo ciclo = gson.fromJson(linea, Ciclo.class);
 
                     System.out.println("Código: " + ciclo.getCodigo());
-                    System.out.println("Nombre: " + ciclo.getNombre());
                     System.out.println("Denominacion: " + ciclo.getDenominacion());
                     System.out.println("Familia Profesional: " + ciclo.getFamiliaProfesional());
                     System.out.println("Horas Ciclo: " + ciclo.getHorasCiclo());
@@ -252,7 +255,7 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
     public void objFromBinario() {
 
         File f = new File(appConfig.ficheroCiclo + ".dat");
-        Validadores.comprobarFichero(appConfig.ficheroCiclo, ".dat");
+        Validadores.comprobarFicheroLectura(appConfig.ficheroCiclo, ".dat");
 
         try ( DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
 
@@ -262,20 +265,20 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
                 String tempNombre = dis.readUTF();
                 String tempDenominacion = dis.readUTF();
                 String tempFamiliaProfesional = dis.readUTF();
+                String niv = dis.readUTF();
                 int tempHorasCiclo = dis.readInt();
                 int tempAñoCurricular = dis.readInt();
 
                 Ciclo ciclo = new Ciclo(
                         tempCode,
-                        tempNombre,
                         tempDenominacion,
                         tempFamiliaProfesional,
+                        niv,
                         tempHorasCiclo,
                         tempAñoCurricular
                 );
 
                 System.out.println("Código: " + ciclo.getCodigo());
-                System.out.println("Nombre: " + ciclo.getNombre());
                 System.out.println("Denominacion: " + ciclo.getDenominacion());
                 System.out.println("Familia Profesional: " + ciclo.getFamiliaProfesional());
                 System.out.println("Horas Ciclo: " + ciclo.getHorasCiclo());
@@ -293,7 +296,7 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
     @Override
     public void objFromTXT() {
         File f = new File(appConfig.ficheroCiclo + ".txt");
-        Validadores.comprobarFichero(appConfig.ficheroCiclo, ".txt");
+        Validadores.comprobarFicheroLectura(appConfig.ficheroCiclo, ".txt");
 
         try ( BufferedReader br = new BufferedReader(new FileReader(f))) {
 
@@ -308,23 +311,22 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
                 String[] datos = linea.split(";");
 
                 int tempCode = Integer.parseInt(datos[0]);
-                String tempNombre = datos[1];
-                String tempDenominacion = datos[2];
-                String tempFamiliaProfesional = datos[3];
+                String tempDenominacion = datos[1];
+                String tempFamiliaProfesional = datos[2];
+                String niv = datos[3];
                 int tempHorasCiclo = Integer.parseInt(datos[4]);
                 int tempAñoCurricular = Integer.parseInt(datos[5]);
 
                  Ciclo ciclo = new Ciclo(
                         tempCode,
-                        tempNombre,
                         tempDenominacion,
                         tempFamiliaProfesional,
+                        niv,
                         tempHorasCiclo,
                         tempAñoCurricular
                 );
 
                 System.out.println("Código: " + ciclo.getCodigo());
-                System.out.println("Nombre: " + ciclo.getNombre());
                 System.out.println("Denominacion: " + ciclo.getDenominacion());
                 System.out.println("Familia Profesional: " + ciclo.getFamiliaProfesional());
                 System.out.println("Horas Ciclo: " + ciclo.getHorasCiclo());
@@ -338,7 +340,10 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
 
     }
 
-//=========SQL=============
+    // ============================================================================================================================================================================
+    // ===================== SQL ==================================================================================================================================================
+    // ============================================================================================================================================================================
+    
     /**
      *
      * @return
@@ -358,7 +363,7 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public String toCSV() {
-        return codigo + ";" + nombre + ";" + denominacion + ";" + familiaProfesional + ";" + horasCiclo + ";" + añoCurricular;
+        return codigo + ";" + denominacion + ";" + familiaProfesional + ";" + nivel + ";" + horasCiclo + ";" + añoCurricular;
     }
 
     /**
@@ -379,12 +384,7 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public String toTXT() {
-        return codigo + ";"
-                + nombre + ";"
-                + denominacion + ";"
-                + familiaProfesional + ";"
-                + horasCiclo + ";"
-                + añoCurricular;
+        return toCSV();
     }
     //Metodos de la clase
 
@@ -393,7 +393,9 @@ public class Ciclo implements interfaces.interpolaridadDeDatos {
     }
 
 
-
+    // ============================================================================================================================================================================
+    // ===================== TO STRING ============================================================================================================================================
+    // ============================================================================================================================================================================ 
    
     
 

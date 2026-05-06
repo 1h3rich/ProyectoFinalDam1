@@ -4,27 +4,16 @@
  */
 package servicios.Ficheros;
 
-import Config.appConfig;
 import Utils.Validadores;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import modelos.Alumno;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.logging.*;
 
 /**
  *
  * @author isard
  */
 public class GestionFicheros {
-    // En esta clase se va a encontrar todos los metodos necesarios para la gestion de ficheros (csv, txt, json, etc)
 
     /**
      * Crea el fichero; se sabe que tipo de fichero es porque por parámetro le
@@ -46,64 +35,127 @@ public class GestionFicheros {
         }
     }
 
-    // =========================================================
-    // ===================== SAVE TO ===========================
-    // =========================================================
-    public void saveToBinario(String cadena, String direccion) {
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(direccion + ".dat", true))) {
+    //==========================================================================================================================================================
+    //======SAVE================================================================================================================================================
+    //==========================================================================================================================================================
+    /**
+     * Guarda un objeto a csv, txt o json
+     *
+     * @param cadena toCSV, toTXT, toJSON
+     * @param direccion appConfig.*;
+     * @param terminacion .txt, .csv, .json
+     */
+    public static void saveToTxtCsvJson(String cadena, String direccion, String terminacion) {
+        if (Validadores.comprobarFicheroEscritura(direccion, ".csv"));
+        if (Validadores.comprobarFicheroEscritura(direccion, ".txt"));
+        if (Validadores.comprobarFicheroEscritura(direccion, ".json"));
 
-            dos.writeUTF(cadena);
-
-        } catch (IOException e) {
-            System.out.println("Error BIN: " + e.getMessage());
-        }
-    }
-
-    public static void saveTo(String cadena, String direccion, String terminacion) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(direccion + terminacion, true))) {
 
             bw.write(cadena);
             bw.newLine();
 
         } catch (IOException e) {
-            System.out.println("Error JSON: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
 
-    // =========================================================
-    // =================== FROM FILES ==========================
-    // =========================================================
-    
-    public void objFromCSV() {
+    /**
+     * Guarda un objeto en binario, se le ha de pasar la lista con el tipo
+     * @param direccion
+     * @param lista 
+     */
+    public static void saveToBinario(String direccion, ArrayList<?> lista) {
 
-        if (Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv")) {
-
-            try (BufferedReader br = new BufferedReader(
-                    new FileReader(appConfig.ficheroAlumno + ".csv"))) {
-
-                String linea;
-
-                while ((linea = br.readLine()) != null) {
-
-                    String[] d = linea.split(";");
-
-                    Alumno a = new Alumno(
-                            Integer.parseInt(d[0]),
-                            d[1],
-                            LocalDate.parse(d[2]),
-                            d[3],
-                            d[4],
-                            d[5]
-                    );
-
-                    System.out.println(a);
-                    System.out.println("-----------------");
-                }
+        if (Validadores.comprobarFicheroEscritura(direccion, ".dat")) {
+            ObjectOutputStream oos = null;
+            try {
+                oos = new ObjectOutputStream(new FileOutputStream(direccion + ".dat", true));
+                oos.writeObject(lista);
 
             } catch (IOException e) {
-                System.out.println("Error CSV");
+                System.out.println("Error BIN: " + e.getMessage());
             }
         }
+    }
+
+    //=========================================================================================================================================================
+    //=======LOAD==============================================================================================================================================
+    //=========================================================================================================================================================
+    /**
+     * Carga desde TXT o CSV pasandole la direccion y la extension
+     * @param direccion
+     * @param terminacion
+     * @return
+     */
+    public static ArrayList<String> loadTxtCsv(String direccion, String terminacion) {
+        ArrayList<String> lineas = new ArrayList<>();
+        try {
+            if (Validadores.comprobarFicheroLectura(direccion, terminacion)) {
+                BufferedReader br = new BufferedReader(new FileReader(direccion + terminacion));
+                String linea = "";
+                while ((linea = br.readLine()) != null) {
+                    lineas.add(linea);
+                }
+                return lineas;
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Carga desde Json, solo hace falta pasarle la direccion
+     * @param direccion
+     * @return
+     */
+    public static ArrayList<String> loadJson(String direccion) {
+        ArrayList<String> lineas = new ArrayList<>();
+        try {
+            if (Validadores.comprobarFicheroLectura(direccion, ".json")) {
+                BufferedReader br = new BufferedReader(new FileReader(direccion + ".json"));
+                String linea = "";
+                while ((linea = br.readLine()) != null) {
+                    lineas.add(linea);
+                }
+                return lineas;
+
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Carga desde binario, solo hace falta pasarle la direccion
+     * @param direccion
+     * @return 
+     */
+    public static ArrayList<String> loadBinario(String direccion) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(direccion + ".dat"))) {
+            if (Validadores.comprobarFicheroLectura(direccion, ".dat")) {
+
+                Object obj = ois.readObject();
+
+                if (obj instanceof ArrayList<?>) {
+                    return (ArrayList<String>) obj;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("No se ha encontrado el archivo: " + direccion + ".dat");
+        } catch (IOException ex) {
+            System.out.println("Error al leer el archivo binario: " + ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Clase no encontrada.");
+        }
+
+        return new ArrayList<>();
     }
 }

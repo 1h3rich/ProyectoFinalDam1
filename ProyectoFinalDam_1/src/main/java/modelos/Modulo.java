@@ -167,7 +167,7 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     
     @Override
     public void objFromCSV(){
-        if(Utils.Validadores.comprobarFichero(appConfig.ficheroModulo, ".csv")) {
+        if(Utils.Validadores.comprobarFicheroLectura(appConfig.ficheroModulo, ".csv")) {
             String linea;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroModulo + ".csv"));
@@ -204,7 +204,7 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     @Override
     public void objFromJSON(){
         File f = new File(appConfig.ficheroModulo + ".json");
-        Validadores.comprobarFichero(appConfig.ficheroModulo, ".json");
+        Validadores.comprobarFicheroLectura(appConfig.ficheroModulo, ".json");
         
         
     }

@@ -8,9 +8,9 @@ import servicios.Ficheros.GestionFicheros;
 
 public class LineaMatricula implements interfaces.interpolaridadDeDatos {
 
-    // =========================================================
-    // ===================== ATRIBUTOS =========================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ===================== ATRIBUTOS ============================================================================================================================================
+    // ============================================================================================================================================================================
     // IDs (persistencia)
     private int codigo_matricula;
     private int codigo_modulo;
@@ -24,9 +24,9 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
     private double calificacion_primera;
     private double calificacion_segunda;
 
-    // =========================================================
-    // ================== CONSTRUCTORES ========================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ================== CONSTRUCTORES ===========================================================================================================================================
+    // ============================================================================================================================================================================
     /**
      * Constructor desde CSV / TXT / JSON (trabaja con IDs)
      */
@@ -63,9 +63,9 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
         this.calificacion_segunda = calificacion_segunda;
     }
 
-    // =========================================================
-    // ===================== GETTERS ===========================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ===================== GETTERS ==============================================================================================================================================
+    // ============================================================================================================================================================================
     public int getCodigo_matricula() {
         return codigo_matricula;
     }
@@ -94,9 +94,9 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
         return mo;
     }
 
-    // =========================================================
-    // ==================== SAVE TO ============================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ==================== SAVE ==================================================================================================================================================
+    // ============================================================================================================================================================================
     
     /**
      * Guarda en CSV
@@ -173,43 +173,15 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
         }
     }
 
-    // =========================================================
-    // ==================== FROM FILES =========================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ==================== LOAD ==================================================================================================================================================
+    // ============================================================================================================================================================================
     
     /**
      * Construye desde CSV
      */
     @Override
     public void objFromCSV() {
-
-        if (Utils.Validadores.comprobarFichero(appConfig.ficheroLineaMatricula, ".csv")) {
-
-            try (BufferedReader br = new BufferedReader(
-                    new FileReader(appConfig.ficheroLineaMatricula + ".csv"))) {
-
-                String linea;
-
-                while ((linea = br.readLine()) != null) {
-
-                    String[] d = linea.split(";");
-
-                    LineaMatricula lm = new LineaMatricula(
-                            Integer.parseInt(d[0]),
-                            Integer.parseInt(d[1]),
-                            Integer.parseInt(d[2]),
-                            Double.parseDouble(d[3]),
-                            Double.parseDouble(d[4])
-                    );
-
-                    System.out.println(lm);
-                    System.out.println("-----------------");
-                }
-
-            } catch (IOException e) {
-                System.out.println("Error CSV");
-            }
-        }
     }
 
     /**
@@ -217,26 +189,6 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void objFromJSON() {
-
-        File f = new File(appConfig.ficheroLineaMatricula + ".json");
-
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-
-            String linea;
-
-            while ((linea = br.readLine()) != null) {
-
-                if (!linea.isBlank()) {
-                    LineaMatricula lm = new Gson().fromJson(linea, LineaMatricula.class);
-
-                    System.out.println(lm);
-                    System.out.println("-----------------");
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error JSON: " + e.getMessage());
-        }
     }
 
     /**
@@ -244,28 +196,6 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void objFromBinario() {
-
-        File f = new File(appConfig.ficheroLineaMatricula + ".dat");
-
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
-
-            while (dis.available() > 0) {
-
-                LineaMatricula lm = new LineaMatricula(
-                        dis.readInt(),
-                        dis.readInt(),
-                        dis.readInt(),
-                        dis.readDouble(),
-                        dis.readDouble()
-                );
-
-                System.out.println(lm);
-                System.out.println("-----------------");
-            }
-
-        } catch (IOException e) {
-            System.out.println("Error BIN");
-        }
     }
 
     /**
@@ -273,37 +203,11 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void objFromTXT() {
-
-        File f = new File(appConfig.ficheroLineaMatricula + ".txt");
-
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-
-            String linea;
-
-            while ((linea = br.readLine()) != null) {
-
-                String[] d = linea.split(";");
-
-                LineaMatricula lm = new LineaMatricula(
-                        Integer.parseInt(d[0]),
-                        Integer.parseInt(d[1]),
-                        Integer.parseInt(d[2]),
-                        Double.parseDouble(d[3]),
-                        Double.parseDouble(d[4])
-                );
-
-                System.out.println(lm);
-                System.out.println("-----------------");
-            }
-
-        } catch (IOException e) {
-            System.out.println("Error TXT");
-        }
     }
 
-    // =========================================================
-    // ================= CONVERTIDORES =========================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ================= CONVERTIDORES ============================================================================================================================================
+    // ============================================================================================================================================================================
     @Override
     public String toCSV() {
         return codigo_matricula + ";"
@@ -317,15 +221,20 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
     public String toJSON() {
         return new Gson().toJson(this);
     }
+    
+    public static LineaMatricula fromJson(String json) {
+        return new Gson().fromJson(json, LineaMatricula.class);
+
+    }
 
     @Override
     public String toTXT() {
         return toCSV();
     }
 
-    // =========================================================
-    // ===================== SQL ===============================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ===================== SQL ==================================================================================================================================================
+    // ============================================================================================================================================================================
     public static LineaMatricula SqlToObj(java.sql.ResultSet rs) throws java.sql.SQLException {
 
         return new LineaMatricula(
@@ -341,9 +250,9 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
         Insert.insertarLineaMatricula(this);
     }
 
-    // =========================================================
-    // ===================== TO STRING =========================
-    // =========================================================
+    // ============================================================================================================================================================================
+    // ===================== TO STRING ============================================================================================================================================
+    // ============================================================================================================================================================================ 
     @Override
     public String toString() {
         return "LineaMatricula{"

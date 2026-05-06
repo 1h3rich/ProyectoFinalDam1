@@ -4,8 +4,6 @@
  */
 package Config;
 
-import java.sql.Connection;
-
 /**
  * Aqui se almacenan las constantes necesarias para el correcto funcionamiento de la aplicación.
  * @author isard
