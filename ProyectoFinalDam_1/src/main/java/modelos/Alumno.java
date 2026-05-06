@@ -1,28 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelos;
 
-import java.util.HashSet;
-import servicios.Ficheros.GestionFicheros;
 import Config.appConfig;
 import Utils.Validadores;
-import com.google.gson.*;
+import com.google.gson.Gson;
 import java.io.*;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.logging.*;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import servicios.BaseDeDatos.ConsultasEspecificas;
-import servicios.BaseDeDatos.Multitable;
+import servicios.BaseDeDatos.Insert;
+import servicios.Ficheros.GestionFicheros;
 
-/**
- *
- * @author isard
- */
 public class Alumno implements interfaces.interpolaridadDeDatos {
+
+    // =========================================================
+    // ===================== ATRIBUTOS =========================
+    // =========================================================
 
     private final int codigo;
     private final String nombre;
@@ -30,48 +26,60 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     private final String domicilio;
     private final String telefono;
     private final String correo;
+
     private HashSet<Matricula> matriculas;
 
+    // =========================================================
+    // =================== CONSTRUCTORES =======================
+    // =========================================================
+
     /**
-     * Creacion manual
-     *
-     * @param nombre
-     * @param fechaNacimiento
-     * @param domicilio
-     * @param telefono
-     * @param correo
+     * Creación manual (nuevo alumno)
      */
-    public Alumno(String nombre, LocalDate fechaNacimiento, String domicilio, String telefono, String correo) {
+    public Alumno(String nombre,
+                  LocalDate fechaNacimiento,
+                  String domicilio,
+                  String telefono,
+                  String correo) {
+
         this.codigo = ConsultasEspecificas.leerCodigoBDD("alumno");
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
+
         this.matriculas = new HashSet<>();
     }
 
     /**
-     * Creacion desde la base de datos
-     *
-     * @param codigo
-     * @param nombre
-     * @param fechaNacimiento
-     * @param domicilio
-     * @param telefono
-     * @param correo
+     * Creación desde base de datos
      */
-    public Alumno(int codigo, String nombre, LocalDate fechaNacimiento, String domicilio, String telefono, String correo) {
+    public Alumno(int codigo,
+                  String nombre,
+                  LocalDate fechaNacimiento,
+                  String domicilio,
+                  String telefono,
+                  String correo) {
+
         this.codigo = codigo;
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
+
         this.matriculas = new HashSet<>();
     }
 
-    //Getters
+    // =========================================================
+    // ===================== GETTERS ===========================
+    // =========================================================
+
+    public int getCodigo() {
+        return codigo;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -92,50 +100,54 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
         return correo;
     }
 
-//=============SaveTo================
-    /**
-     * Guarda los alumnos en un archivo CSV
-     */
+    public HashSet<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void agregarMatriculas(Matricula m) {
+        this.matriculas.add(m);
+    }
+
+    // =========================================================
+    // ===================== SAVE TO ===========================
+    // =========================================================
+
     @Override
     public void saveToCSV() {
         GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".csv");
 
-        try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroAlumno + ".csv", true))) {
-                bw.write(toCSV());
-                bw.newLine();
-                bw.close();
-            }
+        try (BufferedWriter bw = new BufferedWriter(
+                new FileWriter(appConfig.ficheroAlumno + ".csv", true))) {
+
+            bw.write(toCSV());
+            bw.newLine();
 
         } catch (IOException e) {
-            System.out.println("Ha ocurrido un error inesperado " + e);
+            System.out.println("Error CSV: " + e.getMessage());
         }
     }
 
-    /**
-     * Guarda los alumnos en un archivo JSON
-     */
     @Override
     public void saveToJSON() {
         GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".json");
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroAlumno + ".json", true))) {
+
+        try (BufferedWriter bw = new BufferedWriter(
+                new FileWriter(appConfig.ficheroAlumno + ".json", true))) {
 
             bw.write(toJSON());
             bw.newLine();
-            bw.close();
 
         } catch (IOException e) {
-            System.out.println("Error al guardar JSON: " + e.getMessage());
+            System.out.println("Error JSON: " + e.getMessage());
         }
     }
 
-    /**
-     * Guarda los alumnos en un archivo binario
-     */
     @Override
     public void saveToBinario() {
         GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".dat");
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(appConfig.ficheroAlumno + ".dat", true))) {
+
+        try (DataOutputStream dos = new DataOutputStream(
+                new FileOutputStream(appConfig.ficheroAlumno + ".dat", true))) {
 
             dos.writeInt(codigo);
             dos.writeUTF(nombre);
@@ -143,16 +155,12 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
             dos.writeUTF(domicilio);
             dos.writeUTF(telefono);
             dos.writeUTF(correo);
-            dos.close();
 
         } catch (IOException e) {
-            System.out.println("Error al guardar JSON: " + e.getMessage());
+            System.out.println("Error BIN: " + e.getMessage());
         }
     }
 
-    /**
-     * Guarda los alumnos en un archivo TXT
-     */
     @Override
     public void saveToTXT() {
         GestionFicheros.crearFichero(appConfig.ficheroAlumno + ".txt");
@@ -161,136 +169,54 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
                 new FileWriter(appConfig.ficheroAlumno + ".txt", true))) {
 
             bw.write(toTXT());
-            bw.close();
+            bw.newLine();
 
         } catch (IOException e) {
-            System.out.println("Error al guardar TXT: " + e.getMessage());
+            System.out.println("Error TXT: " + e.getMessage());
         }
-
     }
 
-    /**
-     * Convierte de CSV a objeto
-     */
+    // =========================================================
+    // =================== FROM FILES ==========================
+    // =========================================================
+
     @Override
     public void objFromCSV() {
-        if (Utils.Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv")) {
-            String linea;
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroAlumno + ".csv"));
+
+        if (Validadores.comprobarFichero(appConfig.ficheroAlumno, ".csv")) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new FileReader(appConfig.ficheroAlumno + ".csv"))) {
+
+                String linea;
+
                 while ((linea = br.readLine()) != null) {
-                    String[] datos = linea.split(";");
 
-                    int tempCode = Integer.parseInt(datos[0]);
-                    String tempName = datos[1];
-                    LocalDate tempFechaNacimiento = LocalDate.parse(datos[2]);
-                    String tempDomicilio = datos[3];
-                    String tempTelefono = datos[4];
-                    String tempCorreo = datos[5];
+                    String[] d = linea.split(";");
 
-                    System.out.println("Codigo: " + tempCode);
-                    System.out.println("Codigo: " + tempName);
-                    System.out.println("Codigo: " + tempFechaNacimiento);
-                    System.out.println("Codigo: " + tempDomicilio);
-                    System.out.println("Codigo: " + tempTelefono);
-                    System.out.println("Codigo: " + tempCorreo);
+                    Alumno a = new Alumno(
+                            Integer.parseInt(d[0]),
+                            d[1],
+                            LocalDate.parse(d[2]),
+                            d[3],
+                            d[4],
+                            d[5]
+                    );
+
+                    System.out.println(a);
                     System.out.println("-----------------");
-
-                    Alumno alumno = new Alumno(tempCode, tempName, tempFechaNacimiento, tempDomicilio, tempTelefono, tempCorreo);
-
                 }
-            } catch (IOException e) {
-                System.out.println("Error al leer el archivo CSV");
-            }
 
+            } catch (IOException e) {
+                System.out.println("Error CSV");
+            }
         }
     }
 
-//===========FromX===============
-    /**
-     * Convierte de JSON a objeto
-     */
     @Override
     public void objFromJSON() {
 
         File f = new File(appConfig.ficheroAlumno + ".json");
-        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".json");
-
-        Gson gson = new Gson();
-        String linea;
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(f));
-
-            while ((linea = br.readLine()) != null) {
-                if (!linea.isBlank()) {
-
-                    Alumno alumno = gson.fromJson(linea, Alumno.class);
-
-                    System.out.println("Código: " + alumno.getCodigo());
-                    System.out.println("Nombre: " + alumno.getNombre());
-                    System.out.println("Fecha nacimiento: " + alumno.getFechaNacimiento());
-                    System.out.println("Domicilio: " + alumno.getDomicilio());
-                    System.out.println("Teléfono: " + alumno.getTelefono());
-                    System.out.println("Correo: " + alumno.getCorreo());
-                    System.out.println("-----------------");
-                }
-            }
-        } catch (JsonSyntaxException | IOException e) {
-            System.out.println("Ha ocurrido un error al crear el objeto desde JSON, error: " + e);
-        }
-
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void objFromBinario() {
-
-        File f = new File(appConfig.ficheroAlumno + ".dat");
-        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".dat");
-
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
-
-            while (dis.available() > 0) {
-
-                int tempCodigo = dis.readInt();
-                String tempNombre = dis.readUTF();
-                LocalDate tempFechaNacimiento = LocalDate.parse(dis.readUTF());
-                String tempDomicilio = dis.readUTF();
-                String tempTelefono = dis.readUTF();
-                String tempCorreo = dis.readUTF();
-
-                Alumno alumno = new Alumno(
-                        tempCodigo,
-                        tempNombre,
-                        tempFechaNacimiento,
-                        tempDomicilio,
-                        tempTelefono,
-                        tempCorreo
-                );
-
-                System.out.println("Código: " + alumno.getCodigo());
-                System.out.println("Nombre: " + alumno.getNombre());
-                System.out.println("Fecha nacimiento: " + alumno.getFechaNacimiento());
-                System.out.println("Domicilio: " + alumno.getDomicilio());
-                System.out.println("Teléfono: " + alumno.getTelefono());
-                System.out.println("Correo: " + alumno.getCorreo());
-                System.out.println("-----------------");
-            }
-        } catch (IOException ex) {
-            System.out.println("Ha ocurrido un error al crear el objeto desde binario, error: " + ex);
-        }
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void objFromTXT() {
-        File f = new File(appConfig.ficheroAlumno + ".txt");
-        Validadores.comprobarFichero(appConfig.ficheroAlumno, ".txt");
 
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 
@@ -298,117 +224,130 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
             while ((linea = br.readLine()) != null) {
 
-                if (linea.isBlank()) {
-                    continue;
+                if (!linea.isBlank()) {
+                    Alumno a = new Gson().fromJson(linea, Alumno.class);
+
+                    System.out.println(a);
+                    System.out.println("-----------------");
                 }
+            }
 
-                String[] datos = linea.split(";");
+        } catch (Exception e) {
+            System.out.println("Error JSON: " + e.getMessage());
+        }
+    }
 
-                int tempCodigo = Integer.parseInt(datos[0]);
-                String tempNombre = datos[1];
-                LocalDate tempFechaNacimiento = LocalDate.parse(datos[2]);
-                String tempDomicilio = datos[3];
-                String tempTelefono = datos[4];
-                String tempCorreo = datos[5];
+    @Override
+    public void objFromBinario() {
 
-                Alumno alumno = new Alumno(
-                        tempCodigo,
-                        tempNombre,
-                        tempFechaNacimiento,
-                        tempDomicilio,
-                        tempTelefono,
-                        tempCorreo
+        File f = new File(appConfig.ficheroAlumno + ".dat");
+
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
+
+            while (dis.available() > 0) {
+
+                Alumno a = new Alumno(
+                        dis.readInt(),
+                        dis.readUTF(),
+                        LocalDate.parse(dis.readUTF()),
+                        dis.readUTF(),
+                        dis.readUTF(),
+                        dis.readUTF()
                 );
 
-                System.out.println("Código: " + alumno.getCodigo());
-                System.out.println("Nombre: " + alumno.getNombre());
-                System.out.println("Fecha nacimiento: " + alumno.getFechaNacimiento());
-                System.out.println("Domicilio: " + alumno.getDomicilio());
-                System.out.println("Teléfono: " + alumno.getTelefono());
-                System.out.println("Correo: " + alumno.getCorreo());
+                System.out.println(a);
                 System.out.println("-----------------");
             }
 
-        } catch (IOException ex) {
-            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            System.out.println("Error BIN: " + e.getMessage());
         }
-
     }
 
-//=========SQL=============
-    /**
-     *
-     * @param rs
-     * @return
-     * @throws java.sql.SQLException
-     */
+    @Override
+    public void objFromTXT() {
+
+        File f = new File(appConfig.ficheroAlumno + ".txt");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+
+                String[] d = linea.split(";");
+
+                Alumno a = new Alumno(
+                        Integer.parseInt(d[0]),
+                        d[1],
+                        LocalDate.parse(d[2]),
+                        d[3],
+                        d[4],
+                        d[5]
+                );
+
+                System.out.println(a);
+                System.out.println("-----------------");
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    // =========================================================
+    // ===================== SQL ===============================
+    // =========================================================
+
     public static Alumno SqlToObj(ResultSet rs) throws SQLException {
-        
-        int codigo = rs.getInt("codigo");
-        String nombre = rs.getNString("nombre");
-        LocalDate fechaNacimiento = rs.getDate("fecha_nacimiento").toLocalDate();
-        String domicilio = rs.getNString("domicilio");
-        String telefono = rs.getNString("telefono");
-        String correo = rs.getNString("correo");
-        
-        return new Alumno(codigo, nombre, fechaNacimiento, domicilio, telefono, correo);
+
+        return new Alumno(
+                rs.getInt("codigo"),
+                rs.getString("nombre"),
+                rs.getDate("fecha_nacimiento").toLocalDate(),
+                rs.getString("domicilio"),
+                rs.getString("telefono"),
+                rs.getString("correo")
+        );
     }
 
-    public String ObjToSql() {
-        
-        return null;
-        
+    public void ObjToSql() {
+        Insert.insertarAlumno(this);
     }
 
-//================Convertidores=======================
-    /**
-     * Convierte la informacion a un String csv
-     *
-     * @return
-     */
+    // =========================================================
+    // ================= CONVERTIDORES =========================
+    // =========================================================
+
     @Override
     public String toCSV() {
-        return codigo + ";" + nombre + ";" + fechaNacimiento + ";" + domicilio + ";" + telefono + ";" + correo;
+        return codigo + ";" + nombre + ";" + fechaNacimiento + ";" +
+                domicilio + ";" + telefono + ";" + correo;
     }
 
-    /**
-     * Convierte la informacion a un String json
-     *
-     * @return
-     */
     @Override
     public String toJSON() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        return new Gson().toJson(this);
     }
 
-    /**
-     * Convierte la informacion a un String TXT
-     *
-     * @return
-     */
     @Override
     public String toTXT() {
-        return codigo + ";"
-                + nombre + ";"
-                + fechaNacimiento + ";"
-                + domicilio + ";"
-                + telefono + ";"
-                + correo;
+        return toCSV();
     }
 
-    //Metodos de la clase
-    public void agregarMatriculas(Matricula matriculas) {
-        this.matriculas.add(matriculas);
-    }
+    // =========================================================
+    // ===================== TO STRING =========================
+    // =========================================================
 
-    //Getters
-    public HashSet<Matricula> getMatriculas() {
-        return matriculas;
+    @Override
+    public String toString() {
+        return "Alumno{" +
+                "codigo=" + codigo +
+                ", nombre='" + nombre + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                ", domicilio='" + domicilio + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", correo='" + correo + '\'' +
+                '}';
     }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
 }
