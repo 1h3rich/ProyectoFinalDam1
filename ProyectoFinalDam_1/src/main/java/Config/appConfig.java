@@ -23,4 +23,5 @@ public class appConfig {
     public static String ficheroCiclo = "ciclo";
     public static String ficheroModulo = "modulo";
     public static String ficheroLineaMatricula = "linea_matricula";
+    public static String ficheroMatricula = "matricula";
 }

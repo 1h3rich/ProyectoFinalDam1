@@ -21,11 +21,11 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
     // =========================================================
 
     private final int codigo;
-    private final String nombre;
-    private final LocalDate fechaNacimiento;
-    private final String domicilio;
-    private final String telefono;
-    private final String correo;
+    private String nombre;
+    private LocalDate fechaNacimiento;
+    private String domicilio;
+    private String telefono;
+    private String correo;
 
     private HashSet<Matricula> matriculas;
 
@@ -35,6 +35,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos {
 
     /**
      * Creación manual (nuevo alumno)
+     * @param nombre
      */
     public Alumno(String nombre,
                   LocalDate fechaNacimiento,

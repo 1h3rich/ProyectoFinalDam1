@@ -34,6 +34,11 @@ public class ProyectoFinalDam1 {
         //LineaMatricula lineaMatricula_1 = new LineaMatricula(0, 0, 0);
         //Matricula matricula_1 = new Matricula(0, estado, 0);
         //Modulo modulo_1 = new Modulo(nombre, curso, 0, 0);
+        
+        //Exportar datos
+        //ArrayList = Coger datos de BD()
+        //for
+            //...convertoCSV(Objeto.toCSV)
     }
     
 }
