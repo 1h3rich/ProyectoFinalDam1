@@ -3,6 +3,7 @@ package Main;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import modelos.*;
 import java.time.LocalDate;
+import java.util.Scanner;
 import servicios.BaseDeDatos.ConsultasMultiTabla;
 
 /*
@@ -21,14 +22,68 @@ public class ProyectoFinalDam1 {
      */
     public static void main(String[] args) {
         
+        Scanner teclado = new Scanner(System.in);
+        
         System.out.println("Proyecto Final");
         System.out.println("");
         
         // Pruebas Base de datos
         GestionBaseDeDatos.vincularBDD();
-         
-        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.consulta1);
+        /*
+        System.out.println("Consulta 1:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta1, false, null, null , null);
+        System.out.println("");
+       /* 
+        System.out.println("Introduce un nivel de ciclo");
+        String nivelCiclo = teclado.nextLine();
+        System.out.println("Introduce un curso de modulo");
+        String cursoDeModulo = teclado.nextLine();
         
+        
+        System.out.println("Consulta 2:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta2,true, nivelCiclo, cursoDeModulo, null);
+        System.out.println("");
+        */
+        
+        System.out.println("Introduce el año academico");
+        String añoAcademico = teclado.next();
+        
+        
+        System.out.println("Consulta 3:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta3,true,añoAcademico ,null,null);
+        System.out.println("");
+        
+        
+        
+        
+        
+        /*
+        System.out.println("Consulta 4:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta4);
+        System.out.println("");
+        
+        System.out.println("Consulta 5:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta5);
+        System.out.println("");
+        
+        System.out.println("Consulta 6:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta6);
+        System.out.println("");
+        
+        System.out.println("Consulta 7:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta7);
+        System.out.println("");
+        
+        System.out.println("Consulta 5:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta5);
+        System.out.println("");
+        
+        
+        System.out.println("Consulta 9:");
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta1);
+        System.out.println("");
+        
+        */
         
         //Pruebas modelos
         
