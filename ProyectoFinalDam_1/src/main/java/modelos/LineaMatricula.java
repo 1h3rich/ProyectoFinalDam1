@@ -1,6 +1,6 @@
 package modelos;
 
-import Config.appConfig;
+import Config.AppConfig;
 import com.google.gson.Gson;
 import java.io.*;
 import servicios.BaseDeDatos.Insert;
@@ -103,10 +103,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToCSV() {
-        GestionFicheros.crearFichero(appConfig.ficheroLineaMatricula + ".csv");
+        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".csv");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(appConfig.ficheroLineaMatricula + ".csv", true))) {
+                new FileWriter(AppConfig.ficheroLineaMatricula + ".csv", true))) {
 
             bw.write(toCSV());
             bw.newLine();
@@ -121,10 +121,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToJSON() {
-        GestionFicheros.crearFichero(appConfig.ficheroLineaMatricula + ".json");
+        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".json");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(appConfig.ficheroLineaMatricula + ".json", true))) {
+                new FileWriter(AppConfig.ficheroLineaMatricula + ".json", true))) {
 
             bw.write(toJSON());
             bw.newLine();
@@ -139,10 +139,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToBinario() {
-        GestionFicheros.crearFichero(appConfig.ficheroLineaMatricula + ".dat");
+        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".dat");
 
         try (DataOutputStream dos = new DataOutputStream(
-                new FileOutputStream(appConfig.ficheroLineaMatricula + ".dat", true))) {
+                new FileOutputStream(AppConfig.ficheroLineaMatricula + ".dat", true))) {
 
             dos.writeInt(codigo_matricula);
             dos.writeInt(codigo_modulo);
@@ -160,10 +160,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToTXT() {
-        GestionFicheros.crearFichero(appConfig.ficheroLineaMatricula + ".txt");
+        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".txt");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(appConfig.ficheroLineaMatricula + ".txt", true))) {
+                new FileWriter(AppConfig.ficheroLineaMatricula + ".txt", true))) {
 
             bw.write(toTXT());
             bw.newLine();

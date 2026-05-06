@@ -60,7 +60,7 @@ public class ConsultasMultiTabla {
                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                     join matricula ma on ma.codigo = lm.codigo_matricula
                                     join alumno a on a.codigo = ma.codigo_alumno
-                                    where ma.año_academico = ?
+                                    where ma.anio_academico = ?
                                     order by a.nombre asc;
                                     """;
 
@@ -78,12 +78,12 @@ public class ConsultasMultiTabla {
                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                     join matricula ma on ma.codigo = lm.codigo_matricula
                                     join alumno a on a.codigo = ma.codigo_alumno
-                                    where c.denominacion = 'Gestion Administrativa' and m.curso = '1' 
-                                    and ma.anio_academico = '2024/2025'
+                                    where c.denominacion = ? and m.curso = ?
+                                    and ma.anio_academico = ? 
                                     order by a.nombre asc;
                                     """;
 
-    public static String [] datosConsulta4 = {consulta4, "nombre", "fecha_nacimineto","califiacion_primera","calificacion_segunda"}; 
+    public static String [] datosConsulta4 = {consulta4, "nombre", "fecha_nacimiento","calificacion_primera","calificacion_segunda"}; 
     
     /*
     Consultar la denominación, la familia profesional y el nivel de todos los ciclos, 
@@ -97,7 +97,7 @@ public class ConsultasMultiTabla {
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                      join matricula ma on ma.codigo = lm.codigo_matricula
-                                     group by c.denominacion, c.familia_profesional, c.nivel, ma.año_academico
+                                     group by c.denominacion, c.familia_profesional, c.nivel, ma.anio_academico
                                      order by c.denominacion asc;
                                      """;
 
@@ -110,7 +110,7 @@ public class ConsultasMultiTabla {
     el total de créditos de forma descendente.
      */
     private static String consulta6 = """
-                                     select a.nombre, ma.año_academico, sum(m.creditos_ects) as 'total de creditos',
+                                     select a.nombre, ma.anio_academico, sum(m.creditos_ects) as 'total de creditos',
                                      sum(c.horas) as 'total de horas matriculadas'
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
@@ -120,7 +120,7 @@ public class ConsultasMultiTabla {
                                      order by sum(m.creditos_ects) asc;
                                      """;
 
-     public static String [] datosConsulta6 = {consulta6, "nombre", "año_academico","total de creditos", "total de horas matriculadas"}; 
+     public static String [] datosConsulta6 = {consulta6, "nombre", "anio_academico","total de creditos", "total de horas matriculadas"}; 
     
     /*
     Consultar el nombre del alumno, el nombre del módulo y el año académico de 
@@ -128,7 +128,7 @@ public class ConsultasMultiTabla {
     Este informe deberá estar ordenado por el año académico de forma ascendente.
      */
     private static String consulta7 = """
-                                     select a.nombre as 'nombre alumno', m.nombre as 'nombre modulo'  , ma.año_academico 
+                                     select a.nombre as 'nombre alumno', m.nombre as 'nombre modulo'  , ma.anio_academico 
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                      join matricula ma on ma.codigo = lm.codigo_matricula
@@ -137,7 +137,7 @@ public class ConsultasMultiTabla {
                                      order by ma.anio_academico asc;
                                      """;
 
-     public static String [] datosConsulta7 = {consulta7, "nombre alumno", "nombre modulo","año_academico"}; 
+     public static String [] datosConsulta7 = {consulta7, "nombre alumno", "nombre modulo","anio_academico"}; 
     
     /*
     Consultar el nombre del módulo y la denominación del ciclo,
@@ -152,7 +152,7 @@ public class ConsultasMultiTabla {
                                      from modulo m
                                      join ciclo c on m.codigo_ciclo = c.codigo
                                      join linea_matricula lm on m.codigo = lm.codigo_modulo
-                                     where lm.repeticion > 1
+                                     where lm.repeticion = true
                                      group by  m.codigo, m.nombre, c.denominacion
                                      having count(lm.codigo_matricula) > 3;
                                      """;

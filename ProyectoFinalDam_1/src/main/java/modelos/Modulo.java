@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelos;
-import Config.appConfig;
+import Config.AppConfig;
 import Utils.Validadores;
 import java.io.*;
 import servicios.BaseDeDatos.ConsultasEspecificas;
@@ -89,10 +89,10 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     */
     @Override
     public void saveToCSV(){
-        GestionFicheros.crearFichero(appConfig.ficheroModulo + ".csv");
+        GestionFicheros.crearFichero(AppConfig.ficheroModulo + ".csv");
         
         try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroModulo + ".csv",true))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.ficheroModulo + ".csv",true))) {
                 bw.write(toCSV());
                 bw.newLine();
                 bw.close();
@@ -109,9 +109,9 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     
     @Override
     public void saveToJSON(){
-        GestionFicheros.crearFichero(appConfig.ficheroModulo + ".json");
+        GestionFicheros.crearFichero(AppConfig.ficheroModulo + ".json");
         
-         try (BufferedWriter bw = new BufferedWriter(new FileWriter(appConfig.ficheroModulo + ".csv",true))) {
+         try (BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.ficheroModulo + ".csv",true))) {
                 
              bw.write(toJSON());
                 bw.newLine();
@@ -124,8 +124,8 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     
     @Override
     public void saveToBinario(){
-         GestionFicheros.crearFichero(appConfig.ficheroModulo + ".dat");
-         try(DataOutputStream  modulo = new DataOutputStream(new FileOutputStream(appConfig.ficheroModulo + ".dat",true))) {
+         GestionFicheros.crearFichero(AppConfig.ficheroModulo + ".dat");
+         try(DataOutputStream  modulo = new DataOutputStream(new FileOutputStream(AppConfig.ficheroModulo + ".dat",true))) {
              
              modulo.writeInt(codigo);
              modulo.writeInt(codigo_ciclo);
@@ -146,10 +146,10 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     
     @Override
     public void saveToTXT(){
-         GestionFicheros.crearFichero(appConfig.ficheroModulo + ".txt");
+         GestionFicheros.crearFichero(AppConfig.ficheroModulo + ".txt");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(appConfig.ficheroModulo + ".txt", true))) {
+                new FileWriter(AppConfig.ficheroModulo + ".txt", true))) {
 
             bw.write(toTXT());
             bw.close();
@@ -167,10 +167,10 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     
     @Override
     public void objFromCSV(){
-        if(Utils.Validadores.comprobarFicheroLectura(appConfig.ficheroModulo, ".csv")) {
+        if(Utils.Validadores.comprobarFicheroLectura(AppConfig.ficheroModulo, ".csv")) {
             String linea;
             try {
-                BufferedReader br = new BufferedReader(new FileReader(appConfig.ficheroModulo + ".csv"));
+                BufferedReader br = new BufferedReader(new FileReader(AppConfig.ficheroModulo + ".csv"));
                 while ((linea = br.readLine()) != null) {
                     String[]datos = linea.split(";");
                     
@@ -203,8 +203,8 @@ public class Modulo implements interfaces.interpolaridadDeDatos{
     
     @Override
     public void objFromJSON(){
-        File f = new File(appConfig.ficheroModulo + ".json");
-        Validadores.comprobarFicheroLectura(appConfig.ficheroModulo, ".json");
+        File f = new File(AppConfig.ficheroModulo + ".json");
+        Validadores.comprobarFicheroLectura(AppConfig.ficheroModulo, ".json");
         
         
     }
