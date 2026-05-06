@@ -4,6 +4,8 @@
  */
 package servicios.BaseDeDatos;
 
+import java.util.HashMap;
+
 /**
  *
  * @author isard
@@ -16,12 +18,16 @@ public class ConsultasMultiTabla {
     indicando para cada ciclo, los nombres y las horas de sus módulos.
     Este informe deberá estar ordenado por la denominación del ciclo de forma ascendente. 
      */
+    
     public static String consulta1 = """
                                      Select c.denominacion, c.familia_profesional, c.nivel, m.nombre 
-                                     as 'nombre modulo', m.horas as 'horas modulo'
+                                     as 'nombre modulo', c.horas as 'horas modulo'
                                      from ciclo c join modulo m on c.codigo= m.codigo_ciclo
                                      order by c.denominacion asc;
                                      """;
+
+    //public static HashMap<String,String> consulta_1 = new HashMap();
+    public static String [] datosConsulta1 = {consulta1,"denominacion", "familia_profesional", "nivel","nombre"};
 
     /*
     Solicitará al usuario un nivel de ciclo y un curso de módulo. Consultar el nombre 

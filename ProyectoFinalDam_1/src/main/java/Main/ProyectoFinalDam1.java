@@ -3,6 +3,7 @@ package Main;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import modelos.*;
 import java.time.LocalDate;
+import servicios.BaseDeDatos.ConsultasMultiTabla;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -26,6 +27,9 @@ public class ProyectoFinalDam1 {
         // Pruebas Base de datos
         GestionBaseDeDatos.vincularBDD();
          
+        GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.consulta1);
+        
+        
         //Pruebas modelos
         
         //Alumno alumno_1 = new Alumno(nombre, LocalDate.MIN, domicilio, 0, correo);

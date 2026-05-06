@@ -6,6 +6,7 @@ package servicios.BaseDeDatos;
 
 import Config.appConfig;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,4 +59,20 @@ public class GestionBaseDeDatos {
             Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void realizarConsulta(String consulta){
+        try {
+           PreparedStatement pst = con.prepareStatement(consulta); //Preparo el objeto PreparedStatement
+           ResultSet rs = pst.executeQuery(); //Ejecuto la consulta
+           
+           while (rs.next()) { //Salta a la siguiente línea de la tabla
+                System.out.println(); 
+           } 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+   
 }
