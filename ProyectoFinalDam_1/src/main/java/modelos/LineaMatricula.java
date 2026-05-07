@@ -247,7 +247,7 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
     }
 
     public void ObjToSql() {
-        Insert.insertarLineaMatricula(this);
+        Insert.insertarBDD(this);
     }
 
     // ============================================================================================================================================================================

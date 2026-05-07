@@ -51,7 +51,6 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
-
         this.matriculas = new HashSet<>();
     }
 
@@ -214,7 +213,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
             ArrayList<String> temp = GestionFicheros.loadJson(AppConfig.ficheroAlumno);
 
             for (String string : temp) {
-                Alumno alumno = Alumno.fromJson(string);
+                Alumno alumno = GestionFicheros.fromJson(string);
 
                 lista.add(alumno);
             }
@@ -222,7 +221,6 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
             for (Alumno string : lista) {
                 System.out.println(string);
             }
-
         }
     }
 
@@ -261,7 +259,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
     }
 
     public void ObjToSql() {
-        Insert.insertarAlumno(this);
+        Insert.insertarBDD(this);
     }
 
     // ===============================================================================================================================================================
@@ -278,12 +276,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
         return new Gson().toJson(this);
 
     }
-
-    public static Alumno fromJson(String json) {
-        return new Gson().fromJson(json, Alumno.class);
-
-    }
-
+    
     @Override
     public String toTXT() {
         return toCSV();
