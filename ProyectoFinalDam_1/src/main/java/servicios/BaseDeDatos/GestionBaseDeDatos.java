@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelos.*;
 
 /**
  *
@@ -17,6 +18,12 @@ import java.util.logging.Logger;
 public class GestionBaseDeDatos {
 
     private static Connection con;
+
+    private static ArrayList<Alumno> listaAlumnos = new ArrayList<>();
+    private static ArrayList<Ciclo> listaCiclos = new ArrayList<>();
+    private static ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
+    private static ArrayList<Matricula> listaMatriculas = new ArrayList<>();
+    private static ArrayList<Modulo> listaModulos = new ArrayList<>();
 
     /**
      * Aunque no es necesario, se comprubea el driver e informa, además despues
@@ -62,28 +69,42 @@ public class GestionBaseDeDatos {
 
     /**
      * Metodo con el cual ejecutas por consola la consulta que quieras,
-     * pasandole un array con la consulta y las columnas que tiene, ademas
-     * de un array con las entradas
+     * pasandole un array con la consulta y las columnas que tiene, ademas de un
+     * array con las entradas
      *
      * @param datosConsulta
      * @param entradas
-     
+     * @param mostrarPorPantalla
+     *
      */
-    public static void realizarSQL(String[] datosConsulta,String entradas[]) {//Todavia falta poner más visual la tabla
+    public static void realizarSQL(String[] datosConsulta, String entradas[], boolean mostrarPorPantalla, boolean guardarDatos) {//Todavia falta poner más visual la tabla
         try {
             PreparedStatement pst = con.prepareStatement(datosConsulta[0]);
 
             for (int i = 0; i < entradas.length; i++) {
                 pst.setString(i + 1, entradas[i]);
             }
-            
+
             ResultSet rs = pst.executeQuery();
 
-            while (rs.next()) { //Salta a la siguiente línea de la tabla
-                for (int i = 1; i < datosConsulta.length; i++) {
-                    System.out.print(rs.getString(datosConsulta[i]) + " ");
+            if (mostrarPorPantalla) {
+                while (rs.next()) { //Salta a la siguiente línea de la tabla
+                    for (int i = 1; i < datosConsulta.length; i++) {
+                        System.out.print(rs.getString(datosConsulta[i]) + " ");
+                    }
+                    System.out.println("");
                 }
-                System.out.println("");
+            }
+            if(guardarDatos){
+                String objeto [] = new String [10];
+                
+                while (rs.next()) { //Salta a la siguiente línea de la tabla
+                    for (int i = 1; i < datosConsulta.length; i++) {
+                        rs.getString(datosConsulta[i]);
+                    }
+                    System.out.println("");
+                }
+                
             }
 
         } catch (SQLException ex) {
@@ -128,7 +149,7 @@ public class GestionBaseDeDatos {
         }
     }
 
-    */
+     */
     public static void actualizarFila(String[] datosActualizacion, String entradas[]) {
         try {
             PreparedStatement pst = con.prepareStatement(datosActualizacion[0]);
@@ -138,8 +159,6 @@ public class GestionBaseDeDatos {
             }
 
             ResultSet rs = pst.executeQuery();
-
-            
 
         } catch (SQLException ex) {
             Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
