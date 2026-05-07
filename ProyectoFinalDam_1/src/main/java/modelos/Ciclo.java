@@ -4,7 +4,7 @@
  */
 package modelos;
 
-import Config.AppConfig;
+import Config.Config;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -102,10 +102,10 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void saveToCSV() {
-        GestionFicheros.crearFichero(AppConfig.ficheroCiclo + ".csv");
+        GestionFicheros.crearFichero(Config.ficheroCiclo + ".csv");
 
         try {
-            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.ficheroCiclo + ".csv", true))) {
+            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(Config.ficheroCiclo + ".csv", true))) {
                 bw.write(toCSV());
                 bw.newLine();
             }
@@ -120,8 +120,8 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void saveToJSON() {
-        GestionFicheros.crearFichero(AppConfig.ficheroCiclo + ".json");
-        try ( BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.ficheroCiclo + ".json", true))) {
+        GestionFicheros.crearFichero(Config.ficheroCiclo + ".json");
+        try ( BufferedWriter bw = new BufferedWriter(new FileWriter(Config.ficheroCiclo + ".json", true))) {
 
             bw.write(toJSON());
             bw.newLine();
@@ -137,8 +137,8 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void saveToBinario() {
-        GestionFicheros.crearFichero(AppConfig.ficheroCiclo + ".dat");
-        try ( DataOutputStream dos = new DataOutputStream(new FileOutputStream(AppConfig.ficheroCiclo + ".dat", true))) {
+        GestionFicheros.crearFichero(Config.ficheroCiclo + ".dat");
+        try ( DataOutputStream dos = new DataOutputStream(new FileOutputStream(Config.ficheroCiclo + ".dat", true))) {
 
             dos.writeInt(codigo);
             dos.writeUTF(denominacion);
@@ -157,10 +157,10 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void saveToTXT() {
-        GestionFicheros.crearFichero(AppConfig.ficheroCiclo + ".txt");
+        GestionFicheros.crearFichero(Config.ficheroCiclo + ".txt");
 
         try ( BufferedWriter bw = new BufferedWriter(
-                new FileWriter(AppConfig.ficheroCiclo + ".txt", true))) {
+                new FileWriter(Config.ficheroCiclo + ".txt", true))) {
 
             bw.write(toTXT());
             bw.close();
@@ -180,10 +180,10 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void objFromCSV() {
-        if (Utils.Validadores.comprobarFicheroLectura(AppConfig.ficheroCiclo, ".csv")) {
+        if (Utils.Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
             String linea;
             try {
-                BufferedReader br = new BufferedReader(new FileReader(AppConfig.ficheroCiclo + ".csv"));
+                BufferedReader br = new BufferedReader(new FileReader(Config.ficheroCiclo + ".csv"));
                 while ((linea = br.readLine()) != null) {
                     String[] datos = linea.split(";");
 
@@ -220,8 +220,8 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     @Override
     public void objFromJSON() {
 
-        File f = new File(AppConfig.ficheroCiclo + ".json");
-        Validadores.comprobarFicheroLectura(AppConfig.ficheroCiclo, ".json");
+        File f = new File(Config.ficheroCiclo + ".json");
+        Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json");
 
         Gson gson = new Gson();
         String linea;
@@ -254,8 +254,8 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     @Override
     public void objFromBinario() {
 
-        File f = new File(AppConfig.ficheroCiclo + ".dat");
-        Validadores.comprobarFicheroLectura(AppConfig.ficheroCiclo, ".dat");
+        File f = new File(Config.ficheroCiclo + ".dat");
+        Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".dat");
 
         try ( DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
 
@@ -295,8 +295,8 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void objFromTXT() {
-        File f = new File(AppConfig.ficheroCiclo + ".txt");
-        Validadores.comprobarFicheroLectura(AppConfig.ficheroCiclo, ".txt");
+        File f = new File(Config.ficheroCiclo + ".txt");
+        Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt");
 
         try ( BufferedReader br = new BufferedReader(new FileReader(f))) {
 

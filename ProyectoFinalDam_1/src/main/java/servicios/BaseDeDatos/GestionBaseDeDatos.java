@@ -4,7 +4,7 @@
  */
 package servicios.BaseDeDatos;
 
-import Config.AppConfig;
+import Config.Config;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -32,12 +32,12 @@ public class GestionBaseDeDatos {
 
             System.out.println("Probando conexion...");
             try {
-                con = DriverManager.getConnection(AppConfig.urlSQL, AppConfig.nombreUsuarioSQL, AppConfig.contraseñaSQL[0]);
+                con = DriverManager.getConnection(Config.urlSQL, Config.nombreUsuarioSQL, Config.contraseñaSQL[0]);
                 System.out.println("Conexion exitosa");
 
             } catch (SQLException e) {
                 try {
-                    con = DriverManager.getConnection(AppConfig.urlSQL, AppConfig.nombreUsuarioSQL, AppConfig.contraseñaSQL[1]);
+                    con = DriverManager.getConnection(Config.urlSQL, Config.nombreUsuarioSQL, Config.contraseñaSQL[1]);
                     System.out.println("Conexion exitosa");
                 } catch (SQLException ex) {
                     System.out.println("Error en la contraseña del WorkBench");

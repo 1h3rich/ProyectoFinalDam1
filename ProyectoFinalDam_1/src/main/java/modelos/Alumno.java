@@ -1,6 +1,6 @@
 package modelos;
 
-import Config.AppConfig;
+import Config.Config;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import java.io.Serializable;
@@ -168,29 +168,29 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
     // ===============================================================================================================================================================
     @Override
     public void saveToCSV() {
-        if (Validadores.comprobarFicheroEscritura(AppConfig.ficheroAlumno, ".csv")) {
-            GestionFicheros.saveToTxtCsvJson(this.toCSV(), AppConfig.ficheroAlumno, ".csv");
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".csv")) {
+            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroAlumno, ".csv");
         }
     }
 
     @Override
     public void saveToJSON() {
-        if (Validadores.comprobarFicheroEscritura(AppConfig.ficheroAlumno, ".json")) {
-            GestionFicheros.saveToTxtCsvJson(this.toJSON(), AppConfig.ficheroAlumno, ".json");
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".json")) {
+            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroAlumno, ".json");
         }
     }
 
     @Override
     public void saveToTXT() {
-        if (Validadores.comprobarFicheroEscritura(AppConfig.ficheroAlumno, ".txt")) {
-            GestionFicheros.saveToTxtCsvJson(this.toTXT(), AppConfig.ficheroAlumno, ".txt");
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".txt")) {
+            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroAlumno, ".txt");
         }
     }
 
     @Override
     public void saveToBinario() {
-        if (Validadores.comprobarFicheroEscritura(AppConfig.ficheroAlumno, ".dat")) {
-            GestionFicheros.saveToBinario(AppConfig.ficheroAlumno, lista);
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
+            GestionFicheros.saveToBinario(Config.ficheroAlumno, lista);
         }
     }
 
@@ -199,9 +199,9 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
     // ===============================================================================================================================================================
     @Override
     public void objFromCSV() {
-        if (Validadores.comprobarFicheroLectura(AppConfig.ficheroAlumno, ".csv")) {
+        if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".csv")) {
 
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(AppConfig.ficheroAlumno, ".csv");
+            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroAlumno, ".csv");
             cargarDesdeLineas(temp);
 
         }
@@ -209,8 +209,8 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
 
     @Override
     public void objFromJSON() {
-        if (Validadores.comprobarFicheroLectura(AppConfig.ficheroAlumno, ".json")) {
-            ArrayList<String> temp = GestionFicheros.loadJson(AppConfig.ficheroAlumno);
+        if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".json")) {
+            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroAlumno);
 
             for (String string : temp) {
                 Alumno alumno = GestionFicheros.fromJson(string);
@@ -229,16 +229,16 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
      */
     @Override
     public void objFromBinario() {
-        if (Validadores.comprobarFicheroLectura(AppConfig.ficheroAlumno, ".dat")) {
-            ArrayList<String> temp = GestionFicheros.loadBinario(AppConfig.ficheroAlumno);
+        if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".dat")) {
+            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroAlumno);
             cargarDesdeLineas(temp);
         }
     }
 
     @Override
     public void objFromTXT() {
-        if (Validadores.comprobarFicheroLectura(AppConfig.ficheroAlumno, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(AppConfig.ficheroAlumno, ".txt");
+        if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".txt")) {
+            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroAlumno, ".txt");
             cargarDesdeLineas(temp);
         }
     }

@@ -1,6 +1,6 @@
 package modelos;
 
-import Config.AppConfig;
+import Config.Config;
 import com.google.gson.Gson;
 import java.io.*;
 import servicios.BaseDeDatos.Insert;
@@ -103,10 +103,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToCSV() {
-        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".csv");
+        GestionFicheros.crearFichero(Config.ficheroLineaMatricula + ".csv");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(AppConfig.ficheroLineaMatricula + ".csv", true))) {
+                new FileWriter(Config.ficheroLineaMatricula + ".csv", true))) {
 
             bw.write(toCSV());
             bw.newLine();
@@ -121,10 +121,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToJSON() {
-        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".json");
+        GestionFicheros.crearFichero(Config.ficheroLineaMatricula + ".json");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(AppConfig.ficheroLineaMatricula + ".json", true))) {
+                new FileWriter(Config.ficheroLineaMatricula + ".json", true))) {
 
             bw.write(toJSON());
             bw.newLine();
@@ -139,10 +139,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToBinario() {
-        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".dat");
+        GestionFicheros.crearFichero(Config.ficheroLineaMatricula + ".dat");
 
         try (DataOutputStream dos = new DataOutputStream(
-                new FileOutputStream(AppConfig.ficheroLineaMatricula + ".dat", true))) {
+                new FileOutputStream(Config.ficheroLineaMatricula + ".dat", true))) {
 
             dos.writeInt(codigo_matricula);
             dos.writeInt(codigo_modulo);
@@ -160,10 +160,10 @@ public class LineaMatricula implements interfaces.interpolaridadDeDatos {
      */
     @Override
     public void saveToTXT() {
-        GestionFicheros.crearFichero(AppConfig.ficheroLineaMatricula + ".txt");
+        GestionFicheros.crearFichero(Config.ficheroLineaMatricula + ".txt");
 
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(AppConfig.ficheroLineaMatricula + ".txt", true))) {
+                new FileWriter(Config.ficheroLineaMatricula + ".txt", true))) {
 
             bw.write(toTXT());
             bw.newLine();
