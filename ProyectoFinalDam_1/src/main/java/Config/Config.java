@@ -5,21 +5,21 @@
 package Config;
 
 /**
- * Aqui se almacenan las constantes necesarias para el correcto funcionamiento de la aplicación.
- * @author isard
+ *
+ * @author 1DAM
  */
-public class appConfig {
-    
+public class Config {
     // SQL
+
     public static String urlSQL = "jdbc:mysql://127.0.0.1:3306/centro_formacion";
     public static String nombreUsuarioSQL = "root";
     public static String[] contraseñaSQL = {"alumno", "root"};
-    
+
     // Ficheros
-    
     public static String ficheroAlumno = "alumno";
     public static String ficheroCiclo = "ciclo";
     public static String ficheroModulo = "modulo";
     public static String ficheroLineaMatricula = "linea_matricula";
     public static String ficheroMatricula = "matricula";
+
 }

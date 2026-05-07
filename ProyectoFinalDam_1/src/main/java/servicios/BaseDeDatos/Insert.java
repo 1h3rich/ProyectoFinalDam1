@@ -22,7 +22,7 @@ public class Insert {
      * @param alumno
      * @return 
      */
-    public static String insertarAlumno(Alumno alumno){
+    private static String insertarAlumno(Alumno alumno){
         return "insert into alumno (nombre, fecha_nacimiento, domicilio, telefono, correo ) values (?, ?, ?, ?, ?)";
     }
     /**
@@ -30,7 +30,7 @@ public class Insert {
      * @param matricula
      * @return 
      */
-    public static String insertarMatricula(Matricula matricula){
+    private static String insertarMatricula(Matricula matricula){
         return "insert into matricula (codigo_alumno, año_academico, estado, importe) values (?, ?, ?, ?)";
     }
     
@@ -39,7 +39,7 @@ public class Insert {
      * @param lineaMatricula
      * @return 
      */
-    public static String insertarLineaMatricula(LineaMatricula lineaMatricula){
+    private static String insertarLineaMatricula(LineaMatricula lineaMatricula){
         return "insert into linea_matricula (codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda) values (?, ?, ?, ?, ?)";
     }
     
@@ -48,7 +48,7 @@ public class Insert {
      * @param ciclo
      * @return 
      */
-    public static String insertarCiclo(Ciclo ciclo){
+    private static String insertarCiclo(Ciclo ciclo){
         return "insert into ciclo (denominacion, familia_profresional, nivel, horas, año_curriculum ) values (?, ?, ?, ?, ?)";
     }
     
@@ -57,7 +57,7 @@ public class Insert {
      * @param modulo
      * @return 
      */
-    public static String insertarModulo(Modulo modulo){
+    private static String insertarModulo(Modulo modulo){
         return "insert into modulo (codigo_ciclo, nombre, curso, creditos_etcs, horas ) values (?, ?, ?, ?, ?)";
     }
     

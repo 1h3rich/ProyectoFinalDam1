@@ -5,9 +5,11 @@
 package servicios.Ficheros;
 
 import Utils.Validadores;
+import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.*;
+import modelos.Alumno;
 
 /**
  *
@@ -158,4 +160,15 @@ public class GestionFicheros {
 
         return new ArrayList<>();
     }
+
+    
+    //=========================================================================================================================================================================
+    //======================= FROM ============================================================================================================================================
+    //=========================================================================================================================================================================
+
+    public static Alumno fromJson(String json) {
+        return new Gson().fromJson(json, Alumno.class);
+    }
+    
+    
 }
