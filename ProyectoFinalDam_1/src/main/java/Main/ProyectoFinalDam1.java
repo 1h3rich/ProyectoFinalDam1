@@ -1,8 +1,6 @@
 package Main;
 
 import servicios.BaseDeDatos.GestionBaseDeDatos;
-import modelos.*;
-import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import servicios.BaseDeDatos.ConsultasMultiTabla;
