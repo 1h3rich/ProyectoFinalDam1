@@ -213,7 +213,7 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
             ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroAlumno);
 
             for (String string : temp) {
-                Alumno alumno = GestionFicheros.fromJson(string);
+                Alumno alumno = (Alumno)GestionFicheros.fromJson(string, Alumno.class);
 
                 lista.add(alumno);
             }

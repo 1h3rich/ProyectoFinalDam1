@@ -1,404 +1,227 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelos;
 
 import Config.Config;
 import Utils.Validadores;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.io.*;
-import servicios.BaseDeDatos.*;
+import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.Insert;
 import servicios.Ficheros.GestionFicheros;
 
-/*
- * @author isard
- */
 public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
-    // Aqui va la creacion del objeto Ciclo, el cual deberemos meter en la base de datos 
 
-    private int codigo;
+    // =========================================================
+    // ===================== ATRIBUTOS =========================
+    // =========================================================
+    private final int codigo;
     private String denominacion;
     private String familiaProfesional;
     private String nivel;
-    private int horasCiclo;
-    private int añoCurricular;
+    private int horas;
+    private int añoCurriculum;
     private HashMap<Integer, Modulo> modulos;
+    public static ArrayList<Ciclo> lista = new ArrayList<>();
 
-    /**
-     * Creador manual de Ciclos desde el programa (Swing)
-     *
-     * @param denominacion
-     * @param familiaProfesional
-     * @param nivel
-     * @param horasCiclo
-     * @param añoCurricular
-     */
-    public Ciclo(String denominacion, String familiaProfesional, String nivel, int horasCiclo, int añoCurricular) {
-        this.codigo = ConsultasEspecificas.leerCodigoBDD("Ciclo");
+    // =========================================================
+    // =================== CONSTRUCTORES =======================
+    // =========================================================
+    public Ciclo(String denominacion, String familiaProfesional, String nivel, int horas, int añoCurriculum) {
+        this.codigo = ConsultasEspecificas.leerCodigoBDD("ciclo");
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
         this.nivel = nivel;
-        this.horasCiclo = horasCiclo;
-        this.añoCurricular = añoCurricular;
+        this.horas = horas;
+        this.añoCurriculum = añoCurriculum;
+        this.modulos = new HashMap<>();
     }
 
-    /**
-     * Creador automatico de ciclos desde la BDD
-     *
-     * @param codigo
-     * @param denominacion
-     * @param familiaProfesional
-     * @param nivel
-     * @param horasCiclo
-     * @param añoCurricular
-     */
-    public Ciclo(int codigo, String denominacion, String familiaProfesional, String nivel, int horasCiclo, int añoCurricular) {
+    public Ciclo(int codigo, String denominacion, String familiaProfesional, String nivel, int horas, int añoCurriculum) {
         this.codigo = codigo;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
         this.nivel = nivel;
-        this.horasCiclo = horasCiclo;
-        this.añoCurricular = añoCurricular;
+        this.horas = horas;
+        this.añoCurriculum = añoCurriculum;
+        this.modulos = new HashMap<>();
     }
 
-    public String getDenominacion() {
-        return denominacion;
+    // =========================================================
+    // ===================== GETTERS ===========================
+    // =========================================================
+    public int getCodigo() { return codigo; }
+    public String getDenominacion() { return denominacion; }
+    public String getFamiliaProfesional() { return familiaProfesional; }
+    public String getNivel() { return nivel; }
+    public int getHoras() { return horas; }
+    public int getAñoCurriculum() { return añoCurriculum; }
+    public HashMap<Integer, Modulo> getModulos() { return modulos; }
+
+    // =========================================================
+    // ====================== SETTERS ==========================
+    // =========================================================
+    public void setDenominacion(String denominacion) { this.denominacion = denominacion; }
+    public void setFamiliaProfesional(String familiaProfesional) { this.familiaProfesional = familiaProfesional; }
+    public void setNivel(String nivel) { this.nivel = nivel; }
+    public void setHoras(int horas) { this.horas = horas; }
+    public void setAñoCurriculum(int añoCurriculum) { this.añoCurriculum = añoCurriculum; }
+
+    // =========================================================
+    // ======================= METODOS =========================
+    // =========================================================
+    public void agregarModulo(Modulo m) {
+        this.modulos.put(m.getCodigo(), m);
     }
 
-    public String getFamiliaProfesional() {
-        return familiaProfesional;
+    public static Ciclo obtenerLineas(String linea) {
+        String[] partes = linea.split(";");
+
+        int cod = Integer.parseInt(partes[0]);
+        String den = partes[1];
+        String fam = partes[2];
+        String niv = partes[3];
+        int horas = Integer.parseInt(partes[4]);
+        int año = Integer.parseInt(partes[5]);
+
+        return new Ciclo(cod, den, fam, niv, horas, año);
     }
 
-    public int getHorasCiclo() {
-        return horasCiclo;
+    private void cargarDesdeLineas(ArrayList<String> temp) {
+        for (String linea : temp) {
+            Ciclo c = obtenerLineas(linea);
+            lista.add(c);
+        }
+
+        for (Ciclo c : lista) {
+            System.out.println(c);
+        }
     }
 
-    public int getAñoCurricular() {
-        return añoCurricular;
-    }
-
-    public HashMap<Integer, Modulo> getModulos() {
-        return modulos;
-    }
-    
-    public int getCodigo() {
-        return codigo;
-    }
-    public String getNivel() {
-        return nivel;
-    }
-
-    // ============================================================================================================================================================================
-    // ==================== SAVE ==================================================================================================================================================
-    // ============================================================================================================================================================================
-    /**
-     * Guarda los ciclos en un archivo CSV
-     */
+    // =========================================================
+    // ===================== SAVE TO ===========================
+    // =========================================================
     @Override
     public void saveToCSV() {
-        GestionFicheros.crearFichero(Config.ficheroCiclo + ".csv");
-
-        try {
-            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(Config.ficheroCiclo + ".csv", true))) {
-                bw.write(toCSV());
-                bw.newLine();
-            }
-
-        } catch (IOException e) {
-            System.out.println("Ha ocurrido un error inesperado " + e);
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".csv")) {
+            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroCiclo, ".csv");
         }
     }
 
-    /**
-     * Guarda los alumnos en un archivo JSON
-     */
     @Override
     public void saveToJSON() {
-        GestionFicheros.crearFichero(Config.ficheroCiclo + ".json");
-        try ( BufferedWriter bw = new BufferedWriter(new FileWriter(Config.ficheroCiclo + ".json", true))) {
-
-            bw.write(toJSON());
-            bw.newLine();
-            bw.close();
-
-        } catch (IOException e) {
-            System.out.println("Error al guardar JSON: " + e.getMessage());
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".json")) {
+            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroCiclo, ".json");
         }
     }
 
-    /**
-     * Guarda los ciclos en un archivo binario
-     */
-    @Override
-    public void saveToBinario() {
-        GestionFicheros.crearFichero(Config.ficheroCiclo + ".dat");
-        try ( DataOutputStream dos = new DataOutputStream(new FileOutputStream(Config.ficheroCiclo + ".dat", true))) {
-
-            dos.writeInt(codigo);
-            dos.writeUTF(denominacion);
-            dos.writeUTF(familiaProfesional);
-            dos.writeInt(horasCiclo);
-            dos.writeInt(añoCurricular);
-            dos.close();
-
-        } catch (IOException e) {
-            System.out.println("Error al guardar Binario: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Guarda los alumnos en un archivo TXT
-     */
     @Override
     public void saveToTXT() {
-        GestionFicheros.crearFichero(Config.ficheroCiclo + ".txt");
-
-        try ( BufferedWriter bw = new BufferedWriter(
-                new FileWriter(Config.ficheroCiclo + ".txt", true))) {
-
-            bw.write(toTXT());
-            bw.close();
-
-        } catch (IOException e) {
-            System.out.println("Error al guardar TXT: " + e.getMessage());
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".txt")) {
+            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroCiclo, ".txt");
         }
-
     }
-    
-    // ============================================================================================================================================================================
-    // ==================== LOAD ==================================================================================================================================================
-    // ============================================================================================================================================================================
 
-    /**
-     * Convierte de CSV a objeto
-     */
+    @Override
+    public void saveToBinario() {
+        if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
+            GestionFicheros.saveToBinario(Config.ficheroCiclo, lista);
+        }
+    }
+
+    // =========================================================
+    // =================== FROM FILES ==========================
+    // =========================================================
     @Override
     public void objFromCSV() {
-        if (Utils.Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
-            String linea;
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(Config.ficheroCiclo + ".csv"));
-                while ((linea = br.readLine()) != null) {
-                    String[] datos = linea.split(";");
-
-                    int tempCode = Integer.parseInt(datos[0]);
-                    String tempDenominacion = datos[1];
-                    String tempFamiliaProfesional = datos[2];
-                    String niv = datos[3];
-                    int tempHorasCiclo = Integer.parseInt(datos[4]);
-                    int tempAñoCurricular = Integer.parseInt(datos[5]);
-
-                    System.out.println("Codigo: " + tempCode);
-                    System.out.println("Denominacion: " + tempDenominacion);
-                    System.out.println("Familia Profesional: " + tempFamiliaProfesional);
-                    System.out.println("Horas Ciclo: " + tempHorasCiclo);
-                    System.out.println("Año Curricular: " + tempAñoCurricular);
-                    System.out.println("-----------------");
-
-                    Ciclo ciclo = new Ciclo(tempCode, tempDenominacion, tempFamiliaProfesional, niv, tempHorasCiclo, tempAñoCurricular);
-
-                }
-            } catch (IOException e) {
-                System.out.println("Error al leer el archivo CSV: " + e.getMessage());
-            }
-
+        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
+            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroCiclo, ".csv");
+            cargarDesdeLineas(temp);
         }
     }
 
-    // ============================================================================================================================================================================
-    // ================= CONVERTIDORES ============================================================================================================================================
-    // ============================================================================================================================================================================
-    /**
-     * Convierte de JSON a objeto
-     */
-    @Override
-    public void objFromJSON() {
-
-        File f = new File(Config.ficheroCiclo + ".json");
-        Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json");
-
-        Gson gson = new Gson();
-        String linea;
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(f));
-
-            while ((linea = br.readLine()) != null) {
-                if (!linea.isBlank()) {
-
-                    Ciclo ciclo = gson.fromJson(linea, Ciclo.class);
-
-                    System.out.println("Código: " + ciclo.getCodigo());
-                    System.out.println("Denominacion: " + ciclo.getDenominacion());
-                    System.out.println("Familia Profesional: " + ciclo.getFamiliaProfesional());
-                    System.out.println("Horas Ciclo: " + ciclo.getHorasCiclo());
-                    System.out.println("Año Curricular: " + ciclo.getAñoCurricular());
-                    System.out.println("-----------------");
-                }
-            }
-        } catch (JsonSyntaxException | IOException e) {
-            System.out.println("Ha ocurrido un error al crear el objeto desde JSON, error: " + e.getMessage());
-        }
-
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void objFromBinario() {
-
-        File f = new File(Config.ficheroCiclo + ".dat");
-        Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".dat");
-
-        try ( DataInputStream dis = new DataInputStream(new FileInputStream(f))) {
-
-            while (dis.available() > 0) {
-
-                int tempCode = dis.readInt();
-                String tempNombre = dis.readUTF();
-                String tempDenominacion = dis.readUTF();
-                String tempFamiliaProfesional = dis.readUTF();
-                String niv = dis.readUTF();
-                int tempHorasCiclo = dis.readInt();
-                int tempAñoCurricular = dis.readInt();
-
-                Ciclo ciclo = new Ciclo(
-                        tempCode,
-                        tempDenominacion,
-                        tempFamiliaProfesional,
-                        niv,
-                        tempHorasCiclo,
-                        tempAñoCurricular
-                );
-
-                System.out.println("Código: " + ciclo.getCodigo());
-                System.out.println("Denominacion: " + ciclo.getDenominacion());
-                System.out.println("Familia Profesional: " + ciclo.getFamiliaProfesional());
-                System.out.println("Horas Ciclo: " + ciclo.getHorasCiclo());
-                System.out.println("Año Curricular: " + ciclo.getAñoCurricular());
-                System.out.println("-----------------");
-            }
-        } catch (IOException ex) {
-            System.out.println("Ha ocurrido un error al crear el objeto desde binario, error: " + ex.getMessage());
-        }
-    }
-
-    /**
-     *
-     */
     @Override
     public void objFromTXT() {
-        File f = new File(Config.ficheroCiclo + ".txt");
-        Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt");
+        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt")) {
+            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroCiclo, ".txt");
+            cargarDesdeLineas(temp);
+        }
+    }
 
-        try ( BufferedReader br = new BufferedReader(new FileReader(f))) {
+    @Override
+    public void objFromBinario() {
+        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".dat")) {
+            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroCiclo);
+            cargarDesdeLineas(temp);
+        }
+    }
 
-            String linea;
+    @Override
+    public void objFromJSON() {
+        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
+            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroCiclo);
 
-            while ((linea = br.readLine()) != null) {
-
-                if (linea.isBlank()) {
-                    continue;
-                }
-
-                String[] datos = linea.split(";");
-
-                int tempCode = Integer.parseInt(datos[0]);
-                String tempDenominacion = datos[1];
-                String tempFamiliaProfesional = datos[2];
-                String niv = datos[3];
-                int tempHorasCiclo = Integer.parseInt(datos[4]);
-                int tempAñoCurricular = Integer.parseInt(datos[5]);
-
-                 Ciclo ciclo = new Ciclo(
-                        tempCode,
-                        tempDenominacion,
-                        tempFamiliaProfesional,
-                        niv,
-                        tempHorasCiclo,
-                        tempAñoCurricular
-                );
-
-                System.out.println("Código: " + ciclo.getCodigo());
-                System.out.println("Denominacion: " + ciclo.getDenominacion());
-                System.out.println("Familia Profesional: " + ciclo.getFamiliaProfesional());
-                System.out.println("Horas Ciclo: " + ciclo.getHorasCiclo());
-                System.out.println("Año Curricular: " + ciclo.getAñoCurricular());
-                System.out.println("-----------------");
+            for (String linea : temp) {
+                Ciclo c = (Ciclo)GestionFicheros.fromJson(linea, Ciclo.class);
+                lista.add(c);
             }
 
-        } catch (IOException ex) {
-            System.out.println("Ha ocurrido un error al crear el objeto desde el fichero de texto, error: " + ex.getMessage());;
+            for (Ciclo c : lista) {
+                System.out.println(c);
+            }
         }
-
     }
 
-    // ============================================================================================================================================================================
-    // ===================== SQL ==================================================================================================================================================
-    // ============================================================================================================================================================================
-    
-    /**
-     *
-     * @return
-     */
-    public String SqlToObj() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    // =========================================================
+    // ======================= SQL =============================
+    // =========================================================
+    public static Ciclo SqlToObj(ResultSet rs) throws SQLException {
+        return new Ciclo(
+                rs.getInt("codigo"),
+                rs.getString("denominacion"),
+                rs.getString("familia_profesional"),
+                rs.getString("nivel"),
+                rs.getInt("horas"),
+                rs.getInt("año_curriculum")
+        );
     }
 
-    public String ObjToSql() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void ObjToSql() {
+        Insert.insertarBDD(this);
     }
 
-    /**
-     * Convierte la informacion a un String csv
-     *
-     * @return
-     */
+    // =========================================================
+    // ================== CONVERTIDORES ========================
+    // =========================================================
     @Override
     public String toCSV() {
-        return codigo + ";" + denominacion + ";" + familiaProfesional + ";" + nivel + ";" + horasCiclo + ";" + añoCurricular;
+        return codigo + ";" + denominacion + ";" + familiaProfesional + ";" + nivel + ";" + horas + ";" + añoCurriculum;
     }
 
-    /**
-     * Convierte la informacion a un String json
-     *
-     * @return
-     */
     @Override
     public String toJSON() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        return new Gson().toJson(this);
     }
 
-    /**
-     * Convierte la informacion a un String TXT
-     *
-     * @return
-     */
     @Override
     public String toTXT() {
         return toCSV();
     }
-    //Metodos de la clase
 
-    public void agregarModulo(Modulo modulo) {
-        this.modulos.put(modulo.getCodigo(),modulo);
+    // =========================================================
+    // ===================== TO STRING =========================
+    // =========================================================
+    @Override
+    public String toString() {
+        return "Ciclo{" +
+                "codigo=" + codigo +
+                ", denominacion='" + denominacion + '\'' +
+                ", familiaProfesional='" + familiaProfesional + '\'' +
+                ", nivel='" + nivel + '\'' +
+                ", horas=" + horas +
+                ", añoCurriculum=" + añoCurriculum +
+                '}';
     }
-
-
-    // ============================================================================================================================================================================
-    // ===================== TO STRING ============================================================================================================================================
-    // ============================================================================================================================================================================ 
-   
-    
-
-    
-
 }
