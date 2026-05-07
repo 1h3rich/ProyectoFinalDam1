@@ -166,8 +166,15 @@ public class GestionFicheros {
     //======================= FROM ============================================================================================================================================
     //=========================================================================================================================================================================
 
-    public static Alumno fromJson(String json) {
-        return new Gson().fromJson(json, Alumno.class);
+    /**
+     * Convierte un string en json y devuelve el objeto.
+     * Los parametros son: la cadena y el .class de la clase.
+     * @param json
+     * @param clase
+     * @return 
+     */
+    public static Object fromJson(String json, Class clase) {
+        return new Gson().fromJson(json, clase);
     }
     
     
