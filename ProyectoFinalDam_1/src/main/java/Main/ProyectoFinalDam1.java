@@ -31,9 +31,7 @@ public class ProyectoFinalDam1 {
         GestionBaseDeDatos.vincularBDD();
         boolean salir = false;
 
-        
         // TODO ESTE MENU ES PARA REALIZAR PRUEBAS TODO ESTO HABRA QUE HACERLO EN SWING
-        
         while (!salir) {
             System.out.println("\n========================================");
             System.out.println("       MENÚ GESTIÓN DE MATRÍCULAS       ");
@@ -45,13 +43,14 @@ public class ProyectoFinalDam1 {
 
             try {
                 int opcionPrincipal = teclado.nextInt();
-                teclado.nextLine(); 
+                teclado.nextLine();
 
                 switch (opcionPrincipal) {
-                    case 1 -> System.out.println("\n[INFO] Ejecutando inserción de datos...");
+                    case 1 ->
+                        System.out.println("\n[INFO] Ejecutando inserción de datos...");
                     // Aquí pondriamos para insertar los datos en la base de datos y crear los objetos correspondientes
 
-                    case 2 -> 
+                    case 2 ->
                         mostrarSubmenuConsultas();
 
                     case 3 -> {
@@ -59,11 +58,12 @@ public class ProyectoFinalDam1 {
                         System.out.println("\n¡Gracias por usar la aplicación! Saliendo...");
                     }
 
-                    default -> System.out.println("\n[ERROR] Opción no válida. Inténtelo de nuevo.");
+                    default ->
+                        System.out.println("\n[ERROR] Opción no válida. Inténtelo de nuevo.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("\n[ERROR] Debe introducir un número entero.");
-                teclado.nextLine(); 
+                teclado.nextLine();
             }
         }
         teclado.close();
@@ -93,75 +93,83 @@ public class ProyectoFinalDam1 {
 
             try {
                 int opcionConsulta = teclado.nextInt();
-                teclado.nextLine(); 
+                teclado.nextLine();
 
                 if (opcionConsulta >= 1 && opcionConsulta <= 9) {
                     System.out.println("\n[BD] Lanzando la Consulta " + opcionConsulta + " a la base de datos...");
 
-                    
                     switch (opcionConsulta) {
                         case 1 -> {
                             System.out.println("Consulta 1:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta1, false, null, null, null);
+                            String entradas[] = new String[0];
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta1, entradas);
                             System.out.println("");
                         }
                         case 2 -> {
+                            String entradas[] = new String[2];
                             System.out.println("Introduce un nivel de ciclo");
-                            String nivelCiclo = teclado.nextLine();
+                            entradas[0] = teclado.nextLine();
                             System.out.println("Introduce un curso de modulo");
-                            String cursoDeModulo = teclado.nextLine();
+                            entradas[1] = teclado.nextLine();
 
                             System.out.println("Consulta 2:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta2, true, nivelCiclo, cursoDeModulo, null);
+
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta2, entradas);
                             System.out.println("");
                         }
                         case 3 -> {
+                            String entradas[] = new String[1];
                             System.out.println("Introduce el año academico");
-                            String añoAcademico = teclado.next();
+                            entradas[0] = teclado.next();
 
                             System.out.println("Consulta 3:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta3, true, añoAcademico, null, null);
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta3, entradas);
                             System.out.println("");
                         }
                         case 4 -> {
+                            String entradas[] = new String[3];
                             System.out.println("Introduce la denominacion del ciclo");
-                            String denominacionCiclo = teclado.nextLine();
+                            entradas[0] = teclado.nextLine();
                             System.out.println("Introduce el curso del modulo");
-                            String cursoModulo = teclado.nextLine();
+                            entradas[1] = teclado.nextLine();
                             System.out.println("Introduce el anio academico");
-                            String anioAcademico = teclado.nextLine();
+                            entradas[2] = teclado.nextLine();
 
                             System.out.println("Consulta 4:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta4, true, denominacionCiclo, cursoModulo, anioAcademico);
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta4, entradas);
                         }
                         case 5 -> {
+                            String entradas[] = new String[0];
                             System.out.println("Consulta 5:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta5, false, null, null, null);
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta5, entradas);
                             System.out.println("");
                         }
                         case 6 -> {
+                            String entradas[] = new String[0];
                             System.out.println("Consulta 6:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta6, false, null, null, null);
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta6, entradas);
                             System.out.println("");
                         }
                         case 7 -> {
+                            String entradas[] = new String[0];
                             System.out.println("Consulta 7:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta7, false, null, null, null);
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta7, entradas);
                             System.out.println("");
                         }
                         case 8 -> {
                             System.out.println("Consulta 8:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta8, false, null, null, null);
+                            //GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta8, false, null, null, null);
                             System.out.println("");
                         }
                         case 9 -> {
+                            String entradas[] = new String[0];
                             System.out.println("Consulta 9:");
-                            GestionBaseDeDatos.realizarConsulta(ConsultasMultiTabla.datosConsulta9, false, null, null, null);
+                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta9, entradas);
                             System.out.println("");
                         }
 
                     }
-                    
+
                 } else if (opcionConsulta == 10) {
                     volver = true; // Rompe este bucle y regresa automáticamente al menú principal
                 } else {

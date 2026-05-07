@@ -62,30 +62,21 @@ public class GestionBaseDeDatos {
 
     /**
      * Metodo con el cual ejecutas por consola la consulta que quieras,
-     * pasandole un array con la consulta y las columnas que tiene, un boolean
-     * que indica si necesita parametros de entrada la consulta y los parametros
-     * que necesita con un maximo de 3
+     * pasandole un array con la consulta y las columnas que tiene, ademas
+     * de un array con las entradas
      *
      * @param datosConsulta
-     * @param entradaBoolean
-     * @param entrada1
-     * @param entrada2
-     * @param entrada3
+     * @param entradas
+     
      */
-    public static void realizarConsulta(String[] datosConsulta, boolean entradaBoolean, String entrada1, String entrada2, String entrada3) {//Todavia falta poner más visual la tabla
+    public static void realizarSQL(String[] datosConsulta,String entradas[]) {//Todavia falta poner más visual la tabla
         try {
             PreparedStatement pst = con.prepareStatement(datosConsulta[0]);
 
-            if (entradaBoolean) {
-                pst.setString(1, entrada1);
-                if (entrada2 != null) {
-                    pst.setString(2, entrada2);
-                }
-                if (entrada3 != null) {
-                    pst.setString(3, entrada3);
-                }
-
+            for (int i = 0; i < entradas.length; i++) {
+                pst.setString(i + 1, entradas[i]);
             }
+            
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) { //Salta a la siguiente línea de la tabla
@@ -100,4 +91,80 @@ public class GestionBaseDeDatos {
         }
     }
 
+    public static void insertarDatos(String[] datosInsertar, String entradas[]) {
+        try {
+            PreparedStatement pst = con.prepareStatement(datosInsertar[0]);
+
+            for (int i = 0; i < entradas.length; i++) {
+                pst.setString(i + 1, entradas[i]);
+            }
+            ResultSet rs = pst.executeQuery();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /*
+    public static void consultarTabla(String[] datosTablas, boolean ordenar, String datoOrdenacion) {
+        try {
+            PreparedStatement pst = con.prepareStatement(datosTablas[0]);
+
+            if (ordenar) {
+                pst.setString(1, datoOrdenacion);
+            }
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) { //Salta a la siguiente línea de la tabla
+                for (int i = 1; i < datosTablas.length; i++) {
+                    System.out.print(rs.getString(datosTablas[i]) + " ");
+                }
+                System.out.println("");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    */
+    public static void actualizarFila(String[] datosActualizacion, String entradas[]) {
+        try {
+            PreparedStatement pst = con.prepareStatement(datosActualizacion[0]);
+
+            for (int i = 0; i < entradas.length; i++) {
+                pst.setString(i + 1, entradas[i]);
+            }
+
+            ResultSet rs = pst.executeQuery();
+
+            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void eliminarFila(String[] datosEliminar, String entradas[]) {
+        try {
+            PreparedStatement pst = con.prepareStatement(datosEliminar[0]);
+
+            for (int i = 0; i < entradas.length; i++) {
+                pst.setString(i + 1, entradas[i]);
+            }
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) { //Salta a la siguiente línea de la tabla
+                for (int i = 1; i < datosEliminar.length; i++) {
+                    System.out.print(rs.getString(datosEliminar[i]) + " ");
+                }
+                System.out.println("");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
