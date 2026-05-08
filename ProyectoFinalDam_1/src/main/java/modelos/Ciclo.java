@@ -3,106 +3,291 @@ package modelos;
 import Config.Config;
 import Utils.Validadores;
 import com.google.gson.Gson;
+import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.BaseDeDatos.Insert;
 import servicios.Ficheros.GestionFicheros;
 
-public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
+public class Ciclo implements interpolaridadDeDatos, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
     // =========================================================
+
     private final int codigo;
     private String denominacion;
     private String familiaProfesional;
     private String nivel;
     private int horas;
     private int añoCurriculum;
-    private HashMap<Integer, Modulo> modulos;
-    public static ArrayList<Ciclo> lista = new ArrayList<>();
 
     // =========================================================
     // =================== CONSTRUCTORES =======================
     // =========================================================
-    public Ciclo(String denominacion, String familiaProfesional, String nivel, int horas, int añoCurriculum) {
-        this.codigo = ConsultasEspecificas.leerCodigoBDD("ciclo");
+
+    /**
+     * Creación manual de nuevo ciclo.
+     *
+     * @param denominacion
+     * @param familiaProfesional
+     * @param nivel
+     * @param horas
+     * @param añoCurriculum
+     */
+    public Ciclo(String denominacion,
+                 String familiaProfesional,
+                 String nivel,
+                 int horas,
+                 int añoCurriculum) {
+
+        int codigoGenerado = ConsultasEspecificas.leerCodigoBDD("ciclo");
+
+        if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
+            throw new IllegalArgumentException("El código generado del ciclo debe ser mayor que 0");
+        }
+
+        validarDatos(
+                denominacion,
+                familiaProfesional,
+                nivel,
+                horas,
+                añoCurriculum
+        );
+
+        this.codigo = codigoGenerado;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
         this.nivel = nivel;
         this.horas = horas;
         this.añoCurriculum = añoCurriculum;
-        this.modulos = new HashMap<>();
     }
 
-    public Ciclo(int codigo, String denominacion, String familiaProfesional, String nivel, int horas, int añoCurriculum) {
+    /**
+     * Creación desde base de datos / fichero.
+     *
+     * @param codigo
+     * @param denominacion
+     * @param familiaProfesional
+     * @param nivel
+     * @param horas
+     * @param añoCurriculum
+     */
+    public Ciclo(int codigo,
+                 String denominacion,
+                 String familiaProfesional,
+                 String nivel,
+                 int horas,
+                 int añoCurriculum) {
+
+        if (!Validadores.validarCodigoPositivo(codigo)) {
+            throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
+        }
+
+        validarDatos(
+                denominacion,
+                familiaProfesional,
+                nivel,
+                horas,
+                añoCurriculum
+        );
+
         this.codigo = codigo;
         this.denominacion = denominacion;
         this.familiaProfesional = familiaProfesional;
         this.nivel = nivel;
         this.horas = horas;
         this.añoCurriculum = añoCurriculum;
-        this.modulos = new HashMap<>();
     }
 
     // =========================================================
     // ===================== GETTERS ===========================
     // =========================================================
-    public int getCodigo() { return codigo; }
-    public String getDenominacion() { return denominacion; }
-    public String getFamiliaProfesional() { return familiaProfesional; }
-    public String getNivel() { return nivel; }
-    public int getHoras() { return horas; }
-    public int getAñoCurriculum() { return añoCurriculum; }
-    public HashMap<Integer, Modulo> getModulos() { return modulos; }
 
-    // =========================================================
-    // ====================== SETTERS ==========================
-    // =========================================================
-    public void setDenominacion(String denominacion) { this.denominacion = denominacion; }
-    public void setFamiliaProfesional(String familiaProfesional) { this.familiaProfesional = familiaProfesional; }
-    public void setNivel(String nivel) { this.nivel = nivel; }
-    public void setHoras(int horas) { this.horas = horas; }
-    public void setAñoCurriculum(int añoCurriculum) { this.añoCurriculum = añoCurriculum; }
-
-    // =========================================================
-    // ======================= METODOS =========================
-    // =========================================================
-    public void agregarModulo(Modulo m) {
-        this.modulos.put(m.getCodigo(), m);
+    public int getCodigo() {
+        return codigo;
     }
 
+    public String getDenominacion() {
+        return denominacion;
+    }
+
+    public String getFamiliaProfesional() {
+        return familiaProfesional;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public int getHoras() {
+        return horas;
+    }
+
+    public int getAñoCurriculum() {
+        return añoCurriculum;
+    }
+
+    // =========================================================
+    // ===================== SETTERS ===========================
+    // =========================================================
+
+    public void setDenominacion(String denominacion) {
+        if (!Validadores.validarTextoNoVacio(denominacion)) {
+            throw new IllegalArgumentException("La denominación no puede estar vacía");
+        }
+
+        this.denominacion = denominacion;
+    }
+
+    public void setFamiliaProfesional(String familiaProfesional) {
+        if (!Validadores.validarTextoNoVacio(familiaProfesional)) {
+            throw new IllegalArgumentException("La familia profesional no puede estar vacía");
+        }
+
+        this.familiaProfesional = familiaProfesional;
+    }
+
+    public void setNivel(String nivel) {
+        if (!Validadores.validarNivel(nivel)) {
+            throw new IllegalArgumentException("El nivel no puede estar vacío");
+        }
+
+        this.nivel = nivel;
+    }
+
+    public void setHoras(int horas) {
+        if (!Validadores.validarHorasCiclo(horas)) {
+            throw new IllegalArgumentException("Las horas del ciclo deben ser mayores que 0");
+        }
+
+        this.horas = horas;
+    }
+
+    public void setAñoCurriculum(int añoCurriculum) {
+        if (!Validadores.validarAñoCurriculum(añoCurriculum)) {
+            throw new IllegalArgumentException("El año del currículum no es válido");
+        }
+
+        this.añoCurriculum = añoCurriculum;
+    }
+
+    // =========================================================
+    // ==================== VALIDACIONES =======================
+    // =========================================================
+
+    private static void validarDatos(String denominacion,
+                                     String familiaProfesional,
+                                     String nivel,
+                                     int horas,
+                                     int añoCurriculum) {
+
+        if (!Validadores.validarTextoNoVacio(denominacion)) {
+            throw new IllegalArgumentException("La denominación no puede estar vacía");
+        }
+
+        if (!Validadores.validarTextoNoVacio(familiaProfesional)) {
+            throw new IllegalArgumentException("La familia profesional no puede estar vacía");
+        }
+
+        if (!Validadores.validarNivel(nivel)) {
+            throw new IllegalArgumentException("El nivel no puede estar vacío");
+        }
+
+        if (!Validadores.validarHorasCiclo(horas)) {
+            throw new IllegalArgumentException("Las horas del ciclo deben ser mayores que 0");
+        }
+
+        if (!Validadores.validarAñoCurriculum(añoCurriculum)) {
+            throw new IllegalArgumentException("El año del currículum no es válido");
+        }
+    }
+
+    private void validarObjeto() {
+        if (!Validadores.validarCodigoPositivo(this.codigo)) {
+            throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
+        }
+
+        validarDatos(
+                this.denominacion,
+                this.familiaProfesional,
+                this.nivel,
+                this.horas,
+                this.añoCurriculum
+        );
+    }
+
+    // =========================================================
+    // ===================== MÉTODOS ===========================
+    // =========================================================
+
     public static Ciclo obtenerLineas(String linea) {
-        String[] partes = linea.split(";");
+        String[] partes = linea.split(";", -1);
 
-        int cod = Integer.parseInt(partes[0]);
-        String den = partes[1];
-        String fam = partes[2];
-        String niv = partes[3];
-        int horas = Integer.parseInt(partes[4]);
-        int año = Integer.parseInt(partes[5]);
+        if (partes.length != 6) {
+            throw new IllegalArgumentException("Línea inválida para Ciclo: " + linea);
+        }
 
-        return new Ciclo(cod, den, fam, niv, horas, año);
+        int tempCodigo = Integer.parseInt(partes[0]);
+        String tempDenominacion = partes[1];
+        String tempFamiliaProfesional = partes[2];
+        String tempNivel = partes[3];
+        int tempHoras = Integer.parseInt(partes[4]);
+        int tempAñoCurriculum = Integer.parseInt(partes[5]);
+
+        return new Ciclo(
+                tempCodigo,
+                tempDenominacion,
+                tempFamiliaProfesional,
+                tempNivel,
+                tempHoras,
+                tempAñoCurriculum
+        );
     }
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
+
+        GestionBaseDeDatos.listaCiclo.clear();
+
         for (String linea : temp) {
-            Ciclo c = obtenerLineas(linea);
-            lista.add(c);
+            if (!linea.trim().isEmpty()) {
+                Ciclo ciclo = Ciclo.obtenerLineas(linea);
+                GestionBaseDeDatos.listaCiclo.add(ciclo);
+            }
         }
 
-        for (Ciclo c : lista) {
-            System.out.println(c);
+        for (Ciclo ciclo : GestionBaseDeDatos.listaCiclo) {
+            System.out.println(ciclo);
         }
+    }
+
+    /**
+     * Devuelve los módulos que pertenecen a este ciclo.
+     *
+     * La relación correcta está en Modulo.codigo_ciclo.
+     */
+    public ArrayList<Modulo> obtenerModulosDelCiclo() {
+        ArrayList<Modulo> modulosDelCiclo = new ArrayList<>();
+
+        for (Modulo modulo : GestionBaseDeDatos.listaModulo) {
+            if (modulo.getCodigo_ciclo() == this.codigo) {
+                modulosDelCiclo.add(modulo);
+            }
+        }
+
+        return modulosDelCiclo;
     }
 
     // =========================================================
     // ===================== SAVE TO ===========================
     // =========================================================
+
     @Override
     public void saveToCSV() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".csv")) {
@@ -127,13 +312,14 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     @Override
     public void saveToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroCiclo, lista);
+            GestionFicheros.saveToBinario(Config.ficheroCiclo, GestionBaseDeDatos.listaCiclo);
         }
     }
 
     // =========================================================
     // =================== FROM FILES ==========================
     // =========================================================
+
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
@@ -143,10 +329,26 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     }
 
     @Override
-    public void objFromTXT() {
-        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroCiclo, ".txt");
-            cargarDesdeLineas(temp);
+    public void objFromJSON() {
+        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
+
+            GestionBaseDeDatos.listaCiclo.clear();
+
+            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroCiclo);
+
+            for (String string : temp) {
+                if (!string.trim().isEmpty()) {
+                    Ciclo ciclo = (Ciclo) GestionFicheros.fromJson(string, Ciclo.class);
+
+                    ciclo.validarObjeto();
+
+                    GestionBaseDeDatos.listaCiclo.add(ciclo);
+                }
+            }
+
+            for (Ciclo ciclo : GestionBaseDeDatos.listaCiclo) {
+                System.out.println(ciclo);
+            }
         }
     }
 
@@ -159,25 +361,19 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     }
 
     @Override
-    public void objFromJSON() {
-        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
-            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroCiclo);
-
-            for (String linea : temp) {
-                Ciclo c = (Ciclo)GestionFicheros.fromJson(linea, Ciclo.class);
-                lista.add(c);
-            }
-
-            for (Ciclo c : lista) {
-                System.out.println(c);
-            }
+    public void objFromTXT() {
+        if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt")) {
+            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroCiclo, ".txt");
+            cargarDesdeLineas(temp);
         }
     }
 
     // =========================================================
     // ======================= SQL =============================
     // =========================================================
+
     public static Ciclo SqlToObj(ResultSet rs) throws SQLException {
+
         return new Ciclo(
                 rs.getInt("codigo"),
                 rs.getString("denominacion"),
@@ -193,11 +389,17 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     }
 
     // =========================================================
-    // ================== CONVERTIDORES ========================
+    // ================= CONVERTIDORES =========================
     // =========================================================
+
     @Override
     public String toCSV() {
-        return codigo + ";" + denominacion + ";" + familiaProfesional + ";" + nivel + ";" + horas + ";" + añoCurriculum;
+        return codigo + ";"
+                + denominacion + ";"
+                + familiaProfesional + ";"
+                + nivel + ";"
+                + horas + ";"
+                + añoCurriculum;
     }
 
     @Override
@@ -213,15 +415,16 @@ public class Ciclo implements interfaces.interpolaridadDeDatos, Serializable {
     // =========================================================
     // ===================== TO STRING =========================
     // =========================================================
+
     @Override
     public String toString() {
-        return "Ciclo{" +
-                "codigo=" + codigo +
-                ", denominacion='" + denominacion + '\'' +
-                ", familiaProfesional='" + familiaProfesional + '\'' +
-                ", nivel='" + nivel + '\'' +
-                ", horas=" + horas +
-                ", añoCurriculum=" + añoCurriculum +
-                '}';
+        return "Ciclo{"
+                + "codigo=" + codigo
+                + ", denominacion='" + denominacion + '\''
+                + ", familiaProfesional='" + familiaProfesional + '\''
+                + ", nivel='" + nivel + '\''
+                + ", horas=" + horas
+                + ", añoCurriculum=" + añoCurriculum
+                + '}';
     }
 }

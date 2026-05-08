@@ -6,8 +6,10 @@ package servicios.BaseDeDatos;
 
 import Config.Config;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelos.*;
 
 /**
  *
@@ -16,6 +18,11 @@ import java.util.logging.Logger;
 public class GestionBaseDeDatos {
 
     private static Connection con;
+    public static ArrayList<Alumno> listaAlumno = new ArrayList<>();
+    public static ArrayList<Matricula> listaMatricula = new ArrayList<>();
+    public static ArrayList<LineaMatricula> listaLineaMatricula = new ArrayList<>();
+    public static ArrayList<Ciclo> listaCiclo = new ArrayList<>();
+    public static ArrayList<Modulo> listaModulo = new ArrayList<>();
 
     /**
      * Aunque no es necesario, se comprubea el driver e informa, además despues

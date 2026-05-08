@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.*;
-import modelos.Alumno;
 
 /**
  *

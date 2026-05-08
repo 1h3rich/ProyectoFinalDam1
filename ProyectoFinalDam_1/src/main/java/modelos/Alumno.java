@@ -3,35 +3,38 @@ package modelos;
 import Config.Config;
 import Utils.Validadores;
 import com.google.gson.Gson;
+import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.BaseDeDatos.Insert;
 import servicios.Ficheros.GestionFicheros;
 
-public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
+public class Alumno implements interpolaridadDeDatos, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
     // =========================================================
+
     private final int codigo;
     private String nombre;
     private LocalDate fechaNacimiento;
     private String domicilio;
     private String telefono;
     private String correo;
-    private HashSet<Matricula> matriculas;
-    public static ArrayList<Alumno> lista = new ArrayList<>();
 
     // =========================================================
     // =================== CONSTRUCTORES =======================
     // =========================================================
+
     /**
-     * Creación manual (nuevo alumno)
+     * Creación manual de nuevo alumno.
      *
      * @param nombre
      * @param fechaNacimiento
@@ -40,22 +43,30 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
      * @param correo
      */
     public Alumno(String nombre,
-            LocalDate fechaNacimiento,
-            String domicilio,
-            String telefono,
-            String correo) {
+                  LocalDate fechaNacimiento,
+                  String domicilio,
+                  String telefono,
+                  String correo) {
 
-        this.codigo = ConsultasEspecificas.leerCodigoBDD("alumno");
+        int codigoGenerado = ConsultasEspecificas.leerCodigoBDD("alumno");
+
+        if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
+            throw new IllegalArgumentException("El código generado del alumno debe ser mayor que 0");
+        }
+
+        validarDatos(nombre, fechaNacimiento, domicilio, telefono, correo);
+
+        this.codigo = codigoGenerado;
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
-        this.matriculas = new HashSet<>();
     }
 
     /**
-     * Creación desde base de datos
+     * Creación desde base de datos / fichero.
+     *
      * @param codigo
      * @param nombre
      * @param fechaNacimiento
@@ -63,7 +74,18 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
      * @param telefono
      * @param correo
      */
-    public Alumno(int codigo,String nombre,LocalDate fechaNacimiento,String domicilio,String telefono,String correo) {
+    public Alumno(int codigo,
+                  String nombre,
+                  LocalDate fechaNacimiento,
+                  String domicilio,
+                  String telefono,
+                  String correo) {
+
+        if (!Validadores.validarCodigoPositivo(codigo)) {
+            throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
+        }
+
+        validarDatos(nombre, fechaNacimiento, domicilio, telefono, correo);
 
         this.codigo = codigo;
         this.nombre = nombre;
@@ -71,13 +93,12 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.correo = correo;
-
-        this.matriculas = new HashSet<>();
     }
 
-    // =================================================================================================================================================================================================
-    // ===================== GETTERS ===================================================================================================================================================================
-    // =================================================================================================================================================================================================
+    // =========================================================
+    // ===================== GETTERS ===========================
+    // =========================================================
+
     public int getCodigo() {
         return codigo;
     }
@@ -102,70 +123,160 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
         return correo;
     }
 
-    public HashSet<Matricula> getMatriculas() {
-        return matriculas;
-    }
-
-    // ==========================================================================================================================================================================
-    // ====SETTERS===============================================================================================================================================================
-    // ==========================================================================================================================================================================
+    // =========================================================
+    // ===================== SETTERS ===========================
+    // =========================================================
 
     public void setNombre(String nombre) {
+        if (!Validadores.validarTextoNoVacio(nombre)) {
+            throw new IllegalArgumentException("El nombre del alumno no puede estar vacío");
+        }
+
         this.nombre = nombre;
     }
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        if (!Validadores.validarFechaNacimiento(fechaNacimiento)) {
+            throw new IllegalArgumentException("La fecha de nacimiento no es válida");
+        }
+
         this.fechaNacimiento = fechaNacimiento;
     }
 
     public void setDomicilio(String domicilio) {
+        if (!Validadores.validarTextoNoVacio(domicilio)) {
+            throw new IllegalArgumentException("El domicilio no puede estar vacío");
+        }
+
         this.domicilio = domicilio;
     }
 
     public void setTelefono(String telefono) {
+        if (!Validadores.validarTelefono(telefono)) {
+            throw new IllegalArgumentException("El teléfono no es válido");
+        }
+
         this.telefono = telefono;
     }
 
     public void setCorreo(String correo) {
+        if (!Validadores.validarCorreo(correo)) {
+            throw new IllegalArgumentException("El correo no es válido");
+        }
+
         this.correo = correo;
     }
-    
-    // ==========================================================================================================================================================================
-    // ===METODOS================================================================================================================================================================
-    // ==========================================================================================================================================================================
-    
-    public void agregarMatriculas(Matricula m) {
-        this.matriculas.add(m);
+
+    // =========================================================
+    // ==================== VALIDACIONES =======================
+    // =========================================================
+
+    private static void validarDatos(String nombre,
+                                     LocalDate fechaNacimiento,
+                                     String domicilio,
+                                     String telefono,
+                                     String correo) {
+
+        if (!Validadores.validarTextoNoVacio(nombre)) {
+            throw new IllegalArgumentException("El nombre del alumno no puede estar vacío");
+        }
+
+        if (!Validadores.validarFechaNacimiento(fechaNacimiento)) {
+            throw new IllegalArgumentException("La fecha de nacimiento no es válida");
+        }
+
+        if (!Validadores.validarTextoNoVacio(domicilio)) {
+            throw new IllegalArgumentException("El domicilio no puede estar vacío");
+        }
+
+        if (!Validadores.validarTelefono(telefono)) {
+            throw new IllegalArgumentException("El teléfono no es válido");
+        }
+
+        if (!Validadores.validarCorreo(correo)) {
+            throw new IllegalArgumentException("El correo no es válido");
+        }
     }
 
+    private void validarObjeto() {
+        if (!Validadores.validarCodigoPositivo(this.codigo)) {
+            throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
+        }
+
+        validarDatos(
+                this.nombre,
+                this.fechaNacimiento,
+                this.domicilio,
+                this.telefono,
+                this.correo
+        );
+    }
+
+    // =========================================================
+    // ===================== MÉTODOS ===========================
+    // =========================================================
+
     public static Alumno obtenerLineas(String linea) {
-        String[] partes = linea.split(";");
+        String[] partes = linea.split(";", -1);
 
-        int cod = Integer.parseInt(partes[0]);
-        String tempNom = partes[1];
-        LocalDate tempFn = LocalDate.parse(partes[2]);
-        String temoDom = partes[3];
-        String tempTelf = partes[4];
-        String tempCo = partes[5];
+        if (partes.length != 6) {
+            throw new IllegalArgumentException("Línea inválida para Alumno: " + linea);
+        }
 
-        return new Alumno(cod, tempNom, tempFn, temoDom, tempTelf, tempCo);
+        int tempCodigo = Integer.parseInt(partes[0]);
+        String tempNombre = partes[1];
+        LocalDate tempFechaNacimiento = LocalDate.parse(partes[2]);
+        String tempDomicilio = partes[3];
+        String tempTelefono = partes[4];
+        String tempCorreo = partes[5];
+
+        return new Alumno(
+                tempCodigo,
+                tempNombre,
+                tempFechaNacimiento,
+                tempDomicilio,
+                tempTelefono,
+                tempCorreo
+        );
     }
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
+        GestionBaseDeDatos.listaAlumno.clear();
+
         for (String linea : temp) {
-            Alumno alumno = Alumno.obtenerLineas(linea);
-            lista.add(alumno);
+            if (!linea.trim().isEmpty()) {
+                Alumno alumno = Alumno.obtenerLineas(linea);
+                GestionBaseDeDatos.listaAlumno.add(alumno);
+            }
         }
 
-        for (Alumno alumno : lista) {
+        for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
             System.out.println(alumno);
         }
     }
 
-    // ===============================================================================================================================================================
-    // ===================== SAVE TO =================================================================================================================================
-    // ===============================================================================================================================================================
+    /**
+     * Devuelve las matrículas que pertenecen a este alumno.
+     *
+     * La relación correcta está en Matricula.codigo_alumno.
+     */
+    public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
+        ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();
+
+        for (Matricula matricula : GestionBaseDeDatos.listaMatricula) {
+            if (matricula.getCodigo_alumno() == this.codigo) {
+                matriculasDelAlumno.add(matricula);
+            }
+        }
+
+        return matriculasDelAlumno;
+    }
+
+    // =========================================================
+    // ===================== SAVE TO ===========================
+    // =========================================================
+
     @Override
     public void saveToCSV() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".csv")) {
@@ -190,43 +301,46 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
     @Override
     public void saveToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroAlumno, lista);
+            GestionFicheros.saveToBinario(Config.ficheroAlumno, GestionBaseDeDatos.listaAlumno);
         }
     }
 
-    // ===============================================================================================================================================================
-    // =================== FROM FILES ================================================================================================================================
-    // ===============================================================================================================================================================
+    // =========================================================
+    // =================== FROM FILES ==========================
+    // =========================================================
+
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".csv")) {
-
             ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroAlumno, ".csv");
             cargarDesdeLineas(temp);
-
         }
     }
 
     @Override
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".json")) {
+
+            GestionBaseDeDatos.listaAlumno.clear();
+
             ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroAlumno);
 
             for (String string : temp) {
-                Alumno alumno = (Alumno)GestionFicheros.fromJson(string, Alumno.class);
+                if (!string.trim().isEmpty()) {
+                    Alumno alumno = (Alumno) GestionFicheros.fromJson(string, Alumno.class);
 
-                lista.add(alumno);
+                    alumno.validarObjeto();
+
+                    GestionBaseDeDatos.listaAlumno.add(alumno);
+                }
             }
 
-            for (Alumno string : lista) {
-                System.out.println(string);
+            for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
+                System.out.println(alumno);
             }
         }
     }
 
-    /**
-     * Objeto desde binario...
-     */
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".dat")) {
@@ -243,11 +357,11 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
         }
     }
 
-    // ===============================================================================================================================================================
-    // ===================== SQL =====================================================================================================================================
-    // ===============================================================================================================================================================
-    public static Alumno SqlToObj(ResultSet rs) throws SQLException {
+    // =========================================================
+    // ======================= SQL =============================
+    // =========================================================
 
+    public static Alumno SqlToObj(ResultSet rs) throws SQLException {
         return new Alumno(
                 rs.getInt("codigo"),
                 rs.getString("nombre"),
@@ -262,29 +376,34 @@ public class Alumno implements interfaces.interpolaridadDeDatos, Serializable {
         Insert.insertarBDD(this);
     }
 
-    // ===============================================================================================================================================================
-    // ================= CONVERTIDORES ===============================================================================================================================
-    // ===============================================================================================================================================================
+    // =========================================================
+    // ================= CONVERTIDORES =========================
+    // =========================================================
+
     @Override
     public String toCSV() {
-        return codigo + ";" + nombre + ";" + fechaNacimiento + ";"
-                + domicilio + ";" + telefono + ";" + correo;
+        return codigo + ";"
+                + nombre + ";"
+                + fechaNacimiento + ";"
+                + domicilio + ";"
+                + telefono + ";"
+                + correo;
     }
 
     @Override
     public String toJSON() {
         return new Gson().toJson(this);
-
     }
-    
+
     @Override
     public String toTXT() {
         return toCSV();
     }
 
-    // ===============================================================================================================================================================
-    // ===================== TO STRING ===============================================================================================================================
-    // ===============================================================================================================================================================
+    // =========================================================
+    // ===================== TO STRING =========================
+    // =========================================================
+
     @Override
     public String toString() {
         return "Alumno{"
