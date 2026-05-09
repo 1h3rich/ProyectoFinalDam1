@@ -104,7 +104,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
      public LineaMatricula(String cadena[]){
         this.cod_matricula = Integer.parseInt(cadena[0]) ;
         this.cod_modulo = Integer.parseInt(cadena[1]) ;
-        this.repeticion = Integer.parseInt(cadena[2]) ;;
+        this.repeticion = Integer.parseInt(cadena[2]) ;
         this.cal_primera = Double.parseDouble(cadena[3]);
         this.cal_segunda = Double.parseDouble(cadena[4]);
        

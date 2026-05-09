@@ -4,13 +4,11 @@
  */
 package servicios.BaseDeDatos;
 
-import java.util.HashMap;
-
 /**
  *
  * @author isard
  */
-public class ConsultasMultiTabla {
+public class ConsultasEjercicios {
     //Aqui van las consultas especificas de los informes multitabla
 
     /*

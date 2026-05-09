@@ -7,7 +7,6 @@ import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import servicios.BaseDeDatos.ConsultasEspecificas;
 import servicios.BaseDeDatos.GestionBaseDeDatos;

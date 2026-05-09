@@ -265,9 +265,9 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     }
 
     /**
-     * Devuelve las matrículas que pertenecen a este alumno.
+     * Devuelve las matrículas que pertenecen a este alumno.La relación correcta está en Matricula.codigo_alumno.
      *
-     * La relación correcta está en Matricula.codigo_alumno.
+     * @return
      */
     public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
         ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();
