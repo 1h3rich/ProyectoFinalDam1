@@ -21,7 +21,7 @@ public class ConsultasMultiTabla {
     
     private static String consulta1 = """
                                      Select c.denominacion, c.familia_profesional, c.nivel, m.nombre 
-                                     as 'nombre modulo', c.horas as 'horas modulo'
+                                     as 'nombre modulo', m.horas as 'horas modulo'
                                      from ciclo c join modulo m on c.codigo= m.codigo_ciclo
                                      order by c.denominacion asc;
                                      """;
@@ -111,7 +111,7 @@ public class ConsultasMultiTabla {
      */
     private static String consulta6 = """
                                      select a.nombre, ma.anio_academico, sum(m.creditos_ects) as 'total de creditos',
-                                     sum(c.horas) as 'total de horas matriculadas'
+                                     sum(m.horas) as 'total de horas matriculadas'
                                      from modulo m join ciclo c on c.codigo=m.codigo_ciclo
                                      join  linea_matricula lm on lm.codigo_modulo = m.codigo
                                      join matricula ma on ma.codigo = lm.codigo_matricula

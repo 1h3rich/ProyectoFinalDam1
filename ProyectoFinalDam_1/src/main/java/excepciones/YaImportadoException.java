@@ -9,7 +9,6 @@ package excepciones;
  * @author isard
  */
 public class YaImportadoException extends Exception {
-
     
     public YaImportadoException() {
     }
@@ -18,4 +17,5 @@ public class YaImportadoException extends Exception {
     public YaImportadoException(String msg) {
         super(msg);
     }
+    
 }

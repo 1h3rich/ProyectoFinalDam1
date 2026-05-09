@@ -18,12 +18,13 @@ import modelos.*;
 public class GestionBaseDeDatos {
 
     private static Connection con;
+    public static ArrayList<Alumno> listaAlumno = new ArrayList<>();
+    public static ArrayList<Matricula> listaMatricula = new ArrayList<>();
+    public static ArrayList<LineaMatricula> listaLineaMatricula = new ArrayList<>();
+    public static ArrayList<Ciclo> listaCiclo = new ArrayList<>();
+    public static ArrayList<Modulo> listaModulo = new ArrayList<>();
 
-    private static ArrayList<Alumno> listaAlumnos = new ArrayList<>();
-    private static ArrayList<Ciclo> listaCiclos = new ArrayList<>();
-    private static ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
-    private static ArrayList<Matricula> listaMatriculas = new ArrayList<>();
-    private static ArrayList<Modulo> listaModulos = new ArrayList<>();
+    
 
     /**
      * Aunque no es necesario, se comprubea el driver e informa, además despues
@@ -105,7 +106,15 @@ public class GestionBaseDeDatos {
                     System.out.println("");
                 }
                 if(datosConsulta[0].equalsIgnoreCase("Alumno")){
-                    
+                    Alumno alumno = new Alumno(objeto);
+                }else if(datosConsulta[0].equalsIgnoreCase("Ciclo")){
+                    Ciclo ciclo = new Ciclo(objeto);
+                }else if(datosConsulta[0].equalsIgnoreCase("LineaMatricula")){
+                    LineaMatricula lineaMatricula = new LineaMatricula(objeto);
+                }else if(datosConsulta[0].equalsIgnoreCase("Matricula")){
+                    Matricula matricula = new Matricula(objeto);
+                }else if(datosConsulta[0].equalsIgnoreCase("Modulo")){
+                    Modulo modulo = new Modulo(objeto);
                 }
                 
             }
