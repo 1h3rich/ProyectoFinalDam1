@@ -6,6 +6,7 @@ package servicios.BaseDeDatos;
 
 import Config.Config;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.*;
@@ -98,10 +99,13 @@ public class GestionBaseDeDatos {
                 String objeto [] = new String [10];
                 
                 while (rs.next()) { //Salta a la siguiente línea de la tabla
-                    for (int i = 1; i < datosConsulta.length; i++) {
-                        rs.getString(datosConsulta[i]);
+                    for (int i = 2; i < datosConsulta.length; i++) { //Empiezo en la posicion 2 ya que en la 0 es el objeto a guardar y en la 1 la consulta
+                        objeto[i] = rs.getString(datosConsulta[i]);
                     }
                     System.out.println("");
+                }
+                if(datosConsulta[0].equalsIgnoreCase("Alumno")){
+                    
                 }
                 
             }
