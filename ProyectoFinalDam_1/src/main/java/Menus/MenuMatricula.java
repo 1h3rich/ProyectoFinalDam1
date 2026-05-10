@@ -1,0 +1,505 @@
+package menus;
+
+import Config.Config;
+import Utils.Validadores;
+import excepciones.YaImportadoException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import modelos.Matricula;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
+import servicios.Ficheros.GestionFicheros;
+
+/**
+ * Menú de gestión completa de la tabla matricula.
+ * Incluye operaciones CRUD, exportación/importación de ficheros
+ * y visualización de datos insertados durante la sesión.
+ *
+ * Estados válidos: parcial, completa, anulada.
+ *
+ * @author 1DAM
+ */
+public class MenuMatricula {
+
+    /** Lista de matrículas insertadas durante la ejecución actual. */
+    private static final ArrayList<Matricula> matriculasSesion = new ArrayList<>();
+
+    /** Flags que indican si ya se ha importado desde cada formato. */
+    private static boolean importadoTxt  = false;
+    private static boolean importadoCsv  = false;
+    private static boolean importadoBin  = false;
+    private static boolean importadoJson = false;
+
+    // =========================================================
+    // =================== MENÚ PRINCIPAL ======================
+    // =========================================================
+
+    /**
+     * Muestra el menú de gestión de matrículas y gestiona la navegación.
+     *
+     * @param teclado Scanner compartido con el Main para la entrada de datos.
+     */
+    public static void mostrarMenu(Scanner teclado) {
+        boolean volver = false;
+
+        while (!volver) {
+            System.out.println("\n========================================");
+            System.out.println("       GESTIÓN DE MATRÍCULAS           ");
+            System.out.println("========================================");
+            System.out.println("1. Insertar matrícula");
+            System.out.println("2. Actualizar matrícula por código");
+            System.out.println("3. Eliminar matrícula por código");
+            System.out.println("4. Consultar matrícula por código");
+            System.out.println("5. Consultar todas las matrículas (ordenado por estado)");
+            System.out.println("6. Exportar tabla");
+            System.out.println("7. Importar tabla");
+            System.out.println("8. Ver datos insertados en esta sesión");
+            System.out.println("9. <- Volver al menú anterior");
+            System.out.print("Elija una opción (1-9): ");
+
+            try {
+                int opcion = teclado.nextInt();
+                teclado.nextLine();
+
+                switch (opcion) {
+                    case 1 -> insertarMatricula(teclado);
+                    case 2 -> actualizarMatricula(teclado);
+                    case 3 -> eliminarMatricula(teclado);
+                    case 4 -> consultarPorCodigo(teclado);
+                    case 5 -> consultarTodos();
+                    case 6 -> mostrarMenuExportar(teclado);
+                    case 7 -> mostrarMenuImportar(teclado);
+                    case 8 -> verDatosSesion();
+                    case 9 -> volver = true;
+                    default -> System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("[ERROR] Debe introducir un número entero.");
+                teclado.nextLine();
+            }
+        }
+    }
+
+    // =========================================================
+    // ========================= CRUD ==========================
+    // =========================================================
+
+    /**
+     * Solicita los datos de una nueva matrícula por teclado, la inserta en la base
+     * de datos y la añade a la colección de sesión.
+     *
+     * @param teclado Scanner para leer la entrada del usuario.
+     */
+    private static void insertarMatricula(Scanner teclado) {
+        System.out.println("\n--- INSERTAR MATRÍCULA ---");
+
+        try {
+            System.out.print("Código del alumno: ");
+            int codigoAlumno = teclado.nextInt();
+
+            System.out.print("Año académico (ej. 2024): ");
+            int añoAcademico = teclado.nextInt();
+            teclado.nextLine();
+
+            System.out.print("Estado (parcial/completa/anulada): ");
+            String estado = teclado.nextLine().trim();
+
+            System.out.print("Importe (ej. 350.00): ");
+            double importe = teclado.nextDouble();
+            teclado.nextLine();
+
+            if (!Validadores.validarCodigoPositivo(codigoAlumno)
+                    || !Validadores.validarAñoAcademico(añoAcademico)
+                    || !Validadores.validarTextoNoVacio(estado)
+                    || !Validadores.validarImporte(importe)) {
+                System.out.println("[ERROR] Datos inválidos. Compruebe el año académico y el importe.");
+                return;
+            }
+
+            if (!estado.equals("parcial") && !estado.equals("completa") && !estado.equals("anulada")) {
+                System.out.println("[ERROR] El estado debe ser: parcial, completa o anulada.");
+                return;
+            }
+
+            String[] entradas = {
+                String.valueOf(codigoAlumno),
+                String.valueOf(añoAcademico),
+                estado,
+                String.valueOf(importe)
+            };
+
+            GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA, entradas);
+
+            Matricula matricula = new Matricula(codigoAlumno, añoAcademico, estado, importe);
+            matriculasSesion.add(matricula);
+            GestionBaseDeDatos.listaMatricula.add(matricula);
+
+            System.out.println("[OK] Matrícula insertada correctamente.");
+
+        } catch (InputMismatchException e) {
+            System.out.println("[ERROR] Código, año e importe deben ser numéricos.");
+            teclado.nextLine();
+        } catch (IllegalArgumentException e) {
+            System.out.println("[ERROR] " + e.getMessage());
+        }
+    }
+
+    /**
+     * Solicita el código de una matrícula existente y los nuevos valores de sus campos,
+     * y actualiza el registro en la base de datos.
+     *
+     * @param teclado Scanner para leer la entrada del usuario.
+     */
+    private static void actualizarMatricula(Scanner teclado) {
+        System.out.println("\n--- ACTUALIZAR MATRÍCULA ---");
+
+        try {
+            System.out.print("Código de la matrícula a actualizar: ");
+            int codigo = teclado.nextInt();
+
+            System.out.print("Nuevo código del alumno: ");
+            int codigoAlumno = teclado.nextInt();
+
+            System.out.print("Nuevo año académico: ");
+            int añoAcademico = teclado.nextInt();
+            teclado.nextLine();
+
+            System.out.print("Nuevo estado (parcial/completa/anulada): ");
+            String estado = teclado.nextLine().trim();
+
+            System.out.print("Nuevo importe: ");
+            double importe = teclado.nextDouble();
+            teclado.nextLine();
+
+            if (!Validadores.validarCodigoPositivo(codigo)
+                    || !Validadores.validarCodigoPositivo(codigoAlumno)
+                    || !Validadores.validarAñoAcademico(añoAcademico)
+                    || !Validadores.validarTextoNoVacio(estado)
+                    || !Validadores.validarImporte(importe)) {
+                System.out.println("[ERROR] Datos inválidos.");
+                return;
+            }
+
+            if (!estado.equals("parcial") && !estado.equals("completa") && !estado.equals("anulada")) {
+                System.out.println("[ERROR] El estado debe ser: parcial, completa o anulada.");
+                return;
+            }
+
+            String[] entradas = {
+                String.valueOf(codigoAlumno),
+                String.valueOf(añoAcademico),
+                estado,
+                String.valueOf(importe),
+                String.valueOf(codigo)
+            };
+
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MATRICULA, entradas);
+            System.out.println("[OK] Matrícula actualizada correctamente.");
+
+        } catch (InputMismatchException e) {
+            System.out.println("[ERROR] Los valores numéricos deben ser enteros o decimales.");
+            teclado.nextLine();
+        }
+    }
+
+    /**
+     * Solicita el código de una matrícula y la elimina de la base de datos.
+     *
+     * @param teclado Scanner para leer la entrada del usuario.
+     */
+    private static void eliminarMatricula(Scanner teclado) {
+        System.out.println("\n--- ELIMINAR MATRÍCULA ---");
+
+        try {
+            System.out.print("Código de la matrícula a eliminar: ");
+            int codigo = teclado.nextInt();
+            teclado.nextLine();
+
+            if (!Validadores.validarCodigoPositivo(codigo)) {
+                System.out.println("[ERROR] El código debe ser mayor que 0.");
+                return;
+            }
+
+            System.out.print("¿Confirma la eliminación de la matrícula con código " + codigo + "? (s/n): ");
+            String confirmacion = teclado.nextLine().trim();
+
+            if (confirmacion.equalsIgnoreCase("s")) {
+                GestionBaseDeDatos.eliminarFila(ConsultasSQL.DELETE_MATRICULA, new String[]{String.valueOf(codigo)});
+                System.out.println("[OK] Matrícula eliminada correctamente.");
+            } else {
+                System.out.println("[INFO] Eliminación cancelada.");
+            }
+
+        } catch (InputMismatchException e) {
+            System.out.println("[ERROR] El código debe ser un número entero.");
+            teclado.nextLine();
+        }
+    }
+
+    /**
+     * Solicita el código de una matrícula y muestra sus datos.
+     *
+     * @param teclado Scanner para leer la entrada del usuario.
+     */
+    private static void consultarPorCodigo(Scanner teclado) {
+        System.out.println("\n--- CONSULTAR MATRÍCULA POR CÓDIGO ---");
+
+        try {
+            System.out.print("Código de la matrícula: ");
+            int codigo = teclado.nextInt();
+            teclado.nextLine();
+
+            if (!Validadores.validarCodigoPositivo(codigo)) {
+                System.out.println("[ERROR] El código debe ser mayor que 0.");
+                return;
+            }
+
+            System.out.println("\n" + formatearCabecera(ConsultasSQL.SELECT_MATRICULA_POR_CODIGO));
+            GestionBaseDeDatos.realizarSQL(
+                    ConsultasSQL.SELECT_MATRICULA_POR_CODIGO,
+                    new String[]{String.valueOf(codigo)},
+                    true,
+                    false
+            );
+
+        } catch (InputMismatchException e) {
+            System.out.println("[ERROR] El código debe ser un número entero.");
+            teclado.nextLine();
+        }
+    }
+
+    /**
+     * Muestra todas las matrículas ordenadas por estado de forma ascendente.
+     */
+    private static void consultarTodos() {
+        System.out.println("\n--- TODAS LAS MATRÍCULAS (ordenado por estado ASC) ---");
+        System.out.println(formatearCabecera(ConsultasSQL.SELECT_MATRICULA_TODOS));
+        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_MATRICULA_TODOS, new String[0], true, false);
+    }
+
+    // =========================================================
+    // ==================== EXPORTAR ===========================
+    // =========================================================
+
+    /**
+     * Submenú de exportación de la tabla matricula a distintos formatos de fichero.
+     *
+     * @param teclado Scanner para leer la opción del usuario.
+     */
+    private static void mostrarMenuExportar(Scanner teclado) {
+        System.out.println("\n--- EXPORTAR TABLA MATRÍCULA ---");
+        System.out.println("1. Exportar a TXT  (separador ;)");
+        System.out.println("2. Exportar a CSV  (separador :)");
+        System.out.println("3. Exportar a Binario");
+        System.out.println("4. Exportar a JSON");
+        System.out.println("5. <- Volver");
+        System.out.print("Elija una opción (1-5): ");
+
+        try {
+            int opcion = teclado.nextInt();
+            teclado.nextLine();
+            cargarMatriculasDesdeBD();
+
+            switch (opcion) {
+                case 1 -> exportarATxt();
+                case 2 -> exportarACsv();
+                case 3 -> exportarABinario();
+                case 4 -> exportarAJson();
+                case 5 -> { /* volver */ }
+                default -> System.out.println("[ERROR] Opción no válida.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("[ERROR] Debe introducir un número entero.");
+            teclado.nextLine();
+        }
+    }
+
+    private static void exportarATxt() {
+        exportarAFicheroTexto(Config.ficheroMatricula + ".txt", false);
+    }
+
+    private static void exportarACsv() {
+        exportarAFicheroTexto(Config.ficheroMatricula + ".csv", true);
+    }
+
+    private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
+            for (Matricula m : GestionBaseDeDatos.listaMatricula) {
+                String linea = m.toCSV();
+                if (usarDosPuntos) {
+                    linea = linea.replace(";", ":");
+                }
+                pw.println(linea);
+            }
+            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaMatricula.size()
+                    + " registros a: " + rutaFichero);
+        } catch (IOException e) {
+            System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
+        }
+    }
+
+    private static void exportarABinario() {
+        GestionFicheros.saveToBinario(Config.ficheroMatricula, GestionBaseDeDatos.listaMatricula);
+        System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaMatricula.size()
+                + " registros a: " + Config.ficheroMatricula + ".dat");
+    }
+
+    private static void exportarAJson() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroMatricula + ".json", false))) {
+            for (Matricula m : GestionBaseDeDatos.listaMatricula) {
+                pw.println(m.toJSON());
+            }
+            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaMatricula.size()
+                    + " registros a: " + Config.ficheroMatricula + ".json");
+        } catch (IOException e) {
+            System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
+        }
+    }
+
+    // =========================================================
+    // ==================== IMPORTAR ===========================
+    // =========================================================
+
+    /**
+     * Submenú de importación de la tabla matricula desde distintos formatos de fichero.
+     *
+     * @param teclado Scanner para leer la opción del usuario.
+     */
+    private static void mostrarMenuImportar(Scanner teclado) {
+        System.out.println("\n--- IMPORTAR TABLA MATRÍCULA ---");
+        System.out.println("1. Importar desde TXT");
+        System.out.println("2. Importar desde CSV");
+        System.out.println("3. Importar desde Binario");
+        System.out.println("4. Importar desde JSON");
+        System.out.println("5. <- Volver");
+        System.out.print("Elija una opción (1-5): ");
+
+        try {
+            int opcion = teclado.nextInt();
+            teclado.nextLine();
+
+            switch (opcion) {
+                case 1 -> importarDesdeTxt();
+                case 2 -> importarDesdeCsv();
+                case 3 -> importarDesdeBinario();
+                case 4 -> importarDesdeJson();
+                case 5 -> { /* volver */ }
+                default -> System.out.println("[ERROR] Opción no válida.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("[ERROR] Debe introducir un número entero.");
+            teclado.nextLine();
+        } catch (YaImportadoException e) {
+            System.out.println("[AVISO] " + e.getMessage());
+        }
+    }
+
+    private static void importarDesdeTxt() throws YaImportadoException {
+        if (importadoTxt) {
+            throw new YaImportadoException("La tabla matricula ya fue importada desde TXT en esta sesión.");
+        }
+        ArrayList<String> lineas = GestionFicheros.loadTxtCsv(Config.ficheroMatricula, ".txt");
+        if (lineas == null || lineas.isEmpty()) {
+            System.out.println("[INFO] El fichero TXT está vacío o no existe.");
+            return;
+        }
+        GestionBaseDeDatos.listaMatricula.clear();
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                GestionBaseDeDatos.listaMatricula.add(Matricula.obtenerLineas(linea));
+            }
+        }
+        importadoTxt = true;
+        System.out.println("[OK] Importadas " + GestionBaseDeDatos.listaMatricula.size() + " matrículas desde TXT.");
+    }
+
+    private static void importarDesdeCsv() throws YaImportadoException {
+        if (importadoCsv) {
+            throw new YaImportadoException("La tabla matricula ya fue importada desde CSV en esta sesión.");
+        }
+        ArrayList<String> lineas = GestionFicheros.loadTxtCsv(Config.ficheroMatricula, ".csv");
+        if (lineas == null || lineas.isEmpty()) {
+            System.out.println("[INFO] El fichero CSV está vacío o no existe.");
+            return;
+        }
+        GestionBaseDeDatos.listaMatricula.clear();
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                GestionBaseDeDatos.listaMatricula.add(Matricula.obtenerLineas(linea.replace(":", ";")));
+            }
+        }
+        importadoCsv = true;
+        System.out.println("[OK] Importadas " + GestionBaseDeDatos.listaMatricula.size() + " matrículas desde CSV.");
+    }
+
+    private static void importarDesdeBinario() throws YaImportadoException {
+        if (importadoBin) {
+            throw new YaImportadoException("La tabla matricula ya fue importada desde Binario en esta sesión.");
+        }
+        Matricula instancia = new Matricula(1, 2024, "parcial", 0.0);
+        instancia.objFromBinario();
+        importadoBin = true;
+        System.out.println("[OK] Importación desde binario completada.");
+    }
+
+    private static void importarDesdeJson() throws YaImportadoException {
+        if (importadoJson) {
+            throw new YaImportadoException("La tabla matricula ya fue importada desde JSON en esta sesión.");
+        }
+        Matricula instancia = new Matricula(1, 2024, "parcial", 0.0);
+        instancia.objFromJSON();
+        importadoJson = true;
+        System.out.println("[OK] Importación desde JSON completada.");
+    }
+
+    // =========================================================
+    // =================== SESIÓN ==============================
+    // =========================================================
+
+    /**
+     * Muestra en consola las matrículas insertadas durante la sesión actual.
+     */
+    private static void verDatosSesion() {
+        System.out.println("\n--- MATRÍCULAS INSERTADAS EN ESTA SESIÓN ---");
+        if (matriculasSesion.isEmpty()) {
+            System.out.println("[INFO] No se han insertado matrículas en esta sesión.");
+        } else {
+            System.out.println(formatearCabecera(ConsultasSQL.SELECT_MATRICULA_TODOS));
+            for (Matricula m : matriculasSesion) {
+                System.out.println(m.toString());
+            }
+            System.out.println("Total insertadas: " + matriculasSesion.size());
+        }
+    }
+
+    // =========================================================
+    // ==================== AUXILIARES =========================
+    // =========================================================
+
+    /**
+     * Carga todas las matrículas de la base de datos en la lista en memoria.
+     */
+    private static void cargarMatriculasDesdeBD() {
+        GestionBaseDeDatos.listaMatricula.clear();
+        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_MATRICULA_TODOS, new String[0], false, true);
+    }
+
+    /**
+     * Construye una cabecera con los nombres de columna del array de consulta.
+     *
+     * @param datosConsulta Array de consulta (columnas en índices 1..n).
+     * @return Cadena formateada con separador de guiones.
+     */
+    private static String formatearCabecera(String[] datosConsulta) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < datosConsulta.length; i++) {
+            sb.append(String.format("%-22s", datosConsulta[i].toUpperCase()));
+        }
+        sb.append("\n").append("-".repeat(sb.length()));
+        return sb.toString();
+    }
+}
