@@ -4,16 +4,23 @@
  */
 package pantallas;
 
+import Utils.ModoFormulario;
+import javax.swing.JOptionPane;
+import modelos.Modulo;
+
 /**
  *
  * @author Rich
  */
-public class PantallaCreacionManual extends javax.swing.JFrame {
+public class FormularioModulo extends javax.swing.JFrame {
 
+    
+    private ModoFormulario modo;
+    private Modulo modulo;
     /**
-     * Creates new form PantallaCreacionManual
+     * Creates new form FormularioModul
      */
-    public PantallaCreacionManual() {
+    public FormularioModulo() {
         initComponents();
     }
 
@@ -59,22 +66,43 @@ public class PantallaCreacionManual extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaCreacionManual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioModulo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaCreacionManual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioModulo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaCreacionManual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioModulo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaCreacionManual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioModulo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PantallaCreacionManual().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FormularioModulo().setVisible(true);
         });
+    }
+    
+     public FormularioModulo(ModoFormulario modo, Modulo modulo) {
+        initComponents();
+
+        this.modo = modo;
+        this.modulo = modulo;
+
+        setLocationRelativeTo(null);
+        prepararFormulario();
+    }
+
+    private void prepararFormulario() {
+        if (modo == ModoFormulario.CREAR) {
+            setTitle("Crear alumno");
+        } else if (modo == ModoFormulario.MODIFICAR) {
+            setTitle("Modificar alumno");
+
+            if (modulo == null) {
+                JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún alumno.");
+            }
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
