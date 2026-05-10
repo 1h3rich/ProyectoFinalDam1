@@ -80,7 +80,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     public Matricula(String cadena[]){
         this.codigo = Integer.parseInt(cadena[0]) ;
         this.codigo_alumno = Integer.parseInt(cadena[1]) ;
-        this.año_academico = Integer.parseInt(cadena[2]) ;;
+        this.año_academico = Integer.parseInt(cadena[2]) ;
         this.estado = cadena[3];
         this.importe = Double.parseDouble(cadena[4]);
        

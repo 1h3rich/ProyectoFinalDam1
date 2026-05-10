@@ -4,13 +4,11 @@
  */
 package servicios.BaseDeDatos;
 
-import java.util.HashMap;
-
 /**
  *
  * @author isard
  */
-public class ConsultasMultiTabla {
+public class ConsultasEjercicios {
     //Aqui van las consultas especificas de los informes multitabla
 
     /*
@@ -117,7 +115,7 @@ public class ConsultasMultiTabla {
                                      join matricula ma on ma.codigo = lm.codigo_matricula
                                      join alumno a on a.codigo = ma.codigo_alumno
                                      group by a.nombre, ma.anio_academico
-                                     order by sum(m.creditos_ects) asc;
+                                     order by sum(m.creditos_ects) desc;
                                      """;
 
      public static String [] datosConsulta6 = {consulta6, "nombre", "anio_academico","total de creditos", "total de horas matriculadas"}; 

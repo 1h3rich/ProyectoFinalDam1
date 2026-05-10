@@ -3,7 +3,7 @@ package Main;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import servicios.BaseDeDatos.ConsultasMultiTabla;
+import servicios.BaseDeDatos.ConsultasEjercicios;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -21,6 +21,8 @@ public class ProyectoFinalDam1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        
 
         System.out.println("Proyecto Final");
         System.out.println("");
@@ -31,6 +33,7 @@ public class ProyectoFinalDam1 {
 
         // TODO ESTE MENU ES PARA REALIZAR PRUEBAS TODO ESTO HABRA QUE HACERLO EN SWING
         while (!salir) {
+            
             System.out.println("\n========================================");
             System.out.println("       MENÚ GESTIÓN DE MATRÍCULAS       ");
             System.out.println("========================================");
@@ -100,7 +103,7 @@ public class ProyectoFinalDam1 {
                         case 1 -> {
                             System.out.println("Consulta 1:");
                             String entradas[] = new String[0];
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta1, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta1, entradas, true, false);
                             System.out.println("");
                         }
                         case 2 -> {
@@ -112,7 +115,7 @@ public class ProyectoFinalDam1 {
 
                             System.out.println("Consulta 2:");
 
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta2, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta2, entradas, true, false);
                             System.out.println("");
                         }
                         case 3 -> {
@@ -121,7 +124,7 @@ public class ProyectoFinalDam1 {
                             entradas[0] = teclado.next();
 
                             System.out.println("Consulta 3:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta3, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta3, entradas, true, false);
                             System.out.println("");
                         }
                         case 4 -> {
@@ -134,38 +137,39 @@ public class ProyectoFinalDam1 {
                             entradas[2] = teclado.nextLine();
 
                             System.out.println("Consulta 4:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta4, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta4, entradas, true, false);
                         }
                         case 5 -> {
                             String entradas[] = new String[0];
                             System.out.println("Consulta 5:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta5, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta5, entradas, true, false);
                             System.out.println("");
                         }
                         case 6 -> {
                             String entradas[] = new String[0];
                             System.out.println("Consulta 6:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta6, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta6, entradas, true, false);
                             System.out.println("");
                         }
                         case 7 -> {
                             String entradas[] = new String[0];
                             System.out.println("Consulta 7:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta7, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta7, entradas, true, false);
                             System.out.println("");
                         }
                         case 8 -> {
                             String entradas[] = new String[0];
                             System.out.println("Consulta 8:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta8, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta8, entradas, true, false);
                             System.out.println("");
                         }
                         case 9 -> {
                             String entradas[] = new String[0];
                             System.out.println("Consulta 9:");
-                            GestionBaseDeDatos.realizarSQL(ConsultasMultiTabla.datosConsulta9, entradas, true, false);
+                            GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta9, entradas, true, false);
                             System.out.println("");
                         }
+
 
                     }
 

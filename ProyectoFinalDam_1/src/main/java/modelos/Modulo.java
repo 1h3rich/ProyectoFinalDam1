@@ -109,7 +109,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     public Modulo(String cadena[]){
         this.codigo = Integer.parseInt(cadena[0]) ;
         this.codigo_ciclo = Integer.parseInt(cadena[1]) ;
-        this.nombre = cadena[2] ;;
+        this.nombre = cadena[2] ;
         this.curso = cadena[3];
         this.creditos_ects = Integer.parseInt(cadena[4]);
         this.horas = Integer.parseInt(cadena[5]);

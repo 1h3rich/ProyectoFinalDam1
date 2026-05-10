@@ -178,7 +178,15 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ==================== VALIDACIONES =======================
     // =========================================================
-
+    
+    /**
+     * Valida que los datos estén introducidos correctamente.
+     * @param nombre
+     * @param fechaNacimiento
+     * @param domicilio
+     * @param telefono
+     * @param correo 
+     */
     private static void validarDatos(String nombre,
                                      LocalDate fechaNacimiento,
                                      String domicilio,
@@ -265,9 +273,9 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     }
 
     /**
-     * Devuelve las matrículas que pertenecen a este alumno.
+     * Devuelve las matrículas que pertenecen a este alumno.La relación correcta está en Matricula.codigo_alumno.
      *
-     * La relación correcta está en Matricula.codigo_alumno.
+     * @return
      */
     public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
         ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();
