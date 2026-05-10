@@ -76,6 +76,7 @@ public class GestionBaseDeDatos {
      * @param datosConsulta
      * @param entradas
      * @param mostrarPorPantalla
+     * @param guardarDatos
      *
      */
     public static void realizarSQL(String[] datosConsulta, String entradas[], boolean mostrarPorPantalla, boolean guardarDatos) {//Todavia falta poner más visual la tabla
