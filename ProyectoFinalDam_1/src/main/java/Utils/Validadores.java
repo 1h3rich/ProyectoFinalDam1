@@ -7,7 +7,6 @@ package Utils;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import modelos.LineaMatricula;
 
 /**
  *
@@ -125,5 +124,4 @@ public class Validadores {
         return añoCurriculum >= 1900 && añoCurriculum <= 3000;
     }
 
-    
 }

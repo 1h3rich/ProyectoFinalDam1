@@ -4,20 +4,30 @@
  */
 package pantallas;
 
+import Control.EstadoAplicacion;
+import java.awt.HeadlessException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Rich
  */
 public class Principal extends javax.swing.JFrame {
 
+    EstadoAplicacion estado = new EstadoAplicacion();
+
     /**
      * Creates new form Principal
      */
     public Principal() {
-        
-        
+        setTitle("Gestion de Centro Educativo");
+        setSize(800, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         
         initComponents();
+        actualizarBotones();
     }
 
     /**
@@ -30,12 +40,12 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButtonMadeBy = new javax.swing.JButton();
         jButtonCrearDatos = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButtonBorrarDatos = new javax.swing.JButton();
         jButtonGuardarDatos = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButtonCargar = new javax.swing.JButton();
         jButtonModificarDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -47,13 +57,13 @@ public class Principal extends javax.swing.JFrame {
         jLabel2.setToolTipText("");
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setFont(new java.awt.Font("NSimSun", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Made by:");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonMadeBy.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonMadeBy.setFont(new java.awt.Font("NSimSun", 1, 14)); // NOI18N
+        jButtonMadeBy.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonMadeBy.setText("Made by:");
+        jButtonMadeBy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonMadeByActionPerformed(evt);
             }
         });
 
@@ -94,13 +104,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(255, 255, 255));
-        jButton4.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
-        jButton4.setText("Cargar Datos");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCargar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonCargar.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonCargar.setText("Cargar Datos");
+        jButtonCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonCargarActionPerformed(evt);
             }
         });
 
@@ -122,7 +132,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButtonMadeBy)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -136,7 +146,7 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(58, 58, 58)
                         .addComponent(jButtonGuardarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(63, 63, 63)
                         .addComponent(jButtonModificarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(63, 63, 63)
@@ -154,39 +164,61 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrearDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonGuardarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonModificarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBorrarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 364, Short.MAX_VALUE)
+                .addComponent(jButtonMadeBy, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonMadeByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMadeByActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonMadeByActionPerformed
 
     private void jButtonCrearDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearDatosActionPerformed
-        // TODO add your handling code here:
+        if (!estado.isBaseDeDatosCargada()) {
+            JOptionPane.showMessageDialog(this,"No has cargado la base de datos, debera introducir los datos manualmente.");
+        }
+        PantallaCreacionManual pcm = new PantallaCreacionManual();
+        pcm.setVisible(true);
     }//GEN-LAST:event_jButtonCrearDatosActionPerformed
 
     private void jButtonBorrarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarDatosActionPerformed
-        // TODO add your handling code here:
+        if(!estado.isBaseDeDatosCargada()){
+            JOptionPane.showMessageDialog(this, "Primero debes cargar la base de datos");
+            return;
+        }
+        
+        //borrar datos
     }//GEN-LAST:event_jButtonBorrarDatosActionPerformed
 
     private void jButtonGuardarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarDatosActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButtonGuardarDatosActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButtonCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarActionPerformed
+        try {
+            //Consulta que cargue toda la base de datos
+            estado.setBaseDeDatosCargada(true);
+            actualizarBotones();
+
+            JOptionPane.showMessageDialog(this, "Base de datos cargada correctamente");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la base de datos");
+        }
+    }//GEN-LAST:event_jButtonCargarActionPerformed
 
     private void jButtonModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarDatosActionPerformed
-        // TODO add your handling code here:
+        if (!estado.isBaseDeDatosCargada()) {
+            JOptionPane.showMessageDialog(
+                    this,"Primero debes cargar la base de datos.");
+            return;
+        }
+        //Modificar los datos
     }//GEN-LAST:event_jButtonModificarDatosActionPerformed
 
     /**
@@ -222,12 +254,21 @@ public class Principal extends javax.swing.JFrame {
         });
     }
 
+    private void actualizarBotones() {
+        boolean bdCargada = estado.isBaseDeDatosCargada();
+
+        jButtonCrearDatos.setEnabled(true);
+        jButtonGuardarDatos.setEnabled(true);
+        jButtonModificarDatos.setEnabled(bdCargada);
+        jButtonBorrarDatos.setEnabled(bdCargada);
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButtonBorrarDatos;
+    private javax.swing.JButton jButtonCargar;
     private javax.swing.JButton jButtonCrearDatos;
     private javax.swing.JButton jButtonGuardarDatos;
+    private javax.swing.JButton jButtonMadeBy;
     private javax.swing.JButton jButtonModificarDatos;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

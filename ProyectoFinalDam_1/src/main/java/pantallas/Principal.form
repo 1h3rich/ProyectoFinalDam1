@@ -27,7 +27,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonMadeBy" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -44,7 +44,7 @@
                       <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                       <Component id="jButtonGuardarDatos" min="-2" pref="181" max="-2" attributes="0"/>
                       <EmptySpace pref="58" max="32767" attributes="0"/>
-                      <Component id="jButton4" min="-2" pref="181" max="-2" attributes="0"/>
+                      <Component id="jButtonCargar" min="-2" pref="181" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                       <Component id="jButtonModificarDatos" min="-2" pref="181" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
@@ -66,12 +66,12 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonCrearDatos" alignment="0" min="-2" pref="54" max="-2" attributes="0"/>
                   <Component id="jButtonGuardarDatos" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
-                  <Component id="jButton4" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                  <Component id="jButtonCargar" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
                   <Component id="jButtonModificarDatos" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
                   <Component id="jButtonBorrarDatos" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="361" max="32767" attributes="0"/>
-              <Component id="jButton1" min="-2" pref="31" max="-2" attributes="0"/>
+              <EmptySpace pref="364" max="32767" attributes="0"/>
+              <Component id="jButtonMadeBy" min="-2" pref="31" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -94,7 +94,7 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="jButtonMadeBy">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -108,7 +108,7 @@
         <Property name="text" type="java.lang.String" value="Made by:"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonMadeByActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonCrearDatos">
@@ -178,7 +178,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGuardarDatosActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
+    <Component class="javax.swing.JButton" name="jButtonCargar">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -192,7 +192,7 @@
         <Property name="text" type="java.lang.String" value="Cargar Datos"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCargarActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonModificarDatos">

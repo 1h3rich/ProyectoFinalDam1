@@ -178,7 +178,15 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ==================== VALIDACIONES =======================
     // =========================================================
-
+    
+    /**
+     * Valida que los datos estén introducidos correctamente.
+     * @param nombre
+     * @param fechaNacimiento
+     * @param domicilio
+     * @param telefono
+     * @param correo 
+     */
     private static void validarDatos(String nombre,
                                      LocalDate fechaNacimiento,
                                      String domicilio,
