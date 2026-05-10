@@ -553,7 +553,7 @@ public class MenuLineaMatricula {
     private static void cargarLineasDesdeBD() {
         GestionBaseDeDatos.listaLineaMatricula.clear();
         GestionBaseDeDatos.realizarSQL(
-                ConsultasSQL.SELECT_LINEA_MATRICULA_TODOS, new String[0], false, true
+                ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true
         );
     }
 

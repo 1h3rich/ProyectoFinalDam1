@@ -485,7 +485,7 @@ public class MenuMatricula {
      */
     private static void cargarMatriculasDesdeBD() {
         GestionBaseDeDatos.listaMatricula.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_MATRICULA_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
     }
 
     /**

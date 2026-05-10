@@ -18,30 +18,36 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
 /**
- * Menú de gestión completa de la tabla alumno.
- * Incluye operaciones CRUD, exportación/importación de ficheros
- * y visualización de datos insertados durante la sesión.
+ * Menú de gestión completa de la tabla alumno. Incluye operaciones CRUD,
+ * exportación/importación de ficheros y visualización de datos insertados
+ * durante la sesión.
  *
  * @author 1DAM
  */
 public class MenuAlumno {
 
-    /** Formato de fecha usado en la entrada de datos por teclado. */
+    /**
+     * Formato de fecha usado en la entrada de datos por teclado.
+     */
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    /** Lista de alumnos insertados durante la ejecución actual. */
+    /**
+     * Lista de alumnos insertados durante la ejecución actual.
+     */
     private static final ArrayList<Alumno> alumnosSesion = new ArrayList<>();
 
-    /** Flags que indican si ya se ha importado desde cada formato (evita doble importación). */
-    private static boolean importadoTxt  = false;
-    private static boolean importadoCsv  = false;
-    private static boolean importadoBin  = false;
+    /**
+     * Flags que indican si ya se ha importado desde cada formato (evita doble
+     * importación).
+     */
+    private static boolean importadoTxt = false;
+    private static boolean importadoCsv = false;
+    private static boolean importadoBin = false;
     private static boolean importadoJson = false;
 
     // =========================================================
     // =================== MENÚ PRINCIPAL ======================
     // =========================================================
-
     /**
      * Muestra el menú de gestión de alumnos y gestiona la navegación.
      *
@@ -70,16 +76,26 @@ public class MenuAlumno {
                 teclado.nextLine();
 
                 switch (opcion) {
-                    case 1 -> insertarAlumno(teclado);
-                    case 2 -> actualizarAlumno(teclado);
-                    case 3 -> eliminarAlumno(teclado);
-                    case 4 -> consultarPorCodigo(teclado);
-                    case 5 -> consultarTodos();
-                    case 6 -> mostrarMenuExportar(teclado);
-                    case 7 -> mostrarMenuImportar(teclado);
-                    case 8 -> verDatosSesion();
-                    case 9 -> volver = true;
-                    default -> System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
+                    case 1 ->
+                        insertarAlumno(teclado);
+                    case 2 ->
+                        actualizarAlumno(teclado);
+                    case 3 ->
+                        eliminarAlumno(teclado);
+                    case 4 ->
+                        consultarPorCodigo(teclado);
+                    case 5 ->
+                        consultarTodos();
+                    case 6 ->
+                        mostrarMenuExportar(teclado);
+                    case 7 ->
+                        mostrarMenuImportar(teclado);
+                    case 8 ->
+                        verDatosSesion();
+                    case 9 ->
+                        volver = true;
+                    default ->
+                        System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("[ERROR] Debe introducir un número entero.");
@@ -91,7 +107,6 @@ public class MenuAlumno {
     // =========================================================
     // ========================= CRUD ==========================
     // =========================================================
-
     /**
      * Solicita los datos de un nuevo alumno por teclado, lo inserta en la base
      * de datos y lo añade a la colección de sesión.
@@ -150,8 +165,8 @@ public class MenuAlumno {
     }
 
     /**
-     * Solicita el código de un alumno existente y los nuevos valores de sus campos,
-     * y actualiza el registro en la base de datos.
+     * Solicita el código de un alumno existente y los nuevos valores de sus
+     * campos, y actualiza el registro en la base de datos.
      *
      * @param teclado Scanner para leer la entrada del usuario.
      */
@@ -286,9 +301,9 @@ public class MenuAlumno {
     // =========================================================
     // ==================== EXPORTAR ===========================
     // =========================================================
-
     /**
-     * Submenú de exportación de la tabla alumno a distintos formatos de fichero.
+     * Submenú de exportación de la tabla alumno a distintos formatos de
+     * fichero.
      *
      * @param teclado Scanner para leer la opción del usuario.
      */
@@ -308,12 +323,18 @@ public class MenuAlumno {
             cargarAlumnosDesdeBD();
 
             switch (opcion) {
-                case 1 -> exportarATxt();
-                case 2 -> exportarACsv();
-                case 3 -> exportarABinario();
-                case 4 -> exportarAJson();
-                case 5 -> { /* volver */ }
-                default -> System.out.println("[ERROR] Opción no válida.");
+                case 1 ->
+                    exportarATxt();
+                case 2 ->
+                    exportarACsv();
+                case 3 ->
+                    exportarABinario();
+                case 4 ->
+                    exportarAJson();
+                case 5 -> {
+                    /* volver */ }
+                default ->
+                    System.out.println("[ERROR] Opción no válida.");
             }
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Debe introducir un número entero.");
@@ -341,10 +362,11 @@ public class MenuAlumno {
      * Escribe la lista de alumnos en un fichero de texto.
      *
      * @param rutaFichero Ruta completa del fichero de salida.
-     * @param usarDosPuntos true para usar ":" como separador (CSV); false para ";" (TXT).
+     * @param usarDosPuntos true para usar ":" como separador (CSV); false para
+     * ";" (TXT).
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
+        try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
                 String linea = alumno.toCSV();
                 if (usarDosPuntos) {
@@ -372,7 +394,7 @@ public class MenuAlumno {
      * Exporta todos los alumnos a un fichero JSON (un objeto JSON por línea).
      */
     private static void exportarAJson() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroAlumno + ".json", false))) {
+        try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroAlumno + ".json", false))) {
             for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
                 pw.println(alumno.toJSON());
             }
@@ -386,10 +408,10 @@ public class MenuAlumno {
     // =========================================================
     // ==================== IMPORTAR ===========================
     // =========================================================
-
     /**
-     * Submenú de importación de la tabla alumno desde distintos formatos de fichero.
-     * Lanza YaImportadoException si el formato seleccionado ya fue importado.
+     * Submenú de importación de la tabla alumno desde distintos formatos de
+     * fichero. Lanza YaImportadoException si el formato seleccionado ya fue
+     * importado.
      *
      * @param teclado Scanner para leer la opción del usuario.
      */
@@ -407,12 +429,18 @@ public class MenuAlumno {
             teclado.nextLine();
 
             switch (opcion) {
-                case 1 -> importarDesdeTxt();
-                case 2 -> importarDesdeCsv();
-                case 3 -> importarDesdeBinario();
-                case 4 -> importarDesdeJson();
-                case 5 -> { /* volver */ }
-                default -> System.out.println("[ERROR] Opción no válida.");
+                case 1 ->
+                    importarDesdeTxt();
+                case 2 ->
+                    importarDesdeCsv();
+                case 3 ->
+                    importarDesdeBinario();
+                case 4 ->
+                    importarDesdeJson();
+                case 5 -> {
+                    /* volver */ }
+                default ->
+                    System.out.println("[ERROR] Opción no válida.");
             }
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Debe introducir un número entero.");
@@ -425,7 +453,8 @@ public class MenuAlumno {
     /**
      * Importa alumnos desde un fichero TXT con separador ";".
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde TXT en esta sesión.
+     * @throws YaImportadoException si la tabla ya fue importada desde TXT en
+     * esta sesión.
      */
     private static void importarDesdeTxt() throws YaImportadoException {
         if (importadoTxt) {
@@ -449,7 +478,8 @@ public class MenuAlumno {
     /**
      * Importa alumnos desde un fichero CSV con separador ":".
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde CSV en esta sesión.
+     * @throws YaImportadoException si la tabla ya fue importada desde CSV en
+     * esta sesión.
      */
     private static void importarDesdeCsv() throws YaImportadoException {
         if (importadoCsv) {
@@ -474,7 +504,8 @@ public class MenuAlumno {
     /**
      * Importa alumnos desde un fichero binario (.dat).
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde binario en esta sesión.
+     * @throws YaImportadoException si la tabla ya fue importada desde binario
+     * en esta sesión.
      */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
@@ -493,7 +524,8 @@ public class MenuAlumno {
     /**
      * Importa alumnos desde un fichero JSON.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde JSON en esta sesión.
+     * @throws YaImportadoException si la tabla ya fue importada desde JSON en
+     * esta sesión.
      */
     private static void importarDesdeJson() throws YaImportadoException {
         if (importadoJson) {
@@ -512,7 +544,6 @@ public class MenuAlumno {
     // =========================================================
     // =================== SESIÓN ==============================
     // =========================================================
-
     /**
      * Muestra en consola los alumnos insertados durante la sesión actual.
      */
@@ -532,18 +563,17 @@ public class MenuAlumno {
     // =========================================================
     // ==================== AUXILIARES =========================
     // =========================================================
-
     /**
      * Carga todos los alumnos de la base de datos en la lista en memoria.
      */
     private static void cargarAlumnosDesdeBD() {
         GestionBaseDeDatos.listaAlumno.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_ALUMNO_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
     }
 
     /**
-     * Construye una cabecera legible a partir de los nombres de columna definidos
-     * en el array de datos de la consulta.
+     * Construye una cabecera legible a partir de los nombres de columna
+     * definidos en el array de datos de la consulta.
      *
      * @param datosConsulta Array con la SQL en [0] y columnas en [1..n].
      * @return Cadena formateada con los nombres de columna separados por " | ".

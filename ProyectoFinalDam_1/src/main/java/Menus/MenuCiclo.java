@@ -516,12 +516,12 @@ public class MenuCiclo {
     // ==================== AUXILIARES =========================
     // =========================================================
 
-    /**
+     /**
      * Carga todos los ciclos de la base de datos en la lista en memoria.
      */
     private static void cargarCiclosDesdeBD() {
         GestionBaseDeDatos.listaCiclo.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_CICLO_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
     }
 
     /**

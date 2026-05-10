@@ -484,7 +484,7 @@ public class MenuModulo {
      */
     private static void cargarModulosDesdeBD() {
         GestionBaseDeDatos.listaModulo.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_MODULO_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
     }
 
     /**
