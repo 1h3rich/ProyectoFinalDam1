@@ -78,7 +78,7 @@ public class FormularioModulo extends javax.swing.JFrame {
 
         jLabelInfoNombre2.setText("Creditos");
 
-        jCheckBox3.setText("Busqueda por telefono");
+        jCheckBox3.setText("Busqueda por creditos");
         jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox3ActionPerformed(evt);
@@ -91,7 +91,7 @@ public class FormularioModulo extends javax.swing.JFrame {
 
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("FORMULARIO ALUMNADO");
+        jLabelTitulo.setText("FORMULARIO MODULO");
 
         jCheckBoxConfirmacionBDD.setText("ExportarToBDD");
         jCheckBoxConfirmacionBDD.addActionListener(new java.awt.event.ActionListener() {
@@ -187,7 +187,7 @@ public class FormularioModulo extends javax.swing.JFrame {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(345, 345, 345)
                                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(419, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,7 +229,7 @@ public class FormularioModulo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
 
         pack();
@@ -387,7 +387,7 @@ public class FormularioModulo extends javax.swing.JFrame {
         dispose();
     }
     
-    private void cargarDatosAlumno(){
+    private void cargarDatosModulo(){
         String creditos = String.valueOf(modulo.getCreditos_ects());
         String horas = String.valueOf(modulo.getHoras());
         String codigo_ciclo = String.valueOf(modulo.getCodigo_ciclo());
