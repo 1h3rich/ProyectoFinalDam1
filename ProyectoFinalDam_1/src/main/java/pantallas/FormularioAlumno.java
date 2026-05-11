@@ -8,7 +8,6 @@ import Utils.ModoFormulario;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import modelos.Alumno;
-import servicios.BaseDeDatos.Insert;
 
 /**
  *
@@ -360,7 +359,7 @@ public class FormularioAlumno extends javax.swing.JFrame {
         // INSERT A LA BASE DE DATOS
         // Insert.insertarAlumno(nuevoAlumno);
         if(jCheckBoxConfirmacionBDD.isSelected()){
-            Insert.insertarBDD("Alumno");
+            Alumno.ObjToSql();
         JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
         }else{
             JOptionPane.showMessageDialog(this, "Alumno creado pero no insertado.");

@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
-import servicios.BaseDeDatos.Insert;
 import servicios.Ficheros.GestionFicheros;
 
 public class LineaMatricula implements interpolaridadDeDatos, Serializable {
@@ -354,7 +353,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     }
 
     public void ObjToSql() {
-        Insert.insertarBDD(this);
+        //realiarSql
     }
 
     // =========================================================

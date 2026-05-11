@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import servicios.BaseDeDatos.ConsultasEspecificas;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
-import servicios.BaseDeDatos.Insert;
 import servicios.Ficheros.GestionFicheros;
 
 public class Modulo implements interpolaridadDeDatos, Serializable {
@@ -376,7 +375,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     }
 
     public void ObjToSql() {
-        Insert.insertarBDD(this);
     }
 
     // =========================================================

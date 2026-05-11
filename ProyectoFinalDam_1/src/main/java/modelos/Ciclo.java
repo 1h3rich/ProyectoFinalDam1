@@ -9,8 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import servicios.BaseDeDatos.ConsultasEspecificas;
+import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
-import servicios.BaseDeDatos.Insert;
 import servicios.Ficheros.GestionFicheros;
 
 public class Ciclo implements interpolaridadDeDatos, Serializable {
@@ -394,7 +394,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     }
 
     public void ObjToSql() {
-        Insert.insertarBDD(this);
+        //
     }
 
     // =========================================================
