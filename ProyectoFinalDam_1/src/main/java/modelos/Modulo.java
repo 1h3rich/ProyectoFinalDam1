@@ -374,7 +374,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
         );
     }
 
-    public void ObjToSql() {
+    public static void ObjToSql() {
     }
 
     // =========================================================
