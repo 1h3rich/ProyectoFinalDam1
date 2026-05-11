@@ -5,6 +5,7 @@
 package pantallas;
 
 import Utils.ModoFormulario;
+import Utils.Validadores;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import modelos.Alumno;
@@ -13,7 +14,7 @@ import modelos.Alumno;
  *
  * @author Rich
  */
-public class FormularioAlumno extends javax.swing.JFrame {
+public class CrearAlumno extends javax.swing.JFrame {
 
     private ModoFormulario modo;
     private Alumno alumno;
@@ -21,7 +22,7 @@ public class FormularioAlumno extends javax.swing.JFrame {
     /**
      * Creates new form FormularioAlumno
      */
-    public FormularioAlumno() {
+    public CrearAlumno() {
         initComponents();
     }
 
@@ -49,12 +50,8 @@ public class FormularioAlumno extends javax.swing.JFrame {
         jLabelInfoNombre5 = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
         jCheckBoxConfirmacionBDD = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,34 +110,9 @@ public class FormularioAlumno extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("NSimSun", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Lista");
-
         jLabel2.setText("Seleccione esta opción para insertar en la base de datos.");
 
         jLabel3.setText("Guardado local.");
-
-        jCheckBox1.setText("Busqueda por codigo");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-
-        jCheckBox2.setText("Busqueda por nombre");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
-            }
-        });
-
-        jCheckBox3.setText("Busqueda por telefono");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,16 +125,8 @@ public class FormularioAlumno extends javax.swing.JFrame {
                         .addComponent(jLabelInfoNombre3))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18))
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jCheckBox3)
-                                .addGap(408, 408, 408)
+                                .addGap(557, 557, 557)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabelInfoNombre4)
@@ -173,7 +137,13 @@ public class FormularioAlumno extends javax.swing.JFrame {
                                             .addComponent(jLabelInfoNombre1, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabelInfoNombre5, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(59, 59, 59)))))
+                                        .addGap(59, 59, 59))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,34 +154,19 @@ public class FormularioAlumno extends javax.swing.JFrame {
                             .addComponent(jCheckBoxConfirmacionBDD)
                             .addComponent(jButtonGuardar)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jCheckBox1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(345, 345, 345)
-                                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(461, 461, 461)
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(429, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox2)
-                .addGap(4, 4, 4)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre)
-                    .addComponent(jCheckBox3))
+                    .addComponent(jLabelInfoNombre))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,9 +202,9 @@ public class FormularioAlumno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        if(modo == ModoFormulario.CREAR){
+        if (modo == ModoFormulario.CREAR) {
             crearAlumno();
-        }else{
+        } else {
             modificarAlumno();
         }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
@@ -263,20 +218,8 @@ public class FormularioAlumno extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldNombreActionPerformed
 
     private void jCheckBoxConfirmacionBDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConfirmacionBDDActionPerformed
-      
+
     }//GEN-LAST:event_jCheckBoxConfirmacionBDDActionPerformed
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,23 +238,24 @@ public class FormularioAlumno extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormularioAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormularioAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormularioAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormularioAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new FormularioAlumno().setVisible(true);
+            new CrearAlumno().setVisible(true);
         });
     }
 
-    public FormularioAlumno(ModoFormulario modo, Alumno alumno) {
+    public CrearAlumno(ModoFormulario modo, Alumno alumno) {
         initComponents();
 
         this.modo = modo;
@@ -326,13 +270,13 @@ public class FormularioAlumno extends javax.swing.JFrame {
             setTitle("Crear alumno");
             jButtonGuardar.setText("Crear Alumno");
             limpiarCampos();
-        } else{
+        } else {
             setTitle("Modificar alumno");
             jButtonGuardar.setText("Modificar Alumno");
 
             if (alumno != null) {
                 cargarDatosAlumno();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "No se ha seleccionado ningun alumno,");
             }
         }
@@ -346,7 +290,11 @@ public class FormularioAlumno extends javax.swing.JFrame {
         String telefono = jTextFieldTelefono.getText();
         String correo = jTextFieldCorreo.getText();
 
-        if (nombre.isBlank() || apellidos.isBlank() || domicilio.isBlank() || telefono.isBlank() || correo.isBlank()) {
+        if (Validadores.validarTextoNoVacio(nombre)
+                || Validadores.validarTextoNoVacio(apellidos)
+                || Validadores.validarTextoNoVacio(domicilio)
+                || Validadores.validarTelefono(telefono)
+                || Validadores.validarCorreo(correo)) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
@@ -358,10 +306,10 @@ public class FormularioAlumno extends javax.swing.JFrame {
 
         // INSERT A LA BASE DE DATOS
         // Insert.insertarAlumno(nuevoAlumno);
-        if(jCheckBoxConfirmacionBDD.isSelected()){
+        if (jCheckBoxConfirmacionBDD.isSelected()) {
             Alumno.ObjToSql();
-        JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
-        }else{
+            JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
+        } else {
             JOptionPane.showMessageDialog(this, "Alumno creado pero no insertado.");
         }
         dispose();
@@ -384,7 +332,7 @@ public class FormularioAlumno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
-        
+
         nombre = nombre + " " + apellidos;
         LocalDate fechaNacimiento = LocalDate.parse(temp);
 
@@ -395,23 +343,24 @@ public class FormularioAlumno extends javax.swing.JFrame {
         alumno.setCorreo(correo);
 
         // UPDATE BASE DE DATOS
-         if(jCheckBoxConfirmacionBDD.isSelected()){
-             //No existe la consulta aun, o no se como utilizar realizarSQL
-        JOptionPane.showMessageDialog(this, "Alumno actualizado correctamente.");
-        }else{
+        if (jCheckBoxConfirmacionBDD.isSelected()) {
+            //No existe la consulta aun, o no se como utilizar realizarSQL
+            JOptionPane.showMessageDialog(this, "Alumno actualizado correctamente.");
+        } else {
             JOptionPane.showMessageDialog(this, "Alumno actualizado de manera local");
         }
         dispose();
     }
-    
-    private void cargarDatosAlumno(){
+
+    private void cargarDatosAlumno() {
         jTextFieldNombre.setText(alumno.getNombre());
         jTextFieldCorreo.setText(alumno.getCorreo());
         jTextFieldDomicilio.setText(alumno.getDomicilio());
         jTextFieldFechaNacimiento.setText(alumno.getFechaNacimiento().toString());
         jTextFieldTelefono.setText(alumno.getTelefono());
     }
-    private void limpiarCampos(){
+
+    private void limpiarCampos() {
         jTextFieldNombre.setText("");
         jTextFieldCorreo.setText("");
         jTextFieldDomicilio.setText("");
@@ -420,11 +369,7 @@ public class FormularioAlumno extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBoxConfirmacionBDD;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelInfoNombre;

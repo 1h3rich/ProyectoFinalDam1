@@ -50,6 +50,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabelInfoCargar = new javax.swing.JLabel();
         jButtonEjercicios = new javax.swing.JButton();
         jLabelInfoEjercicios = new javax.swing.JLabel();
+        jButtonConsultar = new javax.swing.JButton();
+        jLabelInfoGuardar1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,6 +153,20 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabelInfoEjercicios.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoEjercicios.setText("Ejercicios de Base de Datos");
 
+        jButtonConsultar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonConsultar.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonConsultar.setText("Consultar");
+        jButtonConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConsultarActionPerformed(evt);
+            }
+        });
+
+        jLabelInfoGuardar1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoGuardar1.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelInfoGuardar1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabelInfoGuardar1.setText("Consulta desde la base de datos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,6 +174,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(409, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(434, 434, 434))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jComboBoxTipoDato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(51, 51, 51)
@@ -168,7 +187,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                             .addComponent(jButtonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jButtonCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonConsultar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelInfoImportar)
@@ -177,11 +197,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                             .addComponent(jLabelInfoBorrar)
                             .addComponent(jLabelInfoGuardar)
                             .addComponent(jLabelInfoCargar)
-                            .addComponent(jLabelInfoEjercicios))
-                        .addGap(213, 213, 213))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(434, 434, 434))))
+                            .addComponent(jLabelInfoEjercicios)
+                            .addComponent(jLabelInfoGuardar1))
+                        .addGap(213, 213, 213))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,6 +225,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabelInfoBorrar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonConsultar)
+                    .addComponent(jLabelInfoGuardar1))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jLabelInfoGuardar))
                 .addGap(18, 18, 18)
@@ -217,7 +239,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEjercicios)
                     .addComponent(jLabelInfoEjercicios))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
 
         pack();
@@ -264,11 +286,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         switch (tipo) {
             case ALUMNO:
-                new FormularioAlumno(ModoFormulario.CREAR, null).setVisible(true);
+                new ModificarAlumno(ModoFormulario.CREAR, null).setVisible(true);
                 break;
 
             case MODULO:
-                new FormularioModulo(ModoFormulario.CREAR, null).setVisible(true);
+                new CrearModulo(ModoFormulario.CREAR, null).setVisible(true);
                 break;
 
             //Falta añadir los formularios de mat, ciclo y linea
@@ -287,11 +309,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             case ALUMNO:
                 // Aquí deberías seleccionar un alumno real.
                 // De momento lo dejamos en null para montar la estructura.
-                new FormularioAlumno(ModoFormulario.MODIFICAR, null).setVisible(true);
+                new ModificarAlumno(ModoFormulario.MODIFICAR, null).setVisible(true);
                 break;
 
             case MODULO:
-                new FormularioModulo(ModoFormulario.MODIFICAR, null).setVisible(true);
+                new CrearModulo(ModoFormulario.MODIFICAR, null).setVisible(true);
                 break;
         }
     }//GEN-LAST:event_jButtonModificarActionPerformed
@@ -327,6 +349,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_jButtonBorrarActionPerformed
+
+    private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonConsultarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -416,6 +442,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonCargar;
+    private javax.swing.JButton jButtonConsultar;
     private javax.swing.JButton jButtonCrear;
     private javax.swing.JButton jButtonEjercicios;
     private javax.swing.JButton jButtonGuardar;
@@ -428,6 +455,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelInfoCrear;
     private javax.swing.JLabel jLabelInfoEjercicios;
     private javax.swing.JLabel jLabelInfoGuardar;
+    private javax.swing.JLabel jLabelInfoGuardar1;
     private javax.swing.JLabel jLabelInfoImportar;
     private javax.swing.JLabel jLabelInfoModificar;
     // End of variables declaration//GEN-END:variables
