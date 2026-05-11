@@ -259,7 +259,7 @@ public class MenuMatricula {
             }
 
             System.out.println("\n" + formatearCabecera(ConsultasSQL.SELECT_MATRICULA_POR_CODIGO));
-            GestionBaseDeDatos.realizarSQL(
+            GestionBaseDeDatos.realizarConsultaSQL(
                     ConsultasSQL.SELECT_MATRICULA_POR_CODIGO,
                     new String[]{String.valueOf(codigo)},
                     true,
@@ -278,7 +278,7 @@ public class MenuMatricula {
     private static void consultarTodos() {
         System.out.println("\n--- TODAS LAS MATRÍCULAS (ordenado por estado ASC) ---");
         System.out.println(formatearCabecera(ConsultasSQL.SELECT_MATRICULA_TODOS));
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_MATRICULA_TODOS, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SELECT_MATRICULA_TODOS, new String[0], true, false);
     }
 
     // =========================================================
@@ -485,7 +485,7 @@ public class MenuMatricula {
      */
     private static void cargarMatriculasDesdeBD() {
         GestionBaseDeDatos.listaMatricula.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
     }
 
     /**

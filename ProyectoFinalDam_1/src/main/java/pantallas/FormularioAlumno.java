@@ -8,6 +8,8 @@ import Utils.ModoFormulario;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import modelos.Alumno;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  *
@@ -359,7 +361,15 @@ public class FormularioAlumno extends javax.swing.JFrame {
         // INSERT A LA BASE DE DATOS
         // Insert.insertarAlumno(nuevoAlumno);
         if(jCheckBoxConfirmacionBDD.isSelected()){
-            Alumno.ObjToSql();
+            String[] entradas = {
+                nombre,
+                fechaNacimiento.toString(),
+                domicilio,
+                telefono,
+                correo
+            };
+
+            GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO, entradas);
         JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
         }else{
             JOptionPane.showMessageDialog(this, "Alumno creado pero no insertado.");
@@ -396,7 +406,7 @@ public class FormularioAlumno extends javax.swing.JFrame {
 
         // UPDATE BASE DE DATOS
          if(jCheckBoxConfirmacionBDD.isSelected()){
-             //No existe la consulta aun, o no se como utilizar realizarSQL
+             //No existe la consulta aun, o no se como utilizar realizarConsultaSQL
         JOptionPane.showMessageDialog(this, "Alumno actualizado correctamente.");
         }else{
             JOptionPane.showMessageDialog(this, "Alumno actualizado de manera local");

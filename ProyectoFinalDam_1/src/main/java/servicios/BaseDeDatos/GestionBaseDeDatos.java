@@ -97,7 +97,7 @@ public class GestionBaseDeDatos {
      * @param mostrarPorPantalla
      * @param guardarDatos
      */
-    public static void realizarSQL(String[] datosConsulta, String[] entradas, boolean mostrarPorPantalla, boolean guardarDatos) {
+    public static void realizarConsultaSQL(String[] datosConsulta, String[] entradas, boolean mostrarPorPantalla, boolean guardarDatos) {
         try {
             comprobarConexion();
 
@@ -225,6 +225,7 @@ public class GestionBaseDeDatos {
 
         } catch (SQLException ex) {
             Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 }

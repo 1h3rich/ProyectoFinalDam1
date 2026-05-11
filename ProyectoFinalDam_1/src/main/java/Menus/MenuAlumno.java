@@ -276,7 +276,7 @@ public class MenuAlumno {
             }
 
             System.out.println("\n" + formatearCabecera(ConsultasSQL.SELECT_ALUMNO_POR_CODIGO));
-            GestionBaseDeDatos.realizarSQL(
+            GestionBaseDeDatos.realizarConsultaSQL(
                     ConsultasSQL.SELECT_ALUMNO_POR_CODIGO,
                     new String[]{String.valueOf(codigo)},
                     true,
@@ -295,7 +295,7 @@ public class MenuAlumno {
     private static void consultarTodos() {
         System.out.println("\n--- TODOS LOS ALUMNOS (ordenado por nombre ASC) ---");
         System.out.println(formatearCabecera(ConsultasSQL.SELECT_ALUMNO_TODOS));
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_ALUMNO_TODOS, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SELECT_ALUMNO_TODOS, new String[0], true, false);
     }
 
     // =========================================================
@@ -568,7 +568,7 @@ public class MenuAlumno {
      */
     private static void cargarAlumnosDesdeBD() {
         GestionBaseDeDatos.listaAlumno.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
     }
 
     /**

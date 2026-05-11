@@ -258,7 +258,7 @@ public class MenuModulo {
             }
 
             System.out.println("\n" + formatearCabecera(ConsultasSQL.SELECT_MODULO_POR_CODIGO));
-            GestionBaseDeDatos.realizarSQL(
+            GestionBaseDeDatos.realizarConsultaSQL(
                     ConsultasSQL.SELECT_MODULO_POR_CODIGO,
                     new String[]{String.valueOf(codigo)},
                     true,
@@ -277,7 +277,7 @@ public class MenuModulo {
     private static void consultarTodos() {
         System.out.println("\n--- TODOS LOS MÓDULOS (ordenado por nombre ASC) ---");
         System.out.println(formatearCabecera(ConsultasSQL.SELECT_MODULO_TODOS));
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_MODULO_TODOS, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SELECT_MODULO_TODOS, new String[0], true, false);
     }
 
     // =========================================================
@@ -484,7 +484,7 @@ public class MenuModulo {
      */
     private static void cargarModulosDesdeBD() {
         GestionBaseDeDatos.listaModulo.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
     }
 
     /**

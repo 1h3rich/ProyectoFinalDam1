@@ -256,7 +256,7 @@ public class MenuCiclo {
             }
 
             System.out.println("\n" + formatearCabecera(ConsultasSQL.SELECT_CICLO_POR_CODIGO));
-            GestionBaseDeDatos.realizarSQL(
+            GestionBaseDeDatos.realizarConsultaSQL(
                     ConsultasSQL.SELECT_CICLO_POR_CODIGO,
                     new String[]{String.valueOf(codigo)},
                     true,
@@ -275,7 +275,7 @@ public class MenuCiclo {
     private static void consultarTodos() {
         System.out.println("\n--- TODOS LOS CICLOS (ordenado por denominación ASC) ---");
         System.out.println(formatearCabecera(ConsultasSQL.SELECT_CICLO_TODOS));
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_CICLO_TODOS, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SELECT_CICLO_TODOS, new String[0], true, false);
     }
 
     // =========================================================
@@ -521,7 +521,7 @@ public class MenuCiclo {
      */
     private static void cargarCiclosDesdeBD() {
         GestionBaseDeDatos.listaCiclo.clear();
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
     }
 
     /**

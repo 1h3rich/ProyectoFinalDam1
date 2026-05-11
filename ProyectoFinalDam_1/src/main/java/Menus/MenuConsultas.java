@@ -77,7 +77,7 @@ public class MenuConsultas {
      */
     private static void ejecutarConsulta1() {
         System.out.println("\n--- CONSULTA 1: Módulos y sus ciclos ---");
-        GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta1, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasEjercicios.datosConsulta1, new String[0], true, false);
     }
 
     /**
@@ -96,7 +96,7 @@ public class MenuConsultas {
         System.out.print("Introduce el curso del módulo (primero/segundo): ");
         String cursoModulo = teclado.nextLine().trim();
 
-        GestionBaseDeDatos.realizarSQL(
+        GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasEjercicios.datosConsulta2,
                 new String[]{nivelCiclo, cursoModulo},
                 true, false
@@ -116,7 +116,7 @@ public class MenuConsultas {
         System.out.print("Introduce el año académico (ej. 2024): ");
         String añoAcademico = teclado.nextLine().trim();
 
-        GestionBaseDeDatos.realizarSQL(
+        GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasEjercicios.datosConsulta3,
                 new String[]{añoAcademico},
                 true, false
@@ -142,7 +142,7 @@ public class MenuConsultas {
         System.out.print("Introduce el año académico (ej. 2024): ");
         String añoAcademico = teclado.nextLine().trim();
 
-        GestionBaseDeDatos.realizarSQL(
+        GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasEjercicios.datosConsulta4,
                 new String[]{denominacion, curso, añoAcademico},
                 true, false
@@ -156,7 +156,7 @@ public class MenuConsultas {
      */
     private static void ejecutarConsulta5() {
         System.out.println("\n--- CONSULTA 5: Importe total recaudado por ciclo y año académico ---");
-        GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta5, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasEjercicios.datosConsulta5, new String[0], true, false);
     }
 
     /**
@@ -165,7 +165,7 @@ public class MenuConsultas {
      */
     private static void ejecutarConsulta6() {
         System.out.println("\n--- CONSULTA 6: Créditos ECTS y horas totales por alumno ---");
-        GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta6, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasEjercicios.datosConsulta6, new String[0], true, false);
     }
 
     /**
@@ -174,7 +174,7 @@ public class MenuConsultas {
      */
     private static void ejecutarConsulta7() {
         System.out.println("\n--- CONSULTA 7: Alumnos con calificación primera pendiente ---");
-        GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta7, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasEjercicios.datosConsulta7, new String[0], true, false);
     }
 
     /**
@@ -183,7 +183,7 @@ public class MenuConsultas {
      */
     private static void ejecutarConsulta8() {
         System.out.println("\n--- CONSULTA 8: Módulos con más de 3 alumnos repetidores ---");
-        GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta8, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasEjercicios.datosConsulta8, new String[0], true, false);
     }
 
     /**
@@ -192,6 +192,6 @@ public class MenuConsultas {
      */
     private static void ejecutarConsulta9() {
         System.out.println("\n--- CONSULTA 9: Alumnos sin matrícula o con matrícula anulada ---");
-        GestionBaseDeDatos.realizarSQL(ConsultasEjercicios.datosConsulta9, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasEjercicios.datosConsulta9, new String[0], true, false);
     }
 }

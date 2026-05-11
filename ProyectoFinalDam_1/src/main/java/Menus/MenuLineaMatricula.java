@@ -282,7 +282,7 @@ public class MenuLineaMatricula {
             }
 
             System.out.println("\n" + formatearCabecera(ConsultasSQL.SELECT_LINEA_MATRICULA_POR_CODIGO));
-            GestionBaseDeDatos.realizarSQL(
+            GestionBaseDeDatos.realizarConsultaSQL(
                     ConsultasSQL.SELECT_LINEA_MATRICULA_POR_CODIGO,
                     new String[]{String.valueOf(codMatricula), String.valueOf(codModulo)},
                     true,
@@ -301,7 +301,7 @@ public class MenuLineaMatricula {
     private static void consultarTodos() {
         System.out.println("\n--- TODAS LAS LÍNEAS DE MATRÍCULA (ordenado por cod. matrícula ASC) ---");
         System.out.println(formatearCabecera(ConsultasSQL.SELECT_LINEA_MATRICULA_TODOS));
-        GestionBaseDeDatos.realizarSQL(ConsultasSQL.SELECT_LINEA_MATRICULA_TODOS, new String[0], true, false);
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SELECT_LINEA_MATRICULA_TODOS, new String[0], true, false);
     }
 
     // =========================================================
@@ -552,7 +552,7 @@ public class MenuLineaMatricula {
      */
     private static void cargarLineasDesdeBD() {
         GestionBaseDeDatos.listaLineaMatricula.clear();
-        GestionBaseDeDatos.realizarSQL(
+        GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true
         );
     }
