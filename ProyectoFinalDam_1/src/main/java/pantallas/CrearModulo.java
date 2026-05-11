@@ -37,16 +37,12 @@ public class CrearModulo extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabelInfoNombre = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jLabelInfoNombre1 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
         jLabelInfoNombre2 = new javax.swing.JLabel();
-        jCheckBox3 = new javax.swing.JCheckBox();
         jLabelInfoNombre3 = new javax.swing.JLabel();
         jLabelInfoNombre4 = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
         jCheckBoxConfirmacionBDD = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
         jButtonGuardar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldNombre = new javax.swing.JTextField();
@@ -60,30 +56,9 @@ public class CrearModulo extends javax.swing.JFrame {
 
         jLabelInfoNombre.setText("Nombre:");
 
-        jCheckBox1.setText("Busqueda por codigo");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-
         jLabelInfoNombre1.setText("Curso:");
 
-        jCheckBox2.setText("Busqueda por nombre");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
-            }
-        });
-
         jLabelInfoNombre2.setText("Creditos");
-
-        jCheckBox3.setText("Busqueda por creditos");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
-            }
-        });
 
         jLabelInfoNombre3.setText("Horas:");
 
@@ -91,7 +66,7 @@ public class CrearModulo extends javax.swing.JFrame {
 
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("FORMULARIO MODULO");
+        jLabelTitulo.setText("CREAR MODULO");
 
         jCheckBoxConfirmacionBDD.setText("ExportarToBDD");
         jCheckBoxConfirmacionBDD.addActionListener(new java.awt.event.ActionListener() {
@@ -99,10 +74,6 @@ public class CrearModulo extends javax.swing.JFrame {
                 jCheckBoxConfirmacionBDDActionPerformed(evt);
             }
         });
-
-        jLabel1.setFont(new java.awt.Font("NSimSun", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Lista");
 
         jButtonGuardar.setText("Guardar");
         jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -148,16 +119,9 @@ public class CrearModulo extends javax.swing.JFrame {
                         .addGap(555, 555, 555)
                         .addComponent(jLabelInfoNombre3))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox3)
-                                .addGap(408, 408, 408)
+                                .addGap(555, 555, 555)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabelInfoNombre4)
@@ -167,7 +131,13 @@ public class CrearModulo extends javax.swing.JFrame {
                                             .addComponent(jLabelInfoNombre2, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabelInfoNombre1, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(61, 61, 61)))))
+                                        .addGap(61, 61, 61))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,34 +147,19 @@ public class CrearModulo extends javax.swing.JFrame {
                             .addComponent(jCheckBoxConfirmacionBDD)
                             .addComponent(jButtonGuardar)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jCheckBox1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(345, 345, 345)
-                                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(461, 461, 461)
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(419, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox2)
-                .addGap(4, 4, 4)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre)
-                    .addComponent(jCheckBox3))
+                    .addComponent(jLabelInfoNombre))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -234,18 +189,6 @@ public class CrearModulo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jCheckBoxConfirmacionBDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConfirmacionBDDActionPerformed
 
@@ -411,11 +354,7 @@ public class CrearModulo extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBoxConfirmacionBDD;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelInfoNombre;
