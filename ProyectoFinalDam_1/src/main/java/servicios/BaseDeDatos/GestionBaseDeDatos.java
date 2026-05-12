@@ -20,6 +20,8 @@ public class GestionBaseDeDatos {
     public static TreeSet<Ciclo> listaCiclo = new TreeSet<>();
     public static TreeSet<Modulo> listaModulo = new TreeSet<>();
     
+    public static ArrayList<String> datosInsertados = new ArrayList<>();
+    
     /**
      * Conecta Java con la base de datos MySQL.
      */
@@ -319,7 +321,7 @@ public class GestionBaseDeDatos {
      * @return true si existe al menos un registro con ese código; false en caso contrario.
      */
     public static boolean existeRegistro(String tabla, int codigo) {
-        // Se construye la SQL con el nombre de tabla (no puede ser parámetro ? en JDBC)
+        // Se construye la SQL con el nombre de tabla 
         String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
         try {
             comprobarConexion(); 
