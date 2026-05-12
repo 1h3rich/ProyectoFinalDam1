@@ -4,12 +4,19 @@
  */
 package pantallas;
 
+import Utils.ModoFormulario;
+import Utils.Validadores;
+import javax.swing.JOptionPane;
+import modelos.LineaMatricula;
+
 /**
  *
  * @author Rich
  */
 public class CrearLineaMatricula extends javax.swing.JFrame {
 
+    private ModoFormulario modo;
+    private LineaMatricula linea;
     /**
      * Creates new form FormularioLineaMatriucla
      */
@@ -26,21 +33,169 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabelInfoFamiliaProfesional = new javax.swing.JLabel();
+        jLabelInfoNombre3 = new javax.swing.JLabel();
+        jTextFieldcodigoModulo = new javax.swing.JTextField();
+        jButtonGuardar = new javax.swing.JButton();
+        jCheckBoxConfirmacionBDD = new javax.swing.JCheckBox();
+        jLabelInfoNombre4 = new javax.swing.JLabel();
+        jTextField2ªCalif = new javax.swing.JTextField();
+        jTextField1ªcalif = new javax.swing.JTextField();
+        jLabelInfoAñoCurricular = new javax.swing.JLabel();
+        jLabel2InfoInfoBDD = new javax.swing.JLabel();
+        jTextFieldCod_Matr = new javax.swing.JTextField();
+        jTextFieldRepetidor = new javax.swing.JTextField();
+        jLabelTitulo = new javax.swing.JLabel();
+        jLabel3InfoInfoGuardar = new javax.swing.JLabel();
+        jLabelInfoDenominacion = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabelInfoFamiliaProfesional.setText("Codigo-Modulo");
+
+        jLabelInfoNombre3.setText("Repeticion:");
+
+        jTextFieldcodigoModulo.setMinimumSize(new java.awt.Dimension(64, 128));
+        jTextFieldcodigoModulo.setPreferredSize(new java.awt.Dimension(64, 128));
+        jTextFieldcodigoModulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldcodigoModuloActionPerformed(evt);
+            }
+        });
+
+        jButtonGuardar.setText("Guardar");
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardarActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxConfirmacionBDD.setText("ExportarToBDD");
+        jCheckBoxConfirmacionBDD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxConfirmacionBDDActionPerformed(evt);
+            }
+        });
+
+        jLabelInfoNombre4.setText("1ª Calificacion: ");
+
+        jTextField2ªCalif.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jTextField1ªcalif.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jLabelInfoAñoCurricular.setText("2ª Calificacion:");
+
+        jLabel2InfoInfoBDD.setText("Seleccione esta opción para insertar en la base de datos.");
+
+        jTextFieldCod_Matr.setMinimumSize(new java.awt.Dimension(64, 128));
+        jTextFieldCod_Matr.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jTextFieldRepetidor.setPreferredSize(new java.awt.Dimension(64, 128));
+        jTextFieldRepetidor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldRepetidorActionPerformed(evt);
+            }
+        });
+
+        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitulo.setText("FORMULARIO LINEA-MATRICULA");
+
+        jLabel3InfoInfoGuardar.setText("Guardado local.");
+
+        jLabelInfoDenominacion.setText("Codigo-Matricula:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(378, 378, 378)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3InfoInfoGuardar, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2InfoInfoBDD, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(143, 143, 143)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelInfoNombre4)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabelInfoDenominacion)
+                                        .addComponent(jLabelInfoFamiliaProfesional, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(jLabelInfoNombre3)
+                                    .addComponent(jLabelInfoAñoCurricular))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldCod_Matr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldRepetidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldcodigoModulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1ªcalif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2ªCalif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBoxConfirmacionBDD)
+                            .addComponent(jButtonGuardar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(111, 111, 111)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldCod_Matr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelInfoDenominacion))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldcodigoModulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelInfoFamiliaProfesional))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelInfoNombre3)
+                    .addComponent(jTextFieldRepetidor, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelInfoNombre4)
+                    .addComponent(jTextField1ªcalif, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2ªCalif, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelInfoAñoCurricular))
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxConfirmacionBDD)
+                    .addComponent(jLabel2InfoInfoBDD))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonGuardar)
+                    .addComponent(jLabel3InfoInfoGuardar))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldcodigoModuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldcodigoModuloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldcodigoModuloActionPerformed
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        if(modo == ModoFormulario.CREAR){
+            crearLinea();
+        }
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jCheckBoxConfirmacionBDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConfirmacionBDDActionPerformed
+
+    }//GEN-LAST:event_jCheckBoxConfirmacionBDDActionPerformed
+
+    private void jTextFieldRepetidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRepetidorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldRepetidorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,7 +234,99 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             }
         });
     }
+    
+    public CrearLineaMatricula(ModoFormulario modo, LineaMatricula linea) {
+        initComponents();
 
+        this.modo = modo;
+        this.linea = linea;
+
+        setLocationRelativeTo(null);
+        prepararFormulario();
+    }
+    
+    private void prepararFormulario() {
+        if (modo == ModoFormulario.CREAR) {
+            setTitle("Crear Linea Matricula");
+            jButtonGuardar.setText("Crear Linea Matricula");
+            limpiarCampos();
+        }
+    }
+    
+    private void crearLinea() {
+        String cod_matr = jTextFieldCod_Matr.getText();
+        String cod_ciclo = jTextFieldcodigoModulo.getText();
+        String repe = jTextFieldRepetidor.getText();
+        String PrimCal = jTextField1ªcalif.getText();
+        String SegCal = jTextField2ªCalif.getText();
+        
+         if (Validadores.validarTextoNoVacio(cod_matr)
+                || Validadores.validarTextoNoVacio(cod_ciclo)
+                || Validadores.validarTextoNoVacio(repe)
+                || Validadores.validarTelefono(PrimCal)
+                || Validadores.validarCorreo(SegCal)) {
+            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+            return;
+        }
+         int codigo_matr = Integer.parseInt(cod_matr);
+         int codigo_ciclo = Integer.parseInt(cod_ciclo);
+         int repeticion = Integer.parseInt(repe);
+         double PriCalif = Double.parseDouble(PrimCal);
+         double SegCalif = Double.parseDouble(SegCal);
+         
+         LineaMatricula linea = new LineaMatricula(codigo_matr, codigo_ciclo, repeticion, PriCalif, SegCalif);
+         
+         // INSERT A LA BASE DE DATOS
+        // Insert.insertarLineaMatricula(nuevaLinea);
+        if(jCheckBoxConfirmacionBDD.isSelected()){
+            LineaMatricula.ObjToSql();
+        JOptionPane.showMessageDialog(this, "Linea Matricula creada correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this, "Linea Matricula creada pero no insertado.");
+        }
+        dispose();
+         
+    }
+    
+    private void cargarDatosLinea(){
+        String codigo_matr = String.valueOf(linea.getCod_matricula());
+        String codigo_mod = String.valueOf(linea.getCod_modulo());
+        String repeticion = String.valueOf(linea.getRepeticion());
+        String PriCalif = String.valueOf(linea.getCal_primera());
+        String SegCalif = String.valueOf(linea.getCal_segunda());
+        
+        jTextFieldCod_Matr.setText(codigo_matr);
+        jTextFieldcodigoModulo.setText(codigo_mod);
+        jTextFieldRepetidor.setText(repeticion);
+        jTextField1ªcalif.setText(PriCalif);
+        jTextField2ªCalif.setText(SegCalif);
+        
+        
+    }
+    private void limpiarCampos(){
+        jTextFieldCod_Matr.setText("");
+        jTextFieldcodigoModulo.setText("");
+        jTextFieldRepetidor.setText("");
+        jTextField1ªcalif.setText("");
+        jTextField2ªCalif.setText("");
+    }
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JCheckBox jCheckBoxConfirmacionBDD;
+    private javax.swing.JLabel jLabel2InfoInfoBDD;
+    private javax.swing.JLabel jLabel3InfoInfoGuardar;
+    private javax.swing.JLabel jLabelInfoAñoCurricular;
+    private javax.swing.JLabel jLabelInfoDenominacion;
+    private javax.swing.JLabel jLabelInfoFamiliaProfesional;
+    private javax.swing.JLabel jLabelInfoNombre3;
+    private javax.swing.JLabel jLabelInfoNombre4;
+    private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JTextField jTextField1ªcalif;
+    private javax.swing.JTextField jTextField2ªCalif;
+    private javax.swing.JTextField jTextFieldCod_Matr;
+    private javax.swing.JTextField jTextFieldRepetidor;
+    private javax.swing.JTextField jTextFieldcodigoModulo;
     // End of variables declaration//GEN-END:variables
 }
