@@ -309,7 +309,7 @@ public class ModificarAlumno extends javax.swing.JFrame {
         // INSERT A LA BASE DE DATOS
         // Insert.insertarAlumno(nuevoAlumno);
         if (jCheckBoxConfirmacionBDD.isSelected()) {
-            
+            Alumno.ObjToSql();
             JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
         } else {
             JOptionPane.showMessageDialog(this, "Alumno creado pero no insertado.");
