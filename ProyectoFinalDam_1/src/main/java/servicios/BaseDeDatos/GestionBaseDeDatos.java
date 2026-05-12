@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import modelos.*;
 
 public class GestionBaseDeDatos {
@@ -227,5 +228,109 @@ public class GestionBaseDeDatos {
             Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
             
         }
+    }
+    
+    /**
+     * Ejecuta una consulta SELECT y devuelve un DefaultTableModel listo para
+     * asignar a cualquier JTable de Swing.
+     *
+     * Las columnas se extraen automáticamente de los metadatos del ResultSet,
+     * por lo que este método funciona con CUALQUIER consulta sin hardcodear
+     * nombres de columna.
+     *
+     * Las celdas son de sólo lectura (isCellEditable devuelve false).
+     *
+     * Patrón de uso en un JFrame:
+     *
+     *   DefaultTableModel modelo = GestionBaseDeDatos.obtenerTableModel(
+     *       "SELECT * FROM alumno ORDER BY nombre ASC", new String[0]
+     *   );
+     *   jTable1.setModel(modelo);
+     *
+     * @param sql    Consulta SQL con marcadores ? para los parámetros.
+     * @param params Array de parámetros para los marcadores ? (puede ser new String[0]).
+     * @return DefaultTableModel con cabeceras y filas; vacío si hay error.
+     */
+    public static DefaultTableModel obtenerTableModel(String sql, String[] params) {
+ 
+        // Modelo de tabla de sólo lectura (isCellEditable = false)
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+ 
+        try {
+            comprobarConexion();
+ 
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
+ 
+                // Pasar parámetros al PreparedStatement
+                if (params != null) {
+                    for (int i = 0; i < params.length; i++) {
+                        pst.setString(i + 1, params[i]);
+                    }
+                }
+ 
+                try (ResultSet rs = pst.executeQuery()) {
+ 
+                    ResultSetMetaData meta = rs.getMetaData();
+                    int numColumnas = meta.getColumnCount();
+ 
+                    // --- 1. Añadir cabeceras de columna (nombre de cada columna de la BD) ---
+                    for (int i = 1; i <= numColumnas; i++) {
+                        modelo.addColumn(meta.getColumnLabel(i).toUpperCase());
+                    }
+ 
+                    // --- 2. Añadir filas (cada fila del ResultSet es un Object[]) ---
+                    while (rs.next()) {
+                        Object[] fila = new Object[numColumnas];
+                        for (int i = 0; i < numColumnas; i++) {
+                            fila[i] = rs.getObject(i + 1);
+                        }
+                        modelo.addRow(fila);
+                    }
+                }
+            }
+ 
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return modelo;
+    }
+    
+    /**
+     * Comprueba si existe un registro con el código dado en la tabla indicada.
+     * Se usa para validar claves foráneas ANTES de insertar o actualizar.
+     *
+     * Ejemplos de uso en formularios Swing:
+     *   if (!GestionBaseDeDatos.existeRegistro("ciclo", codigoCiclo)) {
+     *       JOptionPane.showMessageDialog(this, "El ciclo no existe.");
+     *       return;
+     *   }
+     *
+     * @param tabla  Nombre de la tabla (p. ej. "ciclo", "alumno", "modulo").
+     * @param codigo Código a buscar (clave primaria entera).
+     * @return true si existe al menos un registro con ese código; false en caso contrario.
+     */
+    public static boolean existeRegistro(String tabla, int codigo) {
+        // Se construye la SQL con el nombre de tabla (no puede ser parámetro ? en JDBC)
+        String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
+        try {
+            comprobarConexion();
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
+                pst.setInt(1, codigo);
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt(1) > 0;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }
