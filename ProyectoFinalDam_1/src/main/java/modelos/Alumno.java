@@ -387,9 +387,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
         );
     }
 
-    public static void ObjToSql() {
-        
-    }
+   
 
     // =========================================================
     // ================= CONVERTIDORES =========================
