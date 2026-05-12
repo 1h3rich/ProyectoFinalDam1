@@ -319,7 +319,7 @@ public class GestionBaseDeDatos {
         // Se construye la SQL con el nombre de tabla (no puede ser parámetro ? en JDBC)
         String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
         try {
-            comprobarConexion();
+            comprobarConexion(); 
             try (PreparedStatement pst = con.prepareStatement(sql)) {
                 pst.setInt(1, codigo);
                 try (ResultSet rs = pst.executeQuery()) {
