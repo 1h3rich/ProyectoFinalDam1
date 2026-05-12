@@ -2,16 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package pantallas;
+package pantallas.Consultas;
 
 import Utils.TipoDato;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.BorderLayout;
-import servicios.BaseDeDatos.ConsultasSQL;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
+import servicios.BaseDeDatos.*;
 
 /**
  *
@@ -27,8 +25,51 @@ public class ConsultaCompleta extends javax.swing.JFrame {
      */
     public ConsultaCompleta() {
         initComponents();
-        GestionBaseDeDatos.vincularBDD();
+        configurarVentana();
         inicializarTabla();
+        conectarYCargarDatos();
+    }
+
+    private void conectarYCargarDatos() {
+        if (GestionBaseDeDatos.vincularBDD()) {
+            cargarTabla();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se ha podido conectar con la base de datos.",
+                    "Error de conexión",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+            jComboBoxEleccion.setEnabled(false);
+        }
+    }
+
+    private void configurarVentana() {
+        setLocationRelativeTo(null);
+        setTitle("Consultas completas");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                cerrarVentana();
+            }
+        });
+    }
+
+    private void cerrarVentana() {
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que quieres cerrar la ventana de consultas?",
+                "Cerrar consultas",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
     }
 
     /**
@@ -43,7 +84,6 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jComboBoxEleccion = new javax.swing.JComboBox<>();
-        jButtonActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,13 +111,6 @@ public class ConsultaCompleta extends javax.swing.JFrame {
             }
         });
 
-        jButtonActualizar.setText("Actualizar");
-        jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonActualizarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,9 +120,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jComboBoxEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonActualizar))
+                        .addComponent(jComboBoxEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -103,10 +134,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jComboBoxEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonActualizar)))
+                    .addComponent(jComboBoxEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(339, Short.MAX_VALUE))
         );
 
@@ -114,12 +142,10 @@ public class ConsultaCompleta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxEleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEleccionActionPerformed
-
+        if (tabla != null) {
+            cargarTabla();
+        }
     }//GEN-LAST:event_jComboBoxEleccionActionPerformed
-
-    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
-        cargarTabla();
-    }//GEN-LAST:event_jButtonActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,105 +182,102 @@ public class ConsultaCompleta extends javax.swing.JFrame {
 
     //Se puede escribir
     private void inicializarTabla() {
-
+        jPanel1.removeAll();
         jPanel1.setLayout(new BorderLayout());
 
         tabla = new JTable();
-
         tabla.setRowHeight(24);
+        tabla.setAutoCreateRowSorter(true);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         scrollPane = new JScrollPane(tabla);
 
         jPanel1.add(scrollPane, BorderLayout.CENTER);
+
+        jPanel1.revalidate();
+        jPanel1.repaint();
     }
 
     private String obtenerSQL(TipoDato tipo) {
-
         return switch (tipo) {
-
             case ALUMNO ->
                 ConsultasSQL.SELECT_ALUMNO_TODOS[0];
-
             case MODULO ->
                 ConsultasSQL.SELECT_MODULO_TODOS[0];
-
             case CICLO ->
                 ConsultasSQL.SELECT_CICLO_TODOS[0];
-
             case MATRICULA ->
                 ConsultasSQL.SELECT_MATRICULA_TODOS[0];
-
             case LINEA_MATRICULA ->
                 ConsultasSQL.SELECT_LINEA_MATRICULA_TODOS[0];
-
             default ->
                 null;
         };
     }
 
     private void cargarTabla() {
+    try {
+        TipoDato tipo = obtenerTipoSeleccionado();
+        String sql = obtenerSQL(tipo);
 
-        try {
-
-            TipoDato tipo = obtenerTipoSeleccionado();
-
-            String sql = obtenerSQL(tipo);
-
-            if (sql == null) {
-                return;
-            }
-
-            DefaultTableModel modelo
-                    = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
-
-            tabla.setModel(modelo);
-
-            // Ordenar columnas al hacer clic
-            TableRowSorter<DefaultTableModel> sorter
-                    = new TableRowSorter<>(modelo);
-
-            tabla.setRowSorter(sorter);
-
-        } catch (Exception e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Error cargando datos:\n" + e.getMessage()
-            );
+        if (sql == null || sql.isBlank()) {
+            JOptionPane.showMessageDialog(this, "No hay consulta SQL definida.");
+            return;
         }
+
+        DefaultTableModel modelo = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
+
+        tabla.setModel(modelo);
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
+        tabla.setRowSorter(sorter);
+
+        tabla.setRowHeight(24);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        scrollPane.setViewportView(tabla);
+
+        tabla.revalidate();
+        tabla.repaint();
+
+        scrollPane.revalidate();
+        scrollPane.repaint();
+
+        jPanel1.revalidate();
+        jPanel1.repaint();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Error cargando datos:\n" + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        e.printStackTrace();
     }
+}
 
     private TipoDato obtenerTipoSeleccionado() {
         String seleccion = jComboBoxEleccion.getSelectedItem().toString();
 
-        switch (seleccion) {
-            case "Alumno" -> {
-                return TipoDato.ALUMNO;
-            }
-
-            case "Módulo" -> {
-                return TipoDato.MODULO;
-            }
-
-            case "Ciclo" -> {
-                return TipoDato.CICLO;
-            }
-
-            case "Matrícula" -> {
-                return TipoDato.MATRICULA;
-            }
-
-            case "Línea Matrícula" -> {
-                return TipoDato.LINEA_MATRICULA;
-            }
-
+        return switch (seleccion) {
+            case "Alumno" ->
+                TipoDato.ALUMNO;
+            case "Módulo" ->
+                TipoDato.MODULO;
+            case "Ciclo" ->
+                TipoDato.CICLO;
+            case "Matrícula" ->
+                TipoDato.MATRICULA;
+            case "Línea Matrícula" ->
+                TipoDato.LINEA_MATRICULA;
             default ->
                 throw new IllegalArgumentException("Tipo no válido: " + seleccion);
-        }
+        };
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonActualizar;
     private javax.swing.JComboBox<String> jComboBoxEleccion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

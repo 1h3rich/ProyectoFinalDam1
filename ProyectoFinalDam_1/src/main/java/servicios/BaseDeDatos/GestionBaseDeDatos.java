@@ -1,9 +1,9 @@
 package servicios.BaseDeDatos;
 
 import Config.Config;
+import Utils.ItemCombo;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,53 +13,77 @@ import modelos.*;
 public class GestionBaseDeDatos {
 
     private static Connection con;
+    private static boolean transaccionActiva = false;
 
     public static TreeSet<Alumno> listaAlumno = new TreeSet<>();
     public static TreeSet<Matricula> listaMatricula = new TreeSet<>();
     public static TreeSet<LineaMatricula> listaLineaMatricula = new TreeSet<>();
     public static TreeSet<Ciclo> listaCiclo = new TreeSet<>();
     public static TreeSet<Modulo> listaModulo = new TreeSet<>();
-    
-    
-    
+
     //En esta lista hay que guaradr los datos que insertan cada vez que se hace un insert
     public static ArrayList<String> datosInsertados = new ArrayList<>(); //Aqui no estoy seguro si es String o podria Ser de Tipo Object, si se puede elegir pondria Object
-    
+
     /**
      * Conecta Java con la base de datos MySQL.
+     *
+     * @return
      */
-    public static void vincularBDD() {
-        
+    public static boolean vincularBDD() {
         try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Driver MySQL cargado correctamente");
 
-            try {
-                con = DriverManager.getConnection(
-                        Config.urlSQL,
-                        Config.nombreUsuarioSQL,
-                        Config.contraseñaSQL[0]
-                );
-                System.out.println("Conexion exitosa");
+            con = DriverManager.getConnection(
+                    Config.urlSQL,
+                    Config.nombreUsuarioSQL,
+                    Config.contraseñaSQL[0]
+            );
 
-            } catch (SQLException e) {
-                try {
-                    con = DriverManager.getConnection(
-                            Config.urlSQL,
-                            Config.nombreUsuarioSQL,
-                            Config.contraseñaSQL[1]
-                    );
-                    System.out.println("Conexion exitosa");
+            con.setAutoCommit(true);
 
-                } catch (SQLException ex) {
-                    System.out.println("Error al conectar con la base de datos");
-                    Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            System.out.println("Conexion exitosa");
+            System.out.println("URL Java: " + Config.urlSQL);
+            System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
+
+            diagnosticoConexion();
+
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("Error al conectar con la base de datos:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void diagnosticoConexion() {
+        String sql = """
+        SELECT 
+            DATABASE() AS base_actual,
+            @@hostname AS host,
+            @@port AS puerto,
+            @@autocommit AS autocommit,
+            (SELECT COUNT(*) FROM alumno) AS total_alumnos
+        """;
+
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                System.out.println("Base Java: " + rs.getString("base_actual"));
+                System.out.println("Host Java: " + rs.getString("host"));
+                System.out.println("Puerto Java: " + rs.getString("puerto"));
+                System.out.println("Autocommit Java: " + rs.getString("autocommit"));
+                System.out.println("Alumnos Java: " + rs.getInt("total_alumnos"));
             }
 
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error: no se encontro el driver de MySQL");
-            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            System.out.println("Error en diagnosticoConexion:");
+            e.printStackTrace();
         }
     }
 
@@ -80,17 +104,17 @@ public class GestionBaseDeDatos {
     /**
      * Comprueba que haya conexion antes de ejecutar consultas.
      */
-    private static void comprobarConexion() {
+    private static boolean comprobarConexion() {
         try {
             if (con == null || con.isClosed()) {
-                try {
-                    throw new SQLException("No hay conexion abierta con la base de datos");
-                } catch (SQLException ex) {
-                    Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                return vincularBDD();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Error al comprobar conexión: " + e.getMessage());
+            return false;
         }
     }
 
@@ -148,7 +172,7 @@ public class GestionBaseDeDatos {
                             for (int i = primeraColumna, j = 0; i < datosConsulta.length; i++, j++) {
                                 objeto[j] = rs.getString(datosConsulta[i]);
                             }
-                            
+
                             guardarObjeto(datosConsulta[0], objeto);
                         }
                     }
@@ -197,14 +221,14 @@ public class GestionBaseDeDatos {
      */
     public static void insertarDatos(String[] datosInsertar, String[] entradas) {
         ejecutarActualizacion(datosInsertar[0], entradas, "Filas insertadas");
-        
+
         String texto = " ";
-        
+
         for (int i = 0; i < entradas.length; i++) {
             texto += entradas[i] + " ";
         }
         datosInsertados.add(texto);
-        
+
     }
 
     /**
@@ -243,7 +267,7 @@ public class GestionBaseDeDatos {
                         pst.setString(i + 1, entradas[i]);
                     }
                 }
-                
+
                 int filasAfectadas = pst.executeUpdate(); //Se usa executeUpdate en vez de executeQuery, porque asi sabemos las lineas afectadas
                 System.out.println(mensaje + ": " + filasAfectadas);
             }
@@ -277,7 +301,6 @@ public class GestionBaseDeDatos {
      */
     public static DefaultTableModel obtenerTableModel(String sql, String[] params) {
 
-        // Modelo de tabla de sólo lectura (isCellEditable = false)
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -285,41 +308,54 @@ public class GestionBaseDeDatos {
             }
         };
 
-        try {
-            comprobarConexion();
+        if (!comprobarConexion()) {
+            System.out.println("No hay conexión con la base de datos.");
+            return modelo;
+        }
 
-            try (PreparedStatement pst = con.prepareStatement(sql)) {
+        System.out.println("SQL ejecutada:");
+        System.out.println(sql);
 
-                // Pasar parámetros al PreparedStatement
-                if (params != null) {
-                    for (int i = 0; i < params.length; i++) {
-                        pst.setString(i + 1, params[i]);
-                    }
-                }
+        if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+                System.out.println("Parametro " + (i + 1) + ": " + params[i]);
+            }
+        }
 
-                try (ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
 
-                    ResultSetMetaData meta = rs.getMetaData();
-                    int numColumnas = meta.getColumnCount();
-
-                    // --- 1. Añadir cabeceras de columna (nombre de cada columna de la BD) ---
-                    for (int i = 1; i <= numColumnas; i++) {
-                        modelo.addColumn(meta.getColumnLabel(i).toUpperCase());
-                    }
-
-                    // --- 2. Añadir filas (cada fila del ResultSet es un Object[]) ---
-                    while (rs.next()) {
-                        Object[] fila = new Object[numColumnas];
-                        for (int i = 0; i < numColumnas; i++) {
-                            fila[i] = rs.getObject(i + 1);
-                        }
-                        modelo.addRow(fila);
-                    }
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    pst.setString(i + 1, params[i]);
                 }
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+            try (ResultSet rs = pst.executeQuery()) {
+
+                ResultSetMetaData meta = rs.getMetaData();
+                int numColumnas = meta.getColumnCount();
+
+                for (int i = 1; i <= numColumnas; i++) {
+                    modelo.addColumn(meta.getColumnLabel(i));
+                }
+
+                while (rs.next()) {
+                    Object[] fila = new Object[numColumnas];
+
+                    for (int i = 0; i < numColumnas; i++) {
+                        fila[i] = rs.getObject(i + 1);
+                    }
+
+                    modelo.addRow(fila);
+                    System.out.println("SQL ejecutada:");
+                    System.out.println(sql);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("ERROR AL CARGAR TABLA:");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return modelo;
@@ -378,30 +414,364 @@ public class GestionBaseDeDatos {
     }
 
     public static int insertarAlumnoYDevolverID(String[] entradas) {
-
-        if (con == null) {
-            return -1;
-        }
+        comprobarConexion();
 
         String sql = ConsultasSQL.INSERT_ALUMNO[0];
 
+        System.out.println("SQL alumno: " + sql);
+        System.out.println("Nombre: " + entradas[0]);
+        System.out.println("Correo: " + entradas[1]);
+        System.out.println("Domicilio: " + entradas[2]);
+        System.out.println("Teléfono: " + entradas[3]);
+        System.out.println("Fecha: " + entradas[4]);
+
         try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            for (int i = 0; i < entradas.length; i++) {
-                pst.setString(i + 1, entradas[i]);
+            pst.setString(1, entradas[0]);
+            pst.setString(2, entradas[1]);
+            pst.setString(3, entradas[2]);
+            pst.setString(4, entradas[3]);
+            pst.setDate(5, java.sql.Date.valueOf(entradas[4]));
+
+            int filas = pst.executeUpdate();
+
+            if (filas > 0) {
+                try (ResultSet rs = pst.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
             }
 
-            pst.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("ERROR SQL AL INSERTAR ALUMNO:");
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
 
-            try (ResultSet rs = pst.getGeneratedKeys()) {
+        } catch (IllegalArgumentException ex) {
+            System.out.println("ERROR EN FORMATO DE FECHA:");
+            System.out.println("La fecha debe ser YYYY-MM-DD. Ejemplo: 2003-05-12");
+            ex.printStackTrace();
+        }
+
+        return -1;
+    }
+
+    public static int insertarMatriculaYDevolverID(String[] datos) {
+        comprobarConexion();
+
+        String sql = ConsultasSQL.INSERT_MATRICULA[0];
+
+        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pst.setString(1, datos[0]);
+            pst.setDouble(2, Double.parseDouble(datos[1]));
+            pst.setString(3, datos[2]);
+            pst.setInt(4, Integer.parseInt(datos[3]));
+
+            int filas = pst.executeUpdate();
+
+            if (filas > 0) {
+                try (ResultSet rs = pst.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al insertar matrícula: " + e.getMessage());
+        }
+
+        return -1;
+    }
+
+    public static boolean insertarLineaMatricula(String[] datos) {
+        comprobarConexion();
+
+        String sql = ConsultasSQL.INSERT_LINEA_MATRICULA[0];
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, Integer.parseInt(datos[0]));
+            pst.setInt(2, Integer.parseInt(datos[1]));
+            pst.setInt(3, Integer.parseInt(datos[2]));
+            pst.setDouble(4, Double.parseDouble(datos[3]));
+            pst.setDouble(5, Double.parseDouble(datos[4]));
+
+            int filas = pst.executeUpdate();
+
+            return filas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al insertar línea de matrícula: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static int insertarCicloYDevolverID(String[] datos) {
+        comprobarConexion();
+
+        String sql = ConsultasSQL.INSERT_CICLO[0];
+
+        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pst.setString(1, datos[0]);
+            pst.setString(2, datos[1]);
+            pst.setString(3, datos[2]);
+            pst.setInt(4, Integer.parseInt(datos[3]));
+            pst.setInt(5, Integer.parseInt(datos[4]));
+
+            int filas = pst.executeUpdate();
+
+            if (filas > 0) {
+                try (ResultSet rs = pst.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al insertar ciclo: " + e.getMessage());
+        }
+
+        return -1;
+    }
+
+    public static int insertarModuloYDevolverID(String[] datos) {
+        comprobarConexion();
+
+        String sql = ConsultasSQL.INSERT_MODULO[0];
+
+        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pst.setString(1, datos[0]);
+            pst.setString(2, datos[1]);
+            pst.setInt(3, Integer.parseInt(datos[2]));
+            pst.setInt(4, Integer.parseInt(datos[3]));
+            pst.setInt(5, Integer.parseInt(datos[4]));
+
+            int filas = pst.executeUpdate();
+
+            if (filas > 0) {
+                try (ResultSet rs = pst.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al insertar módulo: " + e.getMessage());
+        }
+
+        return -1;
+    }
+
+    public static void iniciarTransaccion() {
+        try {
+            comprobarConexion();
+
+            if (con != null && !con.isClosed()) {
+                con.setAutoCommit(false);
+                transaccionActiva = true;
+                System.out.println("Transacción iniciada");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al iniciar transacción: " + e.getMessage());
+        }
+    }
+
+    public static void confirmarTransaccion() {
+        try {
+            if (con != null && transaccionActiva) {
+                con.commit();
+                con.setAutoCommit(true);
+                transaccionActiva = false;
+                System.out.println("Transacción confirmada");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al confirmar transacción: " + e.getMessage());
+        }
+    }
+
+    public static void cancelarTransaccion() {
+        try {
+            if (con != null && transaccionActiva) {
+                con.rollback();
+                con.setAutoCommit(true);
+                transaccionActiva = false;
+                System.out.println("Transacción cancelada");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al cancelar transacción: " + e.getMessage());
+        }
+    }
+
+    public static void cargarDenominacionesCiclosEnComboBox(javax.swing.JComboBox<String> comboBox) {
+        comprobarConexion();
+
+        String sql = "SELECT denominacion FROM ciclo ORDER BY denominacion ASC";
+
+        comboBox.removeAllItems();
+
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                comboBox.addItem(rs.getString("denominacion"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al cargar ciclos en ComboBox: " + e.getMessage());
+        }
+    }
+
+    public static ArrayList<Utils.ItemCombo> obtenerCiclosCombo() {
+        comprobarConexion();
+
+        ArrayList<Utils.ItemCombo> lista = new ArrayList<>();
+
+        String sql = "SELECT codigo, denominacion FROM ciclo ORDER BY denominacion ASC";
+
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("codigo");
+                String denominacion = rs.getString("denominacion");
+
+                lista.add(new Utils.ItemCombo(id, denominacion));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener ciclos: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public static ArrayList<Utils.ItemCombo> obtenerModulosPorCicloCombo(int idCiclo) {
+        comprobarConexion();
+
+        ArrayList<Utils.ItemCombo> lista = new ArrayList<>();
+
+        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo = ? ORDER BY nombre ASC";
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, idCiclo);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("codigo");
+                    String nombre = rs.getString("nombre");
+
+                    lista.add(new Utils.ItemCombo(id, nombre));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener módulos del ciclo: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public static int contarModulosPorCiclo(int idCiclo) {
+        comprobarConexion();
+
+        String sql = "SELECT COUNT(*) FROM modulo WHERE codigo_ciclo = ?";
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, idCiclo);
+
+            try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
             }
 
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
+            System.out.println("Error al contar módulos del ciclo: " + e.getMessage());
         }
 
-        return -1;
+        return 0;
+    }
+
+    public static ArrayList<ItemCombo> obtenerModulosDisponiblesCombo() {
+        comprobarConexion();
+
+        ArrayList<ItemCombo> lista = new ArrayList<>();
+
+        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo IS NULL ORDER BY nombre ASC";
+
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("codigo");
+                String nombre = rs.getString("nombre");
+
+                lista.add(new ItemCombo(id, nombre));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener módulos disponibles: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public static boolean asignarModuloACiclo(int idModulo, int idCiclo) {
+        comprobarConexion();
+
+        String sql = "UPDATE modulo SET codigo_ciclo = ? WHERE codigo = ?";
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, idCiclo);
+            pst.setInt(2, idModulo);
+
+            int filas = pst.executeUpdate();
+
+            return filas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al asignar módulo al ciclo: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static void comprobarBaseActual() {
+        if (!comprobarConexion()) {
+            System.out.println("No hay conexión.");
+            return;
+        }
+
+        String sql = """
+                 SELECT 
+                    DATABASE() AS base_actual,
+                    (SELECT COUNT(*) FROM alumno) AS total_alumnos,
+                    (SELECT COUNT(*) FROM modulo) AS total_modulos,
+                    (SELECT COUNT(*) FROM ciclo) AS total_ciclos
+                 """;
+
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                System.out.println("Base usada por Java: " + rs.getString("base_actual"));
+                System.out.println("Alumnos vistos por Java: " + rs.getInt("total_alumnos"));
+                System.out.println("Módulos vistos por Java: " + rs.getInt("total_modulos"));
+                System.out.println("Ciclos vistos por Java: " + rs.getInt("total_ciclos"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error comprobando base actual: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

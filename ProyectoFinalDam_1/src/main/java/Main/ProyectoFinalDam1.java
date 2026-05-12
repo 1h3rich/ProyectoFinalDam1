@@ -1,4 +1,4 @@
-  package Main;
+package Main;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -13,27 +13,28 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 /**
  * Clase principal de la aplicación de gestión del centro de formación.
  *
- * Arranca la conexión con la base de datos, presenta el menú principal
- * y delega en cada submenú especializado (Alumno, Ciclo, Módulo,
- * Matrícula, Línea de Matrícula y Consultas Multitabla).
+ * Arranca la conexión con la base de datos, presenta el menú principal y delega
+ * en cada submenú especializado (Alumno, Ciclo, Módulo, Matrícula, Línea de
+ * Matrícula y Consultas Multitabla).
  *
- * El Scanner se crea aquí y se comparte con todos los submenús para
- * evitar que se cierre prematuramente.
+ * El Scanner se crea aquí y se comparte con todos los submenús para evitar que
+ * se cierre prematuramente.
  *
  * @author 1DAM
  */
 public class ProyectoFinalDam1 {
 
-    /** Scanner compartido con todos los submenús de la aplicación. */
+    /**
+     * Scanner compartido con todos los submenús de la aplicación.
+     */
     private static final Scanner teclado = new Scanner(System.in);
 
     // =========================================================
     // ========================= MAIN ==========================
     // =========================================================
-
     /**
-     * Punto de entrada de la aplicación.
-     * Conecta con la base de datos y lanza el bucle del menú principal.
+     * Punto de entrada de la aplicación. Conecta con la base de datos y lanza
+     * el bucle del menú principal.
      *
      * @param args Argumentos de línea de comandos (no se utilizan).
      */
@@ -52,17 +53,24 @@ public class ProyectoFinalDam1 {
                 teclado.nextLine();
 
                 switch (opcion) {
-                    case 1 -> MenuAlumno.mostrarMenu(teclado);
-                    case 2 -> MenuCiclo.mostrarMenu(teclado);
-                    case 3 -> MenuModulo.mostrarMenu(teclado);
-                    case 4 -> MenuMatricula.mostrarMenu(teclado);
-                    case 5 -> MenuLineaMatricula.mostrarMenu(teclado);
-                    case 6 -> MenuConsultas.mostrarMenu(teclado);
+                    case 1 ->
+                        MenuAlumno.mostrarMenu(teclado);
+                    case 2 ->
+                        MenuCiclo.mostrarMenu(teclado);
+                    case 3 ->
+                        MenuModulo.mostrarMenu(teclado);
+                    case 4 ->
+                        MenuMatricula.mostrarMenu(teclado);
+                    case 5 ->
+                        MenuLineaMatricula.mostrarMenu(teclado);
+                    case 6 ->
+                        MenuConsultas.mostrarMenu(teclado);
                     case 7 -> {
                         salir = true;
                         System.out.println("\n¡Hasta pronto! Cerrando la aplicación...");
                     }
-                    default -> System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 7.");
+                    default ->
+                        System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 7.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("[ERROR] Debe introducir un número entero.");
@@ -77,7 +85,6 @@ public class ProyectoFinalDam1 {
     // =========================================================
     // ==================== AUXILIARES =========================
     // =========================================================
-
     /**
      * Muestra la pantalla de bienvenida al arrancar la aplicación.
      */

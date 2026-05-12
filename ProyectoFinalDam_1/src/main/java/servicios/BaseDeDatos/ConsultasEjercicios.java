@@ -1,185 +1,213 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package servicios.BaseDeDatos;
 
-import java.util.HashMap;
-
-/**
- *
- * @author isard
- */
 public class ConsultasEjercicios {
-    //Aqui van las consultas especificas de los informes multitabla
 
-    /*
-    Consultar la denominación, la familia profesional y el nivel de todos los ciclos,
-    indicando para cada ciclo, los nombres y las horas de sus módulos.
-    Este informe deberá estar ordenado por la denominación del ciclo de forma ascendente. 
+    /**
+     * Consultar la denominación, la familia profesional y el nivel de todos los
+     * ciclos, indicando para cada ciclo, los nombres y las horas de sus
+     * módulos. Este informe deberá estar ordenado por la denominación del ciclo
+     * de forma ascendente.
      */
-    
-    
-    
-    private static String consulta1 = """
-                                     Select c.denominacion, c.familia_profesional, c.nivel, m.nombre 
-                                     as 'nombre modulo', m.horas as 'horas modulo'
-                                     from ciclo c join modulo m on c.codigo= m.codigo_ciclo
-                                     order by c.denominacion asc;
-                                     """;
+    public static final String[] datosConsulta1 = {
+        """
+        SELECT 
+            c.denominacion,
+            c.familia_profesional,
+            c.nivel,
+            m.nombre AS nombre_modulo,
+            m.horas AS horas_modulo
+        FROM ciclo c
+        JOIN modulo m ON c.codigo = m.codigo_ciclo
+        ORDER BY c.denominacion ASC
+        """
+    };
 
-    
-    
-    public static String [] datosConsulta1 = {consulta1,"denominacion", "familia_profesional", "nivel","nombre modulo", "horas modulo"};
-
-    
-    /*
-    Solicitará al usuario un nivel de ciclo y un curso de módulo. Consultar el nombre 
-    y las horas de los módulos que pertenecen a un nivel de ciclo dado y se impartan 
-    en un curso dado, indicando para cada módulo, la denominación del ciclo al que pertenece
-    y el número de alumnos matriculados. Este informe deberá estar ordenado por el nombre del módulo de forma ascendente. 
+    /**
+     * Solicitará al usuario un nivel de ciclo y un curso de módulo. Consultar
+     * el nombre y las horas de los módulos que pertenecen a un nivel de ciclo
+     * dado y se impartan en un curso dado, indicando para cada módulo, la
+     * denominación del ciclo al que pertenece y el número de alumnos
+     * matriculados. Este informe deberá estar ordenado por el nombre del módulo
+     * de forma ascendente.
      */
-    private static String consulta2 = """
-                                    Select m.nombre, m.horas , c.denominacion 
-                                    as ' denominacion ciclo', count(a.codigo) as 'numero de alumnos matriculados'
-                                    from modulo m join ciclo c on c.codigo=m.codigo_ciclo
-                                    join  linea_matricula lm on lm.codigo_modulo = m.codigo
-                                    join matricula ma on ma.codigo = lm.codigo_matricula
-                                    join alumno a on a.codigo = ma.codigo_alumno
-                                    where c.nivel = ? and m.curso = ?
-                                    group by  m.nombre, m.horas , c.denominacion;
-                                     """ // En esta consulta hay dos parametros que hay que pasarle
-            ;
-    public static String [] datosConsulta2 = {consulta2,"nombre", "horas", "denominacion ciclo","numero de alumnos matriculados"};
-    
-    /*
-    Solicitará al usuario un año académico de matrícula. Consultar el nombre 
-    y la fecha de nacimiento de todos los alumnos, indicando para cada alumno, 
-    los nombres de los módulos en los que está matriculado en un año académico dado. 
-    Este informe deberá estar ordenado por el nombre del alumno de forma ascendente. 
+    public static final String[] datosConsulta2 = {
+        """
+        SELECT 
+            m.nombre,
+            c.horas,
+            c.denominacion AS denominacion_ciclo,
+            COUNT(a.codigo) AS numero_alumnos_matriculados
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        JOIN alumno a ON a.codigo = ma.codigo_alumno
+        WHERE c.nivel = ? 
+          AND m.curso = ?
+        GROUP BY m.nombre, c.horas, c.denominacion
+        ORDER BY m.nombre ASC
+        """
+    };
+
+    /**
+     * Solicitará al usuario un año académico de matrícula. Consultar el nombre
+     * y la fecha de nacimiento de todos los alumnos, indicando para cada
+     * alumno, los nombres de los módulos en los que está matriculado en un año
+     * académico dado. Este informe deberá estar ordenado por el nombre del
+     * alumno de forma ascendente.
      */
-    private static String consulta3 = """
-                                    Select a.nombre, a.fecha_nacimiento , m.nombre 
-                                    from modulo m join ciclo c on c.codigo=m.codigo_ciclo
-                                    join  linea_matricula lm on lm.codigo_modulo = m.codigo
-                                    join matricula ma on ma.codigo = lm.codigo_matricula
-                                    join alumno a on a.codigo = ma.codigo_alumno
-                                    where ma.anio_academico = ?
-                                    order by a.nombre asc;
-                                    """;
+    public static final String[] datosConsulta3 = {
+        """
+        SELECT 
+            a.nombre,
+            a.fecha_nacimiento,
+            m.nombre AS nombre_modulo
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        JOIN alumno a ON a.codigo = ma.codigo_alumno
+        WHERE ma.anio_academico = ?
+        ORDER BY a.nombre ASC
+        """
+    };
 
-    public static String [] datosConsulta3 = {consulta3, "nombre", "fecha_nacimiento","nombre"}; 
-    /*
-    Solicitará al usuario una denominación de ciclo, un curso de módulo 
-    y un año académico de matrícula. Consultar el nombre y la fecha de nacimiento 
-    de los alumnos matriculados en un curso dado de un ciclo dado para un año académico dado,
-    indicando para cada alumno, la calificación primera y la calificación segunda de los módulos en los que está matriculado.
-    Este informe deberá estar ordenado por el nombre del alumno de forma ascendente.
+    /**
+     * Solicitará al usuario una denominación de ciclo, un curso de módulo y un
+     * año académico de matrícula. Consultar el nombre y la fecha de nacimiento
+     * de los alumnos matriculados en un curso dado de un ciclo dado para un año
+     * académico dado, indicando para cada alumno, la calificación primera y la
+     * calificación segunda de los módulos en los que está matriculado. Este
+     * informe deberá estar ordenado por el nombre del alumno de forma
+     * ascendente.
      */
-    private static String consulta4 = """
-                                    select a.nombre, a.fecha_nacimiento , lm.calificacion_primera, lm.calificacion_segunda
-                                    from modulo m join ciclo c on c.codigo=m.codigo_ciclo
-                                    join  linea_matricula lm on lm.codigo_modulo = m.codigo
-                                    join matricula ma on ma.codigo = lm.codigo_matricula
-                                    join alumno a on a.codigo = ma.codigo_alumno
-                                    where c.denominacion = ? and m.curso = ?
-                                    and ma.anio_academico = ? 
-                                    order by a.nombre asc;
-                                    """;
+    public static final String[] datosConsulta4 = {
+        """
+        SELECT 
+            a.nombre,
+            a.fecha_nacimiento,
+            lm.calificacion_primera,
+            lm.calificacion_segunda
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        JOIN alumno a ON a.codigo = ma.codigo_alumno
+        WHERE c.denominacion = ?
+          AND m.curso = ?
+          AND ma.anio_academico = ?
+        ORDER BY a.nombre ASC
+        """
+    };
 
-    public static String [] datosConsulta4 = {consulta4, "nombre", "fecha_nacimiento","calificacion_primera","calificacion_segunda"}; 
-    
-    /*
-    Consultar la denominación, la familia profesional y el nivel de todos los ciclos, 
-    indicando para cada ciclo, el importe total de las matrículas de cada año académico.
-    Este informe deberá estar ordenado por la denominación del ciclo de forma ascendente.
-
+    /**
+     * Consultar la denominación, la familia profesional y el nivel de todos los
+     * ciclos, indicando para cada ciclo, el importe total de las matrículas de
+     * cada año académico. Este informe deberá estar ordenado por la
+     * denominación del ciclo de forma ascendente.
      */
-    private static String consulta5 = """
-                                     Select c.denominacion, c.familia_profesional, c.nivel, 
-                                     sum(ma.importe) as 'importe total'
-                                     from modulo m join ciclo c on c.codigo=m.codigo_ciclo
-                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
-                                     join matricula ma on ma.codigo = lm.codigo_matricula
-                                     group by c.denominacion, c.familia_profesional, c.nivel, ma.anio_academico
-                                     order by c.denominacion asc;
-                                     """;
+    public static final String[] datosConsulta5 = {
+        """
+        SELECT 
+            c.denominacion,
+            c.familia_profesional,
+            c.nivel,
+            ma.anio_academico,
+            SUM(ma.importe) AS importe_total
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        GROUP BY c.denominacion, c.familia_profesional, c.nivel, ma.anio_academico
+        ORDER BY c.denominacion ASC
+        """
+    };
 
-    public static String[] datosConsulta5 = {consulta5,"denominacion", "familia_profesional","nivel", "importe total"};
-    
-    /*
-    
-    Consultar el nombre del alumno y el año académico, indicando el total de créditos ECTS 
-    y el total de horas en las que se ha matriculado. Este informe deberá estar ordenado por
-    el total de créditos de forma descendente.
+    /**
+     * Consultar el nombre del alumno y el año académico, indicando el total de
+     * créditos ECTS y el total de horas en las que se ha matriculado. Este
+     * informe deberá estar ordenado por el total de créditos de forma
+     * descendente.
      */
-    private static String consulta6 = """
-                                     select a.nombre, ma.anio_academico, sum(m.creditos_ects) as 'total de creditos',
-                                     sum(m.horas) as 'total de horas matriculadas'
-                                     from modulo m join ciclo c on c.codigo=m.codigo_ciclo
-                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
-                                     join matricula ma on ma.codigo = lm.codigo_matricula
-                                     join alumno a on a.codigo = ma.codigo_alumno
-                                     group by a.nombre, ma.anio_academico
-                                     order by sum(m.creditos_ects) desc;
-                                     """;
+    public static final String[] datosConsulta6 = {
+        """
+        SELECT 
+            a.nombre,
+            ma.anio_academico,
+            SUM(m.creditos_ects) AS total_creditos,
+            SUM(m.horas) AS total_horas_matriculadas
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        JOIN alumno a ON a.codigo = ma.codigo_alumno
+        GROUP BY a.nombre, ma.anio_academico
+        ORDER BY SUM(m.creditos_ects) DESC
+        """
+    };
 
-     public static String [] datosConsulta6 = {consulta6, "nombre", "anio_academico","total de creditos", "total de horas matriculadas"}; 
-    
-    /*
-    Consultar el nombre del alumno, el nombre del módulo y el año académico de 
-    aquellos registros donde la "calificación_primera" todavía sea nula. 
-    Este informe deberá estar ordenado por el año académico de forma ascendente.
+    /**
+     * Consultar el nombre del alumno, el nombre del módulo y el año académico
+     * de aquellos registros donde la "calificación_primera" todavía sea nula.
+     * Este informe deberá estar ordenado por el año académico de forma
+     * ascendente.
      */
-    private static String consulta7 = """
-                                     select a.nombre as 'nombre alumno', m.nombre as 'nombre modulo'  , ma.anio_academico 
-                                     from modulo m join ciclo c on c.codigo=m.codigo_ciclo
-                                     join  linea_matricula lm on lm.codigo_modulo = m.codigo
-                                     join matricula ma on ma.codigo = lm.codigo_matricula
-                                     join alumno a on a.codigo = ma.codigo_alumno
-                                     where lm.calificacion_primera is null
-                                     order by ma.anio_academico asc;
-                                     """;
+    public static final String[] datosConsulta7 = {
+        """
+        SELECT 
+            a.nombre AS nombre_alumno,
+            m.nombre AS nombre_modulo,
+            ma.anio_academico
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        JOIN alumno a ON a.codigo = ma.codigo_alumno
+        WHERE lm.calificacion_primera IS NULL
+        ORDER BY ma.anio_academico ASC
+        """
+    };
 
-     public static String [] datosConsulta7 = {consulta7, "nombre alumno", "nombre modulo","anio_academico"}; 
-    
-    /*
-    Consultar el nombre del módulo y la denominación del ciclo,
-    indicando cuántos alumnos están matriculados con un número de "repetición" superior a 1.
-    Solo se mostrarán los módulos que tengan más de 3 alumnos repetidores.
+    /**
+     * Consultar el nombre del módulo y la denominación del ciclo, indicando
+     * cuántos alumnos están matriculados con un número de "repetición" superior
+     * a 1. Solo se mostrarán los módulos que tengan más de 3 alumnos
+     * repetidores.
      */
-    private static String consulta8 = """
-                                     SELECT m.nombre, c.denominacion, COUNT(lm.codigo_matricula) AS num_repetidores
-                                     FROM modulo m
-                                     JOIN ciclo c ON m.codigo_ciclo = c.codigo
-                                     JOIN linea_matricula lm ON m.codigo = lm.codigo_modulo
-                                     WHERE lm.repeticion > 1
-                                     GROUP BY m.codigo, c.denominacion
-                                     HAVING COUNT(lm.codigo_matricula) > 3;
-                                     """;
-    
-    
-    public static String [] datosConsulta8 = {consulta8, "nombre", "denominacion","num_repetidores"}; 
-    
-    
-    /*
-    Consultar el nombre, teléfono y correo de aquellos alumnos registrados que no tengan 
-    ninguna matrícula asociada en el sistema o cuya matrícula esté en estado "anulada". 
-    Este informe deberá estar ordenado por el nombre del alumno de forma ascendente.
+    public static final String[] datosConsulta8 = {
+        """
+        SELECT 
+            m.nombre AS nombre_modulo,
+            c.denominacion AS denominacion_ciclo,
+            COUNT(a.codigo) AS numero_alumnos_repetidores
+        FROM modulo m
+        JOIN ciclo c ON c.codigo = m.codigo_ciclo
+        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
+        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
+        JOIN alumno a ON a.codigo = ma.codigo_alumno
+        WHERE lm.repeticion > 0
+        GROUP BY m.codigo, m.nombre, c.denominacion
+        HAVING COUNT(a.codigo) > 3
+        """
+    };
 
-    */
-    private static String consulta9 = """
-                                     select distinct 
-                                     a.nombre, 
-                                     a.telefono, 
-                                     a.correo
-                                     from alumno a
-                                     left join matricula mat on a.codigo = mat.codigo_alumno
-                                     where mat.codigo is null 
-                                     or mat.estado = 'anulada'
-                                     order by a.nombre asc;
-                                     """;
-
-    
-    public static String [] datosConsulta9 = {consulta9, "nombre", "telefono","correo"}; 
+    /**
+     * Consultar el nombre, teléfono y correo de aquellos alumnos registrados
+     * que no tengan ninguna matrícula asociada en el sistema o cuya matrícula
+     * esté en estado "anulada". Este informe deberá estar ordenado por el
+     * nombre del alumno de forma ascendente.
+     */
+    public static final String[] datosConsulta9 = {
+        """
+        SELECT DISTINCT
+            a.nombre,
+            a.telefono,
+            a.correo
+        FROM alumno a
+        LEFT JOIN matricula mat ON a.codigo = mat.codigo_alumno
+        WHERE mat.codigo IS NULL
+           OR mat.estado = 'Anulada'
+        ORDER BY a.nombre ASC
+        """
+    };
 }

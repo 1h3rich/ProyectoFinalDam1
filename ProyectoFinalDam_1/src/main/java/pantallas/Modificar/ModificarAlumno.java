@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package pantallas;
+package pantallas.Modificar;
 
+import Utils.ModoFormulario;
 import Utils.Validadores;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import modelos.Alumno;
 
@@ -12,14 +14,15 @@ import modelos.Alumno;
  *
  * @author Rich
  */
-public class CrearAlumno extends javax.swing.JFrame {
+public class ModificarAlumno extends javax.swing.JFrame {
 
+    private ModoFormulario modo;
     private Alumno alumno;
 
     /**
      * Creates new form FormularioAlumno
      */
-    public CrearAlumno() {
+    public ModificarAlumno() {
         initComponents();
     }
 
@@ -199,7 +202,11 @@ public class CrearAlumno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        crearAlumno();
+        if (modo == ModoFormulario.CREAR) {
+            crearAlumno();
+        } else {
+            modificarAlumno();
+        }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jTextFieldCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCorreoActionPerformed
@@ -231,25 +238,53 @@ public class CrearAlumno extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CrearAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new CrearAlumno().setVisible(true);
+            new ModificarAlumno().setVisible(true);
         });
     }
 
-    private void crearAlumno() {
+    public ModificarAlumno(ModoFormulario modo, Alumno alumno) {
+        initComponents();
 
+        this.modo = modo;
+        this.alumno = alumno;
+
+        setLocationRelativeTo(null);
+        prepararFormulario();
+    }
+
+    private void prepararFormulario() {
+        if (modo == ModoFormulario.CREAR) {
+            setTitle("Crear alumno");
+            jButtonGuardar.setText("Crear Alumno");
+            limpiarCampos();
+        } else {
+            setTitle("Modificar alumno");
+            jButtonGuardar.setText("Modificar Alumno");
+
+            if (alumno != null) {
+                cargarDatosAlumno();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se ha seleccionado ningun alumno,");
+            }
+        }
+    }
+
+    private void crearAlumno() {
         String nombre = jTextFieldNombre.getText();
         String apellidos = jTextFieldApellidos.getText();
         String temp = jTextFieldFechaNacimiento.getText();
@@ -257,45 +292,66 @@ public class CrearAlumno extends javax.swing.JFrame {
         String telefono = jTextFieldTelefono.getText();
         String correo = jTextFieldCorreo.getText();
 
-        if (!Validadores.validarTextoNoVacio(nombre)
-                || !Validadores.validarTextoNoVacio(apellidos)
-                || !Validadores.validarTextoNoVacio(domicilio)
-                || !Validadores.validarTelefono(telefono)
-                || !Validadores.validarCorreo(correo)) {
-
+        if (Validadores.validarTextoNoVacio(nombre)
+                || Validadores.validarTextoNoVacio(apellidos)
+                || Validadores.validarTextoNoVacio(domicilio)
+                || Validadores.validarTelefono(telefono)
+                || Validadores.validarCorreo(correo)) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
 
         nombre = nombre + " " + apellidos;
+        LocalDate fechaNacimiento = LocalDate.parse(temp);
 
-        String[] datos = {
-            nombre,
-            temp,
-            domicilio,
-            telefono,
-            correo
-        };
+        Alumno nuevoAlumno = new Alumno(nombre, fechaNacimiento, domicilio, telefono, correo);
 
+        // INSERT A LA BASE DE DATOS
+        // Insert.insertarAlumno(nuevoAlumno);
         if (jCheckBoxConfirmacionBDD.isSelected()) {
-
-            int id = servicios.BaseDeDatos.GestionBaseDeDatos.insertarAlumnoYDevolverID(datos);
-
-            if (id != -1) {
-                JOptionPane.showMessageDialog(this, "Alumno guardado en BD con ID: " + id);
-
-                // 👉 aquí puedes abrir matrícula
-                // new PantallaMatricula(id).setVisible(true);
-                limpiarCampos();
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al insertar alumno en BD");
-            }
-
+            
+            JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
         } else {
-
-            JOptionPane.showMessageDialog(this, "Alumno creado localmente (no BD)");
+            JOptionPane.showMessageDialog(this, "Alumno creado pero no insertado.");
         }
+        dispose();
+    }
+
+    private void modificarAlumno() {
+        if (alumno == null) {
+            JOptionPane.showMessageDialog(this, "No hay alumno para modificar.");
+            return;
+        }
+
+        String nombre = jTextFieldNombre.getText();
+        String apellidos = jTextFieldApellidos.getText();
+        String temp = jTextFieldFechaNacimiento.getText();
+        String domicilio = jTextFieldDomicilio.getText();
+        String telefono = jTextFieldCorreo.getText();
+        String correo = jTextFieldCorreo.getText();
+
+        if (nombre.isBlank() || apellidos.isBlank() || domicilio.isBlank() || telefono.isBlank() || correo.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+            return;
+        }
+
+        nombre = nombre + " " + apellidos;
+        LocalDate fechaNacimiento = LocalDate.parse(temp);
+
+        alumno.setNombre(nombre);
+        alumno.setFechaNacimiento(fechaNacimiento);
+        alumno.setTelefono(telefono);
+        alumno.setDomicilio(domicilio);
+        alumno.setCorreo(correo);
+
+        // UPDATE BASE DE DATOS
+        if (jCheckBoxConfirmacionBDD.isSelected()) {
+            //No existe la consulta aun, o no se como utilizar realizarSQL
+            JOptionPane.showMessageDialog(this, "Alumno actualizado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Alumno actualizado de manera local");
+        }
+        dispose();
     }
 
     private void cargarDatosAlumno() {

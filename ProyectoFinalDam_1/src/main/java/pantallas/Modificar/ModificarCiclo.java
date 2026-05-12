@@ -1,4 +1,4 @@
-package pantallas;
+package pantallas.Modificar;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -6,7 +6,6 @@ package pantallas;
  */
 
 import Utils.ModoFormulario;
-import Utils.Validadores;
 import javax.swing.JOptionPane;
 
 import modelos.Ciclo;
@@ -16,15 +15,12 @@ import modelos.Ciclo;
  * @author Rich
  */
 
-public class CrearCiclo extends javax.swing.JFrame {
-    
-    private ModoFormulario modo;
-    private Ciclo ciclo;
+public class ModificarCiclo extends javax.swing.JFrame {
 
     /**
      * Creates new form FormularioCiclo
      */
-    public CrearCiclo() {
+    public ModificarCiclo() {
         initComponents();
     }
 
@@ -44,11 +40,13 @@ public class CrearCiclo extends javax.swing.JFrame {
         jLabel2InfoInfoBDD = new javax.swing.JLabel();
         jTextFieldNivel = new javax.swing.JTextField();
         jLabel3InfoInfoGuardar = new javax.swing.JLabel();
+        jLabelInfoCodigo = new javax.swing.JLabel();
         jLabelInfoDenominacion = new javax.swing.JLabel();
         jLabelInfoFamiliaProfesional = new javax.swing.JLabel();
         jLabelInfoNombre3 = new javax.swing.JLabel();
         jButtonGuardar = new javax.swing.JButton();
         jLabelInfoNombre4 = new javax.swing.JLabel();
+        jTextFieldCodigo = new javax.swing.JTextField();
         jLabelInfoAñoCurricular = new javax.swing.JLabel();
         jTextFieldDenominacion = new javax.swing.JTextField();
         jLabelTitulo = new javax.swing.JLabel();
@@ -85,6 +83,8 @@ public class CrearCiclo extends javax.swing.JFrame {
 
         jLabel3InfoInfoGuardar.setText("Guardado local.");
 
+        jLabelInfoCodigo.setText("Codigo:");
+
         jLabelInfoDenominacion.setText("Denominación:");
 
         jLabelInfoFamiliaProfesional.setText("Familia profesional:");
@@ -99,6 +99,14 @@ public class CrearCiclo extends javax.swing.JFrame {
         });
 
         jLabelInfoNombre4.setText("Horas:");
+
+        jTextFieldCodigo.setMinimumSize(new java.awt.Dimension(64, 128));
+        jTextFieldCodigo.setPreferredSize(new java.awt.Dimension(64, 128));
+        jTextFieldCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCodigoActionPerformed(evt);
+            }
+        });
 
         jLabelInfoAñoCurricular.setText("AñoCurricular");
 
@@ -123,8 +131,13 @@ public class CrearCiclo extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(172, 172, 172)
-                                .addComponent(jLabelInfoNombre4)
-                                .addGap(86, 86, 86))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelInfoNombre4)
+                                        .addGap(86, 86, 86))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabelInfoCodigo)
+                                        .addGap(69, 69, 69))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,6 +157,7 @@ public class CrearCiclo extends javax.swing.JFrame {
                             .addComponent(jTextFieldDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBoxConfirmacionBDD)
@@ -158,7 +172,11 @@ public class CrearCiclo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111)
+                .addGap(68, 68, 68)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelInfoCodigo))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoDenominacion))
@@ -201,10 +219,12 @@ public class CrearCiclo extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxConfirmacionBDDActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        if(modo == ModoFormulario.CREAR){
-            crearCiclo();
-        }
+
     }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jTextFieldCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldCodigoActionPerformed
 
     private void jTextFieldNivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNivelActionPerformed
         // TODO add your handling code here:
@@ -227,12 +247,8 @@ public class CrearCiclo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CrearCiclo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarCiclo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -242,78 +258,10 @@ public class CrearCiclo extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new CrearCiclo().setVisible(true);
+            new ModificarCiclo().setVisible(true);
         });
     }
-    public CrearCiclo(ModoFormulario modo, Ciclo ciclo) {
-        initComponents();
-
-        this.modo = modo;
-        this.ciclo = ciclo;
-
-        setLocationRelativeTo(null);
-        prepararFormulario();
-    }
-
-    private void prepararFormulario() {
-        if (modo == ModoFormulario.CREAR) {
-            setTitle("Crear Ciclo");
-            jButtonGuardar.setText("Crear Ciclo");
-            limpiarCampos();
-        }
-    }
-
-    private void crearCiclo() {
-        String denominacion = jTextFieldDenominacion.getText();
-        String familia = jTextFieldFamiliaProfresional.getText();
-        String nivel = jTextFieldNivel.getText();
-        String horas = jTextFieldHoras.getText();
-        String año = jTextFieldAñoCurricular.getText();
-        
-         if (Validadores.validarTextoNoVacio(denominacion)
-                || Validadores.validarTextoNoVacio(familia)
-                || Validadores.validarTextoNoVacio(nivel)
-                || Validadores.validarTelefono(horas)
-                || Validadores.validarCorreo(año)) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
-            return;
-        }
-         
-         int hors = Integer.parseInt(horas);
-         int year = Integer.parseInt(año);
-         
-         Ciclo nuevoCiclo = new Ciclo(denominacion, familia, nivel, hors, year);
-         
-         // INSERT A LA BASE DE DATOS
-        // Insert.insertarCiclo(nuevoCiclo);
-        if(jCheckBoxConfirmacionBDD.isSelected()){
-            //Ciclo.ObjToSql();
-        JOptionPane.showMessageDialog(this, "Modulo creado correctamente.");
-        }else{
-            JOptionPane.showMessageDialog(this, "Modulo creado pero no insertado.");
-        }
-        dispose();
-         
-    }
-    
-    private void cargarDatosCiclo(){
-        String horas = String.valueOf(ciclo.getHoras());
-        String año = String.valueOf(ciclo.getAñoCurriculum());
-        
-        jTextFieldDenominacion.setText(ciclo.getDenominacion());
-        jTextFieldFamiliaProfresional.setText(ciclo.getFamiliaProfesional());
-        jTextFieldNivel.setText(ciclo.getNivel());
-        jTextFieldHoras.setText(horas);
-        jTextFieldAñoCurricular.setText(año);
-    }
-    private void limpiarCampos(){
-        jTextFieldDenominacion.setText("");
-        jTextFieldFamiliaProfresional.setText("");
-        jTextFieldNivel.setText("");
-        jTextFieldHoras.setText("");
-        jTextFieldAñoCurricular.setText("");
-        
-    }
+    //No
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGuardar;
@@ -321,12 +269,14 @@ public class CrearCiclo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2InfoInfoBDD;
     private javax.swing.JLabel jLabel3InfoInfoGuardar;
     private javax.swing.JLabel jLabelInfoAñoCurricular;
+    private javax.swing.JLabel jLabelInfoCodigo;
     private javax.swing.JLabel jLabelInfoDenominacion;
     private javax.swing.JLabel jLabelInfoFamiliaProfesional;
     private javax.swing.JLabel jLabelInfoNombre3;
     private javax.swing.JLabel jLabelInfoNombre4;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextFieldAñoCurricular;
+    private javax.swing.JTextField jTextFieldCodigo;
     private javax.swing.JTextField jTextFieldDenominacion;
     private javax.swing.JTextField jTextFieldFamiliaProfresional;
     private javax.swing.JTextField jTextFieldHoras;

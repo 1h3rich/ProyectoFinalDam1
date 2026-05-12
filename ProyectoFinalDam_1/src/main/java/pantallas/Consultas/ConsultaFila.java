@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package pantallas;
+package pantallas.Consultas;
 
 import Utils.TipoDato;
 import java.awt.BorderLayout;
@@ -25,12 +25,10 @@ public class ConsultaFila extends javax.swing.JFrame {
      */
     public ConsultaFila() {
         initComponents();
-
-        GestionBaseDeDatos.vincularBDD();
-
+        configurarVentana();
         inicializarTabla();
-
         actualizarControles();
+        conectarBDD();
     }
 
     /**
@@ -232,50 +230,97 @@ public class ConsultaFila extends javax.swing.JFrame {
     }
 
     //Si
-    private void inicializarTabla() {
+    private void configurarVentana() {
+        setTitle("Consulta por filtro");
 
-        jPanel1.setLayout(new BorderLayout());
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                cerrarVentana();
+            }
+        });
+
+        jComboBoxCiclos.setPrototypeDisplayValue("Desarrollo de Aplicaciones Multiplataforma");
+        jComboBoxModulos.setPrototypeDisplayValue("Administración de Sistemas Gestores de Bases de Datos");
+
+        setMinimumSize(new java.awt.Dimension(1100, 650));
+        setSize(1200, 700);
+        setLocationRelativeTo(null);
+    }
+
+    private void conectarBDD() {
+        if (!GestionBaseDeDatos.vincularBDD()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se ha podido conectar con la base de datos.",
+                    "Error de conexión",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+            jButtonActualizar.setEnabled(false);
+        }
+    }
+
+    private void cerrarVentana() {
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que quieres cerrar esta consulta?",
+                "Cerrar consulta",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }
+
+    private void inicializarTabla() {
+        jPanel1.removeAll();
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         tabla = new JTable();
-
         tabla.setRowHeight(24);
+        tabla.setAutoCreateRowSorter(true);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         scrollPane = new JScrollPane(tabla);
 
-        jPanel1.add(scrollPane, BorderLayout.CENTER);
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = java.awt.GridBagConstraints.CENTER;
+        gbc.fill = java.awt.GridBagConstraints.NONE;
+
+        jPanel1.add(scrollPane, gbc);
+
+        jPanel1.revalidate();
+        jPanel1.repaint();
     }
 
     private TipoDato obtenerTipoSeleccionado() {
-
         String seleccion = jComboBoxEleccion.getSelectedItem().toString();
 
         return switch (seleccion) {
-
             case "Alumno" ->
                 TipoDato.ALUMNO;
-
             case "Modulo" ->
                 TipoDato.MODULO;
-
             case "Ciclo" ->
                 TipoDato.CICLO;
-
             case "Matricula" ->
                 TipoDato.MATRICULA;
-
             case "Linea Matricula" ->
                 TipoDato.LINEA_MATRICULA;
-
             default ->
-                throw new IllegalArgumentException("Tipo: " + seleccion);
+                throw new IllegalArgumentException("Tipo no válido: " + seleccion);
         };
     }
 
     private void actualizarControles() {
-
         TipoDato tipo = obtenerTipoSeleccionado();
 
-        // ocultar todo
         jTextFieldTelefono.setVisible(false);
         jLabelTelefono.setVisible(false);
 
@@ -286,122 +331,185 @@ public class ConsultaFila extends javax.swing.JFrame {
         jLabelModulo.setVisible(false);
 
         switch (tipo) {
-
-            // BUSCAR POR TELÉFONO
             case ALUMNO, MATRICULA, LINEA_MATRICULA -> {
-
                 jTextFieldTelefono.setVisible(true);
                 jLabelTelefono.setVisible(true);
-
                 jLabelTelefono.setText("Teléfono:");
             }
 
-            // BUSCAR POR MÓDULO
             case MODULO -> {
-
                 jComboBoxModulos.setVisible(true);
                 jLabelModulo.setVisible(true);
             }
 
-            // BUSCAR POR CICLO
             case CICLO -> {
-
                 jComboBoxCiclos.setVisible(true);
                 jLabelCiclos.setVisible(true);
             }
         }
+
+        revalidate();
+        repaint();
     }
 
     private void cargarTabla() {
-
         try {
-
             TipoDato tipo = obtenerTipoSeleccionado();
 
-            String sql = "";
-            String parametro = "";
+            String sql = obtenerSQL(tipo);
+            String parametro = obtenerParametro(tipo);
 
-            switch (tipo) {
-
-                case ALUMNO -> {
-
-                    sql = """
-                      SELECT * FROM alumno
-                      WHERE telefono = ?
-                      """;
-
-                    parametro = jTextFieldTelefono.getText();
-                }
-
-                case MODULO -> {
-
-                    sql = """
-                      SELECT * FROM modulo
-                      WHERE nombre = ?
-                      """;
-                    parametro = jComboBoxModulos.getSelectedItem().toString();
-                }
-
-                case CICLO -> {
-
-                    sql = """
-                      SELECT * FROM ciclo
-                      WHERE denominacion = ?
-                      """;
-                    parametro = jComboBoxCiclos.getSelectedItem().toString();
-                }
-
-                case MATRICULA -> {
-
-                    sql = """
-                      SELECT m.*
-                      FROM matricula m
-                      JOIN alumno a
-                      ON m.codigo_alumno = a.codigo
-                      WHERE a.telefono = ?
-                      """;
-
-                    parametro = jTextFieldTelefono.getText();
-                }
-
-                case LINEA_MATRICULA -> {
-
-                    sql = """
-                      SELECT lm.*
-                      FROM linea_matricula lm
-                      JOIN matricula m
-                      ON lm.codigo_matricula = m.codigo
-                      JOIN alumno a
-                      ON m.codigo_alumno = a.codigo
-                      WHERE a.telefono = ?
-                      """;
-
-                    parametro = jTextFieldTelefono.getText();
-                }
+            if (sql == null || sql.isBlank()) {
+                JOptionPane.showMessageDialog(this, "No hay consulta SQL definida.");
+                return;
             }
 
-            DefaultTableModel modelo
-                    = GestionBaseDeDatos.obtenerTableModel(
-                            sql,
-                            new String[]{parametro}
-                    );
+            if (parametro == null || parametro.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Debes introducir o seleccionar un valor válido.");
+                return;
+            }
+
+            DefaultTableModel modelo = GestionBaseDeDatos.obtenerTableModel(
+                    sql,
+                    new String[]{parametro}
+            );
 
             tabla.setModel(modelo);
 
-            TableRowSorter<DefaultTableModel> sorter
-                    = new TableRowSorter<>(modelo);
-
+            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
             tabla.setRowSorter(sorter);
 
+            tabla.setRowHeight(24);
+            tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+            scrollPane.setViewportView(tabla);
+
+            ajustarTablaAlContenido();
+
         } catch (Exception e) {
-
-            e.printStackTrace();
-
             JOptionPane.showMessageDialog(
                     this,
-                    e.getMessage()
+                    "Error cargando datos:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
+
+            e.printStackTrace();
         }
+    }
+
+    private void ajustarTablaAlContenido() {
+        final int margen = 20;
+        final int anchoMaximoColumna = 300;
+        final int altoMaximoTabla = 500;
+
+        for (int columna = 0; columna < tabla.getColumnCount(); columna++) {
+            int ancho = 50;
+
+            javax.swing.table.TableColumn tableColumn = tabla.getColumnModel().getColumn(columna);
+
+            java.awt.Component header = tabla.getTableHeader()
+                    .getDefaultRenderer()
+                    .getTableCellRendererComponent(
+                            tabla,
+                            tableColumn.getHeaderValue(),
+                            false,
+                            false,
+                            0,
+                            columna
+                    );
+
+            ancho = Math.max(ancho, header.getPreferredSize().width);
+
+            for (int fila = 0; fila < tabla.getRowCount(); fila++) {
+                java.awt.Component celda = tabla.prepareRenderer(
+                        tabla.getCellRenderer(fila, columna),
+                        fila,
+                        columna
+                );
+
+                ancho = Math.max(ancho, celda.getPreferredSize().width);
+            }
+
+            ancho += margen;
+            ancho = Math.min(ancho, anchoMaximoColumna);
+
+            tableColumn.setPreferredWidth(ancho);
+        }
+
+        int anchoTotal = tabla.getPreferredSize().width + 30;
+        int altoTotal = tabla.getRowHeight() * Math.max(tabla.getRowCount(), 1)
+                + tabla.getTableHeader().getPreferredSize().height
+                + 30;
+
+        altoTotal = Math.min(altoTotal, altoMaximoTabla);
+
+        scrollPane.setPreferredSize(new java.awt.Dimension(anchoTotal, altoTotal));
+
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
+
+    private String obtenerSQL(TipoDato tipo) {
+        return switch (tipo) {
+            case ALUMNO ->
+                """
+            SELECT codigo, nombre, correo, domicilio, telefono, fecha_nacimiento
+            FROM alumno
+            WHERE telefono = ?
+            """;
+
+            case MODULO ->
+                """
+            SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
+            FROM modulo
+            WHERE nombre = ?
+            """;
+
+            case CICLO ->
+                """
+            SELECT codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo
+            FROM ciclo
+            WHERE denominacion = ?
+            """;
+
+            case MATRICULA ->
+                """
+            SELECT m.codigo, m.codigo_alumno, m.anio_academico, m.estado, m.importe
+            FROM matricula m
+            JOIN alumno a ON m.codigo_alumno = a.codigo
+            WHERE a.telefono = ?
+            """;
+
+            case LINEA_MATRICULA ->
+                """
+            SELECT lm.codigo_matricula, lm.codigo_modulo, lm.repeticion,
+                   lm.calificacion_primera, lm.calificacion_segunda
+            FROM linea_matricula lm
+            JOIN matricula m ON lm.codigo_matricula = m.codigo
+            JOIN alumno a ON m.codigo_alumno = a.codigo
+            WHERE a.telefono = ?
+            """;
+
+            default ->
+                null;
+        };
+    }
+
+    private String obtenerParametro(TipoDato tipo) {
+        return switch (tipo) {
+            case ALUMNO, MATRICULA, LINEA_MATRICULA ->
+                jTextFieldTelefono.getText().trim();
+
+            case MODULO ->
+                jComboBoxModulos.getSelectedItem().toString().trim();
+
+            case CICLO ->
+                jComboBoxCiclos.getSelectedItem().toString().trim();
+
+            default ->
+                "";
+        };
     }
     //No
 
