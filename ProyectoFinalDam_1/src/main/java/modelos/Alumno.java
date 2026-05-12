@@ -372,24 +372,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
         }
     }
 
-    // =========================================================
-    // ======================= SQL =============================
-    // =========================================================
-
-    public static Alumno SqlToObj(ResultSet rs) throws SQLException {
-        return new Alumno(
-                rs.getInt("codigo"),
-                rs.getString("nombre"),
-                rs.getDate("fecha_nacimiento").toLocalDate(),
-                rs.getString("domicilio"),
-                rs.getString("telefono"),
-                rs.getString("correo")
-        );
-    }
-
-    public static void ObjToSql() {
-        //realizarSql
-    }
+    
 
     // =========================================================
     // ================= CONVERTIDORES =========================

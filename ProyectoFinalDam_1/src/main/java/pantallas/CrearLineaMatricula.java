@@ -279,7 +279,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
          // INSERT A LA BASE DE DATOS
         // Insert.insertarLineaMatricula(nuevaLinea);
         if(jCheckBoxConfirmacionBDD.isSelected()){
-            LineaMatricula.ObjToSql();
+            //LineaMatricula.ObjToSql();
         JOptionPane.showMessageDialog(this, "Linea Matricula creada correctamente.");
         }else{
             JOptionPane.showMessageDialog(this, "Linea Matricula creada pero no insertado.");

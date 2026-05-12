@@ -8,6 +8,7 @@ import Utils.Validadores;
 import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.logging.*;
 
 /**
@@ -67,7 +68,7 @@ public class GestionFicheros {
      * @param direccion
      * @param lista 
      */
-    public static void saveToBinario(String direccion, ArrayList<?> lista) {
+    public static void saveToBinario(String direccion, TreeSet<?> lista) {
 
         if (Validadores.comprobarFicheroEscritura(direccion, ".dat")) {
             ObjectOutputStream oos = null;

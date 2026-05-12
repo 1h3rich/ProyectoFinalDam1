@@ -287,7 +287,7 @@ public class CrearCiclo extends javax.swing.JFrame {
          // INSERT A LA BASE DE DATOS
         // Insert.insertarCiclo(nuevoCiclo);
         if(jCheckBoxConfirmacionBDD.isSelected()){
-            Ciclo.ObjToSql();
+            //Ciclo.ObjToSql();
         JOptionPane.showMessageDialog(this, "Modulo creado correctamente.");
         }else{
             JOptionPane.showMessageDialog(this, "Modulo creado pero no insertado.");

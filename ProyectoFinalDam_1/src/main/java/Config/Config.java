@@ -4,6 +4,9 @@
  */
 package Config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author 1DAM
@@ -14,6 +17,8 @@ public class Config {
     public static String urlSQL = "jdbc:mysql://127.0.0.1:3306/centro_formacion";
     public static String nombreUsuarioSQL = "root";
     public static String[] contraseñaSQL = {"alumno", "root"};
+    //public static  Map<String,String > contraseñaSQL = new HashMap<>();
+   
 
     // Ficheros
     public static String ficheroAlumno = "alumno";
