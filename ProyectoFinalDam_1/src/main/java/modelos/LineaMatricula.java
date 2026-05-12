@@ -352,7 +352,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
         );
     }
 
-    public void ObjToSql() {
+    public static void ObjToSql() {
         //realiarSql
     }
 
