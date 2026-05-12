@@ -293,7 +293,7 @@ public class CrearModulo extends javax.swing.JFrame {
         // INSERT A LA BASE DE DATOS
         // Insert.insertarModulo(nuevoModulo);
         if(jCheckBoxConfirmacionBDD.isSelected()){
-            Modulo.ObjToSql();
+            
         JOptionPane.showMessageDialog(this, "Modulo creado correctamente.");
         }else{
             JOptionPane.showMessageDialog(this, "Modulo creado pero no insertado.");

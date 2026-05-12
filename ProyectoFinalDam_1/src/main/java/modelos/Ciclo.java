@@ -377,26 +377,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
         }
     }
 
-    // =========================================================
-    // ======================= SQL =============================
-    // =========================================================
-
-    public static Ciclo SqlToObj(ResultSet rs) throws SQLException {
-
-        return new Ciclo(
-                rs.getInt("codigo"),
-                rs.getString("denominacion"),
-                rs.getString("familia_profesional"),
-                rs.getString("nivel"),
-                rs.getInt("horas"),
-                rs.getInt("año_curriculum")
-        );
-    }
-
-    public void ObjToSql() {
-        //
-    }
-
+    
     // =========================================================
     // ================= CONVERTIDORES =========================
     // =========================================================

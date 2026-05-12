@@ -339,22 +339,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
         }
     }
 
-    // =========================================================
-    // ======================= SQL =============================
-    // =========================================================
-    public static LineaMatricula SqlToObj(ResultSet rs) throws SQLException {
-        return new LineaMatricula(
-                rs.getInt("cod_matricula"),
-                rs.getInt("cod_modulo"),
-                rs.getInt("repeticion"),
-                rs.getDouble("cal_primera"),
-                rs.getDouble("cal_segunda")
-        );
-    }
-
-    public void ObjToSql() {
-        //realiarSql
-    }
+   
 
     // =========================================================
     // ================= CONVERTIDORES =========================

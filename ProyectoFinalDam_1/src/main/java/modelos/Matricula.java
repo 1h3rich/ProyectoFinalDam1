@@ -301,22 +301,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
         }
     }
 
-    // =========================================================
-    // ======================= SQL =============================
-    // =========================================================
-
-    public static Matricula SqlToObj(ResultSet rs) throws SQLException {
-        return new Matricula(
-                rs.getInt("codigo"),
-                rs.getInt("codigo_alumno"),
-                rs.getInt("año_academico"),
-                rs.getString("estado"),
-                rs.getDouble("importe")
-        );
-    }
-
-    public void ObjToSql() {
-    }
+   
 
     // =========================================================
     // ================= CONVERTIDORES =========================

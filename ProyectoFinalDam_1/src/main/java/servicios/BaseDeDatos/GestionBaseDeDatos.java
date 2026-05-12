@@ -3,6 +3,8 @@ package servicios.BaseDeDatos;
 import Config.Config;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -12,16 +14,17 @@ public class GestionBaseDeDatos {
 
     private static Connection con;
 
-    public static ArrayList<Alumno> listaAlumno = new ArrayList<>();
-    public static ArrayList<Matricula> listaMatricula = new ArrayList<>();
-    public static ArrayList<LineaMatricula> listaLineaMatricula = new ArrayList<>();
-    public static ArrayList<Ciclo> listaCiclo = new ArrayList<>();
-    public static ArrayList<Modulo> listaModulo = new ArrayList<>();
-
+    public static TreeSet<Alumno> listaAlumno = new TreeSet<>();
+    public static TreeSet<Matricula> listaMatricula = new TreeSet<>();
+    public static TreeSet<LineaMatricula> listaLineaMatricula = new TreeSet<>();
+    public static TreeSet<Ciclo> listaCiclo = new TreeSet<>();
+    public static TreeSet<Modulo> listaModulo = new TreeSet<>();
+    
     /**
      * Conecta Java con la base de datos MySQL.
      */
     public static void vincularBDD() {
+        
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Driver MySQL cargado correctamente");
@@ -102,8 +105,8 @@ public class GestionBaseDeDatos {
         try {
             comprobarConexion();
 
-            int posicionSQL = guardarDatos ? 1 : 0;
-            int primeraColumna = guardarDatos ? 2 : 1;
+            int posicionSQL = guardarDatos ? 1 : 0; // Si hace falta guardar los datos empezara desde la posicion 1, ya que la 0 esta reservada para el tipo de dato
+            int primeraColumna = guardarDatos ? 2 : 1; // Si hace falta guardar los datos , las columnas empiezan en la posicion2 en vez de la 1 
 
             String sql = datosConsulta[posicionSQL];
 
@@ -111,7 +114,7 @@ public class GestionBaseDeDatos {
 
                 if (entradas != null) {
                     for (int i = 0; i < entradas.length; i++) {
-                        pst.setString(i + 1, entradas[i]);
+                        pst.setString(i + 1, entradas[i]); // Introducimos las entradas necesarias
                     }
                 }
 
@@ -119,7 +122,7 @@ public class GestionBaseDeDatos {
 
                     while (rs.next()) {
 
-                        if (mostrarPorPantalla) {
+                        if (mostrarPorPantalla) { // Esto se podra eliminar ya que es solo para mostrar por consola
                             for (int i = primeraColumna; i < datosConsulta.length; i++) {
                                 System.out.print(rs.getString(datosConsulta[i]) + " ");
                             }

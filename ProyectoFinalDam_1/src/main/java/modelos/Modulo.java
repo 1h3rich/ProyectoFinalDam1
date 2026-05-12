@@ -359,23 +359,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
         }
     }
 
-    // =========================================================
-    // ======================= SQL =============================
-    // =========================================================
-
-    public static Modulo SqlToObj(ResultSet rs) throws SQLException {
-        return new Modulo(
-                rs.getInt("codigo"),
-                rs.getInt("codigo_ciclo"),
-                rs.getString("nombre"),
-                rs.getString("curso"),
-                rs.getInt("creditos_ects"),
-                rs.getInt("horas")
-        );
-    }
-
-    public static void ObjToSql() {
-    }
 
     // =========================================================
     // ================= CONVERTIDORES =========================
