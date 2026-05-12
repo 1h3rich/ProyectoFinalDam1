@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="570" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jButtonModificar" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonCrear" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonImportar" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonBorrar" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonConsultas" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonEjercicios" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonGuardar" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
+                          <Component id="jButtonCargar" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabelImportar" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelCrear" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelBorrar" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelModificar" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelCargar" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelGuardar" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelEjercicios" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelConsultas" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" pref="523" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+              <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonImportar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelImportar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonCrear" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelCrear" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonModificar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelModificar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonBorrar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelBorrar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonConsultas" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelConsultas" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonEjercicios" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelEjercicios" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonCargar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelCargar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="313" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="jLabelTitulo">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="NSimSun" size="48" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="ACADEMIA JAP&#xd3;N"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonImportar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Importar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonImportarActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonCrear">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Crear"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCrearActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonModificar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Modificar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonModificarActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonBorrar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Borrar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonCargar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cargar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonGuardar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Guardar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelImportar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Importar&#xe1; datos desde la base de datos."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelCrear">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Crearas datos manualmente o con datos."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelBorrar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Borraras datos."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelModificar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Modificaras datos."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelCargar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cargara datos desde archivos locales."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelGuardar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Guardar&#xe1; datos en archivos locales."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonConsultas">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Consultas"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonEjercicios">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ejercicios"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelEjercicios">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ejercicios para BDD."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelConsultas">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Consulta los datos de la base de datos."/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

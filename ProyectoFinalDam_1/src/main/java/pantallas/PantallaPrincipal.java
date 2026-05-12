@@ -4,25 +4,20 @@
  */
 package pantallas;
 
-import Control.EstadoAplicacion;
-import Utils.ModoFormulario;
-import Utils.TipoDato;
-import java.awt.HeadlessException;
-import javax.swing.JOptionPane;
-
 /**
  *
- * @author Rich
+ * @author 1DAM
  */
 public class PantallaPrincipal extends javax.swing.JFrame {
 
-    EstadoAplicacion estado = new EstadoAplicacion();
+    private boolean bdImportada = false;
 
     /**
-     * Creates new form PantallaPrincipal
+     * Creates new form Pantalla
      */
     public PantallaPrincipal() {
         initComponents();
+        actualizarBotones();
     }
 
     /**
@@ -34,47 +29,38 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBoxTipoDato = new javax.swing.JComboBox<>();
-        jButtonImportarBDD = new javax.swing.JButton();
+        jLabelTitulo = new javax.swing.JLabel();
+        jButtonImportar = new javax.swing.JButton();
         jButtonCrear = new javax.swing.JButton();
         jButtonModificar = new javax.swing.JButton();
         jButtonBorrar = new javax.swing.JButton();
-        jButtonGuardar = new javax.swing.JButton();
         jButtonCargar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabelInfoImportar = new javax.swing.JLabel();
-        jLabelInfoCrear = new javax.swing.JLabel();
-        jLabelInfoModificar = new javax.swing.JLabel();
-        jLabelInfoBorrar = new javax.swing.JLabel();
-        jLabelInfoGuardar = new javax.swing.JLabel();
-        jLabelInfoCargar = new javax.swing.JLabel();
+        jButtonGuardar = new javax.swing.JButton();
+        jLabelImportar = new javax.swing.JLabel();
+        jLabelCrear = new javax.swing.JLabel();
+        jLabelBorrar = new javax.swing.JLabel();
+        jLabelModificar = new javax.swing.JLabel();
+        jLabelCargar = new javax.swing.JLabel();
+        jLabelGuardar = new javax.swing.JLabel();
+        jButtonConsultas = new javax.swing.JButton();
         jButtonEjercicios = new javax.swing.JButton();
-        jLabelInfoEjercicios = new javax.swing.JLabel();
-        jButtonConsultar = new javax.swing.JButton();
-        jLabelInfoGuardar1 = new javax.swing.JLabel();
+        jLabelEjercicios = new javax.swing.JLabel();
+        jLabelConsultas = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBoxTipoDato.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBoxTipoDato.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBoxTipoDato.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alumno", "Modulo", "Ciclo", "Matricula", "Linea Matricula", "" }));
-        jComboBoxTipoDato.addActionListener(new java.awt.event.ActionListener() {
+        jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 1, 48)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
+        jLabelTitulo.setText("ACADEMIA JAPÓN");
+
+        jButtonImportar.setText("Importar");
+        jButtonImportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxTipoDatoActionPerformed(evt);
+                jButtonImportarActionPerformed(evt);
             }
         });
 
-        jButtonImportarBDD.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonImportarBDD.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonImportarBDD.setText("Importar");
-        jButtonImportarBDD.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonImportarBDDActionPerformed(evt);
-            }
-        });
-
-        jButtonCrear.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonCrear.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCrear.setText("Crear");
         jButtonCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,8 +68,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButtonModificar.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonModificar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonModificar.setText("Modificar");
         jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,268 +75,119 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButtonBorrar.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonBorrar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonBorrar.setText("Borrar");
-        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBorrarActionPerformed(evt);
-            }
-        });
 
-        jButtonGuardar.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonGuardar.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonGuardar.setText("Guardar");
-
-        jButtonCargar.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonCargar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCargar.setText("Cargar");
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("NSimSun", 1, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Bienvenido");
+        jButtonGuardar.setText("Guardar");
 
-        jLabelInfoImportar.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoImportar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoImportar.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoImportar.setText("Importara los datos desde la base de datos.");
+        jLabelImportar.setText("Importará datos desde la base de datos.");
 
-        jLabelInfoCrear.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoCrear.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoCrear.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoCrear.setText("Crear datos manualmente");
+        jLabelCrear.setText("Crearas datos manualmente o con datos.");
 
-        jLabelInfoModificar.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoModificar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoModificar.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoModificar.setText("Modificara los datos de manera local");
+        jLabelBorrar.setText("Borraras datos.");
 
-        jLabelInfoBorrar.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoBorrar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoBorrar.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoBorrar.setText("Borrara aquel dato o datos aportados de manera local");
+        jLabelModificar.setText("Modificaras datos.");
 
-        jLabelInfoGuardar.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoGuardar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoGuardar.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoGuardar.setText("Guardara en la BDD o en un archivo local");
+        jLabelCargar.setText("Cargara datos desde archivos locales.");
 
-        jLabelInfoCargar.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoCargar.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoCargar.setText("Cargara desde un archivo local.");
+        jLabelGuardar.setText("Guardará datos en archivos locales.");
 
-        jButtonEjercicios.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonEjercicios.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonConsultas.setText("Consultas");
+
         jButtonEjercicios.setText("Ejercicios");
 
-        jLabelInfoEjercicios.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoEjercicios.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoEjercicios.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoEjercicios.setText("Ejercicios de Base de Datos");
+        jLabelEjercicios.setText("Ejercicios para BDD.");
 
-        jButtonConsultar.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonConsultar.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonConsultar.setText("Consultar");
-        jButtonConsultar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonConsultarActionPerformed(evt);
-            }
-        });
-
-        jLabelInfoGuardar1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoGuardar1.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelInfoGuardar1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoGuardar1.setText("Consulta desde la base de datos");
+        jLabelConsultas.setText("Consulta los datos de la base de datos.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(336, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(221, 221, 221))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jComboBoxTipoDato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButtonEjercicios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonImportarBDD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(570, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelTitulo)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButtonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonImportar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonConsultar, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(39, 39, 39)
+                            .addComponent(jButtonConsultas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonEjercicios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelInfoImportar)
-                            .addComponent(jLabelInfoCrear)
-                            .addComponent(jLabelInfoModificar)
-                            .addComponent(jLabelInfoBorrar)
-                            .addComponent(jLabelInfoGuardar)
-                            .addComponent(jLabelInfoCargar)
-                            .addComponent(jLabelInfoEjercicios)
-                            .addComponent(jLabelInfoGuardar1))))
-                .addGap(286, 286, 286))
+                            .addComponent(jLabelImportar)
+                            .addComponent(jLabelCrear)
+                            .addComponent(jLabelBorrar)
+                            .addComponent(jLabelModificar)
+                            .addComponent(jLabelCargar)
+                            .addComponent(jLabelGuardar)
+                            .addComponent(jLabelEjercicios)
+                            .addComponent(jLabelConsultas))
+                        .addGap(8, 8, 8)))
+                .addGap(523, 523, 523))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(134, 134, 134)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(52, 52, 52)
+                .addComponent(jLabelTitulo)
+                .addGap(86, 86, 86)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxTipoDato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonImportarBDD)
-                    .addComponent(jLabelInfoImportar))
-                .addGap(18, 18, 18)
+                    .addComponent(jButtonImportar)
+                    .addComponent(jLabelImportar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrear)
-                    .addComponent(jLabelInfoCrear))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabelCrear))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonModificar)
-                    .addComponent(jLabelInfoModificar))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabelModificar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBorrar)
-                    .addComponent(jLabelInfoBorrar))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabelBorrar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonConsultar)
-                    .addComponent(jLabelInfoGuardar1))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonGuardar)
-                    .addComponent(jLabelInfoGuardar))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonCargar)
-                    .addComponent(jLabelInfoCargar))
-                .addGap(18, 18, 18)
+                    .addComponent(jButtonConsultas)
+                    .addComponent(jLabelConsultas))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEjercicios)
-                    .addComponent(jLabelInfoEjercicios))
-                .addContainerGap(192, Short.MAX_VALUE))
+                    .addComponent(jLabelEjercicios))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCargar)
+                    .addComponent(jLabelCargar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonGuardar)
+                    .addComponent(jLabelGuardar))
+                .addContainerGap(313, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBoxTipoDatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoDatoActionPerformed
-
-    }//GEN-LAST:event_jComboBoxTipoDatoActionPerformed
-
-    /**
-     * El boton utiliza metodos para importar los datos desde la base de datos
-     *
-     * @param evt
-     */
-    private void jButtonImportarBDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportarBDDActionPerformed
-        try {
-            // Metodos de BD.
-            // Ejemplo:
-            // GestionBaseDeDatos.cargarAlumnos();
-            // GestionBaseDeDatos.cargarModulos();
-            // GestionBaseDeDatos.cargarCiclos();
-            // GestionBaseDeDatos.cargarMatriculas();
-            // GestionBaseDeDatos.cargarLineasMatricula();
-
-            estado.setBaseDeDatosCargada(true);
-            actualizarBotones();
-
-            JOptionPane.showMessageDialog(this, "Base de datos cargada correctamente.");
-
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar la base de datos.");
-        }
-    }//GEN-LAST:event_jButtonImportarBDDActionPerformed
+    private void jButtonImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportarActionPerformed
+        bdImportada = true; // simulamos que ya se importó
+        actualizarBotones(); // activamos los demás botones
+    }//GEN-LAST:event_jButtonImportarActionPerformed
 
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
-        TipoDato tipo = obtenerTipoSeleccionado();
-
-        if (!estado.isBaseDeDatosCargada()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "No has cargado la base de datos. Tendrás que rellenar todos los campos manualmente."
-            );
-        }
-
-        switch (tipo) {
-            case ALUMNO:
-                new ModificarAlumno(ModoFormulario.CREAR, null).setVisible(true);
-                break;
-
-            case MODULO:
-                new CrearModulo(ModoFormulario.CREAR, null).setVisible(true);
-                break;
-
-            //Falta añadir los formularios de mat, ciclo y linea
-        }
+        CrearAlumno crearAlumno = new CrearAlumno();
+        crearAlumno.setVisible(true);
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
-        if (!estado.isBaseDeDatosCargada()) {
-            JOptionPane.showMessageDialog(this, "Primero debes importar la base de datos.");
-            return;
-        }
-
-        TipoDato tipo = obtenerTipoSeleccionado();
-
-        switch (tipo) {
-            case ALUMNO:
-                // Aquí deberías seleccionar un alumno real.
-                // De momento lo dejamos en null para montar la estructura.
-                new ModificarAlumno(ModoFormulario.MODIFICAR, null).setVisible(true);
-                break;
-
-            case MODULO:
-                new CrearModulo(ModoFormulario.MODIFICAR, null).setVisible(true);
-                break;
-        }
-    }//GEN-LAST:event_jButtonModificarActionPerformed
-
-    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
-        if (!estado.isBaseDeDatosCargada()) {
-            JOptionPane.showMessageDialog(this, "Primero debes importar la base de datos.");
-            return;
-        }
-
-        TipoDato tipo = obtenerTipoSeleccionado();
-
-        int opcion = JOptionPane.showConfirmDialog(
-                this,
-                "¿Seguro que quieres borrar un registro de tipo " + tipo + "?",
-                "Confirmar borrado",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (opcion != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        switch (tipo) {
-            case ALUMNO:
-                // Delete.borrarAlumno(codigoAlumno);
-                JOptionPane.showMessageDialog(this, "Aquí borrarías un alumno.");
-                break;
-
-            case MODULO:
-                // Delete.borrarModulo(codigoModulo);
-                JOptionPane.showMessageDialog(this, "Aquí borrarías un módulo.");
-                break;
-        }
-    }//GEN-LAST:event_jButtonBorrarActionPerformed
-
-    private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonConsultarActionPerformed
+    }//GEN-LAST:event_jButtonModificarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -380,6 +215,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
@@ -387,76 +223,33 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
     }
 
-    //Aqui se puede escribir
-    private void configurarComboBox() {
-        jComboBoxTipoDato.removeAllItems();
-
-        jComboBoxTipoDato.addItem("Alumno");
-        jComboBoxTipoDato.addItem("Módulo");
-        jComboBoxTipoDato.addItem("Ciclo");
-        jComboBoxTipoDato.addItem("Matrícula");
-        jComboBoxTipoDato.addItem("Línea Matrícula");
-    }
-
+    //Si
     private void actualizarBotones() {
-        boolean bdCargada = estado.isBaseDeDatosCargada();
-
-        jButtonCrear.setEnabled(true);
-        jButtonGuardar.setEnabled(true);
-        jButtonCargar.setEnabled(true);
-
-        jButtonModificar.setEnabled(bdCargada);
-        jButtonBorrar.setEnabled(bdCargada);
+        jButtonModificar.setEnabled(bdImportada);
+        jButtonBorrar.setEnabled(bdImportada);
+        jButtonConsultas.setEnabled(bdImportada);
+        jButtonEjercicios.setEnabled(bdImportada);
     }
 
-    private TipoDato obtenerTipoSeleccionado() {
-        String seleccion = jComboBoxTipoDato.getSelectedItem().toString();
-
-        switch (seleccion) {
-            case "Alumno" -> {
-                return TipoDato.ALUMNO;
-            }
-
-            case "Módulo" -> {
-                return TipoDato.MODULO;
-            }
-
-            case "Ciclo" -> {
-                return TipoDato.CICLO;
-            }
-
-            case "Matrícula" -> {
-                return TipoDato.MATRICULA;
-            }
-
-            case "Línea Matrícula" -> {
-                return TipoDato.LINEA_MATRICULA;
-            }
-
-            default ->
-                throw new IllegalArgumentException("Tipo no válido: " + seleccion);
-        }
-    }
-    //Aqui ya no
+    //No
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonCargar;
-    private javax.swing.JButton jButtonConsultar;
+    private javax.swing.JButton jButtonConsultas;
     private javax.swing.JButton jButtonCrear;
     private javax.swing.JButton jButtonEjercicios;
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JButton jButtonImportarBDD;
+    private javax.swing.JButton jButtonImportar;
     private javax.swing.JButton jButtonModificar;
-    private javax.swing.JComboBox<String> jComboBoxTipoDato;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabelInfoBorrar;
-    private javax.swing.JLabel jLabelInfoCargar;
-    private javax.swing.JLabel jLabelInfoCrear;
-    private javax.swing.JLabel jLabelInfoEjercicios;
-    private javax.swing.JLabel jLabelInfoGuardar;
-    private javax.swing.JLabel jLabelInfoGuardar1;
-    private javax.swing.JLabel jLabelInfoImportar;
-    private javax.swing.JLabel jLabelInfoModificar;
+    private javax.swing.JLabel jLabelBorrar;
+    private javax.swing.JLabel jLabelCargar;
+    private javax.swing.JLabel jLabelConsultas;
+    private javax.swing.JLabel jLabelCrear;
+    private javax.swing.JLabel jLabelEjercicios;
+    private javax.swing.JLabel jLabelGuardar;
+    private javax.swing.JLabel jLabelImportar;
+    private javax.swing.JLabel jLabelModificar;
+    private javax.swing.JLabel jLabelTitulo;
     // End of variables declaration//GEN-END:variables
 }
