@@ -5,8 +5,11 @@
 package pantallas;
 
 import Utils.TipoDato;
-import java.sql.Array;
-import java.util.ArrayList;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.BorderLayout;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
@@ -16,11 +19,16 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
  */
 public class ConsultaCompleta extends javax.swing.JFrame {
 
+    private JTable tabla;
+    private JScrollPane scrollPane;
+
     /**
      * Creates new form ConsultaCompleta
      */
     public ConsultaCompleta() {
         initComponents();
+        GestionBaseDeDatos.vincularBDD();
+        inicializarTabla();
     }
 
     /**
@@ -34,8 +42,6 @@ public class ConsultaCompleta extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableTabla = new javax.swing.JTable();
         jComboBoxEleccion = new javax.swing.JComboBox<>();
         jButtonActualizar = new javax.swing.JButton();
 
@@ -47,37 +53,18 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("CONSULTAS");
 
-        jTableTabla.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTableTabla);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1123, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 1140, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 537, Short.MAX_VALUE)
         );
 
-        jComboBoxEleccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alumnos", "Matriculas", "Linea Matriculas", "Modulos", "Ciclos", " " }));
+        jComboBoxEleccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alumno", "Matrícula", "Línea Matrícula", "Módulo", "Ciclo" }));
         jComboBoxEleccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxEleccionActionPerformed(evt);
@@ -127,11 +114,11 @@ public class ConsultaCompleta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxEleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEleccionActionPerformed
-        
+
     }//GEN-LAST:event_jComboBoxEleccionActionPerformed
 
     private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
-
+        cargarTabla();
     }//GEN-LAST:event_jButtonActualizarActionPerformed
 
     /**
@@ -166,7 +153,77 @@ public class ConsultaCompleta extends javax.swing.JFrame {
             new ConsultaCompleta().setVisible(true);
         });
     }
-    
+
+    //Se puede escribir
+    private void inicializarTabla() {
+
+        jPanel1.setLayout(new BorderLayout());
+
+        tabla = new JTable();
+
+        tabla.setRowHeight(24);
+
+        scrollPane = new JScrollPane(tabla);
+
+        jPanel1.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private String obtenerSQL(TipoDato tipo) {
+
+        return switch (tipo) {
+
+            case ALUMNO ->
+                ConsultasSQL.SELECT_ALUMNO_TODOS[0];
+
+            case MODULO ->
+                ConsultasSQL.SELECT_MODULO_TODOS[0];
+
+            case CICLO ->
+                ConsultasSQL.SELECT_CICLO_TODOS[0];
+
+            case MATRICULA ->
+                ConsultasSQL.SELECT_MATRICULA_TODOS[0];
+
+            case LINEA_MATRICULA ->
+                ConsultasSQL.SELECT_LINEA_MATRICULA_TODOS[0];
+
+            default ->
+                null;
+        };
+    }
+
+    private void cargarTabla() {
+
+        try {
+
+            TipoDato tipo = obtenerTipoSeleccionado();
+
+            String sql = obtenerSQL(tipo);
+
+            if (sql == null) {
+                return;
+            }
+
+            DefaultTableModel modelo
+                    = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
+
+            tabla.setModel(modelo);
+
+            // Ordenar columnas al hacer clic
+            TableRowSorter<DefaultTableModel> sorter
+                    = new TableRowSorter<>(modelo);
+
+            tabla.setRowSorter(sorter);
+
+        } catch (Exception e) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error cargando datos:\n" + e.getMessage()
+            );
+        }
+    }
+
     private TipoDato obtenerTipoSeleccionado() {
         String seleccion = jComboBoxEleccion.getSelectedItem().toString();
 
@@ -201,7 +258,5 @@ public class ConsultaCompleta extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBoxEleccion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableTabla;
     // End of variables declaration//GEN-END:variables
 }

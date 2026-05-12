@@ -56,12 +56,12 @@ public class ConsultasSQL {
  
     /** Sentencia INSERT para la tabla ciclo. */
     public static final String[] INSERT_CICLO = {
-        "INSERT INTO ciclo (denominacion, familia_profesional, nivel, horas, año_curriculum) VALUES (?, ?, ?, ?, ?)"
+        "INSERT INTO ciclo (denominacion, familia_profesional, nivel, horas, anio_curriculo) VALUES (?, ?, ?, ?, ?)"
     };
  
     /** Sentencia UPDATE para la tabla ciclo. */
     public static final String[] UPDATE_CICLO = {
-        "UPDATE ciclo SET denominacion=?, familia_profesional=?, nivel=?, horas=?, año_curriculum=? WHERE codigo=?"
+        "UPDATE ciclo SET denominacion=?, familia_profesional=?, nivel=?, horas=?, anio_curriculo=? WHERE codigo=?"
     };
  
     /** Sentencia DELETE para la tabla ciclo. */
@@ -71,14 +71,14 @@ public class ConsultasSQL {
  
     /** SELECT ciclo por código — para mostrar por pantalla (guardarDatos=false). */
     public static final String[] SELECT_CICLO_POR_CODIGO = {
-        "SELECT codigo, denominacion, familia_profesional, nivel, horas, año_curriculum FROM ciclo WHERE codigo=?",
-        "codigo", "denominacion", "familia_profesional", "nivel", "horas", "año_curriculum"
+        "SELECT codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo FROM ciclo WHERE denominacion like ?",
+        "codigo", "denominacion", "familia_profesional", "nivel", "horas", "anio_curriculo"
     };
  
     /** SELECT todos los ciclos — para mostrar por pantalla (guardarDatos=false). */
     public static final String[] SELECT_CICLO_TODOS = {
-        "SELECT codigo, denominacion, familia_profesional, nivel, horas, año_curriculum FROM ciclo ORDER BY denominacion ASC",
-        "codigo", "denominacion", "familia_profesional", "nivel", "horas", "año_curriculum"
+        "SELECT codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo FROM ciclo ORDER BY denominacion ASC",
+        "codigo", "denominacion", "familia_profesional", "nivel", "horas", "anio_curriculo"
     };
  
     /**
@@ -87,8 +87,8 @@ public class ConsultasSQL {
      */
     public static final String[] SAVE_CICLO_TODOS = {
         "Ciclo",
-        "SELECT codigo, denominacion, familia_profesional, nivel, horas, año_curriculum FROM ciclo ORDER BY denominacion ASC",
-        "codigo", "denominacion", "familia_profesional", "nivel", "horas", "año_curriculum"
+        "SELECT codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo FROM ciclo ORDER BY denominacion ASC",
+        "codigo", "denominacion", "familia_profesional", "nivel", "horas", "anio_curriculo"
     };
  
     // =========================================================
@@ -112,7 +112,7 @@ public class ConsultasSQL {
  
     /** SELECT modulo por código — para mostrar por pantalla (guardarDatos=false). */
     public static final String[] SELECT_MODULO_POR_CODIGO = {
-        "SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas FROM modulo WHERE codigo=?",
+        "SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas FROM modulo WHERE nombre like ?",
         "codigo", "codigo_ciclo", "nombre", "curso", "creditos_ects", "horas"
     };
  
@@ -153,7 +153,7 @@ public class ConsultasSQL {
  
     /** SELECT matricula por código — para mostrar por pantalla (guardarDatos=false). */
     public static final String[] SELECT_MATRICULA_POR_CODIGO = {
-        "SELECT codigo, codigo_alumno, anio_academico, estado, importe FROM matricula WHERE codigo=?",
+        "SELECT codigo, codigo_alumno, anio_academico, estado, importe FROM matricula WHERE codigo = (select codigo from alumno where telefono = ? )",
         "codigo", "codigo_alumno", "anio_academico", "estado", "importe"
     };
  
@@ -197,7 +197,10 @@ public class ConsultasSQL {
  
     /** SELECT linea_matricula por clave compuesta — para mostrar por pantalla (guardarDatos=false). */
     public static final String[] SELECT_LINEA_MATRICULA_POR_CODIGO = {
-        "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula WHERE codigo_matricula=? AND codigo_modulo=?",
+        "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula "
+            + "WHERE codigo_matricula = "
+            + "(select codigo from matricula where codigo_alumno = "
+            + "(select codigo from alumno where telefono = ?))",
         "codigo_matricula", "codigo_modulo", "repeticion", "calificacion_primera", "calificacion_segunda"
     };
  
