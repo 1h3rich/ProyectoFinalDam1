@@ -20,7 +20,10 @@ public class GestionBaseDeDatos {
     public static TreeSet<Ciclo> listaCiclo = new TreeSet<>();
     public static TreeSet<Modulo> listaModulo = new TreeSet<>();
     
-    public static ArrayList<String> datosInsertados = new ArrayList<>();
+    
+    
+    //En esta lista hay que guaradr los datos que insertan cada vez que se hace un insert
+    public static ArrayList<String> datosInsertados = new ArrayList<>(); //Aqui no estoy seguro si es String o podria Ser de Tipo Object, si se puede elegir pondria Object
     
     /**
      * Conecta Java con la base de datos MySQL.
@@ -108,7 +111,7 @@ public class GestionBaseDeDatos {
             comprobarConexion();
 
             int posicionSQL = guardarDatos ? 1 : 0; // Si hace falta guardar los datos empezara desde la posicion 1, ya que la 0 esta reservada para el tipo de dato
-            int primeraColumna = guardarDatos ? 2 : 1; // Si hace falta guardar los datos , las columnas empiezan en la posicion2 en vez de la 1 
+            int primeraColumna = guardarDatos ? 2 : 1; // Si hace falta guardar los datos , las columnas empiezan en la posicion 2 en vez de la 1 
 
             String sql = datosConsulta[posicionSQL];
 
@@ -137,7 +140,7 @@ public class GestionBaseDeDatos {
                             for (int i = primeraColumna, j = 0; i < datosConsulta.length; i++, j++) {
                                 objeto[j] = rs.getString(datosConsulta[i]);
                             }
-
+                            
                             guardarObjeto(datosConsulta[0], objeto);
                         }
                     }
@@ -186,6 +189,14 @@ public class GestionBaseDeDatos {
      */
     public static void insertarDatos(String[] datosInsertar, String[] entradas) {
         ejecutarActualizacion(datosInsertar[0], entradas, "Filas insertadas");
+        
+        String texto = " ";
+        
+        for (int i = 0; i < entradas.length; i++) {
+            texto += entradas[i] + " ";
+        }
+        datosInsertados.add(texto);
+        
     }
 
     /**
@@ -213,7 +224,7 @@ public class GestionBaseDeDatos {
      *
      * Estos comandos NO devuelven ResultSet. Por eso se usa executeUpdate().
      */
-    private static void ejecutarActualizacion(String sql, String[] entradas, String mensaje) {
+    private static void ejecutarActualizacion(String sql, String[] entradas, String mensaje) { //Al hacer todo por swingquizas podamos eliminar String mensaje
         try {
             comprobarConexion();
 
@@ -224,8 +235,8 @@ public class GestionBaseDeDatos {
                         pst.setString(i + 1, entradas[i]);
                     }
                 }
-
-                int filasAfectadas = pst.executeUpdate();
+                
+                int filasAfectadas = pst.executeUpdate(); //Se usa executeUpdate en vez de executeQuery, porque asi sabemos las lineas afectadas
                 System.out.println(mensaje + ": " + filasAfectadas);
             }
 

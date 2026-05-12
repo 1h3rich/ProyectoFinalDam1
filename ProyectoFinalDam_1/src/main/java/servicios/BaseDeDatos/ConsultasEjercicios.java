@@ -149,20 +149,17 @@ public class ConsultasEjercicios {
     Solo se mostrarán los módulos que tengan más de 3 alumnos repetidores.
      */
     private static String consulta8 = """
-                                     select 
-                                     m.nombre as nombre_modulo, 
-                                     c.denominacion as denominacion_ciclo, 
-                                     count(lm.codigo_matricula) as alumnos_repetidores
-                                     from modulo m
-                                     join ciclo c on m.codigo_ciclo = c.codigo
-                                     join linea_matricula lm on m.codigo = lm.codigo_modulo
-                                     where lm.repeticion = true
-                                     group by  m.codigo, m.nombre, c.denominacion
-                                     having count(lm.codigo_matricula) > 3;
+                                     SELECT m.nombre, c.denominacion, COUNT(lm.codigo_matricula) AS num_repetidores
+                                     FROM modulo m
+                                     JOIN ciclo c ON m.codigo_ciclo = c.codigo
+                                     JOIN linea_matricula lm ON m.codigo = lm.codigo_modulo
+                                     WHERE lm.repeticion > 1
+                                     GROUP BY m.codigo, c.denominacion
+                                     HAVING COUNT(lm.codigo_matricula) > 3;
                                      """;
     
     
-    public static String [] datosConsulta8 = {consulta8, "nombre_modulo", "denominacion_ciclo","alumnos_repetidores"}; 
+    public static String [] datosConsulta8 = {consulta8, "nombre", "denominacion","num_repetidores"}; 
     
     
     /*
