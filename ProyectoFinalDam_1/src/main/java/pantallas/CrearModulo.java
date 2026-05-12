@@ -197,8 +197,6 @@ public class CrearModulo extends javax.swing.JFrame {
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         if(modo == ModoFormulario.CREAR){
             crearModulo();
-        }else{
-            modificarModulo();
         }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
