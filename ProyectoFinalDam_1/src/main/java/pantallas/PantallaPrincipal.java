@@ -46,6 +46,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonEjercicios = new javax.swing.JButton();
         jLabelEjercicios = new javax.swing.JLabel();
         jLabelConsultas = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,6 +55,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setText("ACADEMIA JAPÓN");
 
+        jButtonImportar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonImportar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonImportar.setText("Importar");
         jButtonImportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -61,6 +64,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonCrear.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonCrear.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonCrear.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCrear.setText("Crear");
         jButtonCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,6 +74,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonModificar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonModificar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonModificar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonModificar.setText("Modificar");
         jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,41 +84,79 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonBorrar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonBorrar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonBorrar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonBorrar.setText("Borrar");
 
+        jButtonCargar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonCargar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCargar.setText("Cargar");
 
+        jButtonGuardar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonGuardar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonGuardar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonGuardar.setText("Guardar");
 
+        jLabelImportar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelImportar.setForeground(new java.awt.Color(0, 0, 0));
         jLabelImportar.setText("Importará datos desde la base de datos.");
 
+        jLabelCrear.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelCrear.setForeground(new java.awt.Color(0, 0, 0));
         jLabelCrear.setText("Crearas datos manualmente o con datos.");
 
+        jLabelBorrar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelBorrar.setForeground(new java.awt.Color(0, 0, 0));
         jLabelBorrar.setText("Borraras datos.");
 
+        jLabelModificar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelModificar.setForeground(new java.awt.Color(0, 0, 0));
         jLabelModificar.setText("Modificaras datos.");
 
+        jLabelCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelCargar.setForeground(new java.awt.Color(0, 0, 0));
         jLabelCargar.setText("Cargara datos desde archivos locales.");
 
+        jLabelGuardar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelGuardar.setForeground(new java.awt.Color(0, 0, 0));
         jLabelGuardar.setText("Guardará datos en archivos locales.");
 
+        jButtonConsultas.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonConsultas.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonConsultas.setForeground(new java.awt.Color(0, 0, 0));
         jButtonConsultas.setText("Consultas");
 
+        jButtonEjercicios.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonEjercicios.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonEjercicios.setForeground(new java.awt.Color(0, 0, 0));
         jButtonEjercicios.setText("Ejercicios");
 
+        jLabelEjercicios.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelEjercicios.setForeground(new java.awt.Color(0, 0, 0));
         jLabelEjercicios.setText("Ejercicios para BDD.");
 
+        jLabelConsultas.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelConsultas.setForeground(new java.awt.Color(0, 0, 0));
         jLabelConsultas.setText("Consulta los datos de la base de datos.");
+
+        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBox1.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(570, Short.MAX_VALUE)
+                .addContainerGap(456, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabelTitulo)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButtonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -140,7 +187,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addGap(86, 86, 86)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonImportar)
-                    .addComponent(jLabelImportar))
+                    .addComponent(jLabelImportar)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrear)
@@ -169,7 +217,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jLabelGuardar))
-                .addContainerGap(313, Short.MAX_VALUE))
+                .addContainerGap(320, Short.MAX_VALUE))
         );
 
         pack();
@@ -186,7 +234,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
-        // TODO add your handling code here:
+        ModificarAlumno modificarAlumno= new ModificarAlumno();
+        modificarAlumno.setVisible(true);
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
     /**
@@ -242,6 +291,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JButton jButtonImportar;
     private javax.swing.JButton jButtonModificar;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabelBorrar;
     private javax.swing.JLabel jLabelCargar;
     private javax.swing.JLabel jLabelConsultas;
