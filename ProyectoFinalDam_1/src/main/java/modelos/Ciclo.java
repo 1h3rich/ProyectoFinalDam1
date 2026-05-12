@@ -393,7 +393,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
         );
     }
 
-    public void ObjToSql() {
+    public static void ObjToSql() {
         //
     }
 
