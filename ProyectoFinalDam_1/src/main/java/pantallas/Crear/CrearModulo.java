@@ -302,7 +302,8 @@ public class CrearModulo extends javax.swing.JFrame {
                 || !Validadores.validarTextoNoVacio(horasTexto)
                 || !Validadores.validarTextoNoVacio(codigoCicloTexto)) {
 
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+            JOptionPane.showConfirmDialog(this, "Debes rellenar todos los campos", "ERROR", JOptionPane.ERROR_MESSAGE, JOptionPane.ERROR);
+            
             return;
         }
 
