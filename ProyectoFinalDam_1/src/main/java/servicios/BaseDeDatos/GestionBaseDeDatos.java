@@ -16,6 +16,8 @@ public class GestionBaseDeDatos {
     private static Connection con;
     private static boolean transaccionActiva = false;
 
+    
+    /*
     public static TreeSet<Alumno> listaAlumno = new TreeSet<>();
     public static TreeSet<Matricula> listaMatricula = new TreeSet<>();
     public static TreeSet<LineaMatricula> listaLineaMatricula = new TreeSet<>();
@@ -25,6 +27,8 @@ public class GestionBaseDeDatos {
     //En esta lista hay que guaradr los datos que insertan cada vez que se hace un insert
     public static ArrayList<String> datosInsertados = new ArrayList<>(); //Aqui no estoy seguro si es String o podria Ser de Tipo Object, si se puede elegir pondria Object
 
+    
+    */
     /**
      * Conecta Java con la base de datos MySQL.
      *
@@ -247,8 +251,8 @@ public class GestionBaseDeDatos {
      * @param datosActualizacion
      * @param entradas
      */
-    public static void actualizarFila(String[] datosActualizacion, String[] entradas) {
-        ejecutarActualizacion(datosActualizacion[0], entradas, "Filas actualizadas");
+    public static boolean actualizarFila(String[] datosActualizacion, String[] entradas) {
+        return ejecutarActualizacion(datosActualizacion[0], entradas, "Filas actualizadas");
     }
 
     /**
@@ -266,7 +270,7 @@ public class GestionBaseDeDatos {
      *
      * Estos comandos NO devuelven ResultSet. Por eso se usa executeUpdate().
      */
-    private static void ejecutarActualizacion(String sql, String[] entradas, String mensaje) { //Al hacer todo por swingquizas podamos eliminar String mensaje
+    private static boolean ejecutarActualizacion(String sql, String[] entradas, String mensaje) { //Al hacer todo por swingquizas podamos eliminar String mensaje
         try {
             comprobarConexion();
 
@@ -280,12 +284,14 @@ public class GestionBaseDeDatos {
 
                 int filasAfectadas = pst.executeUpdate(); //Se usa executeUpdate en vez de executeQuery, porque asi sabemos las lineas afectadas
                 System.out.println(mensaje + ": " + filasAfectadas);
+                return true;
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+        return false;
     }
 
     /**
@@ -423,162 +429,7 @@ public class GestionBaseDeDatos {
         return 0;
     }
 
-    public static int insertarAlumnoYDevolverID(String[] entradas) {
-        comprobarConexion();
-
-        String sql = ConsultasSQL.INSERT_ALUMNO[0];
-
-        System.out.println("SQL alumno: " + sql);
-        System.out.println("Nombre: " + entradas[0]);
-        System.out.println("Correo: " + entradas[1]);
-        System.out.println("Domicilio: " + entradas[2]);
-        System.out.println("Teléfono: " + entradas[3]);
-        System.out.println("Fecha: " + entradas[4]);
-
-        try ( PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            pst.setString(1, entradas[0]);
-            pst.setString(2, entradas[1]);
-            pst.setString(3, entradas[2]);
-            pst.setString(4, entradas[3]);
-            pst.setDate(5, java.sql.Date.valueOf(entradas[4]));
-
-            int filas = pst.executeUpdate();
-
-            if (filas > 0) {
-                try ( ResultSet rs = pst.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        return rs.getInt(1);
-                    }
-                }
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("ERROR SQL AL INSERTAR ALUMNO:");
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-
-        } catch (IllegalArgumentException ex) {
-            System.out.println("ERROR EN FORMATO DE FECHA:");
-            System.out.println("La fecha debe ser YYYY-MM-DD. Ejemplo: 2003-05-12");
-            ex.printStackTrace();
-        }
-
-        return -1;
-    }
-
-    public static int insertarMatriculaYDevolverID(String[] datos) {
-        comprobarConexion();
-
-        String sql = ConsultasSQL.INSERT_MATRICULA[0];
-
-        try ( PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            pst.setString(1, datos[0]);
-            pst.setDouble(2, Double.parseDouble(datos[1]));
-            pst.setString(3, datos[2]);
-            pst.setInt(4, Integer.parseInt(datos[3]));
-
-            int filas = pst.executeUpdate();
-
-            if (filas > 0) {
-                try ( ResultSet rs = pst.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        return rs.getInt(1);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al insertar matrícula: " + e.getMessage());
-        }
-
-        return -1;
-    }
-
-    public static boolean insertarLineaMatricula(String[] datos) {
-        comprobarConexion();
-
-        String sql = ConsultasSQL.INSERT_LINEA_MATRICULA[0];
-
-        try ( PreparedStatement pst = con.prepareStatement(sql)) {
-
-            pst.setInt(1, Integer.parseInt(datos[0]));
-            pst.setInt(2, Integer.parseInt(datos[1]));
-            pst.setInt(3, Integer.parseInt(datos[2]));
-            pst.setDouble(4, Double.parseDouble(datos[3]));
-            pst.setDouble(5, Double.parseDouble(datos[4]));
-
-            int filas = pst.executeUpdate();
-
-            return filas > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error al insertar línea de matrícula: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public static int insertarCicloYDevolverID(String[] datos) {
-        comprobarConexion();
-
-        String sql = ConsultasSQL.INSERT_CICLO[0];
-
-        try ( PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            pst.setString(1, datos[0]);
-            pst.setString(2, datos[1]);
-            pst.setString(3, datos[2]);
-            pst.setInt(4, Integer.parseInt(datos[3]));
-            pst.setInt(5, Integer.parseInt(datos[4]));
-
-            int filas = pst.executeUpdate();
-
-            if (filas > 0) {
-                try ( ResultSet rs = pst.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        return rs.getInt(1);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al insertar ciclo: " + e.getMessage());
-        }
-
-        return -1;
-    }
-
-    public static int insertarModuloYDevolverID(String[] datos) {
-        comprobarConexion();
-
-        String sql = ConsultasSQL.INSERT_MODULO[0];
-
-        try ( PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            pst.setString(1, datos[0]);
-            pst.setString(2, datos[1]);
-            pst.setInt(3, Integer.parseInt(datos[2]));
-            pst.setInt(4, Integer.parseInt(datos[3]));
-            pst.setInt(5, Integer.parseInt(datos[4]));
-
-            int filas = pst.executeUpdate();
-
-            if (filas > 0) {
-                try ( ResultSet rs = pst.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        return rs.getInt(1);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al insertar módulo: " + e.getMessage());
-        }
-
-        return -1;
-    }
-
+    
     public static void iniciarTransaccion() {
         try {
             comprobarConexion();
@@ -735,27 +586,6 @@ public class GestionBaseDeDatos {
         return lista;
     }
 
-    public static boolean asignarModuloACiclo(int idModulo, int idCiclo) {
-        comprobarConexion();
-
-        String sql = "UPDATE modulo SET codigo_ciclo = ? WHERE codigo = ?";
-
-        try ( PreparedStatement pst = con.prepareStatement(sql)) {
-
-            pst.setInt(1, idCiclo);
-            pst.setInt(2, idModulo);
-
-            int filas = pst.executeUpdate();
-
-            return filas > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error al asignar módulo al ciclo: " + e.getMessage());
-        }
-
-        return false;
-    }
-
     public static void comprobarBaseActual() {
         if (!comprobarConexion()) {
             System.out.println("No hay conexión.");
@@ -784,6 +614,7 @@ public class GestionBaseDeDatos {
             e.printStackTrace();
         }
     }
+    
 
     /**
      * Ejecuta cualquier INSERT con AUTO_INCREMENT y devuelve el ID generado.
@@ -888,12 +719,5 @@ public class GestionBaseDeDatos {
         return insertarYDevolverID(ConsultasSQL.INSERT_CICLO[0], datos);
     }
      */
-    /**
-     * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_MODULO[0], datos)
-     */
-    /*
-    public static int insertarModuloYDevolverID(String[] datos) {
-        return insertarYDevolverID(ConsultasSQL.INSERT_MODULO[0], datos);
-    }
-     */
+    
 }

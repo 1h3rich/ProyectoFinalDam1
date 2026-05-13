@@ -7,7 +7,9 @@ package servicios.Ficheros;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import java.io.*;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.TreeSet;
 import java.util.logging.*;
 
@@ -68,12 +70,12 @@ public class GestionFicheros {
      * @param direccion
      * @param lista 
      */
-    public static void saveToBinario(String direccion, TreeSet<?> lista) {
+    public static void saveToBinario(String direccion, Collection<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
 
         if (Validadores.comprobarFicheroEscritura(direccion, ".dat")) {
             ObjectOutputStream oos = null;
             try {
-                oos = new ObjectOutputStream(new FileOutputStream(direccion + ".dat", true));
+                oos = new ObjectOutputStream(new FileOutputStream(direccion + ".dat", false)); //Cambio el true por false, ya que si no al añadir un objeto se borran los anteriores
                 oos.writeObject(lista);
 
             } catch (IOException e) {

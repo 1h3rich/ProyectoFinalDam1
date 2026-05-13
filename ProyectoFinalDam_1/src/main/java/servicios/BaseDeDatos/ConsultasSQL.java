@@ -219,4 +219,15 @@ public class ConsultasSQL {
         "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula ORDER BY codigo_matricula ASC",
         "codigo_matricula", "codigo_modulo", "repeticion", "calificacion_primera", "calificacion_segunda"
     };
+    
+    
+    
+    // =========================================================
+    // ===================  CONSULTAS EXTRA ====================
+    // =========================================================
+    
+    public static final String[] ASIGNAR_MODULO_A_CICLO = {
+        "UPDATE modulo SET codigo_ciclo = ? WHERE codigo = ?",
+    };
+
 }

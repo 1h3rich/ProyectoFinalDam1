@@ -8,6 +8,7 @@ import Utils.*;
 import javax.swing.JOptionPane;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.util.HashMap;
+import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
  *
@@ -400,7 +401,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             String.valueOf(segundaCalificacion)
         };
 
-        boolean insertado = GestionBaseDeDatos.insertarLineaMatricula(datos);
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[0],datos);
 
         if (insertado) {
             JOptionPane.showMessageDialog(this, "Módulo añadido correctamente a la matrícula.");

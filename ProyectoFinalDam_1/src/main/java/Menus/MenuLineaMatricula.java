@@ -1,6 +1,7 @@
 package menus;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import excepciones.YaImportadoException;
 import java.io.FileWriter;
@@ -148,7 +149,7 @@ public class MenuLineaMatricula {
                     codMatricula, codModulo, repeticion, calPrimera, calSegunda
             );
             lineasSesion.add(lineaMatricula);
-            GestionBaseDeDatos.listaLineaMatricula.add(lineaMatricula);
+            SesionDatos.getLineas().add(lineaMatricula);
 
             System.out.println("[OK] Línea de matrícula insertada correctamente.");
 
@@ -364,14 +365,14 @@ public class MenuLineaMatricula {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (LineaMatricula lm : GestionBaseDeDatos.listaLineaMatricula) {
+            for (LineaMatricula lm : SesionDatos.getLineas()) {
                 String linea = lm.toCSV();
                 if (usarDosPuntos) {
                     linea = linea.replace(";", ":");
                 }
                 pw.println(linea);
             }
-            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaLineaMatricula.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getLineas().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -382,8 +383,8 @@ public class MenuLineaMatricula {
      * Exporta todas las líneas de matrícula a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.saveToBinario(Config.ficheroLineaMatricula, GestionBaseDeDatos.listaLineaMatricula);
-        System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaLineaMatricula.size()
+        GestionFicheros.saveToBinario(Config.ficheroLineaMatricula, SesionDatos.getLineas());
+        System.out.println("[OK] Exportados " + SesionDatos.getLineas().size()
                 + " registros a: " + Config.ficheroLineaMatricula + ".dat");
     }
 
@@ -392,10 +393,10 @@ public class MenuLineaMatricula {
      */
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroLineaMatricula + ".json", false))) {
-            for (LineaMatricula lm : GestionBaseDeDatos.listaLineaMatricula) {
+            for (LineaMatricula lm : SesionDatos.getLineas()) {
                 pw.println(lm.toJSON());
             }
-            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaLineaMatricula.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getLineas().size()
                     + " registros a: " + Config.ficheroLineaMatricula + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -455,14 +456,14 @@ public class MenuLineaMatricula {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        GestionBaseDeDatos.listaLineaMatricula.clear();
+        SesionDatos.getLineas().clear();
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                GestionBaseDeDatos.listaLineaMatricula.add(LineaMatricula.obtenerLineas(linea));
+                SesionDatos.getLineas().add(LineaMatricula.obtenerLineas(linea));
             }
         }
         importadoTxt = true;
-        System.out.println("[OK] Importadas " + GestionBaseDeDatos.listaLineaMatricula.size()
+        System.out.println("[OK] Importadas " + SesionDatos.getLineas().size()
                 + " líneas de matrícula desde TXT.");
     }
 
@@ -480,16 +481,16 @@ public class MenuLineaMatricula {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-        GestionBaseDeDatos.listaLineaMatricula.clear();
+        SesionDatos.getLineas().clear();
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                GestionBaseDeDatos.listaLineaMatricula.add(
+                SesionDatos.getLineas().add(
                         LineaMatricula.obtenerLineas(linea.replace(":", ";"))
                 );
             }
         }
         importadoCsv = true;
-        System.out.println("[OK] Importadas " + GestionBaseDeDatos.listaLineaMatricula.size()
+        System.out.println("[OK] Importadas " + SesionDatos.getLineas().size()
                 + " líneas de matrícula desde CSV.");
     }
 
@@ -551,7 +552,7 @@ public class MenuLineaMatricula {
      * Carga todas las líneas de matrícula de la base de datos en la lista en memoria.
      */
     private static void cargarLineasDesdeBD() {
-        GestionBaseDeDatos.listaLineaMatricula.clear();
+        SesionDatos.getLineas().clear();
         GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true
         );

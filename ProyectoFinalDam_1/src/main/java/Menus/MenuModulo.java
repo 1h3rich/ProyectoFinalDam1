@@ -1,6 +1,7 @@
 package menus;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import excepciones.YaImportadoException;
 import java.io.FileWriter;
@@ -134,7 +135,7 @@ public class MenuModulo {
 
             Modulo modulo = new Modulo(codigoCiclo, nombre, curso, creditosEcts, horas);
             modulosSesion.add(modulo);
-            GestionBaseDeDatos.listaModulo.add(modulo);
+            SesionDatos.getModulos().add(modulo);
 
             System.out.println("[OK] Módulo insertado correctamente.");
 
@@ -327,14 +328,14 @@ public class MenuModulo {
 
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Modulo modulo : GestionBaseDeDatos.listaModulo) {
+            for (Modulo modulo : SesionDatos.getModulos()) {
                 String linea = modulo.toCSV();
                 if (usarDosPuntos) {
                     linea = linea.replace(";", ":");
                 }
                 pw.println(linea);
             }
-            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaModulo.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getModulos().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -342,17 +343,17 @@ public class MenuModulo {
     }
 
     private static void exportarABinario() {
-        GestionFicheros.saveToBinario(Config.ficheroModulo, GestionBaseDeDatos.listaModulo);
-        System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaModulo.size()
+        GestionFicheros.saveToBinario(Config.ficheroModulo,SesionDatos.getModulos());
+        System.out.println("[OK] Exportados " + SesionDatos.getModulos().size()
                 + " registros a: " + Config.ficheroModulo + ".dat");
     }
 
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroModulo + ".json", false))) {
-            for (Modulo modulo : GestionBaseDeDatos.listaModulo) {
+            for (Modulo modulo : SesionDatos.getModulos()) {
                 pw.println(modulo.toJSON());
             }
-            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaModulo.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getModulos().size()
                     + " registros a: " + Config.ficheroModulo + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -406,14 +407,14 @@ public class MenuModulo {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        GestionBaseDeDatos.listaModulo.clear();
+        SesionDatos.getModulos().clear();
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                GestionBaseDeDatos.listaModulo.add(Modulo.obtenerLineas(linea));
+                SesionDatos.getModulos().add(Modulo.obtenerLineas(linea));
             }
         }
         importadoTxt = true;
-        System.out.println("[OK] Importados " + GestionBaseDeDatos.listaModulo.size() + " módulos desde TXT.");
+        System.out.println("[OK] Importados " + SesionDatos.getModulos().size() + " módulos desde TXT.");
     }
 
     private static void importarDesdeCsv() throws YaImportadoException {
@@ -425,14 +426,14 @@ public class MenuModulo {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-        GestionBaseDeDatos.listaModulo.clear();
+        SesionDatos.getModulos().clear();
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                GestionBaseDeDatos.listaModulo.add(Modulo.obtenerLineas(linea.replace(":", ";")));
+                SesionDatos.getModulos().add(Modulo.obtenerLineas(linea.replace(":", ";")));
             }
         }
         importadoCsv = true;
-        System.out.println("[OK] Importados " + GestionBaseDeDatos.listaModulo.size() + " módulos desde CSV.");
+        System.out.println("[OK] Importados " + SesionDatos.getModulos().size() + " módulos desde CSV.");
     }
 
     private static void importarDesdeBinario() throws YaImportadoException {
@@ -483,7 +484,7 @@ public class MenuModulo {
      * Carga todos los módulos de la base de datos en la lista en memoria.
      */
     private static void cargarModulosDesdeBD() {
-        GestionBaseDeDatos.listaModulo.clear();
+        SesionDatos.getModulos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
     }
 

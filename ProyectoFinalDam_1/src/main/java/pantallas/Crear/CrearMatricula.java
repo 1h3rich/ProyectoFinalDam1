@@ -6,6 +6,7 @@ package pantallas.Crear;
 
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
@@ -308,7 +309,7 @@ public class CrearMatricula extends javax.swing.JFrame {
             String.valueOf(codigoAlumno)
         };
 
-        int idMatricula = GestionBaseDeDatos.insertarMatriculaYDevolverID(datos);
+        int idMatricula = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[0],datos);
 
         if (idMatricula != -1) {
             JOptionPane.showMessageDialog(this, "Matrícula creada correctamente con ID: " + idMatricula);

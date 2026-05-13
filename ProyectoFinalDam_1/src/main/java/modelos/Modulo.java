@@ -1,6 +1,7 @@
 package modelos;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import interfaces.interpolaridadDeDatos;
@@ -8,7 +9,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import servicios.BaseDeDatos.ConsultasEspecificas;
+
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
@@ -46,7 +47,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
                   int creditos_ects,
                   int horas) {
 
-        int codigoGenerado = ConsultasEspecificas.leerCodigoBDD("modulo");
+        int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("modulo") + 1;
 
         if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
             throw new IllegalArgumentException("El código generado del módulo debe ser mayor que 0");
@@ -261,16 +262,16 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        GestionBaseDeDatos.listaModulo.clear();
+        SesionDatos.getModulos().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Modulo modulo = Modulo.obtenerLineas(linea);
-                GestionBaseDeDatos.listaModulo.add(modulo);
+                SesionDatos.getModulos().add(modulo);
             }
         }
 
-        for (Modulo modulo : GestionBaseDeDatos.listaModulo) {
+        for (Modulo modulo : SesionDatos.getModulos()) {
             System.out.println(modulo);
         }
     }
@@ -303,7 +304,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     @Override
     public void saveToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroModulo, GestionBaseDeDatos.listaModulo);
+            GestionFicheros.saveToBinario(Config.ficheroModulo, SesionDatos.getModulos());
         }
     }
 
@@ -323,7 +324,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".json")) {
 
-            GestionBaseDeDatos.listaModulo.clear();
+            SesionDatos.getModulos().clear();
 
             ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroModulo);
 
@@ -333,11 +334,11 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
 
                     modulo.validarObjeto();
 
-                    GestionBaseDeDatos.listaModulo.add(modulo);
+                    SesionDatos.getModulos().add(modulo);
                 }
             }
 
-            for (Modulo modulo : GestionBaseDeDatos.listaModulo) {
+            for (Modulo modulo : SesionDatos.getModulos()) {
                 System.out.println(modulo);
             }
         }

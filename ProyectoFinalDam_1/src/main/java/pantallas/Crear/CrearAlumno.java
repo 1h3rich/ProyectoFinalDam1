@@ -6,6 +6,7 @@ package pantallas.Crear;
 
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
@@ -286,7 +287,7 @@ public class CrearAlumno extends javax.swing.JFrame {
 
         GestionBaseDeDatos.iniciarTransaccion();
 
-        int idAlumno = GestionBaseDeDatos.insertarAlumnoYDevolverID(datos);
+        int idAlumno = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],datos);
 
         System.out.println("ID alumno generado: " + idAlumno);
 

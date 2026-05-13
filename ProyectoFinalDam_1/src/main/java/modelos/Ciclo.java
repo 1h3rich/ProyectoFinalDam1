@@ -1,6 +1,7 @@
 package modelos;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import interfaces.interpolaridadDeDatos;
@@ -8,14 +9,14 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import servicios.BaseDeDatos.ConsultasEspecificas;
+
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
 public class Ciclo implements interpolaridadDeDatos, Serializable {
 
-    private static final long serialVersionUID = 1L;
+   
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
@@ -47,7 +48,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
                  int horas,
                  int añoCurriculum) {
 
-        int codigoGenerado = ConsultasEspecificas.leerCodigoBDD("ciclo");
+        int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("ciclo") + 1;
 
         if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
             throw new IllegalArgumentException("El código generado del ciclo debe ser mayor que 0");
@@ -262,16 +263,16 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        GestionBaseDeDatos.listaCiclo.clear();
+        SesionDatos.getCiclos().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = Ciclo.obtenerLineas(linea);
-                GestionBaseDeDatos.listaCiclo.add(ciclo);
+               SesionDatos.getCiclos().add(ciclo);
             }
         }
 
-        for (Ciclo ciclo : GestionBaseDeDatos.listaCiclo) {
+        for (Ciclo ciclo : SesionDatos.getCiclos()) {
             System.out.println(ciclo);
         }
     }
@@ -284,7 +285,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     public ArrayList<Modulo> obtenerModulosDelCiclo() {
         ArrayList<Modulo> modulosDelCiclo = new ArrayList<>();
 
-        for (Modulo modulo : GestionBaseDeDatos.listaModulo) {
+        for (Modulo modulo : SesionDatos.getModulos()) {
             if (modulo.getCodigo_ciclo() == this.codigo) {
                 modulosDelCiclo.add(modulo);
             }
@@ -321,7 +322,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     @Override
     public void saveToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroCiclo, GestionBaseDeDatos.listaCiclo);
+            GestionFicheros.saveToBinario(Config.ficheroCiclo, SesionDatos.getCiclos());
         }
     }
 
@@ -341,7 +342,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
 
-            GestionBaseDeDatos.listaCiclo.clear();
+           SesionDatos.getCiclos().clear();
 
             ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroCiclo);
 
@@ -351,11 +352,11 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
 
                     ciclo.validarObjeto();
 
-                    GestionBaseDeDatos.listaCiclo.add(ciclo);
+                    SesionDatos.getCiclos().add(ciclo);
                 }
             }
 
-            for (Ciclo ciclo : GestionBaseDeDatos.listaCiclo) {
+            for (Ciclo ciclo : SesionDatos.getCiclos()) {
                 System.out.println(ciclo);
             }
         }

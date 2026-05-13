@@ -10,6 +10,7 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import javax.swing.JTextField;
+import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
  *
@@ -401,7 +402,7 @@ public class CrearCiclo extends javax.swing.JFrame {
 
         GestionBaseDeDatos.iniciarTransaccion();
 
-        int idCiclo = GestionBaseDeDatos.insertarCicloYDevolverID(datos);
+        int idCiclo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_CICLO[0],datos);
 
         if (idCiclo != -1) {
             JOptionPane.showMessageDialog(this, "Ciclo creado correctamente con ID: " + idCiclo);

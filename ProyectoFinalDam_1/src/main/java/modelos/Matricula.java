@@ -1,6 +1,7 @@
 package modelos;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import interfaces.interpolaridadDeDatos;
@@ -8,7 +9,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import servicios.BaseDeDatos.ConsultasEspecificas;
+
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
@@ -44,8 +45,9 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
                      double importe) {
 
         validarDatos(codigo_alumno, año_academico, estado, importe);
-
-        this.codigo = ConsultasEspecificas.leerCodigoBDD("matricula");
+         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("matricula") + 1;
+        
+        this.codigo = codigoGenerado;
         this.codigo_alumno = codigo_alumno;
         this.año_academico = año_academico;
         this.estado = estado;
@@ -203,16 +205,16 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        GestionBaseDeDatos.listaMatricula.clear();
+        SesionDatos.getMatriculas().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Matricula matricula = Matricula.obtenerLineas(linea);
-                GestionBaseDeDatos.listaMatricula.add(matricula);
+                SesionDatos.getMatriculas().add(matricula);
             }
         }
 
-        for (Matricula matricula : GestionBaseDeDatos.listaMatricula) {
+        for (Matricula matricula : SesionDatos.getMatriculas()) {
             System.out.println(matricula);
         }
     }
@@ -245,7 +247,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void saveToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroMatricula, GestionBaseDeDatos.listaMatricula);
+            GestionFicheros.saveToBinario(Config.ficheroMatricula, SesionDatos.getMatriculas());
         }
     }
 
@@ -265,7 +267,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".json")) {
 
-            GestionBaseDeDatos.listaMatricula.clear();
+            SesionDatos.getMatriculas().clear();
 
             ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroMatricula);
 
@@ -275,11 +277,11 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
 
                     matricula.validarObjeto();
 
-                    GestionBaseDeDatos.listaMatricula.add(matricula);
+                    SesionDatos.getMatriculas().add(matricula);
                 }
             }
 
-            for (Matricula matricula : GestionBaseDeDatos.listaMatricula) {
+            for (Matricula matricula : SesionDatos.getMatriculas()) {
                 System.out.println(matricula);
             }
         }

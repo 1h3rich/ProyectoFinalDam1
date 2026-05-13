@@ -6,6 +6,7 @@ package pantallas.Crear;
 
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
@@ -343,7 +344,7 @@ public class CrearModulo extends javax.swing.JFrame {
             String.valueOf(codigoCiclo)
         };
 
-        int idModulo = GestionBaseDeDatos.insertarModuloYDevolverID(datos);
+        int idModulo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MODULO[0],datos);
 
         if (idModulo != -1) {
             JOptionPane.showMessageDialog(this, "Módulo creado correctamente con ID: " + idModulo);

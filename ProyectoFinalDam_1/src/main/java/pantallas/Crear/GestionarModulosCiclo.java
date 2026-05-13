@@ -90,7 +90,9 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
 
         int idModulo = mapaModulos.get(nombreModulo);
 
-        boolean asignado = GestionBaseDeDatos.asignarModuloACiclo(idModulo, idCiclo);
+        
+        String entradas [] = {String.valueOf(idCiclo),String.valueOf(idModulo)}; // Le paso las entradas a un String 
+        boolean asignado = GestionBaseDeDatos.actualizarFila(ConsultasSQL.ASIGNAR_MODULO_A_CICLO, entradas);
 
         if (asignado) {
             JOptionPane.showMessageDialog(this, "Módulo añadido al ciclo.");

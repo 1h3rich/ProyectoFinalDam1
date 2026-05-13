@@ -1,6 +1,7 @@
 package menus;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import excepciones.YaImportadoException;
 import java.io.FileWriter;
@@ -153,7 +154,7 @@ public class MenuAlumno {
 
             Alumno alumno = new Alumno(nombre, fechaNacimiento, domicilio, telefono, correo);
             alumnosSesion.add(alumno);
-            GestionBaseDeDatos.listaAlumno.add(alumno);
+            SesionDatos.getAlumnos().add(alumno);
 
             System.out.println("[OK] Alumno insertado correctamente.");
 
@@ -367,14 +368,14 @@ public class MenuAlumno {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
+            for (Alumno alumno : SesionDatos.getAlumnos()) {
                 String linea = alumno.toCSV();
                 if (usarDosPuntos) {
                     linea = linea.replace(";", ":");
                 }
                 pw.println(linea);
             }
-            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaAlumno.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getAlumnos().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -385,8 +386,8 @@ public class MenuAlumno {
      * Exporta todos los alumnos a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.saveToBinario(Config.ficheroAlumno, GestionBaseDeDatos.listaAlumno);
-        System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaAlumno.size()
+        GestionFicheros.saveToBinario(Config.ficheroAlumno, SesionDatos.getAlumnos());
+        System.out.println("[OK] Exportados " + SesionDatos.getAlumnos().size()
                 + " registros a: " + Config.ficheroAlumno + ".dat");
     }
 
@@ -395,10 +396,10 @@ public class MenuAlumno {
      */
     private static void exportarAJson() {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroAlumno + ".json", false))) {
-            for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
+            for (Alumno alumno : SesionDatos.getAlumnos()) {
                 pw.println(alumno.toJSON());
             }
-            System.out.println("[OK] Exportados " + GestionBaseDeDatos.listaAlumno.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getAlumnos().size()
                     + " registros a: " + Config.ficheroAlumno + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -465,14 +466,14 @@ public class MenuAlumno {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        GestionBaseDeDatos.listaAlumno.clear();
+        SesionDatos.getAlumnos().clear();
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                GestionBaseDeDatos.listaAlumno.add(Alumno.obtenerLineas(linea));
+                SesionDatos.getAlumnos().add(Alumno.obtenerLineas(linea));
             }
         }
         importadoTxt = true;
-        System.out.println("[OK] Importados " + GestionBaseDeDatos.listaAlumno.size() + " alumnos desde TXT.");
+        System.out.println("[OK] Importados " + SesionDatos.getAlumnos().size() + " alumnos desde TXT.");
     }
 
     /**
@@ -490,15 +491,15 @@ public class MenuAlumno {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-        GestionBaseDeDatos.listaAlumno.clear();
+        SesionDatos.getAlumnos().clear();
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 String lineaNormalizada = linea.replace(":", ";");
-                GestionBaseDeDatos.listaAlumno.add(Alumno.obtenerLineas(lineaNormalizada));
+                SesionDatos.getAlumnos().add(Alumno.obtenerLineas(lineaNormalizada));
             }
         }
         importadoCsv = true;
-        System.out.println("[OK] Importados " + GestionBaseDeDatos.listaAlumno.size() + " alumnos desde CSV.");
+        System.out.println("[OK] Importados " + SesionDatos.getAlumnos().size() + " alumnos desde CSV.");
     }
 
     /**
@@ -567,7 +568,7 @@ public class MenuAlumno {
      * Carga todos los alumnos de la base de datos en la lista en memoria.
      */
     private static void cargarAlumnosDesdeBD() {
-        GestionBaseDeDatos.listaAlumno.clear();
+        SesionDatos.getAlumnos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
     }
 

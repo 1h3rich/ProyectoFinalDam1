@@ -34,7 +34,7 @@ public class ConsultasEjercicios {
         """
         SELECT 
             m.nombre,
-            c.horas,
+            m.horas,
             c.denominacion AS denominacion_ciclo,
             COUNT(a.codigo) AS numero_alumnos_matriculados
         FROM modulo m
@@ -176,18 +176,13 @@ public class ConsultasEjercicios {
      */
     public static final String[] datosConsulta8 = {
         """
-        SELECT 
-            m.nombre AS nombre_modulo,
-            c.denominacion AS denominacion_ciclo,
-            COUNT(a.codigo) AS numero_alumnos_repetidores
+        SELECT m.nombre, c.denominacion, COUNT(lm.codigo_matricula) AS num_repetidores
         FROM modulo m
-        JOIN ciclo c ON c.codigo = m.codigo_ciclo
-        JOIN linea_matricula lm ON lm.codigo_modulo = m.codigo
-        JOIN matricula ma ON ma.codigo = lm.codigo_matricula
-        JOIN alumno a ON a.codigo = ma.codigo_alumno
-        WHERE lm.repeticion > 0
-        GROUP BY m.codigo, m.nombre, c.denominacion
-        HAVING COUNT(a.codigo) > 3
+        JOIN ciclo c ON m.codigo_ciclo = c.codigo
+        JOIN linea_matricula lm ON m.codigo = lm.codigo_modulo
+        WHERE lm.repeticion > 1
+        GROUP BY m.codigo, c.denominacion
+        HAVING COUNT(lm.codigo_matricula) > 3;
         """
     };
 

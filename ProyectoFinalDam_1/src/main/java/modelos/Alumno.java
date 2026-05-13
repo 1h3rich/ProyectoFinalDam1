@@ -1,19 +1,20 @@
 package modelos;
 
 import Config.Config;
+import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import servicios.BaseDeDatos.ConsultasEspecificas;
+
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
 public class Alumno implements interpolaridadDeDatos, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
@@ -45,7 +46,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
                   String telefono,
                   String correo) {
 
-        int codigoGenerado = ConsultasEspecificas.leerCodigoBDD("alumno");
+        int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("alumno") + 1;
 
         if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
             throw new IllegalArgumentException("El código generado del alumno debe ser mayor que 0");
@@ -255,16 +256,16 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        GestionBaseDeDatos.listaAlumno.clear();
+        SesionDatos.getAlumnos().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Alumno alumno = Alumno.obtenerLineas(linea);
-                GestionBaseDeDatos.listaAlumno.add(alumno);
+                SesionDatos.getAlumnos().add(alumno);
             }
         }
 
-        for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
+        for (Alumno alumno : SesionDatos.getAlumnos()) {
             System.out.println(alumno);
         }
     }
@@ -277,7 +278,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
         ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();
 
-        for (Matricula matricula : GestionBaseDeDatos.listaMatricula) {
+        for (Matricula matricula : SesionDatos.getMatriculas()) {
             if (matricula.getCodigo_alumno() == this.codigo) {
                 matriculasDelAlumno.add(matricula);
             }
@@ -314,7 +315,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     @Override
     public void saveToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroAlumno, GestionBaseDeDatos.listaAlumno);
+            GestionFicheros.saveToBinario(Config.ficheroAlumno, SesionDatos.getAlumnos());
         }
     }
 
@@ -334,7 +335,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".json")) {
 
-            GestionBaseDeDatos.listaAlumno.clear();
+            SesionDatos.getAlumnos().clear();
 
             ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroAlumno);
 
@@ -344,11 +345,11 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
 
                     alumno.validarObjeto();
 
-                    GestionBaseDeDatos.listaAlumno.add(alumno);
+                    SesionDatos.getAlumnos().add(alumno);
                 }
             }
 
-            for (Alumno alumno : GestionBaseDeDatos.listaAlumno) {
+            for (Alumno alumno : SesionDatos.getAlumnos()) {
                 System.out.println(alumno);
             }
         }
