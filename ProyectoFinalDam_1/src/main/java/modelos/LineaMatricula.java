@@ -129,6 +129,8 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     public double getCal_segunda() {
         return cal_segunda;
     }
+    
+        
 
     // =========================================================
     // ===================== SETTERS ===========================

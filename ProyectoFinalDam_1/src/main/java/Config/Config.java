@@ -14,17 +14,17 @@ import java.util.Map;
 public class Config {
     // SQL
 
-    public static String urlSQL = "jdbc:mysql://127.0.0.1:3306/centro_formacion";
-    public static String nombreUsuarioSQL = "root";
+    public static final String urlSQL = "jdbc:mysql://127.0.0.1:3306/centro_formacion";
+    public static final String nombreUsuarioSQL = "root";
     public static String[] contraseñaSQL = {"alumno", "root"};
     //public static  Map<String,String > contraseñaSQL = new HashMap<>();
    
 
     // Ficheros
-    public static String ficheroAlumno = "alumno";
-    public static String ficheroCiclo = "ciclo";
-    public static String ficheroModulo = "modulo";
-    public static String ficheroLineaMatricula = "linea_matricula";
-    public static String ficheroMatricula = "matricula";
+    public static final String ficheroAlumno = "alumno";
+    public static final String ficheroCiclo = "ciclo";
+    public static final String ficheroModulo = "modulo";
+    public static final String ficheroLineaMatricula = "linea_matricula";
+    public static final String ficheroMatricula = "matricula";
 
 }

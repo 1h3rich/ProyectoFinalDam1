@@ -1,0 +1,227 @@
+package Control;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.TreeSet;
+import modelos.Alumno;
+import modelos.Ciclo;
+import modelos.LineaMatricula;
+import modelos.Matricula;
+import modelos.Modulo;
+
+/**
+ * Clase contenedora que registra todos los objetos insertados durante
+ * la ejecución actual de la aplicación.
+ *
+ * Usa tres tipos de colecciones distintos para cumplir el requisito
+ * del proyecto de utilizar al menos tres colecciones diferentes:
+ *
+ *   - TreeSet   → listaCiclos y listaModulos
+ *                 Mantiene los elementos ordenados automáticamente
+ *                 (los modelos implementan Comparable).
+ *
+ *   - ArrayList → listaLineasMatricula
+ *                 Permite duplicados y acceso por índice.
+ *
+ *   - LinkedHashMap → registroSesion
+ *                 Clave = "Alumno#3", valor = resumen en texto.
+ *                 Mantiene el orden de inserción y permite buscar por clave.
+ *                 Se usa para la pantalla "Ver datos insertados en sesión".
+ *
+ * Los datos se pierden al cerrar la aplicación (son de sesión).
+ * No persisten entre ejecuciones.
+ *
+ * Uso desde una pantalla Swing de creación:
+ *   int id = GestionBaseDeDatos.insertarYDevolverID(sql, params);
+ *   if (id != -1) {
+ *       Alumno a = new Alumno(id, nombre, fecha, domicilio, telefono, correo);
+ *       SesionDatos.registrarAlumno(a);
+ *   }
+ *
+ * @author 1DAM
+ */
+public class SesionDatos {
+
+    // =========================================================
+    // ======= COLECCIÓN 1: TreeSet (orden natural) ============
+    // =========================================================
+
+    /**
+     * Ciclos insertados en esta sesión. TreeSet los ordena por denominación
+     * gracias al Comparable implementado en Ciclo.
+     */
+    private static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
+
+    /**
+     * Módulos insertados en esta sesión. TreeSet los ordena por nombre.
+     */
+    private static final TreeSet<Modulo> listaModulos = new TreeSet<>();
+
+    /**
+     * Alumnos insertados en esta sesión. TreeSet los ordena por nombre.
+     */
+    private static final TreeSet<Alumno> listaAlumnos = new TreeSet<>();
+
+    /**
+     * Matrículas insertadas en esta sesión. TreeSet las ordena por estado.
+     */
+    private static final TreeSet<Matricula> listaMatriculas = new TreeSet<>();
+
+    // =========================================================
+    // ======= COLECCIÓN 2: ArrayList (acceso por índice) ======
+    // =========================================================
+
+    /**
+     * Líneas de matrícula insertadas en esta sesión.
+     * Usa ArrayList porque línea_matrícula tiene clave compuesta y no
+     * puede implementar un Comparable sencillo.
+     */
+    private static final ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
+
+    // =========================================================
+    // ======= COLECCIÓN 3: LinkedHashMap (orden inserción) ====
+    // =========================================================
+
+    /**
+     * Registro cronológico de todo lo insertado en esta sesión.
+     *
+     * Clave  → "NombreClase#id"  (ej: "Alumno#3", "Ciclo#1")
+     * Valor  → descripción legible del objeto insertado
+     *
+     * LinkedHashMap preserva el orden de inserción, lo que permite
+     * mostrar al usuario los registros en el orden en que los creó.
+     */
+    private static final LinkedHashMap<String, String> registroSesion = new LinkedHashMap<>();
+
+    // =========================================================
+    // ============= MÉTODOS DE REGISTRO =======================
+    // =========================================================
+
+    /**
+     * Registra un alumno insertado en esta sesión.
+     *
+     * @param alumno Alumno recién insertado con su ID ya asignado por la BD.
+     */
+    public static void registrarAlumno(Alumno alumno) {
+        listaAlumnos.add(alumno);
+        registroSesion.put(
+                "Alumno#" + alumno.getCodigo(),
+                "ALUMNO  | ID: " + alumno.getCodigo()
+                + " | Nombre: " + alumno.getNombre()
+                + " | Correo: " + alumno.getCorreo()
+        );
+    }
+
+    /**
+     * Registra un ciclo insertado en esta sesión.
+     *
+     * @param ciclo Ciclo recién insertado con su ID ya asignado por la BD.
+     */
+    public static void registrarCiclo(Ciclo ciclo) {
+        listaCiclos.add(ciclo);
+        registroSesion.put(
+                "Ciclo#" + ciclo.getCodigo(),
+                "CICLO   | ID: " + ciclo.getCodigo()
+                + " | Denominación: " + ciclo.getDenominacion()
+                + " | Nivel: " + ciclo.getNivel()
+        );
+    }
+
+    /**
+     * Registra un módulo insertado en esta sesión.
+     *
+     * @param modulo Módulo recién insertado con su ID ya asignado por la BD.
+     */
+    public static void registrarModulo(Modulo modulo) {
+        listaModulos.add(modulo);
+        registroSesion.put(
+                "Modulo#" + modulo.getCodigo(),
+                "MÓDULO  | ID: " + modulo.getCodigo()
+                + " | Nombre: " + modulo.getNombre()
+                + " | CicloID: " + modulo.getCodigo_ciclo()
+        );
+    }
+
+    /**
+     * Registra una matrícula insertada en esta sesión.
+     *
+     * @param matricula Matrícula recién insertada con su ID ya asignado por la BD.
+     */
+    public static void registrarMatricula(Matricula matricula) {
+        listaMatriculas.add(matricula);
+        registroSesion.put(
+                "Matricula#" + matricula.getCodigo(),
+                "MATRÍCLA| ID: " + matricula.getCodigo()
+                + " | AlumnoID: " + matricula.getCodigo_alumno()
+                + " | Estado: " + matricula.getEstado()
+                + " | Importe: " + matricula.getImporte()
+        );
+    }
+
+    /**
+     * Registra una línea de matrícula insertada en esta sesión.
+     *
+     * @param linea LineaMatricula recién insertada.
+     */
+    public static void registrarLineaMatricula(LineaMatricula linea) {
+        listaLineasMatricula.add(linea);
+        registroSesion.put(
+                "Linea#" + linea.getCod_matricula()+ "_" + linea.getCod_modulo(),
+                "LÍNEA   | MatrículaID: " + linea.getCod_matricula()
+                + " | MóduloID: " + linea.getCod_modulo()
+                + " | Repetición: " + linea.getRepeticion()
+        );
+    }
+
+    // =========================================================
+    // ================ GETTERS DE LISTAS ======================
+    // =========================================================
+
+    /** @return Copia de la lista de alumnos insertados en sesión. */
+    public static TreeSet<Alumno> getAlumnos()          { return new TreeSet<>(listaAlumnos); }
+
+    /** @return Copia de la lista de ciclos insertados en sesión. */
+    public static TreeSet<Ciclo> getCiclos()            { return new TreeSet<>(listaCiclos); }
+
+    /** @return Copia de la lista de módulos insertados en sesión. */
+    public static TreeSet<Modulo> getModulos()          { return new TreeSet<>(listaModulos); }
+
+    /** @return Copia de la lista de matrículas insertadas en sesión. */
+    public static TreeSet<Matricula> getMatriculas()    { return new TreeSet<>(listaMatriculas); }
+
+    /** @return Copia de la lista de líneas de matrícula insertadas en sesión. */
+    public static ArrayList<LineaMatricula> getLineas() { return new ArrayList<>(listaLineasMatricula); }
+
+    // =========================================================
+    // ============= VER REGISTRO COMPLETO =====================
+    // =========================================================
+
+    /**
+     * Devuelve el registro completo de todo lo insertado en esta sesión,
+     * en orden cronológico (LinkedHashMap preserva el orden de inserción).
+     *
+     * @return LinkedHashMap con clave "TipoClase#id" y valor descripción legible.
+     */
+    public static LinkedHashMap<String, String> getRegistroCompleto() {
+        return new LinkedHashMap<>(registroSesion);
+    }
+
+    /**
+     * Devuelve el número total de registros insertados en esta sesión
+     * sumando todos los tipos.
+     *
+     * @return Total de inserciones realizadas desde que arrancó la aplicación.
+     */
+    public static int getTotalInsertados() {
+        return registroSesion.size();
+    }
+
+    /**
+     * Indica si no se ha insertado nada en esta sesión.
+     *
+     * @return true si el registro de sesión está vacío.
+     */
+    public static boolean isEmpty() {
+        return registroSesion.isEmpty();
+    }
+}
