@@ -793,7 +793,7 @@ public class GestionBaseDeDatos {
      * eran copias idénticas que solo diferían en el SQL y los params. Ahora
      * basta con pasar la SQL de ConsultasSQL y el array de valores.
      *
-     * JDBC/MySQL convierte automáticamente los String al tipo de columna
+     * MySQL convierte automáticamente los String al tipo de columna
      * correcto (igual que ya hace insertarDatos con pst.setString).
      *
      * Ejemplo de uso desde CrearAlumno: int id =
