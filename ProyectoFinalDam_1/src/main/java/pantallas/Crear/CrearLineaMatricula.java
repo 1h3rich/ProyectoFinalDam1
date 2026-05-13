@@ -51,19 +51,15 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         jButtonGuardar.setText("Añadir módulo");
 
-        jLabelInfoCodigoMatricula.setText("Ciclo:");
-        jLabelInfoCodigoModulo.setText("Módulo:");
+        jLabelInfoCiclo.setText("Ciclo:");
 
         jComboBoxCiclos.removeAllItems();
-        jComboBoxModulos.removeAllItems();
 
         jComboBoxCiclos.addActionListener(e -> cicloSeleccionado());
-        jComboBoxModulos.addActionListener(e -> moduloSeleccionado());
     }
 
     private void cargarCiclos() {
         jComboBoxCiclos.removeAllItems();
-        jComboBoxModulos.removeAllItems();
 
         mapaCiclos.clear();
         mapaModulos.clear();
@@ -91,13 +87,11 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             idCicloSeleccionado = -1;
             idModuloSeleccionado = -1;
 
-            jComboBoxModulos.removeAllItems();
             return;
         }
 
         idCicloSeleccionado = mapaCiclos.get(textoSeleccionado);
 
-        cargarModulosPorCiclo(idCicloSeleccionado);
     }
 
     private void cancelar() {
@@ -114,37 +108,6 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         }
     }
 
-    private void cargarModulosPorCiclo(int idCiclo) {
-        jComboBoxModulos.removeAllItems();
-        mapaModulos.clear();
-
-        jComboBoxModulos.addItem("Selecciona un módulo");
-
-        for (ItemCombo modulo : GestionBaseDeDatos.obtenerModulosPorCicloCombo(idCiclo)) {
-            String texto = modulo.toString();
-
-            jComboBoxModulos.addItem(texto);
-            mapaModulos.put(texto, modulo.getId());
-        }
-    }
-
-    private void moduloSeleccionado() {
-        Object seleccionado = jComboBoxModulos.getSelectedItem();
-
-        if (seleccionado == null) {
-            return;
-        }
-
-        String textoSeleccionado = seleccionado.toString();
-
-        if (!mapaModulos.containsKey(textoSeleccionado)) {
-            idModuloSeleccionado = -1;
-            return;
-        }
-
-        idModuloSeleccionado = mapaModulos.get(textoSeleccionado);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -154,23 +117,22 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelInfoCodigoModulo = new javax.swing.JLabel();
         jLabelInfoRepeticion = new javax.swing.JLabel();
         jButtonGuardar = new javax.swing.JButton();
         jLabelInfoPrimeraCalificacion = new javax.swing.JLabel();
         jTextFieldSegundaCalificacion = new javax.swing.JTextField();
         jTextFieldPrimerCalificacion = new javax.swing.JTextField();
         jLabelInfoSegundaCalificacion = new javax.swing.JLabel();
-        jTextFieldRepeticion = new javax.swing.JTextField();
         jLabelTitulo = new javax.swing.JLabel();
-        jLabelInfoCodigoMatricula = new javax.swing.JLabel();
+        jLabelInfoCiclo = new javax.swing.JLabel();
         jButtonCancelar = new javax.swing.JButton();
         jComboBoxCiclos = new javax.swing.JComboBox<>();
-        jComboBoxModulos = new javax.swing.JComboBox<>();
+        jTextFieldRepeticion = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabelInfoCodigoModulo.setText("Codigo-Modulo");
 
         jLabelInfoRepeticion.setText("Repeticion:");
 
@@ -189,18 +151,11 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         jLabelInfoSegundaCalificacion.setText("2ª Calificacion:");
 
-        jTextFieldRepeticion.setPreferredSize(new java.awt.Dimension(64, 128));
-        jTextFieldRepeticion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldRepeticionActionPerformed(evt);
-            }
-        });
-
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("RELLENAR LINEA-MATRICULA");
 
-        jLabelInfoCodigoMatricula.setText("Codigo-Matricula:");
+        jLabelInfoCiclo.setText("Ciclo:");
 
         jButtonCancelar.setText("Cancelar");
         jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -211,40 +166,73 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         jComboBoxCiclos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBoxModulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jTextFieldRepeticion.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 452, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 427, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(518, 518, 518)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelInfoPrimeraCalificacion)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabelInfoCodigoMatricula)
-                                .addComponent(jLabelInfoCodigoModulo, javax.swing.GroupLayout.Alignment.TRAILING))
-                            .addComponent(jLabelInfoRepeticion)
-                            .addComponent(jLabelInfoSegundaCalificacion))
-                        .addGap(72, 72, 72))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonCancelar)
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldRepeticion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldPrimerCalificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldSegundaCalificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonGuardar)
-                    .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxModulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(498, Short.MAX_VALUE))
+                .addGap(515, 515, 515)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelInfoCiclo)
+                    .addComponent(jLabelInfoRepeticion)
+                    .addComponent(jLabelInfoSegundaCalificacion)
+                    .addComponent(jLabelInfoPrimeraCalificacion))
+                .addGap(90, 90, 90)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBoxCiclos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldPrimerCalificacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldSegundaCalificacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldRepeticion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(10, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(394, Short.MAX_VALUE)
-                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(380, 380, 380))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(380, 380, 380))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonCancelar)
+                        .addGap(29, 29, 29)
+                        .addComponent(jButtonGuardar)
+                        .addGap(526, 526, 526))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,30 +240,29 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(70, 70, 70)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfoCodigoMatricula)
-                    .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfoCodigoModulo)
-                    .addComponent(jComboBoxModulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfoRepeticion)
-                    .addComponent(jTextFieldRepeticion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfoPrimeraCalificacion)
-                    .addComponent(jTextFieldPrimerCalificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldSegundaCalificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoSegundaCalificacion))
-                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfoCiclo)
+                            .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfoRepeticion)
+                            .addComponent(jTextFieldRepeticion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfoPrimeraCalificacion)
+                            .addComponent(jTextFieldPrimerCalificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfoSegundaCalificacion)
+                            .addComponent(jTextFieldSegundaCalificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
 
         pack();
@@ -284,10 +271,6 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         crearLinea();
     }//GEN-LAST:event_jButtonGuardarActionPerformed
-
-    private void jTextFieldRepeticionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRepeticionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldRepeticionActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         int opcion = JOptionPane.showConfirmDialog(
@@ -432,7 +415,6 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         idModuloSeleccionado = -1;
 
         jComboBoxCiclos.setSelectedIndex(0);
-        jComboBoxModulos.removeAllItems();
 
         jTextFieldRepeticion.setText("");
         jTextFieldPrimerCalificacion.setText("");
@@ -444,13 +426,14 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JComboBox<String> jComboBoxCiclos;
-    private javax.swing.JComboBox<String> jComboBoxModulos;
-    private javax.swing.JLabel jLabelInfoCodigoMatricula;
-    private javax.swing.JLabel jLabelInfoCodigoModulo;
+    private javax.swing.JLabel jLabelInfoCiclo;
     private javax.swing.JLabel jLabelInfoPrimeraCalificacion;
     private javax.swing.JLabel jLabelInfoRepeticion;
     private javax.swing.JLabel jLabelInfoSegundaCalificacion;
     private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldPrimerCalificacion;
     private javax.swing.JTextField jTextFieldRepeticion;
     private javax.swing.JTextField jTextFieldSegundaCalificacion;
