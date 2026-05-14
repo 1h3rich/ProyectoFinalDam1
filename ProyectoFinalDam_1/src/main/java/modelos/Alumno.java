@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
-public class Alumno implements interpolaridadDeDatos, Serializable {
+public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<Alumno> {
 
     
 
@@ -230,6 +230,18 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
     // ===================== MÉTODOS ===========================
     // =========================================================
 
+    /**
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * @param otro
+     * @return
+     */
+    @Override
+    public int compareTo(Alumno otro){
+        return Integer.compare(this.codigo, otro.codigo);
+    }
+    
+    
+    
     public static Alumno obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);
 
@@ -412,4 +424,6 @@ public class Alumno implements interpolaridadDeDatos, Serializable {
                 + ", correo='" + correo + '\''
                 + '}';
     }
+
+   
 }

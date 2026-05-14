@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
-public class Matricula implements interpolaridadDeDatos, Serializable {
+public class Matricula implements interpolaridadDeDatos, Serializable, Comparable<Matricula> {
 
     
 
@@ -180,6 +180,17 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
+    
+    
+    /**
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * @param otro
+     * @return
+     */
+    @Override
+    public int compareTo(Matricula otro){
+        return Integer.compare(this.codigo, otro.codigo);
+    }
 
     public static Matricula obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
-public class Modulo implements interpolaridadDeDatos, Serializable {
+public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<Modulo> {
 
 
 
@@ -25,7 +25,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     private int codigo_ciclo;
     private String nombre;
     private String curso;
-    private int creditos_ects;
+    private double creditos_ects;
     private int horas;
 
     // =========================================================
@@ -44,7 +44,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     public Modulo(int codigo_ciclo,
                   String nombre,
                   String curso,
-                  int creditos_ects,
+                  double creditos_ects,
                   int horas) {
 
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("modulo") + 1;
@@ -83,7 +83,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
                   int codigo_ciclo,
                   String nombre,
                   String curso,
-                  int creditos_ects,
+                  double creditos_ects,
                   int horas) {
 
         if (!Validadores.validarCodigoPositivo(codigo)) {
@@ -111,7 +111,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
         this.codigo_ciclo = Integer.parseInt(cadena[1]) ;
         this.nombre = cadena[2] ;
         this.curso = cadena[3];
-        this.creditos_ects = Integer.parseInt(cadena[4]);
+        this.creditos_ects = Double.parseDouble(cadena[4]);
         this.horas = Integer.parseInt(cadena[5]);
        
     }
@@ -135,7 +135,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
         return curso;
     }
 
-    public int getCreditos_ects() {
+    public double getCreditos_ects() {
         return creditos_ects;
     }
 
@@ -194,7 +194,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     private static void validarDatos(int codigo_ciclo,
                                      String nombre,
                                      String curso,
-                                     int creditos_ects,
+                                     double creditos_ects,
                                      int horas) {
 
         if (!Validadores.validarCodigoPositivo(codigo_ciclo)) {
@@ -235,6 +235,18 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
+    
+    
+    
+    /**
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * @param otro
+     * @return
+     */
+    @Override
+    public int compareTo(Modulo otro){
+        return Integer.compare(this.codigo, otro.codigo);
+    }
 
     public static Modulo obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);

@@ -41,23 +41,24 @@ public class SesionDatos {
     // ======= COLECCIÓN 1: TreeSet (orden natural) ============
     // =========================================================
     /**
-     * Ciclos insertados en la base de datos. TreeSet los ordena por denominación
-     * gracias al Comparable implementado en Ciclo.
+     * Ciclos insertados en la base de datos.
      */
     private static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
+    
+    
 
     /**
-     * Módulos insertados en la base de datos. TreeSet los ordena por nombre.
+     * Módulos insertados en la base de datos. 
      */
     private static final TreeSet<Modulo> listaModulos = new TreeSet<>();
 
     /**
-     * Alumnos insertados en la base de datos. TreeSet los ordena por nombre.
+     * Alumnos insertados en la base de datos. 
      */
     private static final TreeSet<Alumno> listaAlumnos = new TreeSet<>();
 
     /**
-     * Matrículas insertadas en la base de datos. TreeSet las ordena por estado.
+     * Matrículas insertadas en la base de datos. 
      */
     private static final TreeSet<Matricula> listaMatriculas = new TreeSet<>();
 

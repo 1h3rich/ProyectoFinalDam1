@@ -219,6 +219,10 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
+   
+    
+    
+    
     public static LineaMatricula obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);
 

@@ -1,8 +1,4 @@
-{"codigo":6,"nombre":"Ana","fechaNacimiento":{"year":2000,"month":2,"day":2},"correo":"ana.garcia@email.com"}
-{"codigo":8,"nombre":"Elena","fechaNacimiento":{"year":2000,"month":4,"day":4},"correo":"elena.sanz@email.com"}
-{"codigo":5,"nombre":"Juan","fechaNacimiento":{"year":2000,"month":1,"day":1},"correo":"juan.perez@email.com"}
-{"codigo":4,"nombre":"Lucía","fechaNacimiento":{"year":2004,"month":5,"day":17},"domicilio":"Calle Sur 22, Valencia","telefono":"600777888","correo":"lucia.martinez@email.com"}
-{"codigo":7,"nombre":"Luis","fechaNacimiento":{"year":2000,"month":3,"day":3},"correo":"luis.rodri@email.com"}
-{"codigo":3,"nombre":"Miguel","fechaNacimiento":{"year":2001,"month":11,"day":2},"domicilio":"Calle Norte 8, Madrid","telefono":"600555666","correo":"miguel.navarro@email.com"}
-{"codigo":2,"nombre":"Paula","fechaNacimiento":{"year":2002,"month":8,"day":21},"domicilio":"Avenida Central 5, Zaragoza","telefono":"600333444","correo":"paula.lopez@email.com"}
 {"codigo":1,"nombre":"Ricardo","fechaNacimiento":{"year":2003,"month":3,"day":13},"domicilio":"Calle Mayor 12, Zaragoza","telefono":"600111222","correo":"ricardo.garcia@email.com"}
+{"codigo":2,"nombre":"Paula","fechaNacimiento":{"year":2002,"month":8,"day":21},"domicilio":"Avenida Central 5, Zaragoza","telefono":"600333444","correo":"paula.lopez@email.com"}
+{"codigo":3,"nombre":"Miguel","fechaNacimiento":{"year":2001,"month":11,"day":2},"domicilio":"Calle Norte 8, Madrid","telefono":"600555666","correo":"miguel.navarro@email.com"}
+{"codigo":4,"nombre":"Lucía","fechaNacimiento":{"year":2004,"month":5,"day":17},"domicilio":"Calle Sur 22, Valencia","telefono":"600777888","correo":"lucia.martinez@email.com"}

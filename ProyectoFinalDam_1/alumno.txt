@@ -1,8 +1,4 @@
-6;Ana;2000-02-02;null;null;ana.garcia@email.com
-8;Elena;2000-04-04;null;null;elena.sanz@email.com
-5;Juan;2000-01-01;null;null;juan.perez@email.com
-4;Lucía;2004-05-17;Calle Sur 22, Valencia;600777888;lucia.martinez@email.com
-7;Luis;2000-03-03;null;null;luis.rodri@email.com
-3;Miguel;2001-11-02;Calle Norte 8, Madrid;600555666;miguel.navarro@email.com
-2;Paula;2002-08-21;Avenida Central 5, Zaragoza;600333444;paula.lopez@email.com
 1;Ricardo;2003-03-13;Calle Mayor 12, Zaragoza;600111222;ricardo.garcia@email.com
+2;Paula;2002-08-21;Avenida Central 5, Zaragoza;600333444;paula.lopez@email.com
+3;Miguel;2001-11-02;Calle Norte 8, Madrid;600555666;miguel.navarro@email.com
+4;Lucía;2004-05-17;Calle Sur 22, Valencia;600777888;lucia.martinez@email.com

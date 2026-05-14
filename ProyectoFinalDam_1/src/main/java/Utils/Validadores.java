@@ -92,7 +92,7 @@ public class Validadores {
         return curso != null && !curso.trim().isEmpty();
     }
 
-    public static boolean validarCreditosEcts(int creditos_ects) {
+    public static boolean validarCreditosEcts(double creditos_ects) {
         return creditos_ects > 0;
     }
 

@@ -14,7 +14,7 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
-public class Ciclo implements interpolaridadDeDatos, Serializable {
+public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<Ciclo>{
 
    
 
@@ -236,6 +236,17 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
+    
+    
+    /**
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * @param otro
+     * @return
+     */
+    @Override
+    public int compareTo(Ciclo otro){
+        return Integer.compare(this.codigo, otro.codigo);
+    }
 
     public static Ciclo obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);
