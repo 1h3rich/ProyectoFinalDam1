@@ -27,7 +27,6 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         initComponents();
 
         this.idCiclo = idCiclo;
-        
 
         configurarVentana();
         cargarModulosExistentes();
@@ -41,7 +40,21 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
 
     private void configurarVentana() {
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestionar módulos del ciclo");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                cancelar();
+            }
+        });
+
+        jButtonAñadirModuloExistente.setText("Añadir módulo existente");
+        jButtonCrearModulo.setText("Crear nuevo módulo");
+        jButtonFinalizar.setText("Finalizar");
+        jButtonCancelar.setText("Cancelar");
 
         jButtonFinalizar.setEnabled(false);
     }
@@ -52,7 +65,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
 
         jComboBoxModulos.addItem("Selecciona un módulo");
 
-        for (ItemCombo modulo : GestionBaseDeDatos.obtenerModulosDisponiblesCombo()) {
+        for (ItemCombo modulo : GestionBaseDeDatos.obtenerModulosPorCicloCombo(idCiclo)) {
             String nombreModulo = modulo.toString();
 
             jComboBoxModulos.addItem(nombreModulo);
@@ -90,9 +103,15 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
 
         int idModulo = mapaModulos.get(nombreModulo);
 
-        
-        String entradas [] = {String.valueOf(idCiclo),String.valueOf(idModulo)}; // Le paso las entradas a un String 
-        boolean asignado = GestionBaseDeDatos.actualizarFila(ConsultasSQL.ASIGNAR_MODULO_A_CICLO, entradas);
+        String[] entradas = {
+            String.valueOf(idCiclo),
+            String.valueOf(idModulo)
+        };
+
+        boolean asignado = GestionBaseDeDatos.actualizarFila(
+                GestionBaseDeDatos.ASIGNAR_MODULO_A_CICLO,
+                entradas
+        );
 
         if (asignado) {
             JOptionPane.showMessageDialog(this, "Módulo añadido al ciclo.");
@@ -218,7 +237,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
                         .addGap(418, 418, 418)
                         .addComponent(jLabelContador))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(390, 390, 390)
+                        .addGap(386, 386, 386)
                         .addComponent(jComboBoxModulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

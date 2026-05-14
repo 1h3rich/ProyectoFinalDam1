@@ -16,7 +16,6 @@ public class GestionBaseDeDatos {
     private static Connection con;
     private static boolean transaccionActiva = false;
 
-    
     /*
     public static TreeSet<Alumno> listaAlumno = new TreeSet<>();
     public static TreeSet<Matricula> listaMatricula = new TreeSet<>();
@@ -28,7 +27,7 @@ public class GestionBaseDeDatos {
     public static ArrayList<String> datosInsertados = new ArrayList<>(); //Aqui no estoy seguro si es String o podria Ser de Tipo Object, si se puede elegir pondria Object
 
     
-    */
+     */
     /**
      * Conecta Java con la base de datos MySQL.
      *
@@ -92,7 +91,7 @@ public class GestionBaseDeDatos {
             (SELECT COUNT(*) FROM alumno) AS total_alumnos
         """;
 
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
             if (rs.next()) {
                 System.out.println("Base Java: " + rs.getString("base_actual"));
@@ -168,7 +167,7 @@ public class GestionBaseDeDatos {
 
             String sql = datosConsulta[posicionSQL];
 
-            try ( PreparedStatement pst = con.prepareStatement(sql)) {
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
 
                 if (entradas != null) {
                     for (int i = 0; i < entradas.length; i++) {
@@ -176,7 +175,7 @@ public class GestionBaseDeDatos {
                     }
                 }
 
-                try ( ResultSet rs = pst.executeQuery()) {
+                try (ResultSet rs = pst.executeQuery()) {
 
                     while (rs.next()) {
 
@@ -242,7 +241,7 @@ public class GestionBaseDeDatos {
      */
     public static void insertarDatos(String[] datosInsertar, String[] entradas) {
         ejecutarActualizacion(datosInsertar[1], entradas, "Filas insertadas");
-        guardarObjeto(datosInsertar[0], entradas,false); //Aqui deberiamos de guardar los datos de la sesion que hemos introducido
+        guardarObjeto(datosInsertar[0], entradas, false); //Aqui deberiamos de guardar los datos de la sesion que hemos introducido
     }
 
     /**
@@ -274,7 +273,7 @@ public class GestionBaseDeDatos {
         try {
             comprobarConexion();
 
-            try ( PreparedStatement pst = con.prepareStatement(sql)) {
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
 
                 if (entradas != null) {
                     for (int i = 0; i < entradas.length; i++) {
@@ -338,7 +337,7 @@ public class GestionBaseDeDatos {
             }
         }
 
-        try ( PreparedStatement pst = con.prepareStatement(sql)) {
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
 
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
@@ -346,7 +345,7 @@ public class GestionBaseDeDatos {
                 }
             }
 
-            try ( ResultSet rs = pst.executeQuery()) {
+            try (ResultSet rs = pst.executeQuery()) {
 
                 ResultSetMetaData meta = rs.getMetaData();
                 int numColumnas = meta.getColumnCount();
@@ -377,6 +376,211 @@ public class GestionBaseDeDatos {
         return modelo;
     }
 
+    public static DefaultTableModel obtenerAlumnoPorTelefonoYCorreo(String telefono, String correo) {
+        comprobarConexion();
+
+        String sql = """
+        SELECT 
+            codigo AS 'Código',
+            nombre AS 'Nombre',
+            fecha_nacimiento AS 'Fecha nacimiento',
+            domicilio AS 'Domicilio',
+            telefono AS 'Teléfono',
+            correo AS 'Correo'
+        FROM alumno
+        WHERE telefono = ? AND correo = ?
+        ORDER BY nombre ASC
+    """;
+
+        String[] params = {
+            telefono,
+            correo
+        };
+
+        return obtenerTableModel(sql, params);
+    }
+
+    public static boolean eliminarAlumnoCompletoPorCodigoTelefonoCorreo(
+            int codigoAlumno,
+            String telefono,
+            String correo
+    ) {
+        comprobarConexion();
+
+        String comprobarAlumno = """
+        SELECT COUNT(*) 
+        FROM alumno 
+        WHERE codigo = ? AND telefono = ? AND correo = ?
+    """;
+
+        String eliminarLineasMatricula = """
+        DELETE FROM linea_matricula
+        WHERE codigo_matricula IN (
+            SELECT codigo 
+            FROM matricula 
+            WHERE codigo_alumno = ?
+        )
+    """;
+
+        String eliminarMatriculas = """
+        DELETE FROM matricula 
+        WHERE codigo_alumno = ?
+    """;
+
+        String eliminarAlumno = """
+        DELETE FROM alumno 
+        WHERE codigo = ? AND telefono = ? AND correo = ?
+    """;
+
+        try {
+            con.setAutoCommit(false);
+
+            try (PreparedStatement pst = con.prepareStatement(comprobarAlumno)) {
+                pst.setInt(1, codigoAlumno);
+                pst.setString(2, telefono);
+                pst.setString(3, correo);
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        con.rollback();
+                        con.setAutoCommit(true);
+                        return false;
+                    }
+                }
+            }
+
+            try (PreparedStatement pst = con.prepareStatement(eliminarLineasMatricula)) {
+                pst.setInt(1, codigoAlumno);
+                pst.executeUpdate();
+            }
+
+            try (PreparedStatement pst = con.prepareStatement(eliminarMatriculas)) {
+                pst.setInt(1, codigoAlumno);
+                pst.executeUpdate();
+            }
+
+            int filasAlumno;
+
+            try (PreparedStatement pst = con.prepareStatement(eliminarAlumno)) {
+                pst.setInt(1, codigoAlumno);
+                pst.setString(2, telefono);
+                pst.setString(3, correo);
+
+                filasAlumno = pst.executeUpdate();
+            }
+
+            if (filasAlumno > 0) {
+                con.commit();
+                con.setAutoCommit(true);
+                return true;
+            } else {
+                con.rollback();
+                con.setAutoCommit(true);
+                return false;
+            }
+
+        } catch (SQLException e) {
+            try {
+                if (con != null) {
+                    con.rollback();
+                    con.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            System.out.println("Error al eliminar alumno completo: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean eliminarCicloCompletoPorCodigo(int codigoCiclo) {
+        comprobarConexion();
+
+        String eliminarLineasMatricula = """
+        DELETE FROM linea_matricula
+        WHERE codigo_modulo IN (
+            SELECT codigo
+            FROM modulo
+            WHERE codigo_ciclo = ?
+        )
+    """;
+
+        String eliminarModulos = """
+        DELETE FROM modulo
+        WHERE codigo_ciclo = ?
+    """;
+
+        String eliminarCiclo = """
+        DELETE FROM ciclo
+        WHERE codigo = ?
+    """;
+
+        try {
+            con.setAutoCommit(false);
+
+            try (PreparedStatement pst = con.prepareStatement(eliminarLineasMatricula)) {
+                pst.setInt(1, codigoCiclo);
+                pst.executeUpdate();
+            }
+
+            try (PreparedStatement pst = con.prepareStatement(eliminarModulos)) {
+                pst.setInt(1, codigoCiclo);
+                pst.executeUpdate();
+            }
+
+            int filasCiclo;
+
+            try (PreparedStatement pst = con.prepareStatement(eliminarCiclo)) {
+                pst.setInt(1, codigoCiclo);
+                filasCiclo = pst.executeUpdate();
+            }
+
+            if (filasCiclo > 0) {
+                con.commit();
+                con.setAutoCommit(true);
+                return true;
+            } else {
+                con.rollback();
+                con.setAutoCommit(true);
+                return false;
+            }
+
+        } catch (SQLException e) {
+            try {
+                if (con != null) {
+                    con.rollback();
+                    con.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            System.out.println("Error al eliminar ciclo completo: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static DefaultTableModel obtenerTodosLosCiclos() {
+        comprobarConexion();
+
+        String sql = """
+        SELECT 
+            codigo AS 'Código',
+            denominacion AS 'Denominación',
+            familia_profesional AS 'Familia profesional',
+            nivel AS 'Nivel',
+            horas AS 'Horas',
+            anio_curricular AS 'Año curricular'
+        FROM ciclo
+        ORDER BY denominacion ASC
+    """;
+
+        return obtenerTableModel(sql, new String[0]);
+    }
+
     /**
      * Comprueba si existe un registro con el código dado en la tabla indicada.
      * Se usa para validar claves foráneas ANTES de insertar o actualizar.
@@ -395,9 +599,9 @@ public class GestionBaseDeDatos {
         String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
         try {
             comprobarConexion();
-            try ( PreparedStatement pst = con.prepareStatement(sql)) {
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
                 pst.setInt(1, codigo);
-                try ( ResultSet rs = pst.executeQuery()) {
+                try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         return rs.getInt(1) > 0;
                     }
@@ -409,15 +613,13 @@ public class GestionBaseDeDatos {
         return false;
     }
 
-   
-    
     public static int obtenerUltimoCodigo(String tabla) {
         String sql = "SELECT MAX(codigo) FROM " + tabla;
 
         try {
             comprobarConexion();
 
-            try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
+            try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -431,7 +633,6 @@ public class GestionBaseDeDatos {
         return 0;
     }
 
-    
     public static void iniciarTransaccion() {
         try {
             comprobarConexion();
@@ -475,8 +676,6 @@ public class GestionBaseDeDatos {
         }
     }
 
-    
-  
     public static void cargarDenominacionesCiclosEnComboBox(javax.swing.JComboBox<String> comboBox) {
         comprobarConexion();
 
@@ -484,7 +683,7 @@ public class GestionBaseDeDatos {
 
         comboBox.removeAllItems();
 
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 comboBox.addItem(rs.getString("denominacion"));
@@ -494,7 +693,7 @@ public class GestionBaseDeDatos {
             System.out.println("Error al cargar ciclos en ComboBox: " + e.getMessage());
         }
     }
-    
+
     public static ArrayList<Utils.ItemCombo> obtenerCiclosCombo() {
         comprobarConexion();
 
@@ -502,7 +701,7 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT codigo, denominacion FROM ciclo ORDER BY denominacion ASC";
 
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 int id = rs.getInt("codigo");
@@ -525,11 +724,11 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo = ? ORDER BY nombre ASC";
 
-        try ( PreparedStatement pst = con.prepareStatement(sql)) {
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setInt(1, idCiclo);
 
-            try ( ResultSet rs = pst.executeQuery()) {
+            try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("codigo");
                     String nombre = rs.getString("nombre");
@@ -550,11 +749,11 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT COUNT(*) FROM modulo WHERE codigo_ciclo = ?";
 
-        try ( PreparedStatement pst = con.prepareStatement(sql)) {
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setInt(1, idCiclo);
 
-            try ( ResultSet rs = pst.executeQuery()) {
+            try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
@@ -574,7 +773,7 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo ORDER BY nombre ASC";
 
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 int id = rs.getInt("codigo");
@@ -604,7 +803,7 @@ public class GestionBaseDeDatos {
                     (SELECT COUNT(*) FROM ciclo) AS total_ciclos
                  """;
 
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
             if (rs.next()) {
                 System.out.println("Base usada por Java: " + rs.getString("base_actual"));
@@ -627,8 +826,8 @@ public class GestionBaseDeDatos {
      * eran copias idénticas que solo diferían en el SQL y los params. Ahora
      * basta con pasar la SQL de ConsultasSQL y el array de valores.
      *
-     * MySQL convierte automáticamente los String al tipo de columna
-     * correcto (igual que ya hace insertarDatos con pst.setString).
+     * MySQL convierte automáticamente los String al tipo de columna correcto
+     * (igual que ya hace insertarDatos con pst.setString).
      *
      * Ejemplo de uso desde CrearAlumno: int id =
      * GestionBaseDeDatos.insertarYDevolverID( ConsultasSQL.INSERT_ALUMNO[0],
@@ -642,13 +841,13 @@ public class GestionBaseDeDatos {
      */
     public static int insertarYDevolverID(String sql, String[] params) {
         comprobarConexion();
-        try ( PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < params.length; i++) {
                 pst.setString(i + 1, params[i]);
             }
             int filas = pst.executeUpdate();
             if (filas > 0) {
-                try ( ResultSet rs = pst.getGeneratedKeys()) {
+                try (ResultSet rs = pst.getGeneratedKeys()) {
                     if (rs.next()) {
                         return rs.getInt(1);
                     }
@@ -675,7 +874,7 @@ public class GestionBaseDeDatos {
      */
     public static boolean insertarSinID(String sql, String[] params) {
         comprobarConexion();
-        try ( PreparedStatement pst = con.prepareStatement(sql)) {
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
                 pst.setString(i + 1, params[i]);
             }
@@ -687,6 +886,9 @@ public class GestionBaseDeDatos {
         return false;
     }
 
+    public static final String[] ASIGNAR_MODULO_A_CICLO = {
+        "UPDATE modulo SET codigo_ciclo = ? WHERE codigo = ?"
+    };
     /**
      * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],
      * params)
@@ -722,5 +924,4 @@ public class GestionBaseDeDatos {
         return insertarYDevolverID(ConsultasSQL.INSERT_CICLO[0], datos);
     }
      */
-    
 }
