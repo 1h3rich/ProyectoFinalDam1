@@ -194,7 +194,7 @@ public class GestionBaseDeDatos {
                                 objeto[j] = rs.getString(datosConsulta[i]);
                             }
 
-                            guardarObjeto(datosConsulta[0], objeto);
+                            guardarObjeto(datosConsulta[0], objeto, true); //Guardamos el objeto en nuestra clase SesionDatos, en las listas, quizas no este bien guardado aqui
                         }
                     }
                 }
@@ -208,26 +208,26 @@ public class GestionBaseDeDatos {
     /**
      * Guarda el objeto en su lista correspondiente.
      */
-    private static void guardarObjeto(String tipoObjeto, String[] datos) {
+    private static void guardarObjeto(String tipoObjeto, String[] datos, boolean datosBaseDeDatos) {
         if (tipoObjeto.equalsIgnoreCase("Alumno")) {
             Alumno alumno = new Alumno(datos);
-            SesionDatos.registrarAlumno(alumno);
+            SesionDatos.registrarAlumno(alumno, datosBaseDeDatos);
 
         } else if (tipoObjeto.equalsIgnoreCase("Ciclo")) {
             Ciclo ciclo = new Ciclo(datos);
-            SesionDatos.registrarCiclo(ciclo);
+            SesionDatos.registrarCiclo(ciclo, datosBaseDeDatos);
 
         } else if (tipoObjeto.equalsIgnoreCase("LineaMatricula")) {
             LineaMatricula lineaMatricula = new LineaMatricula(datos);
-            SesionDatos.registrarLineaMatricula(lineaMatricula);
+            SesionDatos.registrarLineaMatricula(lineaMatricula, datosBaseDeDatos);
 
         } else if (tipoObjeto.equalsIgnoreCase("Matricula")) {
             Matricula matricula = new Matricula(datos);
-            SesionDatos.registrarMatricula(matricula);
+            SesionDatos.registrarMatricula(matricula, datosBaseDeDatos);
 
         } else if (tipoObjeto.equalsIgnoreCase("Modulo")) {
             Modulo modulo = new Modulo(datos);
-            SesionDatos.registrarModulo(modulo);
+            SesionDatos.registrarModulo(modulo, datosBaseDeDatos);
 
         } else {
             System.out.println("Tipo de objeto no reconocido: " + tipoObjeto);
@@ -241,8 +241,8 @@ public class GestionBaseDeDatos {
      * @param entradas
      */
     public static void insertarDatos(String[] datosInsertar, String[] entradas) {
-        ejecutarActualizacion(datosInsertar[0], entradas, "Filas insertadas");
-
+        ejecutarActualizacion(datosInsertar[1], entradas, "Filas insertadas");
+        guardarObjeto(datosInsertar[0], entradas,false); //Aqui deberiamos de guardar los datos de la sesion que hemos introducido
     }
 
     /**
@@ -409,6 +409,8 @@ public class GestionBaseDeDatos {
         return false;
     }
 
+   
+    
     public static int obtenerUltimoCodigo(String tabla) {
         String sql = "SELECT MAX(codigo) FROM " + tabla;
 
@@ -473,6 +475,8 @@ public class GestionBaseDeDatos {
         }
     }
 
+    
+  
     public static void cargarDenominacionesCiclosEnComboBox(javax.swing.JComboBox<String> comboBox) {
         comprobarConexion();
 
@@ -490,7 +494,7 @@ public class GestionBaseDeDatos {
             System.out.println("Error al cargar ciclos en ComboBox: " + e.getMessage());
         }
     }
-
+    
     public static ArrayList<Utils.ItemCombo> obtenerCiclosCombo() {
         comprobarConexion();
 
@@ -614,7 +618,6 @@ public class GestionBaseDeDatos {
             e.printStackTrace();
         }
     }
-    
 
     /**
      * Ejecuta cualquier INSERT con AUTO_INCREMENT y devuelve el ID generado.

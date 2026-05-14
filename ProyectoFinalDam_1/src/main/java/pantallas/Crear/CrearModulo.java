@@ -344,7 +344,7 @@ public class CrearModulo extends javax.swing.JFrame {
             String.valueOf(codigoCiclo)
         };
 
-        int idModulo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MODULO[0],datos);
+        int idModulo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MODULO[1],datos);
 
         if (idModulo != -1) {
             JOptionPane.showMessageDialog(this, "Módulo creado correctamente con ID: " + idModulo);

@@ -287,7 +287,7 @@ public class CrearAlumno extends javax.swing.JFrame {
 
         GestionBaseDeDatos.iniciarTransaccion();
 
-        int idAlumno = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],datos);
+        int idAlumno = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[1],datos);
 
         System.out.println("ID alumno generado: " + idAlumno);
 

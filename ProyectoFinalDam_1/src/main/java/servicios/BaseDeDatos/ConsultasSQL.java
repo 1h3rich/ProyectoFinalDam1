@@ -15,6 +15,7 @@ public class ConsultasSQL {
  
     /** Sentencia INSERT para la tabla alumno. */
     public static final String[] INSERT_ALUMNO = {
+        "Alumno",
         "INSERT INTO alumno (nombre, correo, domicilio, telefono, fecha_nacimiento) VALUES (?, ?, ?, ?, ?)"
     };
  
@@ -56,6 +57,7 @@ public class ConsultasSQL {
  
     /** Sentencia INSERT para la tabla ciclo. */
     public static final String[] INSERT_CICLO = {
+        "Ciclo",
         "INSERT INTO ciclo (denominacion, familia_profesional, nivel, horas, anio_curriculo) VALUES (?, ?, ?, ?, ?)"
     };
  
@@ -97,6 +99,7 @@ public class ConsultasSQL {
  
     /** Sentencia INSERT para la tabla modulo. */
     public static final String[] INSERT_MODULO = {
+         "Modulo",
         "INSERT INTO modulo (nombre, curso, creditos_ects, horas, codigo_ciclo) VALUES (?,?,?,?,?)"
     };
  
@@ -138,6 +141,7 @@ public class ConsultasSQL {
  
     /** Sentencia INSERT para la tabla matricula. */
     public static final String[] INSERT_MATRICULA = {
+        "Matricula",
         "INSERT INTO matricula (estado, importe, anio_academico, codigo_alumno) VALUES (?, ?, ?, ?)"
     };
  
@@ -179,6 +183,7 @@ public class ConsultasSQL {
  
     /** Sentencia INSERT para la tabla linea_matricula. */
     public static final String[] INSERT_LINEA_MATRICULA = {
+        "LineaMatricula",
         "INSERT INTO linea_matricula (codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda) VALUES (?, ?, ?, ?, ?)"
     };
  

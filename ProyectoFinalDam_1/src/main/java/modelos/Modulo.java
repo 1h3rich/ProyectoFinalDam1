@@ -15,7 +15,7 @@ import servicios.Ficheros.GestionFicheros;
 
 public class Modulo implements interpolaridadDeDatos, Serializable {
 
-    private static final long serialVersionUID = 1L;
+
 
     // =========================================================
     // ===================== ATRIBUTOS =========================

@@ -402,7 +402,7 @@ public class CrearCiclo extends javax.swing.JFrame {
 
         GestionBaseDeDatos.iniciarTransaccion();
 
-        int idCiclo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_CICLO[0],datos);
+        int idCiclo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_CICLO[1],datos);
 
         if (idCiclo != -1) {
             JOptionPane.showMessageDialog(this, "Ciclo creado correctamente con ID: " + idCiclo);

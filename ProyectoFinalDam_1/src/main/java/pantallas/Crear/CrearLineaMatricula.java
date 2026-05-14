@@ -384,7 +384,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             String.valueOf(segundaCalificacion)
         };
 
-        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[0],datos);
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1],datos);
 
         if (insertado) {
             JOptionPane.showMessageDialog(this, "Módulo añadido correctamente a la matrícula.");

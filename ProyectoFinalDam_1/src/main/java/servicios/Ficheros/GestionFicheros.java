@@ -68,7 +68,7 @@ public class GestionFicheros {
     /**
      * Guarda un objeto en binario, se le ha de pasar la lista con el tipo
      * @param direccion
-     * @param lista 
+     * @param lista Collection
      */
     public static void saveToBinario(String direccion, Collection<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
 

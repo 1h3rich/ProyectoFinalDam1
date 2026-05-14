@@ -309,7 +309,7 @@ public class CrearMatricula extends javax.swing.JFrame {
             String.valueOf(codigoAlumno)
         };
 
-        int idMatricula = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[0],datos);
+        int idMatricula = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[1],datos);
 
         if (idMatricula != -1) {
             JOptionPane.showMessageDialog(this, "Matrícula creada correctamente con ID: " + idMatricula);
