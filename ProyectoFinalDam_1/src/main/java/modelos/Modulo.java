@@ -281,30 +281,30 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     // =========================================================
 
     @Override
-    public void saveToCSV() {
+    public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".csv")) {
-            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroModulo, ".csv");
+            GestionFicheros.guardarTxtCsvJson(this.toCSV(), Config.ficheroModulo, ".csv");
         }
     }
 
     @Override
-    public void saveToJSON() {
+    public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".json")) {
-            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroModulo, ".json");
+            GestionFicheros.guardarTxtCsvJson(this.toJSON(), Config.ficheroModulo, ".json");
         }
     }
 
     @Override
-    public void saveToTXT() {
+    public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".txt")) {
-            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroModulo, ".txt");
+            GestionFicheros.guardarTxtCsvJson(this.toTXT(), Config.ficheroModulo, ".txt");
         }
     }
 
     @Override
-    public void saveToBinario() {
+    public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroModulo, SesionDatos.getModulos());
+            GestionFicheros.guardarToBinario(Config.ficheroModulo, SesionDatos.getModulos());
         }
     }
 
@@ -315,7 +315,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".csv")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroModulo, ".csv");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroModulo, ".csv");
             cargarDesdeLineas(temp);
         }
     }
@@ -326,11 +326,11 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
 
             SesionDatos.getModulos().clear();
 
-            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroModulo);
+            ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroModulo);
 
             for (String string : temp) {
                 if (!string.trim().isEmpty()) {
-                    Modulo modulo = (Modulo) GestionFicheros.fromJson(string, Modulo.class);
+                    Modulo modulo = (Modulo) GestionFicheros.toJson(string, Modulo.class);
 
                     modulo.validarObjeto();
 
@@ -347,7 +347,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".dat")) {
-            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroModulo);
+            ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroModulo);
             cargarDesdeLineas(temp);
         }
     }
@@ -355,7 +355,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroModulo, ".txt");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroModulo, ".txt");
             cargarDesdeLineas(temp);
         }
     }

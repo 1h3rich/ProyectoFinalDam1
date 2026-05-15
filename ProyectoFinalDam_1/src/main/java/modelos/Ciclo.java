@@ -299,30 +299,30 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     // =========================================================
 
     @Override
-    public void saveToCSV() {
+    public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".csv")) {
-            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroCiclo, ".csv");
+            GestionFicheros.guardarTxtCsvJson(this.toCSV(), Config.ficheroCiclo, ".csv");
         }
     }
 
     @Override
-    public void saveToJSON() {
+    public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".json")) {
-            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroCiclo, ".json");
+            GestionFicheros.guardarTxtCsvJson(this.toJSON(), Config.ficheroCiclo, ".json");
         }
     }
 
     @Override
-    public void saveToTXT() {
+    public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".txt")) {
-            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroCiclo, ".txt");
+            GestionFicheros.guardarTxtCsvJson(this.toTXT(), Config.ficheroCiclo, ".txt");
         }
     }
 
     @Override
-    public void saveToBinario() {
+    public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroCiclo, SesionDatos.getCiclos());
+            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.getCiclos());
         }
     }
 
@@ -333,7 +333,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroCiclo, ".csv");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".csv");
             cargarDesdeLineas(temp);
         }
     }
@@ -344,11 +344,11 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
 
            SesionDatos.getCiclos().clear();
 
-            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroCiclo);
+            ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroCiclo);
 
             for (String string : temp) {
                 if (!string.trim().isEmpty()) {
-                    Ciclo ciclo = (Ciclo) GestionFicheros.fromJson(string, Ciclo.class);
+                    Ciclo ciclo = (Ciclo) GestionFicheros.toJson(string, Ciclo.class);
 
                     ciclo.validarObjeto();
 
@@ -365,7 +365,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".dat")) {
-            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroCiclo);
+            ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroCiclo);
             cargarDesdeLineas(temp);
         }
     }
@@ -373,7 +373,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroCiclo, ".txt");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".txt");
             cargarDesdeLineas(temp);
         }
     }

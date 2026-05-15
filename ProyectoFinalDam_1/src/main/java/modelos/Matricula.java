@@ -224,30 +224,30 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     // =========================================================
 
     @Override
-    public void saveToCSV() {
+    public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".csv")) {
-            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroMatricula, ".csv");
+            GestionFicheros.guardarTxtCsvJson(this.toCSV(), Config.ficheroMatricula, ".csv");
         }
     }
 
     @Override
-    public void saveToJSON() {
+    public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".json")) {
-            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroMatricula, ".json");
+            GestionFicheros.guardarTxtCsvJson(this.toJSON(), Config.ficheroMatricula, ".json");
         }
     }
 
     @Override
-    public void saveToTXT() {
+    public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".txt")) {
-            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroMatricula, ".txt");
+            GestionFicheros.guardarTxtCsvJson(this.toTXT(), Config.ficheroMatricula, ".txt");
         }
     }
 
     @Override
-    public void saveToBinario() {
+    public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroMatricula, SesionDatos.getMatriculas());
+            GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.getMatriculas());
         }
     }
 
@@ -258,7 +258,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".csv")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroMatricula, ".csv");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".csv");
             cargarDesdeLineas(temp);
         }
     }
@@ -269,11 +269,11 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
 
             SesionDatos.getMatriculas().clear();
 
-            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroMatricula);
+            ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroMatricula);
 
             for (String string : temp) {
                 if (!string.trim().isEmpty()) {
-                    Matricula matricula = (Matricula) GestionFicheros.fromJson(string, Matricula.class);
+                    Matricula matricula = (Matricula) GestionFicheros.toJson(string, Matricula.class);
 
                     matricula.validarObjeto();
 
@@ -290,7 +290,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".dat")) {
-            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroMatricula);
+            ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroMatricula);
             cargarDesdeLineas(temp);
         }
     }
@@ -298,7 +298,7 @@ public class Matricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroMatricula, ".txt");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".txt");
             cargarDesdeLineas(temp);
         }
     }

@@ -343,7 +343,7 @@ public class MenuModulo {
     }
 
     private static void exportarABinario() {
-        GestionFicheros.saveToBinario(Config.ficheroModulo,SesionDatos.getModulos());
+        GestionFicheros.guardarToBinario(Config.ficheroModulo,SesionDatos.getModulos());
         System.out.println("[OK] Exportados " + SesionDatos.getModulos().size()
                 + " registros a: " + Config.ficheroModulo + ".dat");
     }
@@ -402,7 +402,7 @@ public class MenuModulo {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla modulo ya fue importada desde TXT en esta sesión.");
         }
-        ArrayList<String> lineas = GestionFicheros.loadTxtCsv(Config.ficheroModulo, ".txt");
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroModulo, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
@@ -421,7 +421,7 @@ public class MenuModulo {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla modulo ya fue importada desde CSV en esta sesión.");
         }
-        ArrayList<String> lineas = GestionFicheros.loadTxtCsv(Config.ficheroModulo, ".csv");
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroModulo, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
