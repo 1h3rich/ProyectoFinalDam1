@@ -35,7 +35,8 @@ public class GestionBaseDeDatos {
      */
     public static boolean vincularBDD() {
         try {
-            if (con != null && !con.isClosed()) {
+
+            if (con != null && !con.isClosed()) { //Este if puede estar mal o dar problemas de complejidad
                 con.close();
             }
 
@@ -54,6 +55,10 @@ public class GestionBaseDeDatos {
             System.out.println("URL Java: " + Config.urlSQL);
             System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
 
+            
+            realizarConsultaSQL(ConsultasSQL.CREACION_BASE_DE_DATOS, new String[0], false, false); //Creamos la base de datos si es que no existe
+            realizarConsultaSQL(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO, new String[0], false, false); //Insertamos datos por defecto para que salgan datos en las consultas
+
             diagnosticoConexion();
 
             return true;
@@ -70,6 +75,11 @@ public class GestionBaseDeDatos {
                 System.out.println("Conexion exitosa");
                 System.out.println("URL Java: " + Config.urlSQL);
                 System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
+                
+                
+                realizarConsultaSQL(ConsultasSQL.CREACION_BASE_DE_DATOS, new String[0], false, false); //Creamos la base de datos si es que no existe
+                realizarConsultaSQL(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO, new String[0], false, false); //Insertamos datos por defecto para que salgan datos en las consultas
+                
                 diagnosticoConexion();
                 return true;
 
@@ -91,7 +101,7 @@ public class GestionBaseDeDatos {
             (SELECT COUNT(*) FROM alumno) AS total_alumnos
         """;
 
-        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
 
             if (rs.next()) {
                 System.out.println("Base Java: " + rs.getString("base_actual"));
@@ -167,7 +177,7 @@ public class GestionBaseDeDatos {
 
             String sql = datosConsulta[posicionSQL];
 
-            try (PreparedStatement pst = con.prepareStatement(sql)) {
+            try ( PreparedStatement pst = con.prepareStatement(sql)) {
 
                 if (entradas != null) {
                     for (int i = 0; i < entradas.length; i++) {
@@ -175,7 +185,7 @@ public class GestionBaseDeDatos {
                     }
                 }
 
-                try (ResultSet rs = pst.executeQuery()) {
+                try ( ResultSet rs = pst.executeQuery()) {
 
                     while (rs.next()) {
 
@@ -273,7 +283,7 @@ public class GestionBaseDeDatos {
         try {
             comprobarConexion();
 
-            try (PreparedStatement pst = con.prepareStatement(sql)) {
+            try ( PreparedStatement pst = con.prepareStatement(sql)) {
 
                 if (entradas != null) {
                     for (int i = 0; i < entradas.length; i++) {
@@ -337,7 +347,7 @@ public class GestionBaseDeDatos {
             }
         }
 
-        try (PreparedStatement pst = con.prepareStatement(sql)) {
+        try ( PreparedStatement pst = con.prepareStatement(sql)) {
 
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
@@ -345,7 +355,7 @@ public class GestionBaseDeDatos {
                 }
             }
 
-            try (ResultSet rs = pst.executeQuery()) {
+            try ( ResultSet rs = pst.executeQuery()) {
 
                 ResultSetMetaData meta = rs.getMetaData();
                 int numColumnas = meta.getColumnCount();
@@ -435,12 +445,12 @@ public class GestionBaseDeDatos {
         try {
             con.setAutoCommit(false);
 
-            try (PreparedStatement pst = con.prepareStatement(comprobarAlumno)) {
+            try ( PreparedStatement pst = con.prepareStatement(comprobarAlumno)) {
                 pst.setInt(1, codigoAlumno);
                 pst.setString(2, telefono);
                 pst.setString(3, correo);
 
-                try (ResultSet rs = pst.executeQuery()) {
+                try ( ResultSet rs = pst.executeQuery()) {
                     if (rs.next() && rs.getInt(1) == 0) {
                         con.rollback();
                         con.setAutoCommit(true);
@@ -449,19 +459,19 @@ public class GestionBaseDeDatos {
                 }
             }
 
-            try (PreparedStatement pst = con.prepareStatement(eliminarLineasMatricula)) {
+            try ( PreparedStatement pst = con.prepareStatement(eliminarLineasMatricula)) {
                 pst.setInt(1, codigoAlumno);
                 pst.executeUpdate();
             }
 
-            try (PreparedStatement pst = con.prepareStatement(eliminarMatriculas)) {
+            try ( PreparedStatement pst = con.prepareStatement(eliminarMatriculas)) {
                 pst.setInt(1, codigoAlumno);
                 pst.executeUpdate();
             }
 
             int filasAlumno;
 
-            try (PreparedStatement pst = con.prepareStatement(eliminarAlumno)) {
+            try ( PreparedStatement pst = con.prepareStatement(eliminarAlumno)) {
                 pst.setInt(1, codigoAlumno);
                 pst.setString(2, telefono);
                 pst.setString(3, correo);
@@ -520,19 +530,19 @@ public class GestionBaseDeDatos {
         try {
             con.setAutoCommit(false);
 
-            try (PreparedStatement pst = con.prepareStatement(eliminarLineasMatricula)) {
+            try ( PreparedStatement pst = con.prepareStatement(eliminarLineasMatricula)) {
                 pst.setInt(1, codigoCiclo);
                 pst.executeUpdate();
             }
 
-            try (PreparedStatement pst = con.prepareStatement(eliminarModulos)) {
+            try ( PreparedStatement pst = con.prepareStatement(eliminarModulos)) {
                 pst.setInt(1, codigoCiclo);
                 pst.executeUpdate();
             }
 
             int filasCiclo;
 
-            try (PreparedStatement pst = con.prepareStatement(eliminarCiclo)) {
+            try ( PreparedStatement pst = con.prepareStatement(eliminarCiclo)) {
                 pst.setInt(1, codigoCiclo);
                 filasCiclo = pst.executeUpdate();
             }
@@ -599,9 +609,9 @@ public class GestionBaseDeDatos {
         String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
         try {
             comprobarConexion();
-            try (PreparedStatement pst = con.prepareStatement(sql)) {
+            try ( PreparedStatement pst = con.prepareStatement(sql)) {
                 pst.setInt(1, codigo);
-                try (ResultSet rs = pst.executeQuery()) {
+                try ( ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         return rs.getInt(1) > 0;
                     }
@@ -619,7 +629,7 @@ public class GestionBaseDeDatos {
         try {
             comprobarConexion();
 
-            try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+            try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
 
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -683,7 +693,7 @@ public class GestionBaseDeDatos {
 
         comboBox.removeAllItems();
 
-        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 comboBox.addItem(rs.getString("denominacion"));
@@ -701,7 +711,7 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT codigo, denominacion FROM ciclo ORDER BY denominacion ASC";
 
-        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 int id = rs.getInt("codigo");
@@ -724,11 +734,11 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo = ? ORDER BY nombre ASC";
 
-        try (PreparedStatement pst = con.prepareStatement(sql)) {
+        try ( PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setInt(1, idCiclo);
 
-            try (ResultSet rs = pst.executeQuery()) {
+            try ( ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("codigo");
                     String nombre = rs.getString("nombre");
@@ -749,11 +759,11 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT COUNT(*) FROM modulo WHERE codigo_ciclo = ?";
 
-        try (PreparedStatement pst = con.prepareStatement(sql)) {
+        try ( PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setInt(1, idCiclo);
 
-            try (ResultSet rs = pst.executeQuery()) {
+            try ( ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
@@ -773,7 +783,7 @@ public class GestionBaseDeDatos {
 
         String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo ORDER BY nombre ASC";
 
-        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 int id = rs.getInt("codigo");
@@ -803,7 +813,7 @@ public class GestionBaseDeDatos {
                     (SELECT COUNT(*) FROM ciclo) AS total_ciclos
                  """;
 
-        try (PreparedStatement pst = con.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
 
             if (rs.next()) {
                 System.out.println("Base usada por Java: " + rs.getString("base_actual"));
@@ -841,13 +851,13 @@ public class GestionBaseDeDatos {
      */
     public static int insertarYDevolverID(String sql, String[] params) {
         comprobarConexion();
-        try (PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try ( PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < params.length; i++) {
                 pst.setString(i + 1, params[i]);
             }
             int filas = pst.executeUpdate();
             if (filas > 0) {
-                try (ResultSet rs = pst.getGeneratedKeys()) {
+                try ( ResultSet rs = pst.getGeneratedKeys()) {
                     if (rs.next()) {
                         return rs.getInt(1);
                     }
@@ -874,7 +884,7 @@ public class GestionBaseDeDatos {
      */
     public static boolean insertarSinID(String sql, String[] params) {
         comprobarConexion();
-        try (PreparedStatement pst = con.prepareStatement(sql)) {
+        try ( PreparedStatement pst = con.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
                 pst.setString(i + 1, params[i]);
             }

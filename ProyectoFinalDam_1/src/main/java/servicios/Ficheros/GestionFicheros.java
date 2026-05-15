@@ -7,10 +7,7 @@ package servicios.Ficheros;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import java.io.*;
-import java.util.AbstractCollection;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.TreeSet;
 import java.util.logging.*;
 
 /**
@@ -49,12 +46,14 @@ public class GestionFicheros {
      * @param direccion appConfig.*;
      * @param terminacion .txt, .csv, .json
      */
-    public static void saveToTxtCsvJson(String cadena, String direccion, String terminacion) {
-        if (Validadores.comprobarFicheroEscritura(direccion, ".csv"));
-        if (Validadores.comprobarFicheroEscritura(direccion, ".txt"));
-        if (Validadores.comprobarFicheroEscritura(direccion, ".json"));
+    public static void guardarTxtCsvJson(String cadena, String direccion, String terminacion) {
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(direccion + terminacion, true))) {
+        if (!Validadores.comprobarFicheroEscritura(direccion, terminacion)) {
+            return;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(
+                new FileWriter(direccion + terminacion, true))) {
 
             bw.write(cadena);
             bw.newLine();
@@ -62,15 +61,15 @@ public class GestionFicheros {
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
     }
 
     /**
      * Guarda un objeto en binario, se le ha de pasar la lista con el tipo
+     *
      * @param direccion
      * @param lista 
      */
-    public static void saveToBinario(String direccion, Collection<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
+    public static void guardarToBinario(String direccion, ArrayList<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
 
         if (Validadores.comprobarFicheroEscritura(direccion, ".dat")) {
             ObjectOutputStream oos = null;
@@ -89,11 +88,12 @@ public class GestionFicheros {
     //=========================================================================================================================================================
     /**
      * Carga desde TXT o CSV pasandole la direccion y la extension
+     *
      * @param direccion
      * @param terminacion
      * @return
      */
-    public static ArrayList<String> loadTxtCsv(String direccion, String terminacion) {
+    public static ArrayList<String> leerTxtCsv(String direccion, String terminacion) {
         ArrayList<String> lineas = new ArrayList<>();
         try {
             if (Validadores.comprobarFicheroLectura(direccion, terminacion)) {
@@ -114,10 +114,11 @@ public class GestionFicheros {
 
     /**
      * Carga desde Json, solo hace falta pasarle la direccion
+     *
      * @param direccion
      * @return
      */
-    public static ArrayList<String> loadJson(String direccion) {
+    public static ArrayList<String> leerJson(String direccion) {
         ArrayList<String> lineas = new ArrayList<>();
         try {
             if (Validadores.comprobarFicheroLectura(direccion, ".json")) {
@@ -139,10 +140,11 @@ public class GestionFicheros {
 
     /**
      * Carga desde binario, solo hace falta pasarle la direccion
+     *
      * @param direccion
-     * @return 
+     * @return
      */
-    public static ArrayList<String> loadBinario(String direccion) {
+    public static ArrayList<String> leerBinario(String direccion) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(direccion + ".dat"))) {
             if (Validadores.comprobarFicheroLectura(direccion, ".dat")) {
 
@@ -163,21 +165,19 @@ public class GestionFicheros {
         return new ArrayList<>();
     }
 
-    
     //=========================================================================================================================================================================
     //======================= FROM ============================================================================================================================================
     //=========================================================================================================================================================================
-
     /**
-     * Convierte un string en json y devuelve el objeto.
-     * Los parametros son: la cadena y el .class de la clase.
+     * Convierte un string en json y devuelve el objeto. Los parametros son: la
+     * cadena y el .class de la clase.
+     *
      * @param json
      * @param clase
-     * @return 
+     * @return
      */
-    public static Object fromJson(String json, Class clase) {
+    public static Object toJson(String json, Class clase) {
         return new Gson().fromJson(json, clase);
     }
-    
-    
+
 }

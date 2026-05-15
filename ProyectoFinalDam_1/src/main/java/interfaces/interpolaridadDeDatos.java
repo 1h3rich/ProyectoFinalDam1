@@ -15,10 +15,10 @@ public abstract interface interpolaridadDeDatos {
     //Guardar a distintos tipos de ficheros
     
     
-    public void saveToCSV();
-    public void saveToJSON();
-    public void saveToBinario();
-    public void saveToTXT();
+    public void loadToCsv();
+    public void loadToJson();
+    public void loadToBinario();
+    public void loadToTxt();
     
     //Conversion de fichero a objetos
     
@@ -32,6 +32,5 @@ public abstract interface interpolaridadDeDatos {
     public String toCSV();
     public String toJSON();
     public String toTXT();
-    
     
 }

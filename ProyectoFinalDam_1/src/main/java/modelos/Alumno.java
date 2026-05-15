@@ -304,30 +304,30 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     // =========================================================
 
     @Override
-    public void saveToCSV() {
+    public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".csv")) {
-            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroAlumno, ".csv");
+            GestionFicheros.guardarTxtCsvJson(this.toCSV(), Config.ficheroAlumno, ".csv");
         }
     }
 
     @Override
-    public void saveToJSON() {
+    public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".json")) {
-            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroAlumno, ".json");
+            GestionFicheros.guardarTxtCsvJson(this.toJSON(), Config.ficheroAlumno, ".json");
         }
     }
 
     @Override
-    public void saveToTXT() {
+    public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".txt")) {
-            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroAlumno, ".txt");
+            GestionFicheros.guardarTxtCsvJson(this.toTXT(), Config.ficheroAlumno, ".txt");
         }
     }
 
     @Override
-    public void saveToBinario() {
+    public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroAlumno, SesionDatos.getAlumnos());
+            GestionFicheros.guardarToBinario(Config.ficheroAlumno, SesionDatos.getAlumnos());
         }
     }
 
@@ -338,7 +338,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".csv")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroAlumno, ".csv");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroAlumno, ".csv");
             cargarDesdeLineas(temp);
         }
     }
@@ -349,11 +349,11 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
 
             SesionDatos.getAlumnos().clear();
 
-            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroAlumno);
+            ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroAlumno);
 
             for (String string : temp) {
                 if (!string.trim().isEmpty()) {
-                    Alumno alumno = (Alumno) GestionFicheros.fromJson(string, Alumno.class);
+                    Alumno alumno = (Alumno) GestionFicheros.toJson(string, Alumno.class);
 
                     alumno.validarObjeto();
 
@@ -370,7 +370,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".dat")) {
-            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroAlumno);
+            ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroAlumno);
             cargarDesdeLineas(temp);
         }
     }
@@ -378,7 +378,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroAlumno, ".txt");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroAlumno, ".txt");
             cargarDesdeLineas(temp);
         }
     }

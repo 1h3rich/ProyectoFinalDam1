@@ -50,17 +50,17 @@ public class SesionDatos {
     /**
      * Módulos insertados en la base de datos. 
      */
-    private static final TreeSet<Modulo> listaModulos = new TreeSet<>();
+    private static final ArrayList<Modulo> listaModulos = new ArrayList<>();
 
     /**
      * Alumnos insertados en la base de datos. 
      */
-    private static final TreeSet<Alumno> listaAlumnos = new TreeSet<>();
+    private static final ArrayList<Alumno> listaAlumnos = new ArrayList<>();
 
     /**
      * Matrículas insertadas en la base de datos. 
      */
-    private static final TreeSet<Matricula> listaMatriculas = new TreeSet<>();
+    private static final ArrayList<Matricula> listaMatriculas = new ArrayList<>();
 
     // =========================================================
     // ======= COLECCIÓN 2: ArrayList (acceso por índice) ======
@@ -192,29 +192,29 @@ public class SesionDatos {
     /**
      * @return Copia de la lista de alumnos insertados en sesión.
      */
-    public static TreeSet<Alumno> getAlumnos() {
-        return new TreeSet<>(listaAlumnos);
+    public static ArrayList<Alumno> getAlumnos() {
+        return new ArrayList<>(listaAlumnos);
     }
 
     /**
      * @return Copia de la lista de ciclos insertados en sesión.
      */
-    public static TreeSet<Ciclo> getCiclos() {
-        return new TreeSet<>(listaCiclos);
+    public static ArrayList<Ciclo> getCiclos() {
+        return new ArrayList<>(listaCiclos);
     }
 
     /**
      * @return Copia de la lista de módulos insertados en sesión.
      */
-    public static TreeSet<Modulo> getModulos() {
-        return new TreeSet<>(listaModulos);
+    public static ArrayList<Modulo> getModulos() {
+        return new ArrayList<>(listaModulos);
     }
 
     /**
      * @return Copia de la lista de matrículas insertadas en sesión.
      */
-    public static TreeSet<Matricula> getMatriculas() {
-        return new TreeSet<>(listaMatriculas);
+    public static ArrayList<Matricula> getMatriculas() {
+        return new ArrayList<>(listaMatriculas);
     }
 
     /**

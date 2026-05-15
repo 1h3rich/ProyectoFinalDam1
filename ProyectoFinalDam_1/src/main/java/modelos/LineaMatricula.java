@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.util.ArrayList;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
 public class LineaMatricula implements interpolaridadDeDatos, Serializable {
@@ -103,8 +102,17 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
         this.cod_matricula = Integer.parseInt(cadena[0]) ;
         this.cod_modulo = Integer.parseInt(cadena[1]) ;
         this.repeticion = Integer.parseInt(cadena[2]) ;
-        this.cal_primera = Double.parseDouble(cadena[3]);
-        this.cal_segunda = Double.parseDouble(cadena[4]);
+        if(cadena[3] == null){
+            this.cal_primera = 0;
+        } else{
+            this.cal_primera = Double.parseDouble(cadena[3]);
+        }
+        if(cadena[4] == null){
+            this.cal_segunda = 0;
+        } else{
+            this.cal_segunda = Double.parseDouble(cadena[4]);
+        }
+       
        
     }
 
@@ -262,33 +270,33 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     }
 
     // =========================================================
-    // ===================== SAVE TO ===========================
+    // ===================== LOAD TO ===========================
     // =========================================================
     @Override
-    public void saveToCSV() {
+    public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroLineaMatricula, ".csv")) {
-            GestionFicheros.saveToTxtCsvJson(this.toCSV(), Config.ficheroLineaMatricula, ".csv");
+            GestionFicheros.guardarTxtCsvJson(this.toCSV(), Config.ficheroLineaMatricula, ".csv");
         }
     }
 
     @Override
-    public void saveToJSON() {
+    public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroLineaMatricula, ".json")) {
-            GestionFicheros.saveToTxtCsvJson(this.toJSON(), Config.ficheroLineaMatricula, ".json");
+            GestionFicheros.guardarTxtCsvJson(this.toJSON(), Config.ficheroLineaMatricula, ".json");
         }
     }
 
     @Override
-    public void saveToTXT() {
+    public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroLineaMatricula, ".txt")) {
-            GestionFicheros.saveToTxtCsvJson(this.toTXT(), Config.ficheroLineaMatricula, ".txt");
+            GestionFicheros.guardarTxtCsvJson(this.toTXT(), Config.ficheroLineaMatricula, ".txt");
         }
     }
 
     @Override
-    public void saveToBinario() {
+    public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroLineaMatricula, ".dat")) {
-            GestionFicheros.saveToBinario(Config.ficheroLineaMatricula, SesionDatos.getLineas());
+            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.getLineas());
         }
     }
 
@@ -298,7 +306,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".csv")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroLineaMatricula, ".csv");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".csv");
             cargarDesdeLineas(temp);
         }
     }
@@ -309,12 +317,12 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
 
             SesionDatos.getLineas().clear();
 
-            ArrayList<String> temp = GestionFicheros.loadJson(Config.ficheroLineaMatricula);
+            ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroLineaMatricula);
 
             for (String string : temp) {
                 if (!string.trim().isEmpty()) {
                     LineaMatricula lineaMatricula
-                            = (LineaMatricula) GestionFicheros.fromJson(string, LineaMatricula.class);
+                            = (LineaMatricula) GestionFicheros.toJson(string, LineaMatricula.class);
 
                     lineaMatricula.validarObjeto();
 
@@ -331,7 +339,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".dat")) {
-            ArrayList<String> temp = GestionFicheros.loadBinario(Config.ficheroLineaMatricula);
+            ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroLineaMatricula);
             cargarDesdeLineas(temp);
         }
     }
@@ -339,7 +347,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".txt")) {
-            ArrayList<String> temp = GestionFicheros.loadTxtCsv(Config.ficheroLineaMatricula, ".txt");
+            ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".txt");
             cargarDesdeLineas(temp);
         }
     }

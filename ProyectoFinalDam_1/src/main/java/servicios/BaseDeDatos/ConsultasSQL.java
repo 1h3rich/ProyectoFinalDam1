@@ -14,7 +14,7 @@ public class ConsultasSQL {
     // =========================================================
     public static final String[] CREACION_BASE_DE_DATOS = {
         """
-        DROP DATABASE IF EXISTS centro_formacion;
+        
         CREATE DATABASE centro_formacion;
         USE centro_formacion;
         
@@ -71,7 +71,7 @@ public class ConsultasSQL {
             codigo_modulo INT NOT NULL,
             calificacion_primera DECIMAL(4,2),
             calificacion_segunda DECIMAL(4,2),
-            repeticion int ,
+            repeticion int NOT NULL,
         
             PRIMARY KEY (codigo_matricula, codigo_modulo),
         

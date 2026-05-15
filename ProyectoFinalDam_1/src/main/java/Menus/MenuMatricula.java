@@ -344,7 +344,7 @@ public class MenuMatricula {
     }
 
     private static void exportarABinario() {
-        GestionFicheros.saveToBinario(Config.ficheroMatricula, SesionDatos.getMatriculas());
+        GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.getMatriculas());
         System.out.println("[OK] Exportados " + SesionDatos.getMatriculas().size()
                 + " registros a: " + Config.ficheroMatricula + ".dat");
     }
@@ -403,7 +403,7 @@ public class MenuMatricula {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla matricula ya fue importada desde TXT en esta sesión.");
         }
-        ArrayList<String> lineas = GestionFicheros.loadTxtCsv(Config.ficheroMatricula, ".txt");
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
@@ -422,7 +422,7 @@ public class MenuMatricula {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla matricula ya fue importada desde CSV en esta sesión.");
         }
-        ArrayList<String> lineas = GestionFicheros.loadTxtCsv(Config.ficheroMatricula, ".csv");
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
