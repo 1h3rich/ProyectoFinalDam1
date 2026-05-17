@@ -100,16 +100,16 @@ public class Importar extends javax.swing.JFrame {
         };
     }
  
-    // =========================================================
-    // ============ IMPORTAR ALUMNOS ===========================
-    // =========================================================
+        // ===================================================
+    // ============ IMPORTAR ALUMNOS  ========================
+    // =======================================================
  
     /**
-     * Lee alumnos desde el fichero correspondiente al formato indicado
-     * y los inserta en la base de datos y en SesionDatos.
+     * Lee alumnos desde fichero y los inserta en la BD conservando su código
+     * original para mantener la integridad referencial con otras tablas.
      *
      * @param formato TXT, CSV, BINARIO o JSON
-     * @return Número de alumnos importados
+     * @return Número de alumnos importados correctamente
      * @throws Exception si hay error de lectura o parseo
      */
     private int importarAlumnos(String formato) throws Exception {
@@ -123,28 +123,24 @@ public class Importar extends javax.swing.JFrame {
  
             Alumno alumno = parsearAlumno(linea, formato);
  
+            // Se inserta CON el código del fichero para preservar
+            // la referencia desde matricula.codigo_alumno
             String[] params = {
+                String.valueOf(alumno.getCodigo()),         // código original
                 alumno.getNombre(),
-                alumno.getCorreo(),
+                alumno.getFechaNacimiento().toString(),
                 alumno.getDomicilio(),
                 alumno.getTelefono(),
-                alumno.getFechaNacimiento().toString()
+                alumno.getCorreo()
             };
  
-            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
-                    ConsultasSQL.INSERT_ALUMNO[1], params
+            boolean ok = GestionBaseDeDatos.insertarSinID(
+                    ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], params
             );
  
-            if (idGenerado != -1) {
-                Alumno alumnoConId = new Alumno(
-                        idGenerado,
-                        alumno.getNombre(),
-                        alumno.getFechaNacimiento(),
-                        alumno.getDomicilio(),
-                        alumno.getTelefono(),
-                        alumno.getCorreo()
-                );
-                SesionDatos.registrarAlumno(alumnoConId, false);
+            if (ok) {
+                // El alumno ya tiene su código correcto, lo registramos tal cual
+                SesionDatos.registrarAlumno(alumno, false);
                 contador++;
             }
         }
@@ -152,16 +148,16 @@ public class Importar extends javax.swing.JFrame {
         return contador;
     }
  
-    // =========================================================
-    // ============ IMPORTAR CICLOS ============================
-    // =========================================================
+    // =======================================================
+    // ============ IMPORTAR CICLOS  =========================
+    // =======================================================
  
     /**
-     * Lee ciclos desde el fichero correspondiente al formato indicado
-     * y los inserta en la base de datos y en SesionDatos.
+     * Lee ciclos desde fichero y los inserta en la BD conservando su código
+     * original para mantener la referencia desde modulo.codigo_ciclo.
      *
      * @param formato TXT, CSV, BINARIO o JSON
-     * @return Número de ciclos importados
+     * @return Número de ciclos importados correctamente
      * @throws Exception si hay error de lectura o parseo
      */
     private int importarCiclos(String formato) throws Exception {
@@ -175,7 +171,10 @@ public class Importar extends javax.swing.JFrame {
  
             Ciclo ciclo = parsearCiclo(linea, formato);
  
+            // Se inserta CON el código del fichero para preservar
+            // la referencia desde modulo.codigo_ciclo
             String[] params = {
+                String.valueOf(ciclo.getCodigo()),          // código original
                 ciclo.getDenominacion(),
                 ciclo.getFamiliaProfesional(),
                 ciclo.getNivel(),
@@ -183,20 +182,12 @@ public class Importar extends javax.swing.JFrame {
                 String.valueOf(ciclo.getAñoCurriculum())
             };
  
-            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
-                    ConsultasSQL.INSERT_CICLO[1], params
+            boolean ok = GestionBaseDeDatos.insertarSinID(
+                    ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], params
             );
  
-            if (idGenerado != -1) {
-                Ciclo cicloConId = new Ciclo(
-                        idGenerado,
-                        ciclo.getDenominacion(),
-                        ciclo.getFamiliaProfesional(),
-                        ciclo.getNivel(),
-                        ciclo.getHoras(),
-                        ciclo.getAñoCurriculum()
-                );
-                SesionDatos.registrarCiclo(cicloConId, false);
+            if (ok) {
+                SesionDatos.registrarCiclo(ciclo, false);
                 contador++;
             }
         }
@@ -204,16 +195,16 @@ public class Importar extends javax.swing.JFrame {
         return contador;
     }
  
-    // =========================================================
-    // ============ IMPORTAR MODULOS ===========================
-    // =========================================================
+    // =======================================================
+    // ============ IMPORTAR MODULOS  ========================
+    // =======================================================
  
     /**
-     * Lee módulos desde el fichero correspondiente al formato indicado
-     * y los inserta en la base de datos y en SesionDatos.
+     * Lee módulos desde fichero y los inserta en la BD conservando su código
+     * original para mantener la referencia desde linea_matricula.codigo_modulo.
      *
      * @param formato TXT, CSV, BINARIO o JSON
-     * @return Número de módulos importados
+     * @return Número de módulos importados correctamente
      * @throws Exception si hay error de lectura o parseo
      */
     private int importarModulos(String formato) throws Exception {
@@ -227,28 +218,23 @@ public class Importar extends javax.swing.JFrame {
  
             Modulo modulo = parsearModulo(linea, formato);
  
+            // Se inserta CON el código del fichero
+            // Orden del INSERT_MODULO_CON_CODIGO: codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
             String[] params = {
+                String.valueOf(modulo.getCodigo()),         // código original
+                String.valueOf(modulo.getCodigo_ciclo()),   // referencia a ciclo (debe existir ya)
                 modulo.getNombre(),
                 modulo.getCurso(),
                 String.valueOf(modulo.getCreditos_ects()),
-                String.valueOf(modulo.getHoras()),
-                String.valueOf(modulo.getCodigo_ciclo())
+                String.valueOf(modulo.getHoras())
             };
  
-            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
-                    ConsultasSQL.INSERT_MODULO[1], params
+            boolean ok = GestionBaseDeDatos.insertarSinID(
+                    ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], params
             );
  
-            if (idGenerado != -1) {
-                Modulo moduloConId = new Modulo(
-                        idGenerado,
-                        modulo.getCodigo_ciclo(),
-                        modulo.getNombre(),
-                        modulo.getCurso(),
-                        modulo.getCreditos_ects(),
-                        modulo.getHoras()
-                );
-                SesionDatos.registrarModulo(moduloConId, false);
+            if (ok) {
+                SesionDatos.registrarModulo(modulo, false);
                 contador++;
             }
         }
@@ -257,15 +243,15 @@ public class Importar extends javax.swing.JFrame {
     }
  
     // =========================================================
-    // ============ IMPORTAR MATRICULAS ========================
+    // ============ IMPORTAR MATRICULAS  =======================
     // =========================================================
  
     /**
-     * Lee matrículas desde el fichero correspondiente al formato indicado
-     * y las inserta en la base de datos y en SesionDatos.
+     * Lee matrículas desde fichero y las inserta en la BD conservando su
+     * código original para mantener la referencia desde linea_matricula.
      *
      * @param formato TXT, CSV, BINARIO o JSON
-     * @return Número de matrículas importadas
+     * @return Número de matrículas importadas correctamente
      * @throws Exception si hay error de lectura o parseo
      */
     private int importarMatriculas(String formato) throws Exception {
@@ -279,26 +265,22 @@ public class Importar extends javax.swing.JFrame {
  
             Matricula matricula = parsearMatricula(linea, formato);
  
+            // Se inserta CON el código del fichero
+            // Orden del INSERT_MATRICULA_CON_CODIGO: codigo, codigo_alumno, anio_academico, estado, importe
             String[] params = {
-                matricula.getEstado(),
-                String.valueOf(matricula.getImporte()),
+                String.valueOf(matricula.getCodigo()),           // código original
+                String.valueOf(matricula.getCodigo_alumno()),    // referencia a alumno (debe existir ya)
                 String.valueOf(matricula.getAño_academico()),
-                String.valueOf(matricula.getCodigo_alumno())
+                matricula.getEstado(),
+                String.valueOf(matricula.getImporte())
             };
  
-            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
-                    ConsultasSQL.INSERT_MATRICULA[1], params
+            boolean ok = GestionBaseDeDatos.insertarSinID(
+                    ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], params
             );
  
-            if (idGenerado != -1) {
-                Matricula matriculaConId = new Matricula(
-                        idGenerado,
-                        matricula.getCodigo_alumno(),
-                        matricula.getAño_academico(),
-                        matricula.getEstado(),
-                        matricula.getImporte()
-                );
-                SesionDatos.registrarMatricula(matriculaConId, false);
+            if (ok) {
+                SesionDatos.registrarMatricula(matricula, false);
                 contador++;
             }
         }
@@ -307,15 +289,16 @@ public class Importar extends javax.swing.JFrame {
     }
  
     // =========================================================
-    // ============ IMPORTAR LINEAS MATRICULA ==================
+    // ========= IMPORTAR LINEAS MATRICULA =====================
     // =========================================================
  
     /**
-     * Lee líneas de matrícula desde el fichero correspondiente al formato
-     * indicado y las inserta en la base de datos y en SesionDatos.
+     * Lee líneas de matrícula desde fichero y las inserta en la BD.
+     * Esta tabla ya tiene clave compuesta (no hay código propio que preservar),
+     * por lo que el INSERT estándar es suficiente.
      *
      * @param formato TXT, CSV, BINARIO o JSON
-     * @return Número de líneas importadas
+     * @return Número de líneas importadas correctamente
      * @throws Exception si hay error de lectura o parseo
      */
     private int importarLineasMatricula(String formato) throws Exception {
@@ -329,15 +312,15 @@ public class Importar extends javax.swing.JFrame {
  
             LineaMatricula lm = parsearLineaMatricula(linea, formato);
  
-            // Las calificaciones pueden ser nulas → pasamos null si son 0
-            String calPrimera = lm.getCal_primera() < 0
-                    ? null : String.valueOf(lm.getCal_primera());
-            String calSegunda = lm.getCal_segunda() < 0
-                    ? null : String.valueOf(lm.getCal_segunda());
+            // Las calificaciones pueden ser nulas en BD.
+            // Usamos null directamente si el valor es -1 (indicador interno de nulo)
+            String calPrimera = (lm.getCal_primera() < 0) ? null : String.valueOf(lm.getCal_primera());
+            String calSegunda = (lm.getCal_segunda() < 0) ? null : String.valueOf(lm.getCal_segunda());
  
+            // Orden del INSERT_LINEA_MATRICULA: codigo_matricula, codigo_modulo, repeticion, cal_primera, cal_segunda
             String[] params = {
-                String.valueOf(lm.getCod_matricula()),
-                String.valueOf(lm.getCod_modulo()),
+                String.valueOf(lm.getCod_matricula()),   // referencia a matricula (debe existir ya)
+                String.valueOf(lm.getCod_modulo()),      // referencia a modulo (debe existir ya)
                 String.valueOf(lm.getRepeticion()),
                 calPrimera,
                 calSegunda
