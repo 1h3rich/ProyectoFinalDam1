@@ -33,6 +33,7 @@ public class VisorTabla extends javax.swing.JFrame {
      */
     public VisorTabla() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**

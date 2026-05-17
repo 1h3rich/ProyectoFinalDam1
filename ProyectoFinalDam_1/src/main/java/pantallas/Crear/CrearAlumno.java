@@ -23,6 +23,7 @@ public class CrearAlumno extends javax.swing.JFrame {
      */
     public CrearAlumno() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         setLocationRelativeTo(null);
 

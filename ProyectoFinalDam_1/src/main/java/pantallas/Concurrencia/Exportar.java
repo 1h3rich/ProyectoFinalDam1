@@ -4,19 +4,26 @@
  */
 package pantallas.Concurrencia;
 
+import Config.Config;
 import Control.SesionDatos;
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import modelos.Alumno;
 import modelos.Ciclo;
-import modelos.Modulo;
-import modelos.Matricula;
 import modelos.LineaMatricula;
-
+import modelos.Matricula;
+import modelos.Modulo;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
+import servicios.Ficheros.GestionFicheros;
 import javax.swing.JOptionPane;
 
 /**
  * Formulario Swing para exportar los datos en sesión a distintos formatos de fichero
  * (CSV, TXT, JSON, Binario). Permite seleccionar la entidad a exportar mediante un JComboBox.
+ * Tras escribir el fichero, sincroniza los mismos datos con la BD para garantizar
+ * persistencia aunque el fichero se pierda.
  *
  * @author 1DAM
  */
@@ -27,6 +34,7 @@ public class Exportar extends javax.swing.JFrame {
      */
     public Exportar() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -56,7 +64,7 @@ public class Exportar extends javax.swing.JFrame {
         jButtonTXT.setBackground(new java.awt.Color(255, 255, 255));
         jButtonTXT.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonTXT.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonTXT.setText("EXPORTAR");
+        jButtonTXT.setText("TXT");
         jButtonTXT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonTXTActionPerformed(evt);
@@ -66,7 +74,7 @@ public class Exportar extends javax.swing.JFrame {
         jButtonCSV.setBackground(new java.awt.Color(255, 255, 255));
         jButtonCSV.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonCSV.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonCSV.setText("EXPORTAR");
+        jButtonCSV.setText("CSV");
         jButtonCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCSVActionPerformed(evt);
@@ -76,7 +84,7 @@ public class Exportar extends javax.swing.JFrame {
         jButtonBINARIO.setBackground(new java.awt.Color(255, 255, 255));
         jButtonBINARIO.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonBINARIO.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonBINARIO.setText("EXPORTAR");
+        jButtonBINARIO.setText("BINARIO");
         jButtonBINARIO.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBINARIOActionPerformed(evt);
@@ -86,7 +94,7 @@ public class Exportar extends javax.swing.JFrame {
         jButtonJSON.setBackground(new java.awt.Color(255, 255, 255));
         jButtonJSON.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonJSON.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonJSON.setText("EXPORTAR");
+        jButtonJSON.setText("JSON");
         jButtonJSON.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonJSONActionPerformed(evt);
@@ -102,11 +110,8 @@ public class Exportar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(393, Short.MAX_VALUE)
+                .addContainerGap(404, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(450, 450, 450))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonCSV, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(59, 59, 59)
@@ -120,14 +125,17 @@ public class Exportar extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(524, 524, 524))))
+                        .addGap(419, 419, 419))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(376, 376, 376))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(73, 73, 73)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -144,29 +152,344 @@ public class Exportar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonJSONActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonJSONActionPerformed
-        exportarJSON();
+        ejecutarExportacion((String) jComboBox1.getSelectedItem(), "JSON");
     }//GEN-LAST:event_jButtonJSONActionPerformed
 
     private void jButtonBINARIOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBINARIOActionPerformed
-        exportarBINARIO();
+        ejecutarExportacion((String) jComboBox1.getSelectedItem(), "BINARIO");
     }//GEN-LAST:event_jButtonBINARIOActionPerformed
 
     private void jButtonCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCSVActionPerformed
-        exportarCSV();    }//GEN-LAST:event_jButtonCSVActionPerformed
+        ejecutarExportacion((String) jComboBox1.getSelectedItem(), "CSV");
+    }//GEN-LAST:event_jButtonCSVActionPerformed
 
     private void jButtonTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTXTActionPerformed
-        exportarTXT();
+        ejecutarExportacion((String) jComboBox1.getSelectedItem(), "TXT");
     }//GEN-LAST:event_jButtonTXTActionPerformed
+
+    // =========================================================
+    // =================== LÓGICA DE EXPORTACIÓN ===============
+    // =========================================================
+
+    /**
+     * Punto de entrada desde los botones. Exporta al fichero y sincroniza con la BD.
+     * Para "TODO" exporta todas las entidades en orden.
+     */
+    private void ejecutarExportacion(String tabla, String formato) {
+        try {
+            if ("TODO".equals(tabla)) {
+                int total = 0;
+                total += exportarEntidad("ALUMNADO", formato);
+                total += exportarEntidad("CICLOS", formato);
+                total += exportarEntidad("MODULOS", formato);
+                total += exportarEntidad("MATRICULAS", formato);
+                total += exportarEntidad("LINEA MATRICULA", formato);
+                JOptionPane.showMessageDialog(this,
+                        "Exportación " + formato + " completada: " + total + " registros guardados en fichero y BD.");
+            } else {
+                int n = exportarEntidad(tabla, formato);
+                JOptionPane.showMessageDialog(this,
+                        "Exportación " + formato + " completada: " + n + " registros guardados en fichero y BD.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al exportar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private int exportarEntidad(String tabla, String formato) {
+        return switch (tabla) {
+            case "ALUMNADO"        -> exportarAlumnos(formato);
+            case "CICLOS"          -> exportarCiclos(formato);
+            case "MODULOS"         -> exportarModulos(formato);
+            case "MATRICULAS"      -> exportarMatriculas(formato);
+            case "LINEA MATRICULA" -> exportarLineasMatricula(formato);
+            default -> throw new IllegalArgumentException("Tabla no reconocida: " + tabla);
+        };
+    }
+
+    // =========================================================
+    // =================== EXPORTAR POR ENTIDAD ================
+    // =========================================================
+
+    private int exportarAlumnos(String formato) {
+        if (SesionDatos.listaAlumnos.isEmpty()) return 0;
+
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(Config.ficheroAlumno, SesionDatos.listaAlumnos);
+        } else {
+            String ruta = Config.ficheroAlumno + extension(formato);
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+                for (Alumno alumno : SesionDatos.listaAlumnos) {
+                    pw.println(linea(alumno.toCSV(), alumno.toTXT(), alumno.toJSON(), formato));
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+        }
+
+        int contador = 0;
+        for (Alumno alumno : SesionDatos.listaAlumnos) {
+            sincronizarAlumnoConBDD(alumno);
+            contador++;
+        }
+        return contador;
+    }
+
+    private int exportarCiclos(String formato) {
+        if (SesionDatos.listaCiclos.isEmpty()) return 0;
+
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.listaCiclos);
+        } else {
+            String ruta = Config.ficheroCiclo + extension(formato);
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+                for (Ciclo ciclo : SesionDatos.listaCiclos) {
+                    pw.println(linea(ciclo.toCSV(), ciclo.toTXT(), ciclo.toJSON(), formato));
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+        }
+
+        int contador = 0;
+        for (Ciclo ciclo : SesionDatos.listaCiclos) {
+            sincronizarCicloConBDD(ciclo);
+            contador++;
+        }
+        return contador;
+    }
+
+    private int exportarModulos(String formato) {
+        if (SesionDatos.listaModulos.isEmpty()) return 0;
+
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(Config.ficheroModulo, SesionDatos.listaModulos);
+        } else {
+            String ruta = Config.ficheroModulo + extension(formato);
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+                for (Modulo modulo : SesionDatos.listaModulos) {
+                    pw.println(linea(modulo.toCSV(), modulo.toTXT(), modulo.toJSON(), formato));
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+        }
+
+        int contador = 0;
+        for (Modulo modulo : SesionDatos.listaModulos) {
+            sincronizarModuloConBDD(modulo);
+            contador++;
+        }
+        return contador;
+    }
+
+    private int exportarMatriculas(String formato) {
+        if (SesionDatos.listaMatriculas.isEmpty()) return 0;
+
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.listaMatriculas);
+        } else {
+            String ruta = Config.ficheroMatricula + extension(formato);
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+                for (Matricula matricula : SesionDatos.listaMatriculas) {
+                    pw.println(linea(matricula.toCSV(), matricula.toTXT(), matricula.toJSON(), formato));
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+        }
+
+        int contador = 0;
+        for (Matricula matricula : SesionDatos.listaMatriculas) {
+            sincronizarMatriculaConBDD(matricula);
+            contador++;
+        }
+        return contador;
+    }
+
+    private int exportarLineasMatricula(String formato) {
+        if (SesionDatos.listaLineasMatricula.isEmpty()) return 0;
+
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.listaLineasMatricula);
+        } else {
+            String ruta = Config.ficheroLineaMatricula + extension(formato);
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+                for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
+                    pw.println(linea(lm.toCSV(), lm.toTXT(), lm.toJSON(), formato));
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+        }
+
+        int contador = 0;
+        for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
+            sincronizarLineaMatriculaConBDD(lm);
+            contador++;
+        }
+        return contador;
+    }
+
+    private static String extension(String formato) {
+        return switch (formato) {
+            case "CSV"  -> ".csv";
+            case "TXT"  -> ".txt";
+            case "JSON" -> ".json";
+            default -> throw new IllegalArgumentException("Formato no reconocido: " + formato);
+        };
+    }
+
+    private static String linea(String csv, String txt, String json, String formato) {
+        return switch (formato) {
+            case "CSV"  -> csv;
+            case "TXT"  -> txt;
+            case "JSON" -> json;
+            default -> throw new IllegalArgumentException("Formato no reconocido: " + formato);
+        };
+    }
+
+    // =========================================================
+    // ============= SINCRONIZACIÓN CON LA BD ==================
+    // =========================================================
+    // Para cada entidad: intenta INSERT con el código original.
+    // Si ya existe (clave duplicada), hace UPDATE.
+
+    private void sincronizarAlumnoConBDD(Alumno alumno) {
+        String[] paramsInsert = {
+            String.valueOf(alumno.getCodigo()),
+            alumno.getNombre(),
+            alumno.getFechaNacimiento().toString(),
+            alumno.getDomicilio(),
+            alumno.getTelefono(),
+            alumno.getCorreo()
+        };
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], paramsInsert);
+        if (!insertado) {
+            // Orden UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
+            String[] paramsUpdate = {
+                alumno.getNombre(),
+                alumno.getFechaNacimiento().toString(),
+                alumno.getDomicilio(),
+                alumno.getTelefono(),
+                alumno.getCorreo(),
+                String.valueOf(alumno.getCodigo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, paramsUpdate);
+        }
+    }
+
+    private void sincronizarCicloConBDD(Ciclo ciclo) {
+        String[] paramsInsert = {
+            String.valueOf(ciclo.getCodigo()),
+            ciclo.getDenominacion(),
+            ciclo.getFamiliaProfesional(),
+            ciclo.getNivel(),
+            String.valueOf(ciclo.getHoras()),
+            String.valueOf(ciclo.getAñoCurriculum())
+        };
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], paramsInsert);
+        if (!insertado) {
+            // Orden UPDATE_CICLO: denominacion, familia_profesional, nivel, horas, anio_curriculo, codigo
+            String[] paramsUpdate = {
+                ciclo.getDenominacion(),
+                ciclo.getFamiliaProfesional(),
+                ciclo.getNivel(),
+                String.valueOf(ciclo.getHoras()),
+                String.valueOf(ciclo.getAñoCurriculum()),
+                String.valueOf(ciclo.getCodigo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_CICLO, paramsUpdate);
+        }
+    }
+
+    private void sincronizarModuloConBDD(Modulo modulo) {
+        // Orden INSERT_MODULO_CON_CODIGO: codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
+        String[] paramsInsert = {
+            String.valueOf(modulo.getCodigo()),
+            String.valueOf(modulo.getCodigo_ciclo()),
+            modulo.getNombre(),
+            modulo.getCurso(),
+            String.valueOf(modulo.getCreditos_ects()),
+            String.valueOf(modulo.getHoras())
+        };
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], paramsInsert);
+        if (!insertado) {
+            // Orden UPDATE_MODULO: codigo_ciclo, nombre, curso, creditos_ects, horas, codigo
+            String[] paramsUpdate = {
+                String.valueOf(modulo.getCodigo_ciclo()),
+                modulo.getNombre(),
+                modulo.getCurso(),
+                String.valueOf(modulo.getCreditos_ects()),
+                String.valueOf(modulo.getHoras()),
+                String.valueOf(modulo.getCodigo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, paramsUpdate);
+        }
+    }
+
+    private void sincronizarMatriculaConBDD(Matricula matricula) {
+        // Orden INSERT_MATRICULA_CON_CODIGO: codigo, codigo_alumno, anio_academico, estado, importe
+        String[] paramsInsert = {
+            String.valueOf(matricula.getCodigo()),
+            String.valueOf(matricula.getCodigo_alumno()),
+            String.valueOf(matricula.getAño_academico()),
+            matricula.getEstado(),
+            String.valueOf(matricula.getImporte())
+        };
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], paramsInsert);
+        if (!insertado) {
+            // Orden UPDATE_MATRICULA: codigo_alumno, anio_academico, estado, importe, codigo
+            String[] paramsUpdate = {
+                String.valueOf(matricula.getCodigo_alumno()),
+                String.valueOf(matricula.getAño_academico()),
+                matricula.getEstado(),
+                String.valueOf(matricula.getImporte()),
+                String.valueOf(matricula.getCodigo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MATRICULA, paramsUpdate);
+        }
+    }
+
+    private void sincronizarLineaMatriculaConBDD(LineaMatricula lm) {
+        String calPrimera = (lm.getCal_primera() < 0) ? null : String.valueOf(lm.getCal_primera());
+        String calSegunda = (lm.getCal_segunda() < 0) ? null : String.valueOf(lm.getCal_segunda());
+
+        // Orden INSERT_LINEA_MATRICULA: codigo_matricula, codigo_modulo, repeticion, cal_primera, cal_segunda
+        String[] paramsInsert = {
+            String.valueOf(lm.getCod_matricula()),
+            String.valueOf(lm.getCod_modulo()),
+            String.valueOf(lm.getRepeticion()),
+            calPrimera,
+            calSegunda
+        };
+        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], paramsInsert);
+        if (!insertado) {
+            // Orden UPDATE_LINEA_MATRICULA: repeticion, cal_primera, cal_segunda, codigo_matricula, codigo_modulo
+            String[] paramsUpdate = {
+                String.valueOf(lm.getRepeticion()),
+                calPrimera,
+                calSegunda,
+                String.valueOf(lm.getCod_matricula()),
+                String.valueOf(lm.getCod_modulo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_LINEA_MATRICULA, paramsUpdate);
+        }
+    }
+
+    // =========================================================
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -184,306 +507,10 @@ public class Exportar extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Exportar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new Exportar().setVisible(true);
-        });
+        java.awt.EventQueue.invokeLater(() -> new Exportar().setVisible(true));
     }
 
-    /** Exporta la entidad seleccionada en el combo al fichero CSV correspondiente. */
-    private void exportarCSV() {
-
-        String opcion = jComboBox1.getSelectedItem().toString();
-/*
-        switch (opcion) {
-
-            case "ALUMNADO" -> {
-                for (Alumno alumno : SesionDatos.getAlumnos()) {
-                    alumno.loadToCsv();
-                }
-            }
-
-            case "CICLOS" -> {
-                for (Ciclo ciclo : SesionDatos.getCiclos()) {
-                    ciclo.loadToCsv();
-                }
-            }
-
-            case "MODULOS" -> {
-                for (Modulo modulo : SesionDatos.getModulos()) {
-                    modulo.loadToCsv();
-                }
-            }
-
-            case "MATRICULAS" -> {
-                for (Matricula matricula : SesionDatos.getMatriculas()) {
-                    matricula.loadToCsv();
-                }
-            }
-
-            case "LINEA MATRICULA" -> {
-                for (LineaMatricula linea : SesionDatos.getLineas()) {
-                    linea.loadToCsv();
-                }
-            }
-
-            case "TODO" ->
-                exportarTodoCSV();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Exportación CSV completada"
-        );
-*/
-    }
-
-    /** Exporta la entidad seleccionada en el combo al fichero JSON correspondiente. */
-    private void exportarJSON() {
-
-        String opcion = jComboBox1.getSelectedItem().toString();
-/*
-        switch (opcion) {
-
-            case "ALUMNADO" -> {
-                for (Alumno alumno : SesionDatos.getAlumnos()) {
-                    alumno.loadToJson();
-                }
-            }
-
-            case "CICLOS" -> {
-                for (Ciclo ciclo : SesionDatos.getCiclos()) {
-                    ciclo.loadToJson();
-                }
-            }
-
-            case "MODULOS" -> {
-                for (Modulo modulo : SesionDatos.getModulos()) {
-                    modulo.loadToJson();
-                }
-            }
-
-            case "MATRICULAS" -> {
-                for (Matricula matricula : SesionDatos.getMatriculas()) {
-                    matricula.loadToJson();
-                }
-            }
-
-            case "LINEA MATRICULA" -> {
-                for (LineaMatricula linea : SesionDatos.getLineas()) {
-                    linea.loadToJson();
-                }
-            }
-
-            case "TODO" ->
-                exportarTodoJSON();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Exportación JSON completada"
-        );
-*/
-    }
-
-    /** Exporta todas las entidades en sesión a sus respectivos ficheros CSV. */
-    private void exportarTodoCSV() {
-
-        /*
-        for (Alumno alumno : SesionDatos.getAlumnos()) {
-            alumno.loadToCsv();
-        }
-
-        for (Ciclo ciclo : SesionDatos.getCiclos()) {
-            ciclo.loadToCsv();
-        }
-
-        for (Modulo modulo : SesionDatos.getModulos()) {
-            modulo.loadToCsv();
-        }
-
-        for (Matricula matricula : SesionDatos.getMatriculas()) {
-            matricula.loadToCsv();
-        }
-
-        for (LineaMatricula linea : SesionDatos.getLineas()) {
-            linea.loadToCsv();
-        }
-*/
-    }
-
-    /** Exporta todas las entidades en sesión a sus respectivos ficheros JSON. */
-    private void exportarTodoJSON() {
-/*
-        for (Alumno alumno : SesionDatos.getAlumnos()) {
-            alumno.loadToJson();
-        }
-
-        for (Ciclo ciclo : SesionDatos.getCiclos()) {
-            ciclo.loadToJson();
-        }
-
-        for (Modulo modulo : SesionDatos.getModulos()) {
-            modulo.loadToJson();
-        }
-
-        for (Matricula matricula : SesionDatos.getMatriculas()) {
-            matricula.loadToJson();
-        }
-
-        for (LineaMatricula linea : SesionDatos.getLineas()) {
-            linea.loadToJson();
-        }
-*/
-    }
-
-    /** Exporta todas las entidades en sesión a sus respectivos ficheros binarios (.dat). */
-    private void exportarTodoBinario() {
-/*
-        if (!SesionDatos.getAlumnos().isEmpty()) {
-            SesionDatos.getAlumnos().get(0).loadToBinario();
-        }
-
-        if (!SesionDatos.getCiclos().isEmpty()) {
-            SesionDatos.getCiclos().get(0).loadToBinario();
-        }
-
-        if (!SesionDatos.getModulos().isEmpty()) {
-            SesionDatos.getModulos().get(0).loadToBinario();
-        }
-
-        if (!SesionDatos.getMatriculas().isEmpty()) {
-            SesionDatos.getMatriculas().get(0).loadToBinario();
-        }
-
-        if (!SesionDatos.getLineas().isEmpty()) {
-            SesionDatos.getLineas().get(0).loadToBinario();
-        }
-*/
-    }
-
-    /** Exporta la entidad seleccionada en el combo al fichero TXT correspondiente. */
-    private void exportarTXT() {
-
-        String opcion = jComboBox1.getSelectedItem().toString();
-/*
-        switch (opcion) {
-
-            case "ALUMNADO" -> {
-                for (Alumno alumno : SesionDatos.getAlumnos()) {
-                    alumno.loadToTxt();
-                }
-            }
-
-            case "CICLOS" -> {
-                for (Ciclo ciclo : SesionDatos.getCiclos()) {
-                    ciclo.loadToTxt();
-                }
-            }
-
-            case "MODULOS" -> {
-                for (Modulo modulo : SesionDatos.getModulos()) {
-                    modulo.loadToTxt();
-                }
-            }
-
-            case "MATRICULAS" -> {
-                for (Matricula matricula : SesionDatos.getMatriculas()) {
-                    matricula.loadToTxt();
-                }
-            }
-
-            case "LINEA MATRICULA" -> {
-                for (LineaMatricula linea : SesionDatos.getLineas()) {
-                    linea.loadToTxt();
-                }
-            }
-
-            case "TODO" ->
-                exportarTodoTXT();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Exportación TXT completada"
-        );
-*/
-    }
-
-    /** Exporta todas las entidades en sesión a sus respectivos ficheros TXT. */
-    private void exportarTodoTXT() {
-/*
-        for (Alumno alumno : SesionDatos.getAlumnos()) {
-            alumno.loadToTxt();
-        }
-
-        for (Ciclo ciclo : SesionDatos.getCiclos()) {
-            ciclo.loadToTxt();
-        }
-
-        for (Modulo modulo : SesionDatos.getModulos()) {
-            modulo.loadToTxt();
-        }
-
-        for (Matricula matricula : SesionDatos.getMatriculas()) {
-            matricula.loadToTxt();
-        }
-
-        for (LineaMatricula linea : SesionDatos.getLineas()) {
-            linea.loadToTxt();
-        }
-*/
-    }
-
-    /** Exporta la entidad seleccionada en el combo al fichero binario (.dat) correspondiente. */
-    private void exportarBINARIO() {
-
-        String opcion = jComboBox1.getSelectedItem().toString();
-/*
-        switch (opcion) {
-
-            case "ALUMNADO" -> {
-                if (!SesionDatos.getAlumnos().isEmpty()) {
-                    SesionDatos.getAlumnos().get(0).loadToBinario();
-                }
-            }
-
-            case "CICLOS" -> {
-                if (!SesionDatos.getCiclos().isEmpty()) {
-                    SesionDatos.getCiclos().get(0).loadToBinario();
-                }
-            }
-
-            case "MODULOS" -> {
-                if (!SesionDatos.getModulos().isEmpty()) {
-                    SesionDatos.getModulos().get(0).loadToBinario();
-                }
-            }
-
-            case "MATRICULAS" -> {
-                if (!SesionDatos.getMatriculas().isEmpty()) {
-                    SesionDatos.getMatriculas().get(0).loadToBinario();
-                }
-            }
-
-            case "LINEA MATRICULA" -> {
-                if (!SesionDatos.getLineas().isEmpty()) {
-                    SesionDatos.getLineas().get(0).loadToBinario();
-                }
-            }
-
-            case "TODO" ->
-                exportarTodoBinario();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Exportación BINARIA completada"
-        );
-*/
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBINARIO;
     private javax.swing.JButton jButtonCSV;

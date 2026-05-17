@@ -457,11 +457,11 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      */
     @Override
     public String toCSV() {
-        return codigo + ";"
-                + codigo_ciclo + ";"
-                + nombre + ";"
-                + curso + ";"
-                + creditos_ects + ";"
+        return codigo + ":"
+                + codigo_ciclo + ":"
+                + nombre + ":"
+                + curso + ":"
+                + creditos_ects + ":"
                 + horas;
     }
 
@@ -474,7 +474,12 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     /** @return Cadena idéntica a {@link #toCSV()}. */
     @Override
     public String toTXT() {
-        return toCSV();
+        return codigo + ";"
+                + codigo_ciclo + ";"
+                + nombre + ";"
+                + curso + ";"
+                + creditos_ects + ";"
+                + horas;
     }
 
     // =========================================================

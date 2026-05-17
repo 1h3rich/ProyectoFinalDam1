@@ -439,10 +439,10 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      */
     @Override
     public String toCSV() {
-        return cod_matricula + ";"
-                + cod_modulo + ";"
-                + repeticion + ";"
-                + cal_primera + ";"
+        return cod_matricula + ":"
+                + cod_modulo + ":"
+                + repeticion + ":"
+                + cal_primera + ":"
                 + cal_segunda;
     }
 
@@ -455,7 +455,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     /** @return Cadena idéntica a {@link #toCSV()}. */
     @Override
     public String toTXT() {
-        return toCSV();
+         return cod_matricula + ";"
+                + cod_modulo + ";"
+                + repeticion + ";"
+                + cal_primera + ";"
+                + cal_segunda;
     }
 
     // =========================================================

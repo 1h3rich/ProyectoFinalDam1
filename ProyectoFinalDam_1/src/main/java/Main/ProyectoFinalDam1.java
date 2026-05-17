@@ -2,12 +2,13 @@ package Main;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import menus.MenuAlumno;
+import Menus.MenuAlumno;
 import menus.MenuCiclo;
 import menus.MenuConsultas;
 import menus.MenuLineaMatricula;
 import menus.MenuMatricula;
 import menus.MenuModulo;
+import pantallas.PantallaPrincipal;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
@@ -39,6 +40,8 @@ public class ProyectoFinalDam1 {
      * @param args Argumentos de línea de comandos (no se utilizan).
      */
     public static void main(String[] args) {
+        pantallas.PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
+        pantallaPrincipal.setVisible(true);
         mostrarBienvenida();
 
         GestionBaseDeDatos.vincularBDD();

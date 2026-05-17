@@ -23,10 +23,12 @@ public class ModificarMatricula extends javax.swing.JFrame {
     private DefaultTableModel modeloTablaAlumnos;
 
     /**
-     * Creates new form FormularioMatricula
+     * Abre el formulario de modificación de matrículas, carga la tabla de alumnos
+     * y bloquea el campo de código de alumno para que no sea editable directamente.
      */
     public ModificarMatricula() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jTextFieldCodigoAlumno.setEditable(false);
         configurarTabla();
         cargarAlumnosEnTabla();

@@ -24,6 +24,7 @@ public class ElimarAlumno extends javax.swing.JFrame {
      */
     public ElimarAlumno() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
         configurarTablaVacia();
     }

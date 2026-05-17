@@ -1,5 +1,4 @@
-package menus;
-
+package Menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;

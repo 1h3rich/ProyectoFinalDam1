@@ -4,6 +4,8 @@
  */
 package pantallas;
 
+import pantallas.Concurrencia.Exportar;
+import pantallas.Concurrencia.Importar;
 import pantallas.Consultas.SeleccionConsultas;
 import pantallas.Crear.*;
 import pantallas.Eliminar.MenuBorrar;
@@ -93,11 +95,21 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonCargar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCargar.setText("Cargar");
+        jButtonCargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCargarActionPerformed(evt);
+            }
+        });
 
         jButtonGuardar.setBackground(new java.awt.Color(255, 255, 255));
         jButtonGuardar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonGuardar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonGuardar.setText("Guardar");
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardarActionPerformed(evt);
+            }
+        });
 
         jLabelCrear.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jLabelCrear.setForeground(new java.awt.Color(0, 0, 0));
@@ -263,6 +275,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuBorrar mb = new MenuBorrar();
         mb.setVisible(true);
     }//GEN-LAST:event_jButtonBorrarActionPerformed
+
+    private void jButtonCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarActionPerformed
+        Importar i = new Importar();
+        i.setVisible(true);
+    }//GEN-LAST:event_jButtonCargarActionPerformed
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        Exportar e = new Exportar();
+        e.setVisible(true);
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     /**
      * @param args the command line arguments

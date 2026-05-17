@@ -27,6 +27,7 @@ public class CrearMatricula extends javax.swing.JFrame {
      */
     public CrearMatricula(int idAlumno) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         this.idAlumno = idAlumno;
         configurarVentana();

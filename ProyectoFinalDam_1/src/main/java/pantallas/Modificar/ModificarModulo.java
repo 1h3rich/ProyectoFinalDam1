@@ -22,8 +22,14 @@ public class ModificarModulo extends javax.swing.JFrame {
     /**
      * Creates new form FormularioModul
      */
+    /**
+     * Abre el formulario vacío de modificación de módulos sin ningún módulo preseleccionado.
+     * El campo código de ciclo se bloquea para impedir reasignaciones de ciclo desde este formulario.
+     */
     public ModificarModulo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jTextFieldCod_Ciclo.setEditable(false);
     }
 
     /**
@@ -251,10 +257,12 @@ public class ModificarModulo extends javax.swing.JFrame {
      */
     public ModificarModulo(Modulo modulo) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.modulo = modulo;
         setLocationRelativeTo(null);
         setTitle("Modificar Modulo");
         jButtonGuardar1.setText("Modificar Modulo");
+        jTextFieldCod_Ciclo.setEditable(false);
         if (modulo != null) {
             cargarDatosModulo();
         } else {

@@ -392,10 +392,10 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      */
     @Override
     public String toCSV() {
-        return codigo + ";"
-                + codigo_alumno + ";"
-                + año_academico + ";"
-                + estado + ";"
+        return codigo + ":"
+                + codigo_alumno + ":"
+                + año_academico + ":"
+                + estado + ":"
                 + importe;
     }
 
@@ -408,7 +408,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     /** @return Cadena idéntica a {@link #toCSV()}. */
     @Override
     public String toTXT() {
-        return toCSV();
+        return codigo + ";"
+                + codigo_alumno + ";"
+                + año_academico + ";"
+                + estado + ";"
+                + importe;
     }
 
     // =========================================================

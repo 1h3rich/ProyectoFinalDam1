@@ -24,6 +24,7 @@ public class CrearCiclo extends javax.swing.JFrame {
      */
     public CrearCiclo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
     }
 

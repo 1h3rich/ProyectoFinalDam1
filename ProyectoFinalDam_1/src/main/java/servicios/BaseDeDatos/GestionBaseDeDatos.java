@@ -3,9 +3,9 @@ package servicios.BaseDeDatos;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.ItemCombo;
+import excepciones.YaImportadoException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -106,7 +106,7 @@ public class GestionBaseDeDatos {
             if (rs.next() && rs.getInt(1) == 0) {
                 ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
             }
-        } catch (SQLException ignored) {
+        } catch (SQLException exception) {
         }
     }
 

@@ -23,10 +23,12 @@ public class Menu_Modificar extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu_Modificar.class.getName());
 
     /**
-     * Creates new form Menu_Modificar
+     * Inicializa el menú de modificación, registra los listeners de los botones
+     * Alumno y Matrícula, y precarga ciclos y módulos en sesión si las listas están vacías.
      */
     public Menu_Modificar() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jButtonAlumno.addActionListener(e -> abrirModificarAlumno());
         jButtonMatricula.addActionListener(e -> abrirModificarMatricula());
         cargarDatosSesion();
@@ -85,8 +87,10 @@ public class Menu_Modificar extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 48)); // NOI18N
-        jLabel1.setText("MENU");
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("MODIFICAR");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,9 +99,6 @@ public class Menu_Modificar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(423, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(599, 599, 599))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonAlumno)
                         .addGap(29, 29, 29)
@@ -108,14 +109,17 @@ public class Menu_Modificar extends javax.swing.JFrame {
                         .addComponent(jButtonModulo)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonCiclo)
-                        .addGap(404, 404, 404))))
+                        .addGap(404, 404, 404))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(520, 520, 520))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addGap(51, 51, 51)
                 .addComponent(jLabel1)
-                .addGap(86, 86, 86)
+                .addGap(72, 72, 72)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAlumno)
                     .addComponent(jButtonMatricula)

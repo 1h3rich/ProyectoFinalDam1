@@ -50,8 +50,17 @@ src/main/java/
 │   ├── VisorTabla.java           Ventana genérica para mostrar tablas de datos.
 │   │
 │   ├── Concurrencia/
-│   │   ├── Exportar.java         Exportación de datos a ficheros (CSV, JSON, TXT, binario).
-│   │   └── Importar.java         Importación de datos desde ficheros.
+│   │   ├── Exportar.java         Exporta datos en sesión a fichero (CSV, TXT, JSON, binario) y
+│   │   │                         sincroniza cada registro con la BD (INSERT o UPDATE) para
+│   │   │                         garantizar persistencia aunque el fichero se pierda.
+│   │   └── Importar.java         Pantalla de importación con UI Swing completa. Lee ficheros y
+│   │                             los inserta en BD. Gestiona "TODO" en orden seguro de FK
+│   │                             (ciclos → módulos → alumnos → matrículas → líneas).
+│   │                             Impide reimportar la misma tabla+formato en la misma sesión.
+│   │                             En modo TODO, cada tabla se procesa de forma independiente:
+│   │                             si un fichero no existe o falla, se omite esa tabla y se
+│   │                             continúa con las demás; el resultado final muestra un resumen
+│   │                             con los registros importados y las advertencias por tabla.
 │   │
 │   ├── Consultas/
 │   │   ├── ConsultaCompleta.java Muestra todos los registros de una tabla.
@@ -172,6 +181,19 @@ obtenerUltimoCodigo(String tabla)
 
 obtenerTableModel(String sql, String[] entradas)
   Devuelve un DefaultTableModel con los resultados del SELECT. Lo usan las pantallas de consulta.
+
+insertarYDevolverID(String sql, String[] params)
+  INSERT con AUTO_INCREMENT; devuelve el ID generado, o -1 si falla.
+
+insertarSinID(String sql, String[] params)
+  INSERT sin AUTO_INCREMENT (tablas con PK compuesta, o imports con código explícito).
+  Devuelve true si se insertó al menos una fila.
+  Usado por Exportar e Importar2 para el paso de sincronización con BD:
+    → intenta INSERT; si falla (registro ya existe), se llama a actualizarFila.
+
+PATRÓN UPSERT usado en Exportar (sin soporte nativo de MySQL UPSERT):
+  boolean ok = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_*_CON_CODIGO[1], paramsInsert);
+  if (!ok) GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_*, paramsUpdate);
 
 
 ----------------------------------------------------------------

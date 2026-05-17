@@ -6,10 +6,11 @@ package servicios.Ficheros;
 
 import Utils.Validadores;
 import com.google.gson.Gson;
+import interfaces.InterpolaridadDeDatos;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.logging.*;
 import java.util.Collection;
+import java.util.logging.*;
 
 /**
  * Servicio de gestión de ficheros que encapsula la lectura y escritura en los formatos
@@ -43,6 +44,21 @@ public class GestionFicheros {
     //======SAVE================================================================================================================================================
     //==========================================================================================================================================================
     
+    /**
+     * Vacía el contenido de un fichero de texto sin borrarlo.
+     * Llamar antes de un bucle de exportación para evitar duplicados en ficheros de sesiones anteriores.
+     *
+     * @param direccion ruta base del fichero (sin extensión)
+     * @param terminacion extensión del fichero (.txt, .csv, .json)
+     */
+    public static void truncarFichero(String direccion, String terminacion) {
+        try (FileWriter fw = new FileWriter(direccion + terminacion, false)) {
+            // solo abre en modo sobrescritura para dejar el fichero vacío
+        } catch (IOException e) {
+            System.out.println("Error al truncar fichero: " + e.getMessage());
+        }
+    }
+
     /**
      * Guarda un objeto a csv, txt o json
      *
@@ -149,20 +165,20 @@ public class GestionFicheros {
      * @return
      */
     public static ArrayList<String> leerBinario(String direccion) {
+        if (!Validadores.comprobarFicheroLectura(direccion, ".dat")) {
+            return new ArrayList<>();
+        }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(direccion + ".dat"))) {
-            if (Validadores.comprobarFicheroLectura(direccion, ".dat")) {
-
-                Object obj = ois.readObject();
-
-                if (obj instanceof ArrayList<?> lista) {
-                    ArrayList<String> resultado = new ArrayList<>();
-                    for (Object elemento : lista) {
-                        if (elemento instanceof String s) {
-                            resultado.add(s);
-                        }
+            Object obj = ois.readObject();
+            // Collection cubre tanto ArrayList como TreeSet
+            if (obj instanceof Collection<?> coleccion) {
+                ArrayList<String> resultado = new ArrayList<>();
+                for (Object elemento : coleccion) {
+                    if (elemento instanceof InterpolaridadDeDatos id) {
+                        resultado.add(id.toCSV());
                     }
-                    return resultado;
                 }
+                return resultado;
             }
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el archivo: " + direccion + ".dat");

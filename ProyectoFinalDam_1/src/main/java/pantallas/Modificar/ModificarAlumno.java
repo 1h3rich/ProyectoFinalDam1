@@ -25,10 +25,12 @@ public class ModificarAlumno extends javax.swing.JFrame {
     private DefaultTableModel modeloTabla;
 
     /**
-     * Creates new form FormularioAlumno
+     * Abre el formulario de modificación de alumnos, carga la tabla con todos
+     * los alumnos de la BD y bloquea la fecha de nacimiento para que no sea editable.
      */
     public ModificarAlumno() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jTextFieldFechaNacimiento.setEditable(false);
         jTextFieldFechaNacimiento.setFocusable(false);
@@ -151,6 +153,7 @@ public class ModificarAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldNombre.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldNombre.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -183,7 +186,9 @@ public class ModificarAlumno extends javax.swing.JFrame {
 
         jLabelInfoNombre5.setText("Telefono:");
 
-        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 1, 36)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("MODIFICAR ALUMNADO");
 

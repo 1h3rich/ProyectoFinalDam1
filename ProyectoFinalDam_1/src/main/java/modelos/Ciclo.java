@@ -474,11 +474,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      */
     @Override
     public String toCSV() {
-        return codigo + ";"
-                + denominacion + ";"
-                + familiaProfesional + ";"
-                + nivel + ";"
-                + horas + ";"
+        return codigo + ":"
+                + denominacion + ":"
+                + familiaProfesional + ":"
+                + nivel + ":"
+                + horas + ":"
                 + añoCurriculum;
     }
 
@@ -491,7 +491,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     /** @return Cadena idéntica a {@link #toCSV()}. */
     @Override
     public String toTXT() {
-        return toCSV();
+        return codigo + ";"
+                + denominacion + ";"
+                + familiaProfesional + ";"
+                + nivel + ";"
+                + horas + ";"
+                + añoCurriculum;
     }
 
     // =========================================================

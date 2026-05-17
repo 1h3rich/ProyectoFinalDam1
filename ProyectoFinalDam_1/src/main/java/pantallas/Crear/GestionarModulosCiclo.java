@@ -28,6 +28,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
      */
     public GestionarModulosCiclo(int idCiclo) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         this.idCiclo = idCiclo;
 

@@ -35,6 +35,7 @@ public class Ejercicios extends javax.swing.JFrame {
      */
     public Ejercicios() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
         actualizarDescripcion();
 

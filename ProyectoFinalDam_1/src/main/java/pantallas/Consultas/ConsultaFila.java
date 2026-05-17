@@ -28,6 +28,7 @@ public class ConsultaFila extends javax.swing.JFrame {
      */
     public ConsultaFila() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
         inicializarTabla();
         actualizarControles();

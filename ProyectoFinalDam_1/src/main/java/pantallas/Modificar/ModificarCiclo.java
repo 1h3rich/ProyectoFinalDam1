@@ -26,8 +26,14 @@ public class ModificarCiclo extends javax.swing.JFrame {
     /**
      * Creates new form FormularioCiclo
      */
+    /**
+     * Abre el formulario vacío de modificación de ciclos sin ningún ciclo preseleccionado.
+     * El campo código se muestra bloqueado para evitar ediciones accidentales.
+     */
     public ModificarCiclo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jTextFieldCodigo.setEditable(false);
     }
 
     /**
@@ -290,6 +296,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
      */
     public ModificarCiclo(Ciclo ciclo) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.ciclo = ciclo;
         setLocationRelativeTo(null);
         setTitle("Modificar ciclo");

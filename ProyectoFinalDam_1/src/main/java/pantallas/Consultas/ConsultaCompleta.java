@@ -28,6 +28,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
      */
     public ConsultaCompleta() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
         inicializarTabla();
         conectarYCargarDatos();

@@ -472,11 +472,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      */
     @Override
     public String toCSV() {
-        return codigo + ";"
-                + nombre + ";"
-                + fechaNacimiento + ";"
-                + domicilio + ";"
-                + telefono + ";"
+        return codigo + ":"
+                + nombre + ":"
+                + fechaNacimiento + ":"
+                + domicilio + ":"
+                + telefono + ":"
                 + correo;
     }
 
@@ -497,7 +497,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      */
     @Override
     public String toTXT() {
-        return toCSV();
+         return codigo + ";"
+                + nombre + ";"
+                + fechaNacimiento + ";"
+                + domicilio + ";"
+                + telefono + ";"
+                + correo;
     }
 
     // =========================================================

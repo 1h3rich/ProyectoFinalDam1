@@ -33,6 +33,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
      */
     public CrearLineaMatricula(int idMatricula) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         this.idMatricula = idMatricula;
 

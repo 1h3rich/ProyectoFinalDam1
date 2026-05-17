@@ -23,6 +23,7 @@ public class CrearModulo extends javax.swing.JFrame {
     /** Construye el formulario sin ciclo asociado (el usuario introduce el código manualmente). */
     public CrearModulo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
     }
 
@@ -32,6 +33,7 @@ public class CrearModulo extends javax.swing.JFrame {
      */
     public CrearModulo(int idCiclo) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         this.idCiclo = idCiclo;
 

@@ -23,10 +23,12 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
     private DefaultTableModel modeloTabla;
 
     /**
-     * Creates new form ModificarLineaMatricula
+     * Abre el formulario de modificación de líneas de matrícula y carga todas
+     * las líneas existentes en la tabla para que el usuario pueda seleccionar la que desea editar.
      */
     public ModificarLineaMatricula() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarTabla();
         cargarLineasEnTabla();
     }
@@ -38,6 +40,7 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
      */
     public ModificarLineaMatricula(LineaMatricula lineaMatricula) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         configurarTabla();
         cargarLineasEnTabla();
@@ -67,7 +70,7 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
     /** Consulta todas las líneas de matrícula de la BD y las muestra en la tabla. */
     private void cargarLineasEnTabla() {
         modeloTabla.setRowCount(0);
-        String sql = "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula ORDER BY codigo_matricula ASC";
+        String sql = "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula GROUP BY codigo_matricula";
         DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
         for (int i = 0; i < temp.getRowCount(); i++) {
             modeloTabla.addRow(new Object[]{

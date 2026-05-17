@@ -24,6 +24,7 @@ public class EliminarCiclo extends javax.swing.JFrame {
      */
     public EliminarCiclo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
         cargarTodosLosCiclos();
     }

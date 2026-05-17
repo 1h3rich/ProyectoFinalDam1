@@ -19,6 +19,7 @@ public class SeleccionConsultas extends javax.swing.JFrame {
      */
     public SeleccionConsultas() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
     }
 
