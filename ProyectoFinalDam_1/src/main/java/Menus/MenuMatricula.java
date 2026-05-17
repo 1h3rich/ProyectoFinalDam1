@@ -3,6 +3,7 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import Utils.GsonUtils;
 import com.google.gson.Gson;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
@@ -341,11 +342,7 @@ public class MenuMatricula {
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Matricula m : SesionDatos.listaMatriculas) {
-                String linea = m.toCSV();
-                if (usarDosPuntos) {
-                    linea = linea.replace(";", ":");
-                }
-                pw.println(linea);
+                pw.println(usarDosPuntos ? m.toCSV() : m.toTXT());
             }
             System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
                     + " registros a: " + rutaFichero);
@@ -445,12 +442,13 @@ public class MenuMatricula {
                     String.valueOf(matricula.getImporte())
                 };
  
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.listaMatriculas.add(matricula);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaMatriculas.add(matricula);
+                    contadorImportados++;
+                }
             }
         }
- 
+
         importadoTxt = true;
         System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde TXT.");
     }
@@ -486,12 +484,13 @@ public class MenuMatricula {
                     String.valueOf(matricula.getImporte())
                 };
  
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.listaMatriculas.add(matricula);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaMatriculas.add(matricula);
+                    contadorImportados++;
+                }
             }
         }
- 
+
         importadoCsv = true;
         System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde CSV.");
     }
@@ -564,12 +563,12 @@ public class MenuMatricula {
         }
  
         int contadorImportados = 0;
-        Gson gson = new Gson();
- 
+        Gson gson = GsonUtils.get();
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 Matricula matricula = gson.fromJson(linea, Matricula.class);
- 
+
                 String[] entradas = {
                     String.valueOf(matricula.getCodigo()),
                     String.valueOf(matricula.getCodigo_alumno()),
@@ -577,13 +576,14 @@ public class MenuMatricula {
                     matricula.getEstado(),
                     String.valueOf(matricula.getImporte())
                 };
- 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.listaMatriculas.add(matricula);
-                contadorImportados++;
+
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaMatriculas.add(matricula);
+                    contadorImportados++;
+                }
             }
         }
- 
+
         importadoJson = true;
         System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde JSON.");
     }

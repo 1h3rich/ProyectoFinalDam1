@@ -2,6 +2,7 @@ package Menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import Utils.GsonUtils;
 import com.google.gson.Gson;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
@@ -371,11 +372,7 @@ public class MenuAlumno {
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Alumno alumno : SesionDatos.listaAlumnos) {
-                String linea = alumno.toCSV();
-                if (usarDosPuntos) {
-                    linea = linea.replace(";", ":");
-                }
-                pw.println(linea);
+                pw.println(usarDosPuntos ? alumno.toCSV() : alumno.toTXT());
             }
             System.out.println("[OK] Exportados " + SesionDatos.listaAlumnos.size()
                     + " registros a: " + rutaFichero);
@@ -486,9 +483,10 @@ public class MenuAlumno {
                     alumno.getCorreo()
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
-                SesionDatos.listaAlumnos.add(alumno);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaAlumnos.add(alumno);
+                    contadorImportados++;
+                }
             }
         }
 
@@ -530,9 +528,10 @@ public class MenuAlumno {
                     alumno.getCorreo()
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
-                SesionDatos.listaAlumnos.add(alumno);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaAlumnos.add(alumno);
+                    contadorImportados++;
+                }
             }
         }
 
@@ -611,7 +610,7 @@ public class MenuAlumno {
         }
 
         int contadorImportados = 0;
-        Gson gson = new Gson();
+        Gson gson = GsonUtils.get();
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
@@ -626,9 +625,10 @@ public class MenuAlumno {
                     alumno.getCorreo()
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
-                SesionDatos.listaAlumnos.add(alumno);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaAlumnos.add(alumno);
+                    contadorImportados++;
+                }
             }
         }
 

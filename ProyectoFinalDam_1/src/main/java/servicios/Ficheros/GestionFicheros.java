@@ -4,8 +4,8 @@
  */
 package servicios.Ficheros;
 
+import Utils.GsonUtils;
 import Utils.Validadores;
-import com.google.gson.Gson;
 import interfaces.InterpolaridadDeDatos;
 import java.io.*;
 import java.util.ArrayList;
@@ -117,10 +117,11 @@ public class GestionFicheros {
         ArrayList<String> lineas = new ArrayList<>();
         try {
             if (Validadores.comprobarFicheroLectura(direccion, terminacion)) {
-                BufferedReader br = new BufferedReader(new FileReader(direccion + terminacion));
-                String linea = "";
-                while ((linea = br.readLine()) != null) {
-                    lineas.add(linea);
+                try (BufferedReader br = new BufferedReader(new FileReader(direccion + terminacion))) {
+                    String linea;
+                    while ((linea = br.readLine()) != null) {
+                        lineas.add(linea);
+                    }
                 }
                 return lineas;
             }
@@ -142,13 +143,13 @@ public class GestionFicheros {
         ArrayList<String> lineas = new ArrayList<>();
         try {
             if (Validadores.comprobarFicheroLectura(direccion, ".json")) {
-                BufferedReader br = new BufferedReader(new FileReader(direccion + ".json"));
-                String linea = "";
-                while ((linea = br.readLine()) != null) {
-                    lineas.add(linea);
+                try (BufferedReader br = new BufferedReader(new FileReader(direccion + ".json"))) {
+                    String linea;
+                    while ((linea = br.readLine()) != null) {
+                        lineas.add(linea);
+                    }
                 }
                 return lineas;
-
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
@@ -203,7 +204,7 @@ public class GestionFicheros {
      * @return Objeto del tipo {@code T} con los datos del JSON.
      */
     public static <T> T toJson(String json, Class<T> clase) {
-        return new Gson().fromJson(json, clase);
+        return GsonUtils.get().fromJson(json, clase);
     }
 
 }

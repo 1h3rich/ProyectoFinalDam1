@@ -3,7 +3,7 @@ package modelos;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
-import com.google.gson.Gson;
+import Utils.GsonUtils;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -487,7 +487,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      */
     @Override
     public String toJSON() {
-        return new Gson().toJson(this);
+        return GsonUtils.get().toJson(this);
     }
 
     /**

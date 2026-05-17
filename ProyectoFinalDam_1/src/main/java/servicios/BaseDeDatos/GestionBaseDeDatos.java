@@ -331,7 +331,7 @@ public class GestionBaseDeDatos {
 
                 int filasAfectadas = pst.executeUpdate(); //Se usa executeUpdate en vez de executeQuery, porque asi sabemos las lineas afectadas
                 System.out.println(mensaje + ": " + filasAfectadas);
-                return true;
+                return filasAfectadas > 0;
             }
 
         } catch (SQLException ex) {

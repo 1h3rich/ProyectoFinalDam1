@@ -3,6 +3,7 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import Utils.GsonUtils;
 import com.google.gson.Gson;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
@@ -389,11 +390,7 @@ public class MenuLineaMatricula {
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
-                String linea = lm.toCSV();
-                if (usarDosPuntos) {
-                    linea = linea.replace(";", ":");
-                }
-                pw.println(linea);
+                pw.println(usarDosPuntos ? lm.toCSV() : lm.toTXT());
             }
             System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
                     + " registros a: " + rutaFichero);
@@ -507,9 +504,10 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.listaLineasMatricula.add(lineaMatricula);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
+                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    contadorImportados++;
+                }
             }
         }
 
@@ -549,9 +547,10 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.listaLineasMatricula.add(lineaMatricula);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
+                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    contadorImportados++;
+                }
             }
         }
 
@@ -629,7 +628,7 @@ public class MenuLineaMatricula {
         }
 
         int contadorImportados = 0;
-        Gson gson = new Gson();
+        Gson gson = GsonUtils.get();
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
@@ -643,9 +642,10 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.listaLineasMatricula.add(lineaMatricula);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
+                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    contadorImportados++;
+                }
             }
         }
 

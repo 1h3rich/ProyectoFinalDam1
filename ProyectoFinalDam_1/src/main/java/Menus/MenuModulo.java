@@ -3,6 +3,7 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import Utils.GsonUtils;
 import com.google.gson.Gson;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
@@ -174,8 +175,8 @@ public class MenuModulo {
             System.out.print("Nuevo curso (primero/segundo): ");
             String curso = teclado.nextLine().trim();
 
-            System.out.print("Nuevos créditos ECTS: ");
-            int creditosEcts = teclado.nextInt();
+            System.out.print("Nuevos créditos ECTS (decimal, ej. 9.5): ");
+            double creditosEcts = teclado.nextDouble();
 
             System.out.print("Nuevas horas: ");
             int horas = teclado.nextInt();
@@ -200,8 +201,11 @@ public class MenuModulo {
                 String.valueOf(codigo)
             };
 
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, entradas);
-            System.out.println("[OK] Módulo actualizado correctamente.");
+            if (GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, entradas)) {
+                System.out.println("[OK] Módulo " + codigo + " actualizado correctamente.");
+            } else {
+                System.out.println("[ERROR] No se encontró ningún módulo con código " + codigo + ".");
+            }
 
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Los valores numéricos deben ser enteros.");
@@ -340,11 +344,7 @@ public class MenuModulo {
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Modulo modulo : SesionDatos.listaModulos) {
-                String linea = modulo.toCSV();
-                if (usarDosPuntos) {
-                    linea = linea.replace(";", ":");
-                }
-                pw.println(linea);
+                pw.println(usarDosPuntos ? modulo.toCSV() : modulo.toTXT());
             }
             System.out.println("[OK] Exportados " + SesionDatos.listaModulos.size()
                     + " registros a: " + rutaFichero);
@@ -445,12 +445,13 @@ public class MenuModulo {
                     String.valueOf(modulo.getHoras())
                 };
  
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MODULO_CON_CODIGO, entradas);
-                SesionDatos.listaModulos.add(modulo);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaModulos.add(modulo);
+                    contadorImportados++;
+                }
             }
         }
- 
+
         importadoTxt = true;
         System.out.println("[OK] Importados " + contadorImportados + " módulos desde TXT.");
     }
@@ -487,12 +488,13 @@ public class MenuModulo {
                     String.valueOf(modulo.getHoras())
                 };
  
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MODULO_CON_CODIGO, entradas);
-                SesionDatos.listaModulos.add(modulo);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaModulos.add(modulo);
+                    contadorImportados++;
+                }
             }
         }
- 
+
         importadoCsv = true;
         System.out.println("[OK] Importados " + contadorImportados + " módulos desde CSV.");
     }
@@ -566,12 +568,12 @@ public class MenuModulo {
         }
  
         int contadorImportados = 0;
-        Gson gson = new Gson();
- 
+        Gson gson = GsonUtils.get();
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 Modulo modulo = gson.fromJson(linea, Modulo.class);
- 
+
                 String[] entradas = {
                     String.valueOf(modulo.getCodigo()),
                     String.valueOf(modulo.getCodigo_ciclo()),
@@ -580,13 +582,14 @@ public class MenuModulo {
                     String.valueOf(modulo.getCreditos_ects()),
                     String.valueOf(modulo.getHoras())
                 };
- 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MODULO_CON_CODIGO, entradas);
-                SesionDatos.listaModulos.add(modulo);
-                contadorImportados++;
+
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaModulos.add(modulo);
+                    contadorImportados++;
+                }
             }
         }
- 
+
         importadoJson = true;
         System.out.println("[OK] Importados " + contadorImportados + " módulos desde JSON.");
     }

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import modelos.*;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
@@ -238,7 +237,7 @@ public class Importar extends javax.swing.JFrame {
         if (yaImportados.contains(clave)) {
             throw new YaImportadoException(
                     """
-                    Ya se import\u00f3 esta tabla en el formato indicado durante esta sesion.
+                    Ya se importo esta tabla en el formato indicado durante esta sesion.
                     Reinicia la aplicacion para volver a importar.""");
         }
     }

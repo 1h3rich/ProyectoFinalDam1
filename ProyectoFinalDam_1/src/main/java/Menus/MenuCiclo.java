@@ -3,7 +3,9 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import Utils.GsonUtils;
 import com.google.gson.Gson;
+import java.util.TreeSet;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -210,8 +212,11 @@ public class MenuCiclo {
                 String.valueOf(codigo)
             };
 
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_CICLO, entradas);
-            System.out.println("[OK] Ciclo actualizado correctamente.");
+            if (GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_CICLO, entradas)) {
+                System.out.println("[OK] Ciclo " + codigo + " actualizado correctamente.");
+            } else {
+                System.out.println("[ERROR] No se encontró ningún ciclo con código " + codigo + ".");
+            }
 
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Código, horas y año deben ser números enteros.");
@@ -361,11 +366,7 @@ public class MenuCiclo {
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Ciclo ciclo : SesionDatos.listaCiclos) {
-                String linea = ciclo.toCSV();
-                if (usarDosPuntos) {
-                    linea = linea.replace(";", ":");
-                }
-                pw.println(linea);
+                pw.println(usarDosPuntos ? ciclo.toCSV() : ciclo.toTXT());
             }
             System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
                     + " registros a: " + rutaFichero);
@@ -478,9 +479,10 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.listaCiclos.add(ciclo);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaCiclos.add(ciclo);
+                    contadorImportados++;
+                }
             }
         }
 
@@ -521,9 +523,10 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.listaCiclos.add(ciclo);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaCiclos.add(ciclo);
+                    contadorImportados++;
+                }
             }
         }
 
@@ -549,7 +552,7 @@ public class MenuCiclo {
                 new FileInputStream(Config.ficheroCiclo + ".dat"))) {
 
             @SuppressWarnings("unchecked")
-            ArrayList<Ciclo> lista = (ArrayList<Ciclo>) ois.readObject();
+            TreeSet<Ciclo> lista = (TreeSet<Ciclo>) ois.readObject();
 
             if (lista == null || lista.isEmpty()) {
                 System.out.println("[INFO] El fichero binario está vacío o no existe.");
@@ -566,9 +569,10 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.listaCiclos.add(ciclo);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaCiclos.add(ciclo);
+                    contadorImportados++;
+                }
             }
 
         } catch (java.io.FileNotFoundException e) {
@@ -602,7 +606,7 @@ public class MenuCiclo {
         }
 
         int contadorImportados = 0;
-        Gson gson = new Gson();
+        Gson gson = GsonUtils.get();
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
@@ -617,9 +621,10 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
 
-                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.listaCiclos.add(ciclo);
-                contadorImportados++;
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
+                    SesionDatos.listaCiclos.add(ciclo);
+                    contadorImportados++;
+                }
             }
         }
 
