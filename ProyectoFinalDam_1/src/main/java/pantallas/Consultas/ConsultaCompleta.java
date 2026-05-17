@@ -12,6 +12,9 @@ import javax.swing.table.TableRowSorter;
 import servicios.BaseDeDatos.*;
 
 /**
+ * Formulario Swing para consultas multitabla completas.
+ * Permite seleccionar una entidad en un JComboBox y muestra todos sus registros
+ * en una tabla con soporte de ordenación.
  *
  * @author 1DAM
  */
@@ -30,6 +33,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         conectarYCargarDatos();
     }
 
+    /** Establece la conexión con la BD y carga la tabla inicial; deshabilita el combo si la conexión falla. */
     private void conectarYCargarDatos() {
         if (GestionBaseDeDatos.vincularBDD()) {
             cargarTabla();
@@ -45,6 +49,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         }
     }
 
+    /** Configura el título, la política de cierre y el listener que pide confirmación antes de cerrar. */
     private void configurarVentana() {
         setLocationRelativeTo(null);
         setTitle("Consultas completas");
@@ -59,6 +64,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         });
     }
 
+    /** Muestra un diálogo de confirmación y cierra la ventana solo si el usuario acepta. */
     private void cerrarVentana() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -180,7 +186,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         });
     }
 
-    //Se puede escribir
+    /** Crea la JTable con scroll dentro del jPanel1 y configura el modo de redimensionado y ordenación. */
     private void inicializarTabla() {
         jPanel1.removeAll();
         jPanel1.setLayout(new BorderLayout());
@@ -198,6 +204,11 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         jPanel1.repaint();
     }
 
+    /**
+     * Devuelve la sentencia SQL de selección completa para el tipo de entidad indicado.
+     * @param tipo Entidad de la que se quiere obtener todos los registros.
+     * @return Sentencia SQL lista para ejecutar, o {@code null} si el tipo no está soportado.
+     */
     private String obtenerSQL(TipoDato tipo) {
         return switch (tipo) {
             case ALUMNO ->
@@ -215,6 +226,7 @@ public class ConsultaCompleta extends javax.swing.JFrame {
         };
     }
 
+    /** Ejecuta la consulta SQL correspondiente a la entidad seleccionada en el combo y actualiza la tabla. */
     private void cargarTabla() {
     try {
         TipoDato tipo = obtenerTipoSeleccionado();
@@ -258,6 +270,10 @@ public class ConsultaCompleta extends javax.swing.JFrame {
     }
 }
 
+    /**
+     * Convierte el texto seleccionado en el JComboBox al {@link TipoDato} correspondiente.
+     * @return TipoDato que representa la entidad elegida.
+     */
     private TipoDato obtenerTipoSeleccionado() {
         String seleccion = jComboBoxEleccion.getSelectedItem().toString();
 

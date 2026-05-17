@@ -4,17 +4,35 @@
  */
 package pantallas.Modificar;
 
+import Utils.ModoFormulario;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelos.Matricula;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
+
 /**
+ * Formulario Swing para crear o modificar una matrícula.
+ * Muestra la lista de alumnos y, al seleccionar uno, carga su matrícula más reciente.
  *
  * @author Rich
  */
 public class ModificarMatricula extends javax.swing.JFrame {
+
+    private ModoFormulario modo;
+    private Matricula matricula;
+    private int selectedMatriculaCodigo = -1;
+    private int selectedCodigoAlumno = -1;
+    private DefaultTableModel modeloTablaAlumnos;
 
     /**
      * Creates new form FormularioMatricula
      */
     public ModificarMatricula() {
         initComponents();
+        jTextFieldCodigoAlumno.setEditable(false);
+        configurarTabla();
+        cargarAlumnosEnTabla();
     }
 
     /**
@@ -26,21 +44,210 @@ public class ModificarMatricula extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextFieldAnioAcademico = new javax.swing.JTextField();
+        jButtonCancelar = new javax.swing.JButton();
+        jLabelInfoEstado = new javax.swing.JLabel();
+        jLabelInfoActiva = new javax.swing.JLabel();
+        jLabelInfoImporte = new javax.swing.JLabel();
+        jLabelInfoEuros = new javax.swing.JLabel();
+        jLabelInfoAnioAcademico = new javax.swing.JLabel();
+        jLabelInfoEuros1 = new javax.swing.JLabel();
+        jLabelInfoCodigoAlumno = new javax.swing.JLabel();
+        jLabelTitulo = new javax.swing.JLabel();
+        jButtonGuardar = new javax.swing.JButton();
+        jTextFieldEstado = new javax.swing.JTextField();
+        jTextFieldImporte = new javax.swing.JTextField();
+        jTextFieldCodigoAlumno = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextFieldAnioAcademico.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
+
+        jLabelInfoEstado.setText("Estado:");
+
+        jLabelInfoActiva.setText("Activa/No Activa");
+
+        jLabelInfoImporte.setText("Importe:");
+
+        jLabelInfoEuros.setText("Euros");
+
+        jLabelInfoAnioAcademico.setText("Año Académico:");
+
+        jLabelInfoEuros1.setText("Formato 20XX/20XX +1");
+
+        jLabelInfoCodigoAlumno.setText("Codigo del Alumno:");
+
+        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitulo.setText("RELLENAR MATRICULA");
+
+        jButtonGuardar.setText("Siguiente");
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardarActionPerformed(evt);
+            }
+        });
+
+        jTextFieldEstado.setMinimumSize(new java.awt.Dimension(64, 128));
+        jTextFieldEstado.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jTextFieldImporte.setMinimumSize(new java.awt.Dimension(64, 128));
+        jTextFieldImporte.setPreferredSize(new java.awt.Dimension(64, 128));
+        jTextFieldImporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldImporteActionPerformed(evt);
+            }
+        });
+
+        jTextFieldCodigoAlumno.setPreferredSize(new java.awt.Dimension(64, 128));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(397, 397, 397))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelInfoAnioAcademico)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelInfoCodigoAlumno)
+                                .addGap(86, 86, 86))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelInfoImporte, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelInfoEstado, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(59, 59, 59)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldAnioAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelInfoEuros1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelInfoEuros))
+                            .addComponent(jTextFieldCodigoAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelInfoActiva))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonGuardar)
+                        .addGap(143, 143, 143)))
+                .addGap(220, 220, 220))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoEstado)
+                            .addComponent(jLabelInfoActiva))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoImporte)
+                            .addComponent(jLabelInfoEuros))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfoAnioAcademico)
+                            .addComponent(jTextFieldAnioAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoEuros1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfoCodigoAlumno)
+                            .addComponent(jTextFieldCodigoAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonGuardar)
+                            .addComponent(jButtonCancelar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Seguro que quieres cancelar? Se perderá todo lo creado en este proceso.",
+            "Cancelar creación",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            GestionBaseDeDatos.cancelarTransaccion();
+            this.dispose();
+        }
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        if (modo == null || modo == ModoFormulario.MODIFICAR) modificarMatricula();
+        else crearMatricula();
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jTextFieldImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldImporteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldImporteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -80,6 +287,171 @@ public class ModificarMatricula extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Abre el formulario en modo concreto con una matrícula preseleccionada.
+     *
+     * @param modo      CREAR para nueva matrícula o MODIFICAR para editar la recibida.
+     * @param matricula Matrícula a editar; puede ser null si el modo es CREAR.
+     */
+    public ModificarMatricula(ModoFormulario modo, Matricula matricula) {
+        initComponents();
+        this.modo = modo;
+        this.matricula = matricula;
+        setLocationRelativeTo(null);
+        prepararFormulario();
+    }
+
+    /** Configura el título, botones y campos del formulario según el modo (CREAR / MODIFICAR). */
+    private void prepararFormulario() {
+        if (modo == ModoFormulario.CREAR) {
+            setTitle("Crear matrícula");
+            jButtonGuardar.setText("Crear Matrícula");
+            limpiarCampos();
+        } else {
+            setTitle("Modificar matrícula");
+            jButtonGuardar.setText("Modificar Matrícula");
+            jTextFieldCodigoAlumno.setEditable(false);
+            if (matricula != null) {
+                cargarDatosMatricula();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna matrícula.");
+            }
+        }
+    }
+
+    /** Inicializa la tabla de alumnos con columnas no editables y el listener de selección. */
+    private void configurarTabla() {
+        modeloTablaAlumnos = new DefaultTableModel(
+            new Object[]{"Código", "Nombre", "Teléfono"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+        jTable1.setModel(modeloTablaAlumnos);
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) cargarMatriculaDelAlumnoSeleccionado();
+        });
+    }
+
+    /** Consulta todos los alumnos de la BD ordenados por nombre y los carga en la tabla. */
+    private void cargarAlumnosEnTabla() {
+        modeloTablaAlumnos.setRowCount(0);
+        String sql = "SELECT codigo, nombre, telefono FROM alumno ORDER BY nombre ASC";
+        DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
+        for (int i = 0; i < temp.getRowCount(); i++) {
+            modeloTablaAlumnos.addRow(new Object[]{
+                temp.getValueAt(i, 0),
+                temp.getValueAt(i, 1),
+                temp.getValueAt(i, 2)
+            });
+        }
+    }
+
+    /** Lee la matrícula más reciente del alumno seleccionado en la tabla y rellena los campos del formulario. */
+    private void cargarMatriculaDelAlumnoSeleccionado() {
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) return;
+        selectedCodigoAlumno = Integer.parseInt(modeloTablaAlumnos.getValueAt(fila, 0).toString());
+        jTextFieldCodigoAlumno.setText(String.valueOf(selectedCodigoAlumno));
+
+        String sql = "SELECT codigo, anio_academico, estado, importe FROM matricula WHERE codigo_alumno = ? ORDER BY codigo DESC LIMIT 1";
+        DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[]{String.valueOf(selectedCodigoAlumno)});
+        if (temp.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Este alumno no tiene matrícula.");
+            selectedMatriculaCodigo = -1;
+            limpiarCampos();
+            return;
+        }
+        selectedMatriculaCodigo = Integer.parseInt(temp.getValueAt(0, 0).toString());
+        jTextFieldAnioAcademico.setText(temp.getValueAt(0, 1) == null ? "" : temp.getValueAt(0, 1).toString());
+        jTextFieldEstado.setText(temp.getValueAt(0, 2) == null ? "" : temp.getValueAt(0, 2).toString());
+        jTextFieldImporte.setText(temp.getValueAt(0, 3) == null ? "" : temp.getValueAt(0, 3).toString());
+    }
+
+    /** Valida los campos del formulario e inserta una nueva matrícula en la base de datos. */
+    private void crearMatricula() {
+        String codigoAlumno = jTextFieldCodigoAlumno.getText();
+        String anioAcademico = jTextFieldAnioAcademico.getText();
+        String estado = jTextFieldEstado.getText();
+        String importe = jTextFieldImporte.getText();
+
+        if (codigoAlumno.isBlank() || anioAcademico.isBlank() || estado.isBlank() || importe.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+            return;
+        }
+
+        String[] entradas = {codigoAlumno, anioAcademico, estado, importe};
+        GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA, entradas);
+        JOptionPane.showMessageDialog(this, "Matrícula creada correctamente.");
+        dispose();
+    }
+
+    /** Valida los campos del formulario y actualiza la matrícula del alumno seleccionado en la BD. */
+    private void modificarMatricula() {
+        if (selectedMatriculaCodigo == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un alumno con matrícula primero.");
+            return;
+        }
+
+        String anioAcademico = jTextFieldAnioAcademico.getText().trim();
+        String estado = jTextFieldEstado.getText().trim();
+        String importe = jTextFieldImporte.getText().trim();
+
+        if (anioAcademico.isBlank() || estado.isBlank() || importe.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+            return;
+        }
+
+        // UPDATE_MATRICULA: codigo_alumno, anio_academico, estado, importe, codigo
+        String[] entradas = {
+            String.valueOf(selectedCodigoAlumno),
+            anioAcademico,
+            estado,
+            importe,
+            String.valueOf(selectedMatriculaCodigo)
+        };
+        GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MATRICULA, entradas);
+        JOptionPane.showMessageDialog(this, "Matrícula actualizada correctamente.");
+        cargarAlumnosEnTabla();
+        selectedMatriculaCodigo = -1;
+        selectedCodigoAlumno = -1;
+        limpiarCampos();
+        jTextFieldCodigoAlumno.setText("");
+    }
+
+    /** Vuelca los datos de la matrícula asignada en los campos de texto del formulario. */
+    private void cargarDatosMatricula() {
+        jTextFieldCodigoAlumno.setText(String.valueOf(matricula.getCodigo_alumno()));
+        jTextFieldAnioAcademico.setText(String.valueOf(matricula.getAño_academico()));
+        jTextFieldEstado.setText(matricula.getEstado());
+        jTextFieldImporte.setText(String.valueOf(matricula.getImporte()));
+    }
+
+    /** Limpia todos los campos de texto del formulario para una nueva entrada. */
+    private void limpiarCampos() {
+        jTextFieldCodigoAlumno.setText("");
+        jTextFieldAnioAcademico.setText("");
+        jTextFieldEstado.setText("");
+        jTextFieldImporte.setText("");
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JLabel jLabelInfoActiva;
+    private javax.swing.JLabel jLabelInfoAnioAcademico;
+    private javax.swing.JLabel jLabelInfoCodigoAlumno;
+    private javax.swing.JLabel jLabelInfoEstado;
+    private javax.swing.JLabel jLabelInfoEuros;
+    private javax.swing.JLabel jLabelInfoEuros1;
+    private javax.swing.JLabel jLabelInfoImporte;
+    private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextFieldAnioAcademico;
+    private javax.swing.JTextField jTextFieldCodigoAlumno;
+    private javax.swing.JTextField jTextFieldEstado;
+    private javax.swing.JTextField jTextFieldImporte;
     // End of variables declaration//GEN-END:variables
 }

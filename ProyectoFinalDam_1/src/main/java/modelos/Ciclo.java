@@ -105,6 +105,13 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         this.añoCurriculum = añoCurriculum;
     }
 
+    /**
+     * Creación rápida desde un array de cadenas (tabla Swing, ResultSet ya convertido, etc.).
+     * Orden esperado: [0]=codigo, [1]=denominacion, [2]=familia_profesional, [3]=nivel, [4]=horas, [5]=anio_curriculo.
+     * No realiza validaciones — úsalo solo con datos que ya vienen de la BD.
+     *
+     * @param cadena Array de cadenas con los datos del ciclo.
+     */
     public Ciclo(String cadena[]) {
         this.codigo = Integer.parseInt(cadena[0]);
         this.denominacion = cadena[1];
@@ -117,26 +124,33 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // ===================== GETTERS ===========================
     // =========================================================
+
+    /** @return Código único del ciclo (clave primaria). */
     public int getCodigo() {
         return codigo;
     }
 
+    /** @return Nombre oficial del ciclo formativo. */
     public String getDenominacion() {
         return denominacion;
     }
 
+    /** @return Familia profesional a la que pertenece el ciclo. */
     public String getFamiliaProfesional() {
         return familiaProfesional;
     }
 
+    /** @return Nivel del ciclo (básico, medio o superior). */
     public String getNivel() {
         return nivel;
     }
 
+    /** @return Número total de horas lectivas del ciclo. */
     public int getHoras() {
         return horas;
     }
 
+    /** @return Año de publicación del currículum del ciclo. */
     public int getAñoCurriculum() {
         return añoCurriculum;
     }
@@ -144,6 +158,13 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // ===================== SETTERS ===========================
     // =========================================================
+
+    /**
+     * Actualiza la denominación del ciclo tras validar que no esté vacía.
+     *
+     * @param denominacion Nueva denominación del ciclo.
+     * @throws IllegalArgumentException si la denominación es nula o vacía.
+     */
     public void setDenominacion(String denominacion) {
         if (!Validadores.validarTextoNoVacio(denominacion)) {
             throw new IllegalArgumentException("La denominación no puede estar vacía");
@@ -152,6 +173,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         this.denominacion = denominacion;
     }
 
+    /**
+     * Actualiza la familia profesional tras validar que no esté vacía.
+     *
+     * @param familiaProfesional Nueva familia profesional.
+     * @throws IllegalArgumentException si es nula o vacía.
+     */
     public void setFamiliaProfesional(String familiaProfesional) {
         if (!Validadores.validarTextoNoVacio(familiaProfesional)) {
             throw new IllegalArgumentException("La familia profesional no puede estar vacía");
@@ -160,6 +187,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         this.familiaProfesional = familiaProfesional;
     }
 
+    /**
+     * Actualiza el nivel del ciclo tras validar que no esté vacío.
+     *
+     * @param nivel Nuevo nivel del ciclo.
+     * @throws IllegalArgumentException si es nulo o vacío.
+     */
     public void setNivel(String nivel) {
         if (!Validadores.validarNivel(nivel)) {
             throw new IllegalArgumentException("El nivel no puede estar vacío");
@@ -168,6 +201,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         this.nivel = nivel;
     }
 
+    /**
+     * Actualiza el número de horas del ciclo tras validar que sea mayor que 0.
+     *
+     * @param horas Nuevas horas totales del ciclo.
+     * @throws IllegalArgumentException si las horas son 0 o negativas.
+     */
     public void setHoras(int horas) {
         if (!Validadores.validarHorasCiclo(horas)) {
             throw new IllegalArgumentException("Las horas del ciclo deben ser mayores que 0");
@@ -176,6 +215,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         this.horas = horas;
     }
 
+    /**
+     * Actualiza el año del currículum tras validar que esté en el rango [1900, 3000].
+     *
+     * @param añoCurriculum Nuevo año del currículum.
+     * @throws IllegalArgumentException si el año está fuera del rango válido.
+     */
     public void setAñoCurriculum(int añoCurriculum) {
         if (!Validadores.validarAñoCurriculum(añoCurriculum)) {
             throw new IllegalArgumentException("El año del currículum no es válido");
@@ -187,6 +232,17 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // ==================== VALIDACIONES =======================
     // =========================================================
+
+    /**
+     * Valida todos los campos de un ciclo antes de asignarlos.
+     * Lanza IllegalArgumentException en el primer campo inválido encontrado.
+     *
+     * @param denominacion     Nombre oficial del ciclo.
+     * @param familiaProfesional Familia profesional.
+     * @param nivel            Nivel del ciclo.
+     * @param horas            Horas totales.
+     * @param añoCurriculum    Año del currículum.
+     */
     private static void validarDatos(String denominacion,
             String familiaProfesional,
             String nivel,
@@ -214,6 +270,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /**
+     * Valida todos los campos del objeto actual.
+     * Se usa al deserializar desde JSON para garantizar que los datos siguen siendo correctos.
+     *
+     * @throws IllegalArgumentException si cualquier campo no supera su validación.
+     */
     private void validarObjeto() {
         if (!Validadores.validarCodigoPositivo(this.codigo)) {
             throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
@@ -243,6 +305,13 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         return Integer.compare(this.codigo, otro.codigo);
     }
 
+    /**
+     * Parsea una línea de texto con formato CSV (separador ";") y devuelve el Ciclo correspondiente.
+     *
+     * @param linea Cadena con 6 campos: codigo;denominacion;familia;nivel;horas;anio_curriculo.
+     * @return Ciclo construido con los datos de la línea.
+     * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
+     */
     public static Ciclo obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);
 
@@ -267,6 +336,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         );
     }
 
+    /**
+     * Reemplaza la lista de ciclos en sesión con los objetos parseados desde las líneas de texto.
+     *
+     * @param temp Lista de cadenas, cada una con los datos de un ciclo en formato CSV.
+     */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
         SesionDatos.listaCiclos.clear();
@@ -303,6 +377,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // ===================== SAVE TO ===========================
     // =========================================================
+
+    /** Serializa este ciclo en formato CSV y lo añade al fichero ciclo.csv. */
     @Override
     public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".csv")) {
@@ -310,6 +386,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /** Serializa este ciclo en formato JSON y lo añade al fichero ciclo.json. */
     @Override
     public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".json")) {
@@ -317,6 +394,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /** Serializa este ciclo en formato TXT (mismo separador que CSV) y lo añade al fichero ciclo.txt. */
     @Override
     public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".txt")) {
@@ -324,6 +402,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /** Guarda la lista completa de ciclos en sesión como objeto serializado binario (ciclo.dat). */
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
@@ -334,6 +413,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // =================== FROM FILES ==========================
     // =========================================================
+
+    /** Lee ciclo.csv y reemplaza la lista en sesión con los objetos deserializados. */
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
@@ -342,6 +423,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /** Lee ciclo.json, valida cada objeto y reemplaza la lista en sesión. */
     @Override
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
@@ -366,6 +448,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /** Lee ciclo.dat (binario serializado) y reemplaza la lista en sesión. */
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".dat")) {
@@ -374,6 +457,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
         }
     }
 
+    /** Lee ciclo.txt (formato CSV con ";") y reemplaza la lista en sesión. */
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt")) {
@@ -385,6 +469,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // ================= CONVERTIDORES =========================
     // =========================================================
+
+    /**
+     * Serializa el ciclo como línea CSV con separador ";".
+     *
+     * @return Cadena en formato: codigo;denominacion;familia;nivel;horas;anio_curriculo.
+     */
     @Override
     public String toCSV() {
         return codigo + ";"
@@ -395,11 +485,13 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
                 + añoCurriculum;
     }
 
+    /** @return Cadena JSON con todos los campos del ciclo. */
     @Override
     public String toJSON() {
         return new Gson().toJson(this);
     }
 
+    /** @return Cadena idéntica a {@link #toCSV()}. */
     @Override
     public String toTXT() {
         return toCSV();
@@ -408,6 +500,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // =========================================================
     // ===================== TO STRING =========================
     // =========================================================
+
+    /** @return Representación legible del ciclo para depuración y logs. */
     @Override
     public String toString() {
         return "Ciclo{"

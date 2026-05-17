@@ -12,6 +12,7 @@ public class ConsultasSQL {
     // =========================================================
     // ================= Creacion Base De Datos ================
     // =========================================================
+    /** Script DDL completo para crear la base de datos {@code centro_formacion} con todas sus tablas y restricciones de clave foránea. */
     public static final String[] CREACION_BASE_DE_DATOS = {
         """
         
@@ -89,6 +90,7 @@ public class ConsultasSQL {
         """
     };
 
+    /** Script DML con datos de ejemplo para poblar las tablas de ciclos, módulos, alumnos, matrículas y líneas de matrícula. */
     public static final String[] INSERTAR_DATOS_POR_DEFECTO = {
         """
 
@@ -496,6 +498,7 @@ public class ConsultasSQL {
     // =========================================================
     // ===================  CONSULTAS EXTRA ====================
     // =========================================================
+    /** Sentencia UPDATE para reasignar un módulo a un ciclo distinto dado su código. */
     public static final String[] ASIGNAR_MODULO_A_CICLO = {
         "UPDATE modulo SET codigo_ciclo = ? WHERE codigo = ?",};
 

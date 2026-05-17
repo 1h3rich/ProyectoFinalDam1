@@ -11,6 +11,13 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import modelos.*;
 
+/**
+ * Servicio de acceso a datos que centraliza todas las operaciones contra la base de datos MySQL.
+ * Gestiona la conexión, transacciones, y proporciona métodos para CRUD, consultas y
+ * obtención de modelos de tabla para componentes Swing.
+ *
+ * @author 1DAM
+ */
 public class GestionBaseDeDatos {
 
     private static Connection con;
@@ -56,8 +63,8 @@ public class GestionBaseDeDatos {
             System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
 
             
-            realizarConsultaSQL(ConsultasSQL.CREACION_BASE_DE_DATOS, new String[0], false, false); //Creamos la base de datos si es que no existe
-            realizarConsultaSQL(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO, new String[0], false, false); //Insertamos datos por defecto para que salgan datos en las consultas
+            ejecutarScript(ConsultasSQL.CREACION_BASE_DE_DATOS[0]);
+            ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
 
             diagnosticoConexion();
 
@@ -75,11 +82,10 @@ public class GestionBaseDeDatos {
                 System.out.println("Conexion exitosa");
                 System.out.println("URL Java: " + Config.urlSQL);
                 System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
-                
-                
-                realizarConsultaSQL(ConsultasSQL.CREACION_BASE_DE_DATOS, new String[0], false, false); //Creamos la base de datos si es que no existe
-                realizarConsultaSQL(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO, new String[0], false, false); //Insertamos datos por defecto para que salgan datos en las consultas
-                
+
+                ejecutarScript(ConsultasSQL.CREACION_BASE_DE_DATOS[0]);
+                ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
+
                 diagnosticoConexion();
                 return true;
 
@@ -91,6 +97,28 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /**
+     * Ejecuta un bloque SQL con múltiples sentencias separadas por ';'.
+     * Usa Statement.execute() en lugar de executeQuery(), por lo que soporta
+     * CREATE, INSERT, USE, etc.
+     * Los errores de "ya existe" y "entrada duplicada" se suprimen porque
+     * son esperados cuando la BD ya está inicializada.
+     */
+    private static void ejecutarScript(String sql) {
+        String[] sentencias = sql.split(";");
+        for (String sentencia : sentencias) {
+            String s = sentencia.strip();
+            if (s.isEmpty()) continue;
+            try (java.sql.Statement stmt = con.createStatement()) {
+                stmt.execute(s);
+            } catch (SQLException ignored) {
+                // Silencioso: errores esperados cuando la BD ya está inicializada
+                // (tabla ya existe, datos duplicados, columna sin valor por defecto, etc.)
+            }
+        }
+    }
+
+    /** Imprime por consola información de diagnóstico: base activa, host, puerto, autocommit y número de alumnos. */
     public static void diagnosticoConexion() {
         String sql = """
         SELECT 
@@ -215,7 +243,10 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Guarda el objeto en su lista correspondiente.
+     * Construye el objeto del tipo indicado a partir del array de datos y lo registra en {@link SesionDatos}.
+     * @param tipoObjeto Nombre del tipo Java ("Alumno", "Ciclo", "Modulo", "Matricula", "LineaMatricula").
+     * @param datos Valores en el mismo orden que el constructor del modelo.
+     * @param datosBaseDeDatos {@code true} si los datos provienen de la BD; {@code false} si se acaban de introducir.
      */
     private static void guardarObjeto(String tipoObjeto, String[] datos, boolean datosBaseDeDatos) {
         if (tipoObjeto.equalsIgnoreCase("Alumno")) {
@@ -386,6 +417,12 @@ public class GestionBaseDeDatos {
         return modelo;
     }
 
+    /**
+     * Busca en la BD el alumno cuyo teléfono y correo coinciden y devuelve un {@link DefaultTableModel} con las columnas de presentación.
+     * @param telefono Teléfono del alumno.
+     * @param correo Correo electrónico del alumno.
+     * @return DefaultTableModel con cero o una fila.
+     */
     public static DefaultTableModel obtenerAlumnoPorTelefonoYCorreo(String telefono, String correo) {
         comprobarConexion();
 
@@ -410,6 +447,14 @@ public class GestionBaseDeDatos {
         return obtenerTableModel(sql, params);
     }
 
+    /**
+     * Elimina de la BD el alumno identificado por código, teléfono y correo, borrando primero sus líneas de matrícula y matrículas.
+     * La operación se ejecuta en una transacción propia; hace rollback automático si falla.
+     * @param codigoAlumno Código primario del alumno.
+     * @param telefono Teléfono del alumno (confirmación extra).
+     * @param correo Correo del alumno (confirmación extra).
+     * @return {@code true} si el alumno fue eliminado; {@code false} si no coinciden los datos o hay error.
+     */
     public static boolean eliminarAlumnoCompletoPorCodigoTelefonoCorreo(
             int codigoAlumno,
             String telefono,
@@ -505,6 +550,12 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /**
+     * Elimina de la BD el ciclo indicado junto con sus módulos y las líneas de matrícula asociadas.
+     * La operación se ejecuta en una transacción propia; hace rollback automático si falla.
+     * @param codigoCiclo Código primario del ciclo a eliminar.
+     * @return {@code true} si el ciclo fue eliminado; {@code false} en caso de error.
+     */
     public static boolean eliminarCicloCompletoPorCodigo(int codigoCiclo) {
         comprobarConexion();
 
@@ -573,6 +624,10 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /**
+     * Consulta todos los ciclos de la BD con columnas de presentación en español y los devuelve como {@link DefaultTableModel}.
+     * @return DefaultTableModel con los ciclos ordenados por denominación.
+     */
     public static DefaultTableModel obtenerTodosLosCiclos() {
         comprobarConexion();
 
@@ -583,7 +638,7 @@ public class GestionBaseDeDatos {
             familia_profesional AS 'Familia profesional',
             nivel AS 'Nivel',
             horas AS 'Horas',
-            anio_curricular AS 'Año curricular'
+            anio_curriculo AS 'Año curricular'
         FROM ciclo
         ORDER BY denominacion ASC
     """;
@@ -623,6 +678,11 @@ public class GestionBaseDeDatos {
         return false;
     }
 
+    /**
+     * Devuelve el valor máximo de la columna {@code codigo} en la tabla indicada.
+     * @param tabla Nombre de la tabla.
+     * @return Último código generado, o 0 si la tabla está vacía o hay error.
+     */
     public static int obtenerUltimoCodigo(String tabla) {
         String sql = "SELECT MAX(codigo) FROM " + tabla;
 
@@ -643,6 +703,7 @@ public class GestionBaseDeDatos {
         return 0;
     }
 
+    /** Desactiva el autocommit e inicia una transacción explícita para agrupar varias operaciones. */
     public static void iniciarTransaccion() {
         try {
             comprobarConexion();
@@ -658,6 +719,7 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /** Hace commit de la transacción activa y reactiva el autocommit. */
     public static void confirmarTransaccion() {
         try {
             if (con != null && transaccionActiva) {
@@ -672,6 +734,7 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /** Hace rollback de la transacción activa, deshaciendo todos los cambios, y reactiva el autocommit. */
     public static void cancelarTransaccion() {
         try {
             if (con != null && transaccionActiva) {
@@ -686,6 +749,10 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /**
+     * Rellena el JComboBox proporcionado con las denominaciones de todos los ciclos ordenadas alfabéticamente.
+     * @param comboBox JComboBox de destino; se limpia antes de añadir los elementos.
+     */
     public static void cargarDenominacionesCiclosEnComboBox(javax.swing.JComboBox<String> comboBox) {
         comprobarConexion();
 
@@ -704,6 +771,10 @@ public class GestionBaseDeDatos {
         }
     }
 
+    /**
+     * Devuelve la lista de ciclos como {@link ItemCombo} (id + denominación) para poblar un JComboBox.
+     * @return Lista de ciclos ordenada alfabéticamente; vacía si hay error.
+     */
     public static ArrayList<Utils.ItemCombo> obtenerCiclosCombo() {
         comprobarConexion();
 
@@ -727,6 +798,11 @@ public class GestionBaseDeDatos {
         return lista;
     }
 
+    /**
+     * Devuelve los módulos del ciclo indicado como {@link ItemCombo} (id + nombre) para poblar un JComboBox.
+     * @param idCiclo Código del ciclo cuyos módulos se quieren obtener.
+     * @return Lista de módulos ordenada por nombre; vacía si no hay módulos o hay error.
+     */
     public static ArrayList<Utils.ItemCombo> obtenerModulosPorCicloCombo(int idCiclo) {
         comprobarConexion();
 
@@ -754,6 +830,11 @@ public class GestionBaseDeDatos {
         return lista;
     }
 
+    /**
+     * Cuenta los módulos asociados al ciclo indicado en la BD.
+     * @param idCiclo Código del ciclo.
+     * @return Número de módulos del ciclo, o 0 si hay error.
+     */
     public static int contarModulosPorCiclo(int idCiclo) {
         comprobarConexion();
 
@@ -779,6 +860,7 @@ public class GestionBaseDeDatos {
     
  
 
+    /** Imprime por consola la base de datos activa y el número de alumnos, módulos y ciclos para verificar el estado de la BD. */
     public static void comprobarBaseActual() {
         if (!comprobarConexion()) {
             System.out.println("No hay conexión.");

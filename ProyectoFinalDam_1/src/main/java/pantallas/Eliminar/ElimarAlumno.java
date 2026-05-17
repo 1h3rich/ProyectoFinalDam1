@@ -11,6 +11,9 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.awt.Dimension;
 
 /**
+ * Formulario Swing para eliminar un alumno de la base de datos.
+ * Busca alumnos por teléfono y correo, los muestra en una tabla y, tras
+ * confirmar los datos, borra el alumno junto con sus matrículas y líneas de matrícula.
  *
  * @author Rich
  */
@@ -25,6 +28,7 @@ public class ElimarAlumno extends javax.swing.JFrame {
         configurarTablaVacia();
     }
 
+    /** Configura título, textos de etiquetas, tamaño de campos y el listener de selección de la tabla. */
     private void configurarVentana() {
         setLocationRelativeTo(null);
         setTitle("Eliminar alumno");
@@ -63,6 +67,7 @@ public class ElimarAlumno extends javax.swing.JFrame {
         pack();
     }
 
+    /** Establece en la tabla un modelo vacío con las columnas del alumno y celdas no editables. */
     private void configurarTablaVacia() {
         DefaultTableModel modelo = new DefaultTableModel(
                 new Object[]{"Código", "Nombre", "Fecha nacimiento", "Domicilio", "Teléfono", "Correo"},
@@ -77,6 +82,7 @@ public class ElimarAlumno extends javax.swing.JFrame {
         jTable1.setModel(modelo);
     }
 
+    /** Busca en la BD el alumno que coincide con el teléfono y correo introducidos y muestra el resultado en la tabla. */
     private void buscarAlumnoSeguro() {
         String telefono = jTextField1.getText().trim();
         String correo = jTextField2.getText().trim();
@@ -298,6 +304,7 @@ public class ElimarAlumno extends javax.swing.JFrame {
         });
     }
 
+    /** Rellena los campos de teléfono y correo con los datos del alumno seleccionado en la tabla. */
     private void cargarDatosAlumnoSeleccionado() {
         int filaVista = jTable1.getSelectedRow();
 
@@ -314,6 +321,7 @@ public class ElimarAlumno extends javax.swing.JFrame {
         jTextField2.setText(correo == null ? "" : correo.toString());
     }
 
+    /** Verifica que los datos introducidos coincidan con el alumno de la tabla y, tras confirmar, lo elimina junto con sus matrículas y líneas de matrícula. */
     private void eliminarAlumnoSeleccionado() {
         int filaVista = jTable1.getSelectedRow();
 

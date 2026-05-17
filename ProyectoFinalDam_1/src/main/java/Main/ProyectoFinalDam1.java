@@ -91,8 +91,8 @@ public class ProyectoFinalDam1 {
     private static void mostrarBienvenida() {
         System.out.println("╔══════════════════════════════════════════╗");
         System.out.println("║   SISTEMA DE GESTIÓN - CENTRO FORMACIÓN  ║");
-        System.out.println("║              base de datos:               ║");
-        System.out.println("║             centro_formacion              ║");
+        System.out.println("║              base de datos:              ║");
+        System.out.println("║             centro_formacion             ║");
         System.out.println("╚══════════════════════════════════════════╝");
         System.out.println();
     }

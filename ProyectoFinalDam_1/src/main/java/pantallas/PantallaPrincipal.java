@@ -6,9 +6,13 @@ package pantallas;
 
 import pantallas.Consultas.SeleccionConsultas;
 import pantallas.Crear.*;
+import pantallas.Eliminar.MenuBorrar;
+import pantallas.Modificar.Menu_Modificar;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Ventana principal de la aplicación. Centraliza el acceso a todas las funcionalidades:
+ * crear, modificar, borrar registros, consultas, exportación e importación de datos.
  *
  * @author 1DAM
  */
@@ -22,7 +26,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     public PantallaPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
-        actualizarBotones();
     }
 
     /**
@@ -35,13 +38,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabelTitulo = new javax.swing.JLabel();
-        jButtonImportar = new javax.swing.JButton();
         jButtonCrear = new javax.swing.JButton();
         jButtonModificar = new javax.swing.JButton();
         jButtonBorrar = new javax.swing.JButton();
         jButtonCargar = new javax.swing.JButton();
         jButtonGuardar = new javax.swing.JButton();
-        jLabelImportar = new javax.swing.JLabel();
         jLabelCrear = new javax.swing.JLabel();
         jLabelBorrar = new javax.swing.JLabel();
         jLabelModificar = new javax.swing.JLabel();
@@ -60,16 +61,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 1, 48)); // NOI18N
         jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setText("ACADEMIA JAPÓN");
-
-        jButtonImportar.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonImportar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jButtonImportar.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonImportar.setText("Importar");
-        jButtonImportar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonImportarActionPerformed(evt);
-            }
-        });
 
         jButtonCrear.setBackground(new java.awt.Color(255, 255, 255));
         jButtonCrear.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
@@ -95,6 +86,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonBorrar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonBorrar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonBorrar.setText("Borrar");
+        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarActionPerformed(evt);
+            }
+        });
 
         jButtonCargar.setBackground(new java.awt.Color(255, 255, 255));
         jButtonCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
@@ -105,10 +101,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonGuardar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonGuardar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonGuardar.setText("Guardar");
-
-        jLabelImportar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jLabelImportar.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelImportar.setText("Importara datos desde la base de datos.");
 
         jLabelCrear.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jLabelCrear.setForeground(new java.awt.Color(0, 0, 0));
@@ -184,7 +176,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButtonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonImportar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonConsultas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -193,15 +184,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                             .addComponent(jButtonCrearModulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelImportar)
                             .addComponent(jLabelCrear)
                             .addComponent(jLabelBorrar)
                             .addComponent(jLabelModificar)
-                            .addComponent(jLabelCargar)
                             .addComponent(jLabelGuardar)
-                            .addComponent(jLabelConsultas)
                             .addComponent(jLabelModificar1)
-                            .addComponent(jLabelModificar2))))
+                            .addComponent(jLabelModificar2)
+                            .addComponent(jLabelConsultas)
+                            .addComponent(jLabelCargar))))
                 .addGap(531, 531, 531))
         );
         layout.setVerticalGroup(
@@ -209,52 +199,43 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addComponent(jLabelTitulo)
-                .addGap(86, 86, 86)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonImportar)
-                    .addComponent(jLabelImportar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(71, 71, 71)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrear)
                     .addComponent(jLabelCrear))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrearCiclo)
                     .addComponent(jLabelModificar2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrearModulo)
                     .addComponent(jLabelModificar1))
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonModificar)
                     .addComponent(jLabelModificar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBorrar)
                     .addComponent(jLabelBorrar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonConsultas)
                     .addComponent(jLabelConsultas))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCargar)
                     .addComponent(jLabelCargar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jLabelGuardar))
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addContainerGap(380, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportarActionPerformed
-        bdImportada = GestionBaseDeDatos.vincularBDD(); // simulamos que ya se importó
-        actualizarBotones(); // activamos los demás botones
-    }//GEN-LAST:event_jButtonImportarActionPerformed
 
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
         CrearAlumno crearAlumno = new CrearAlumno();
@@ -262,7 +243,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
-        
+        Menu_Modificar mm = new Menu_Modificar();
+        mm.setVisible(true);
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
     private void jButtonCrearCicloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearCicloActionPerformed
@@ -279,6 +261,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         SeleccionConsultas sc = new SeleccionConsultas();
         sc.setVisible(true);
     }//GEN-LAST:event_jButtonConsultasActionPerformed
+
+    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
+        MenuBorrar mb = new MenuBorrar();
+        mb.setVisible(true);
+    }//GEN-LAST:event_jButtonBorrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,15 +301,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
     }
 
-    //Si
-    private void actualizarBotones() {
-        jButtonModificar.setEnabled(bdImportada);
-        jButtonBorrar.setEnabled(bdImportada);
-        jButtonConsultas.setEnabled(bdImportada);
-    }
-
-    //No
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonCargar;
@@ -331,14 +309,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCrearCiclo;
     private javax.swing.JButton jButtonCrearModulo;
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JButton jButtonImportar;
     private javax.swing.JButton jButtonModificar;
     private javax.swing.JLabel jLabelBorrar;
     private javax.swing.JLabel jLabelCargar;
     private javax.swing.JLabel jLabelConsultas;
     private javax.swing.JLabel jLabelCrear;
     private javax.swing.JLabel jLabelGuardar;
-    private javax.swing.JLabel jLabelImportar;
     private javax.swing.JLabel jLabelModificar;
     private javax.swing.JLabel jLabelModificar1;
     private javax.swing.JLabel jLabelModificar2;

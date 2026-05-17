@@ -10,6 +10,9 @@ import servicios.BaseDeDatos.ConsultasEjercicios;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para ejecutar los nueve ejercicios SQL predefinidos.
+ * Permite seleccionar un ejercicio, muestra su descripción y, al pulsar Actualizar,
+ * solicita los parámetros necesarios y presenta el resultado en una tabla.
  *
  * @author 1DAM
  */
@@ -47,6 +50,7 @@ public class Ejercicios extends javax.swing.JFrame {
         }
     }
 
+    /** Configura el título, el cierre con confirmación, el comportamiento de la tabla y el área de descripción. */
     private void configurarVentana() {
         setLocationRelativeTo(null);
         setTitle("Ejercicios SQL");
@@ -69,6 +73,7 @@ public class Ejercicios extends javax.swing.JFrame {
         jTextAreaDescripcion.setWrapStyleWord(true);
     }
 
+    /** Muestra un diálogo de confirmación y cierra la ventana solo si el usuario acepta. */
     private void cerrarVentana() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -250,7 +255,7 @@ public class Ejercicios extends javax.swing.JFrame {
         });
     }
 
-    //Si
+    /** Obtiene la SQL y los parámetros del ejercicio seleccionado, ejecuta la consulta y muestra el resultado en la tabla. */
     private void cargarTabla() {
         int opcion = jComboBoxEleccion.getSelectedIndex() + 1;
 
@@ -282,6 +287,11 @@ public class Ejercicios extends javax.swing.JFrame {
         jScrollPane1.repaint();
     }
 
+    /**
+     * Devuelve la sentencia SQL del ejercicio indicado, obtenida de {@link ConsultasEjercicios}.
+     * @param opcion Número de ejercicio (1-9).
+     * @return Sentencia SQL, o {@code null} si el número no tiene ejercicio definido.
+     */
     private String obtenerSQL(int opcion) {
         return switch (opcion) {
             case 1 ->
@@ -307,6 +317,11 @@ public class Ejercicios extends javax.swing.JFrame {
         };
     }
 
+    /**
+     * Solicita al usuario los parámetros necesarios para el ejercicio indicado.
+     * @param opcion Número de ejercicio.
+     * @return Array de parámetros, array vacío si el ejercicio no requiere ninguno, o {@code null} si el usuario cancela.
+     */
     private String[] obtenerParametros(int opcion) {
         return switch (opcion) {
             case 2 ->
@@ -320,6 +335,7 @@ public class Ejercicios extends javax.swing.JFrame {
         };
     }
 
+    /** Solicita nivel y curso mediante diálogos y los devuelve como array; devuelve {@code null} si el usuario cancela. */
     private String[] pedirParametrosEjercicio2() {
         String nivel = JOptionPane.showInputDialog(this, "Introduce nivel");
 
@@ -336,6 +352,7 @@ public class Ejercicios extends javax.swing.JFrame {
         return new String[]{nivel, curso};
     }
 
+    /** Solicita el año académico mediante un diálogo y lo devuelve como array; devuelve {@code null} si el usuario cancela. */
     private String[] pedirParametrosEjercicio3() {
         String anioAcademico = JOptionPane.showInputDialog(this, "Introduce año académico");
 
@@ -346,6 +363,7 @@ public class Ejercicios extends javax.swing.JFrame {
         return new String[]{anioAcademico};
     }
 
+    /** Solicita denominación del ciclo, curso y año académico; devuelve {@code null} si el usuario cancela en cualquier paso. */
     private String[] pedirParametrosEjercicio4() {
         String denominacion = JOptionPane.showInputDialog(this, "Introduce denominación del ciclo");
 
@@ -368,6 +386,7 @@ public class Ejercicios extends javax.swing.JFrame {
         return new String[]{denominacion, curso, anioAcademico};
     }
 
+    /** Muestra en el área de texto la descripción del ejercicio seleccionado en el combo. */
     private void actualizarDescripcion() {
         int indice = jComboBoxEleccion.getSelectedIndex();
 

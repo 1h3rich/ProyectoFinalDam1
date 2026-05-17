@@ -5,9 +5,18 @@
 package Utils;
 
 /**
+ * Indica el modo de operación en el que se abre un formulario de la aplicación.
+ * Controla qué campos son editables y qué botones se habilitan.
  *
  * @author Rich
  */
 public enum ModoFormulario {
-    CREAR, MODIFICAR, ELIMINAR, GUARDAR
+    /** El formulario permite introducir y guardar un nuevo registro. */
+    CREAR,
+    /** El formulario carga un registro existente para editarlo. */
+    MODIFICAR,
+    /** El formulario muestra un registro para confirmar su eliminación. */
+    ELIMINAR,
+    /** El formulario exporta o persiste los datos actuales de sesión. */
+    GUARDAR
 }

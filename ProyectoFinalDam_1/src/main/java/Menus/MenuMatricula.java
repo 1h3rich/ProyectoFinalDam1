@@ -322,14 +322,22 @@ public class MenuMatricula {
         }
     }
 
+    /** Escribe la lista de matrículas en un fichero TXT con separador ";". */
     private static void exportarATxt() {
         exportarAFicheroTexto(Config.ficheroMatricula + ".txt", false);
     }
 
+    /** Escribe la lista de matrículas en un fichero CSV con separador ":". */
     private static void exportarACsv() {
         exportarAFicheroTexto(Config.ficheroMatricula + ".csv", true);
     }
 
+    /**
+     * Escribe la lista de matrículas en un fichero de texto, usando ";" o ":" como separador.
+     *
+     * @param rutaFichero  Ruta del fichero de destino.
+     * @param usarDosPuntos true para usar ":" como separador (CSV), false para ";" (TXT).
+     */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Matricula m : SesionDatos.listaMatriculas) {
@@ -346,12 +354,14 @@ public class MenuMatricula {
         }
     }
 
+    /** Serializa la lista de matrículas en un fichero binario (.dat). */
     private static void exportarABinario() {
         GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.listaMatriculas);
         System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
                 + " registros a: " + Config.ficheroMatricula + ".dat");
     }
 
+    /** Escribe la lista de matrículas en un fichero JSON, un objeto por línea. */
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroMatricula + ".json", false))) {
             for (Matricula m : SesionDatos.listaMatriculas) {

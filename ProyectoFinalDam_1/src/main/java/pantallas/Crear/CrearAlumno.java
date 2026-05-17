@@ -10,6 +10,9 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para registrar un nuevo alumno en la base de datos.
+ * Recoge nombre, correo, fecha de nacimiento, domicilio y teléfono;
+ * tras insertar el alumno, abre automáticamente el formulario de creación de matrícula.
  *
  * @author Rich
  */
@@ -31,8 +34,6 @@ public class CrearAlumno extends javax.swing.JFrame {
                 cancelar();
             }
         });
-
-        jButtonGuardar.setText("Crear alumno");
     }
 
     /**
@@ -245,6 +246,7 @@ public class CrearAlumno extends javax.swing.JFrame {
         });
     }
 
+    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -259,6 +261,7 @@ public class CrearAlumno extends javax.swing.JFrame {
         }
     }
 
+    /** Valida los campos, inicia una transacción, inserta el alumno en la BD y abre el formulario de matrícula si el insert es correcto. */
     private void crearAlumno() {
 
         String nombre = jTextFieldNombre.getText().trim();
@@ -303,13 +306,6 @@ public class CrearAlumno extends javax.swing.JFrame {
         }
     }
 
-    private void limpiarCampos() {
-        jTextFieldNombre.setText("");
-        jTextFieldCorreo.setText("");
-        jTextFieldDomicilio.setText("");
-        jTextFieldFechaNacimiento.setText("");
-        jTextFieldTelefono.setText("");
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;

@@ -12,6 +12,8 @@ import java.util.logging.*;
 import java.util.Collection;
 
 /**
+ * Servicio de gestión de ficheros que encapsula la lectura y escritura en los formatos
+ * admitidos por la aplicación: TXT, CSV, JSON y binario serializado.
  *
  * @author isard
  */

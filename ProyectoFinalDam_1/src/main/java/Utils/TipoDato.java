@@ -5,9 +5,20 @@
 package Utils;
 
 /**
+ * Identifica el tipo de entidad del modelo sobre el que opera una pantalla o servicio.
+ * Se usa para parametrizar operaciones genéricas de importación, exportación y visualización.
  *
  * @author Rich
  */
 public enum TipoDato {
-    ALUMNO, MODULO, CICLO, MATRICULA, LINEA_MATRICULA
+    /** Entidad alumno. */
+    ALUMNO,
+    /** Entidad módulo formativo. */
+    MODULO,
+    /** Entidad ciclo formativo. */
+    CICLO,
+    /** Entidad matrícula. */
+    MATRICULA,
+    /** Entidad línea de matrícula (módulo matriculado). */
+    LINEA_MATRICULA
 }

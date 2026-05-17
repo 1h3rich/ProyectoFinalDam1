@@ -15,6 +15,8 @@ import modelos.LineaMatricula;
 import javax.swing.JOptionPane;
 
 /**
+ * Formulario Swing para exportar los datos en sesión a distintos formatos de fichero
+ * (CSV, TXT, JSON, Binario). Permite seleccionar la entidad a exportar mediante un JComboBox.
  *
  * @author 1DAM
  */
@@ -190,7 +192,7 @@ public class Exportar extends javax.swing.JFrame {
         });
     }
 
-    
+    /** Exporta la entidad seleccionada en el combo al fichero CSV correspondiente. */
     private void exportarCSV() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
@@ -238,6 +240,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta la entidad seleccionada en el combo al fichero JSON correspondiente. */
     private void exportarJSON() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
@@ -285,6 +288,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta todas las entidades en sesión a sus respectivos ficheros CSV. */
     private void exportarTodoCSV() {
 
         /*
@@ -310,6 +314,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta todas las entidades en sesión a sus respectivos ficheros JSON. */
     private void exportarTodoJSON() {
 /*
         for (Alumno alumno : SesionDatos.getAlumnos()) {
@@ -334,6 +339,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta todas las entidades en sesión a sus respectivos ficheros binarios (.dat). */
     private void exportarTodoBinario() {
 /*
         if (!SesionDatos.getAlumnos().isEmpty()) {
@@ -358,6 +364,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta la entidad seleccionada en el combo al fichero TXT correspondiente. */
     private void exportarTXT() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
@@ -405,6 +412,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta todas las entidades en sesión a sus respectivos ficheros TXT. */
     private void exportarTodoTXT() {
 /*
         for (Alumno alumno : SesionDatos.getAlumnos()) {
@@ -429,6 +437,7 @@ public class Exportar extends javax.swing.JFrame {
 */
     }
 
+    /** Exporta la entidad seleccionada en el combo al fichero binario (.dat) correspondiente. */
     private void exportarBINARIO() {
 
         String opcion = jComboBox1.getSelectedItem().toString();

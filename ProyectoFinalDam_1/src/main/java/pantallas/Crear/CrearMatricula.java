@@ -10,6 +10,9 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para crear una nueva matrícula asociada a un alumno.
+ * El código del alumno se recibe del formulario anterior y no es editable;
+ * tras insertar la matrícula, abre el formulario de creación de líneas de matrícula.
  *
  * @author Rich
  */
@@ -31,6 +34,7 @@ public class CrearMatricula extends javax.swing.JFrame {
         jTextFieldCodigoAlumno.setEditable(false);
     }
 
+    /** Configura el cierre con confirmación y el texto del botón de guardar. */
     private void configurarVentana() {
          setLocationRelativeTo(null);
 
@@ -46,6 +50,7 @@ public class CrearMatricula extends javax.swing.JFrame {
         jButtonGuardar.setText("Crear matrícula");
     }
 
+    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -268,6 +273,7 @@ public class CrearMatricula extends javax.swing.JFrame {
         });
     }
 
+    /** Valida los campos, inserta la matrícula en la BD dentro de la transacción activa y abre el formulario de líneas de matrícula. */
     private void crearMatricula() {
 
         String estado = jTextFieldEstado.getText().trim();
@@ -322,15 +328,6 @@ public class CrearMatricula extends javax.swing.JFrame {
         }
     }
 
-    private void limpiarCampos() {
-        jTextFieldEstado.setText("");
-        jTextFieldImporte.setText("");
-        jTextFieldAnioAcademico.setText("");
-
-        if (idAlumno == -1) {
-            jTextFieldCodigoAlumno.setText("");
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;

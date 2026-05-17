@@ -12,6 +12,9 @@ import javax.swing.table.TableRowSorter;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para consultas unitabla filtradas por un parámetro.
+ * Según la entidad elegida muestra un campo de teléfono, un combo de ciclos o uno de módulos
+ * y, al pulsar Actualizar, carga los registros que coinciden con el filtro.
  *
  * @author 1DAM
  */
@@ -229,7 +232,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         });
     }
 
-    //Si
+    /** Configura el título, tamaño mínimo, cierre con confirmación y el tamaño prototipo de los combos. */
     private void configurarVentana() {
         setTitle("Consulta por filtro");
 
@@ -250,6 +253,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    /** Establece la conexión con la BD; deshabilita el botón Actualizar si la conexión falla. */
     private void conectarBDD() {
         if (!GestionBaseDeDatos.vincularBDD()) {
             JOptionPane.showMessageDialog(
@@ -263,6 +267,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         }
     }
 
+    /** Muestra un diálogo de confirmación y cierra la ventana solo si el usuario acepta. */
     private void cerrarVentana() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -276,6 +281,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         }
     }
 
+    /** Crea la JTable con scroll dentro del jPanel1 y configura la ordenación automática y el redimensionado libre. */
     private void inicializarTabla() {
         jPanel1.removeAll();
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -299,6 +305,10 @@ public class ConsultaFila extends javax.swing.JFrame {
         jPanel1.repaint();
     }
 
+    /**
+     * Convierte el texto seleccionado en el JComboBox al {@link TipoDato} correspondiente.
+     * @return TipoDato que representa la entidad elegida.
+     */
     private TipoDato obtenerTipoSeleccionado() {
         String seleccion = jComboBoxEleccion.getSelectedItem().toString();
 
@@ -318,6 +328,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         };
     }
 
+    /** Muestra u oculta el campo de teléfono o los combos de ciclo/módulo según la entidad seleccionada. */
     private void actualizarControles() {
         TipoDato tipo = obtenerTipoSeleccionado();
 
@@ -352,6 +363,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         repaint();
     }
 
+    /** Ejecuta la consulta SQL filtrada con el parámetro activo y actualiza la tabla ajustando el ancho de columnas. */
     private void cargarTabla() {
         try {
             TipoDato tipo = obtenerTipoSeleccionado();
@@ -398,6 +410,7 @@ public class ConsultaFila extends javax.swing.JFrame {
         }
     }
 
+    /** Ajusta el ancho de cada columna al contenido más ancho (cabecera o celda) con un máximo de 300 px. */
     private void ajustarTablaAlContenido() {
         final int margen = 20;
         final int anchoMaximoColumna = 300;
@@ -450,6 +463,11 @@ public class ConsultaFila extends javax.swing.JFrame {
         jPanel1.repaint();
     }
 
+    /**
+     * Devuelve la sentencia SQL filtrada (con {@code ?}) adecuada al tipo de entidad.
+     * @param tipo Entidad sobre la que se realiza la consulta.
+     * @return Sentencia SQL parametrizada, o {@code null} si el tipo no está soportado.
+     */
     private String obtenerSQL(TipoDato tipo) {
         return switch (tipo) {
             case ALUMNO ->
@@ -496,6 +514,11 @@ public class ConsultaFila extends javax.swing.JFrame {
         };
     }
 
+    /**
+     * Obtiene el valor del filtro activo según la entidad: teléfono, nombre de módulo o denominación de ciclo.
+     * @param tipo Entidad seleccionada.
+     * @return Cadena de texto que se pasará como parámetro a la consulta SQL.
+     */
     private String obtenerParametro(TipoDato tipo) {
         return switch (tipo) {
             case ALUMNO, MATRICULA, LINEA_MATRICULA ->

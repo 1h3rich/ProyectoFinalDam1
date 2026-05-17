@@ -4,26 +4,98 @@
  */
 package pantallas.Modificar;
 
-import Utils.ModoFormulario;
-import Utils.Validadores;
+import java.awt.HeadlessException;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import modelos.Alumno;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para consultar y modificar los datos de un alumno existente.
+ * Muestra la lista completa de alumnos en una tabla y carga el seleccionado en los campos de edición.
  *
  * @author Rich
  */
 public class ModificarAlumno extends javax.swing.JFrame {
 
-    private ModoFormulario modo;
-    private Alumno alumno;
+    Alumno alumno;
+    private DefaultTableModel modeloTabla;
 
     /**
      * Creates new form FormularioAlumno
      */
     public ModificarAlumno() {
         initComponents();
+
+        jTextFieldFechaNacimiento.setEditable(false);
+        jTextFieldFechaNacimiento.setFocusable(false);
+
+        configurarTabla();
+        cargarAlumnosEnTabla();
+    }
+
+    /** Inicializa el modelo de la tabla con columnas no editables y registra el listener de selección. */
+    private void configurarTabla() {
+        modeloTabla = new DefaultTableModel(
+                new Object[]{"Código", "Nombre", "Correo", "Fecha nacimiento", "Domicilio", "Teléfono"},
+                0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        jTable1.setModel(modeloTabla);
+
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarAlumnoSeleccionado();
+            }
+        });
+    }
+
+    /** Consulta todos los alumnos de la BD ordenados por nombre y los muestra en la tabla. */
+    private void cargarAlumnosEnTabla() {
+        modeloTabla.setRowCount(0);
+        String sql = "SELECT codigo, nombre, correo, fecha_nacimiento, domicilio, telefono FROM alumno ORDER BY nombre ASC";
+        DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
+        for (int i = 0; i < temp.getRowCount(); i++) {
+            modeloTabla.addRow(new Object[]{
+                temp.getValueAt(i, 0),
+                temp.getValueAt(i, 1),
+                temp.getValueAt(i, 2),
+                temp.getValueAt(i, 3),
+                temp.getValueAt(i, 4),
+                temp.getValueAt(i, 5)
+            });
+        }
+    }
+
+    /** Lee la fila seleccionada en la tabla, construye el objeto Alumno y rellena los campos del formulario. */
+    private void cargarAlumnoSeleccionado() {
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) return;
+
+        // Table columns: 0=codigo, 1=nombre, 2=correo, 3=fecha_nacimiento, 4=domicilio, 5=telefono
+        // Alumno(String[]) expects: 0=codigo, 1=nombre, 2=fecha_nacimiento, 3=domicilio, 4=telefono, 5=correo
+        String[] datos = {
+            modeloTabla.getValueAt(fila, 0).toString(),
+            modeloTabla.getValueAt(fila, 1).toString(),
+            modeloTabla.getValueAt(fila, 3).toString(),
+            modeloTabla.getValueAt(fila, 4).toString(),
+            modeloTabla.getValueAt(fila, 5).toString(),
+            modeloTabla.getValueAt(fila, 2).toString()
+        };
+        alumno = new Alumno(datos);
+
+        jTextFieldNombre.setText(alumno.getNombre());
+        jTextFieldCorreo.setText(alumno.getCorreo());
+        jTextFieldFechaNacimiento.setText(alumno.getFechaNacimiento().toString());
+        jTextFieldDomicilio.setText(alumno.getDomicilio());
+        jTextFieldTelefono.setText(alumno.getTelefono());
     }
 
     /**
@@ -37,21 +109,20 @@ public class ModificarAlumno extends javax.swing.JFrame {
 
         jButtonGuardar = new javax.swing.JButton();
         jTextFieldNombre = new javax.swing.JTextField();
-        jTextFieldApellidos = new javax.swing.JTextField();
         jTextFieldCorreo = new javax.swing.JTextField();
         jTextFieldTelefono = new javax.swing.JTextField();
         jTextFieldDomicilio = new javax.swing.JTextField();
         jTextFieldFechaNacimiento = new javax.swing.JTextField();
         jLabelInfoNombre = new javax.swing.JLabel();
-        jLabelInfoNombre1 = new javax.swing.JLabel();
         jLabelInfoNombre2 = new javax.swing.JLabel();
         jLabelInfoNombre3 = new javax.swing.JLabel();
         jLabelInfoNombre4 = new javax.swing.JLabel();
         jLabelInfoNombre5 = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
-        jCheckBoxConfirmacionBDD = new javax.swing.JCheckBox();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jButtonCancelar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,9 +141,6 @@ public class ModificarAlumno extends javax.swing.JFrame {
             }
         });
 
-        jTextFieldApellidos.setMinimumSize(new java.awt.Dimension(64, 128));
-        jTextFieldApellidos.setPreferredSize(new java.awt.Dimension(64, 128));
-
         jTextFieldCorreo.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCorreo.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldCorreo.addActionListener(new java.awt.event.ActionListener() {
@@ -89,8 +157,6 @@ public class ModificarAlumno extends javax.swing.JFrame {
 
         jLabelInfoNombre.setText("Nombre:");
 
-        jLabelInfoNombre1.setText("Apellidos:");
-
         jLabelInfoNombre2.setText("Correo:");
 
         jLabelInfoNombre3.setText("F:/ Nacimiento");
@@ -101,112 +167,122 @@ public class ModificarAlumno extends javax.swing.JFrame {
 
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("FORMULARIO ALUMNADO");
+        jLabelTitulo.setText("MODIFICAR ALUMNADO");
 
-        jCheckBoxConfirmacionBDD.setText("ExportarToBDD");
-        jCheckBoxConfirmacionBDD.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxConfirmacionBDDActionPerformed(evt);
+                jButtonCancelarActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Seleccione esta opción para insertar en la base de datos.");
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
-        jLabel3.setText("Guardado local.");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 419, Short.MAX_VALUE)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(379, 379, 379))
             .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(555, 555, 555)
-                        .addComponent(jLabelInfoNombre3))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonCancelar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonGuardar)
+                        .addGap(208, 208, 208))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabelInfoNombre2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabelInfoNombre5)
+                                .addComponent(jLabelInfoNombre4)))
+                        .addGap(57, 57, 57)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(557, 557, 557)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabelInfoNombre4)
-                                        .addGap(86, 86, 86))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabelInfoNombre2, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelInfoNombre1, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelInfoNombre5, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(59, 59, 59))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBoxConfirmacionBDD)
-                            .addComponent(jButtonGuardar)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(461, 461, 461)
-                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(429, Short.MAX_VALUE))
+                            .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(213, 213, 213))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(17, 17, 17)
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre1))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre2))
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfoNombre3)
-                    .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfoNombre4)
-                    .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre5))
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxConfirmacionBDD)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonGuardar)
-                    .addComponent(jLabel3))
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoNombre))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoNombre2))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoNombre3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoNombre4))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoNombre5))
+                        .addGap(59, 59, 59)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonCancelar)
+                            .addComponent(jButtonGuardar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        if (modo == ModoFormulario.CREAR) {
-            crearAlumno();
-        } else {
-            modificarAlumno();
-        }
+        modificarAlumno();
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jTextFieldCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCorreoActionPerformed
@@ -217,9 +293,10 @@ public class ModificarAlumno extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNombreActionPerformed
 
-    private void jCheckBoxConfirmacionBDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConfirmacionBDDActionPerformed
-
-    }//GEN-LAST:event_jCheckBoxConfirmacionBDDActionPerformed
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        GestionBaseDeDatos.cancelarTransaccion();
+        dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,103 +334,49 @@ public class ModificarAlumno extends javax.swing.JFrame {
         });
     }
 
-    public ModificarAlumno(ModoFormulario modo, Alumno alumno) {
-        initComponents();
-
-        this.modo = modo;
-        this.alumno = alumno;
-
-        setLocationRelativeTo(null);
-        prepararFormulario();
-    }
-
-    private void prepararFormulario() {
-        if (modo == ModoFormulario.CREAR) {
-            setTitle("Crear alumno");
-            jButtonGuardar.setText("Crear Alumno");
-            limpiarCampos();
-        } else {
-            setTitle("Modificar alumno");
-            jButtonGuardar.setText("Modificar Alumno");
-
-            if (alumno != null) {
-                cargarDatosAlumno();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se ha seleccionado ningun alumno,");
-            }
-        }
-    }
-
-    private void crearAlumno() {
-        String nombre = jTextFieldNombre.getText();
-        String apellidos = jTextFieldApellidos.getText();
-        String temp = jTextFieldFechaNacimiento.getText();
-        String domicilio = jTextFieldDomicilio.getText();
-        String telefono = jTextFieldTelefono.getText();
-        String correo = jTextFieldCorreo.getText();
-
-        if (Validadores.validarTextoNoVacio(nombre)
-                || Validadores.validarTextoNoVacio(apellidos)
-                || Validadores.validarTextoNoVacio(domicilio)
-                || Validadores.validarTelefono(telefono)
-                || Validadores.validarCorreo(correo)) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
-            return;
-        }
-
-        nombre = nombre + " " + apellidos;
-        LocalDate fechaNacimiento = LocalDate.parse(temp);
-
-        Alumno nuevoAlumno = new Alumno(nombre, fechaNacimiento, domicilio, telefono, correo);
-
-        // INSERT A LA BASE DE DATOS
-        // Insert.insertarAlumno(nuevoAlumno);
-        if (jCheckBoxConfirmacionBDD.isSelected()) {
-            
-            JOptionPane.showMessageDialog(this, "Alumno creado correctamente.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Alumno creado pero no insertado.");
-        }
-        dispose();
-    }
-
+    /** Valida los campos editados, actualiza el objeto Alumno y persiste los cambios en la BD. */
     private void modificarAlumno() {
         if (alumno == null) {
-            JOptionPane.showMessageDialog(this, "No hay alumno para modificar.");
+            JOptionPane.showMessageDialog(this, "Selecciona un alumno de la tabla primero.");
             return;
         }
 
-        String nombre = jTextFieldNombre.getText();
-        String apellidos = jTextFieldApellidos.getText();
-        String temp = jTextFieldFechaNacimiento.getText();
-        String domicilio = jTextFieldDomicilio.getText();
-        String telefono = jTextFieldCorreo.getText();
-        String correo = jTextFieldCorreo.getText();
+        String nombre = jTextFieldNombre.getText().trim();
+        String correo = jTextFieldCorreo.getText().trim();
+        String domicilio = jTextFieldDomicilio.getText().trim();
+        String telefono = jTextFieldTelefono.getText().trim();
 
-        if (nombre.isBlank() || apellidos.isBlank() || domicilio.isBlank() || telefono.isBlank() || correo.isBlank()) {
+        if (nombre.isBlank() || correo.isBlank() || domicilio.isBlank() || telefono.isBlank()) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
 
-        nombre = nombre + " " + apellidos;
-        LocalDate fechaNacimiento = LocalDate.parse(temp);
+        try {
+            alumno.setNombre(nombre);
+            alumno.setCorreo(correo);
+            alumno.setDomicilio(domicilio);
+            alumno.setTelefono(telefono);
 
-        alumno.setNombre(nombre);
-        alumno.setFechaNacimiento(fechaNacimiento);
-        alumno.setTelefono(telefono);
-        alumno.setDomicilio(domicilio);
-        alumno.setCorreo(correo);
+            // UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
+            String[] entradas = {
+                alumno.getNombre(),
+                alumno.getFechaNacimiento().toString(),
+                alumno.getDomicilio(),
+                alumno.getTelefono(),
+                alumno.getCorreo(),
+                String.valueOf(alumno.getCodigo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
+            JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
+            alumno = null;
+            cargarAlumnosEnTabla();
 
-        // UPDATE BASE DE DATOS
-        if (jCheckBoxConfirmacionBDD.isSelected()) {
-            //No existe la consulta aun, o no se como utilizar realizarSQL
-            JOptionPane.showMessageDialog(this, "Alumno actualizado correctamente.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Alumno actualizado de manera local");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Error al modificar el alumno: " + e.getMessage());
         }
-        dispose();
     }
 
+    /** Vuelca los datos del alumno actualmente seleccionado en los campos del formulario. */
     private void cargarDatosAlumno() {
         jTextFieldNombre.setText(alumno.getNombre());
         jTextFieldCorreo.setText(alumno.getCorreo());
@@ -362,26 +385,18 @@ public class ModificarAlumno extends javax.swing.JFrame {
         jTextFieldTelefono.setText(alumno.getTelefono());
     }
 
-    private void limpiarCampos() {
-        jTextFieldNombre.setText("");
-        jTextFieldCorreo.setText("");
-        jTextFieldDomicilio.setText("");
-        jTextFieldFechaNacimiento.setText("");
-        jTextFieldTelefono.setText("");
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JCheckBox jCheckBoxConfirmacionBDD;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelInfoNombre;
-    private javax.swing.JLabel jLabelInfoNombre1;
     private javax.swing.JLabel jLabelInfoNombre2;
     private javax.swing.JLabel jLabelInfoNombre3;
     private javax.swing.JLabel jLabelInfoNombre4;
     private javax.swing.JLabel jLabelInfoNombre5;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JTextField jTextFieldApellidos;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldCorreo;
     private javax.swing.JTextField jTextFieldDomicilio;
     private javax.swing.JTextField jTextFieldFechaNacimiento;

@@ -31,7 +31,6 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jButtonModificar" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButtonCrear" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jButtonImportar" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButtonBorrar" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButtonConsultas" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButtonCargar" max="32767" attributes="0"/>
@@ -41,15 +40,14 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelImportar" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelCrear" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelBorrar" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelModificar" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelCargar" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelGuardar" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelConsultas" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelModificar1" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelModificar2" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelConsultas" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelCargar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -62,52 +60,47 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
               <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButtonImportar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabelImportar" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonCrear" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelCrear" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonCrearCiclo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelModificar2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonCrearModulo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelModificar1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonModificar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelModificar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonBorrar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelBorrar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonConsultas" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelConsultas" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonCargar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelCargar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="267" max="32767" attributes="0"/>
+              <EmptySpace pref="380" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -126,23 +119,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="ACADEMIA JAP&#xd3;N"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButtonImportar">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="NSimSun" size="12" style="0"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Importar"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonImportarActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonCrear">
       <Properties>
@@ -191,6 +167,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Borrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBorrarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonCargar">
       <Properties>
@@ -218,17 +197,6 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Guardar"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabelImportar">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="NSimSun" size="12" style="0"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Importara datos desde la base de datos."/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelCrear">

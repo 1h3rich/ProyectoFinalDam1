@@ -8,11 +8,12 @@ import Utils.Validadores;
 import javax.swing.JOptionPane;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
-import javax.swing.JTextField;
 import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
+ * Formulario Swing para registrar un nuevo ciclo formativo en la base de datos.
+ * Recoge denominación, familia profesional, nivel, horas y año curricular;
+ * tras insertar el ciclo, abre el formulario de gestión de módulos del ciclo creado.
  *
  * @author Rich
  */
@@ -24,11 +25,9 @@ public class CrearCiclo extends javax.swing.JFrame {
     public CrearCiclo() {
         initComponents();
         configurarVentana();
-        cargarComboCiclos();
-        configurarEventosCombo();
-
     }
 
+    /** Configura el título, el cierre con confirmación y los campos de solo lectura (familia, nivel, horas). */
     private void configurarVentana() {
         setLocationRelativeTo(null);
 
@@ -42,7 +41,6 @@ public class CrearCiclo extends javax.swing.JFrame {
         });
 
         setTitle("Crear ciclo");
-        jButtonGuardar.setText("Crear ciclo");
 
         jTextFieldFamiliaProfresional.setEditable(false);
         jTextFieldNivel.setEditable(false);
@@ -53,6 +51,7 @@ public class CrearCiclo extends javax.swing.JFrame {
         jTextFieldHoras.setPreferredSize(new Dimension(100, 25));
     }
 
+    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -65,72 +64,6 @@ public class CrearCiclo extends javax.swing.JFrame {
             GestionBaseDeDatos.cancelarTransaccion();
             this.dispose();
         }
-    }
-
-    private void cargarComboCiclos() {
-        jComboBoxCiclos.removeAllItems();
-
-        jComboBoxCiclos.addItem("Selecciona un ciclo");
-        jComboBoxCiclos.addItem("DAM");
-        jComboBoxCiclos.addItem("DAW");
-        jComboBoxCiclos.addItem("ASIR");
-        jComboBoxCiclos.addItem("SMR");
-
-        jTextFieldHoras.setEditable(false);
-    }
-
-    private void configurarEventosCombo() {
-        jComboBoxCiclos.addActionListener(e -> actualizarDatosSegunCiclo());
-    }
-
-    private void actualizarDatosSegunCiclo() {
-        Object seleccionado = jComboBoxCiclos.getSelectedItem();
-
-        if (seleccionado == null) {
-            limpiarDatosAutomaticos();
-            ajustarTamanioCamposAutomaticos();
-            return;
-        }
-
-        String ciclo = seleccionado.toString();
-
-        switch (ciclo) {
-            case "DAM":
-                jTextFieldFamiliaProfresional.setText("Informática y Comunicaciones");
-                jTextFieldNivel.setText("Grado Superior");
-                jTextFieldHoras.setText("2000");
-                break;
-
-            case "DAW":
-                jTextFieldFamiliaProfresional.setText("Informática y Comunicaciones");
-                jTextFieldNivel.setText("Grado Superior");
-                jTextFieldHoras.setText("2000");
-                break;
-
-            case "ASIR":
-                jTextFieldFamiliaProfresional.setText("Informática y Comunicaciones");
-                jTextFieldNivel.setText("Grado Superior");
-                jTextFieldHoras.setText("2000");
-                break;
-
-            case "SMR":
-                jTextFieldFamiliaProfresional.setText("Informática y Comunicaciones");
-                jTextFieldNivel.setText("Grado Medio");
-                jTextFieldHoras.setText("2000");
-                break;
-
-            default:
-                limpiarDatosAutomaticos();
-                break;
-        }
-
-        ajustarTamanioCamposAutomaticos();
-    }
-
-    private void limpiarDatosAutomaticos() {
-        jTextFieldFamiliaProfresional.setText("");
-        jTextFieldNivel.setText("");
-        jTextFieldHoras.setText("");
     }
 
     /**
@@ -154,7 +87,7 @@ public class CrearCiclo extends javax.swing.JFrame {
         jLabelInfoAñoCurricular = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
         jButtonCancelar = new javax.swing.JButton();
-        jComboBoxCiclos = new javax.swing.JComboBox<>();
+        jTextFieldDenominacion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,15 +138,6 @@ public class CrearCiclo extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxCiclos.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBoxCiclos.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBoxCiclos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBoxCiclos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxCiclosActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -237,11 +161,11 @@ public class CrearCiclo extends javax.swing.JFrame {
                                 .addComponent(jLabelInfoNombre4)))
                         .addGap(84, 84, 84)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldNivel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldNivel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
                             .addComponent(jTextFieldHoras, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxCiclos, 0, 79, Short.MAX_VALUE)))
+                            .addComponent(jTextFieldDenominacion)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(571, 571, 571)
                         .addComponent(jButtonCancelar)
@@ -254,10 +178,10 @@ public class CrearCiclo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(83, 83, 83)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabelInfoDenominacion)
-                    .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -278,7 +202,7 @@ public class CrearCiclo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(231, Short.MAX_VALUE))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
 
         pack();
@@ -350,26 +274,14 @@ public class CrearCiclo extends javax.swing.JFrame {
         });
     }
 
+    /** Valida los campos, inicia una transacción, inserta el ciclo en la BD y abre el formulario de módulos si el insert es correcto. */
     private void crearCiclo() {
-
-        Object itemSeleccionado = jComboBoxCiclos.getSelectedItem();
-
-        if (itemSeleccionado == null) {
-            JOptionPane.showMessageDialog(this, "Debes seleccionar un ciclo.");
-            return;
-        }
-
-        String denominacion = itemSeleccionado.toString().trim();
-
-        if (denominacion.equals("Selecciona un ciclo")) {
-            JOptionPane.showMessageDialog(this, "Debes seleccionar un ciclo válido.");
-            return;
-        }
 
         String familia = jTextFieldFamiliaProfresional.getText().trim();
         String nivel = jTextFieldNivel.getText().trim();
         String horasTexto = jTextFieldHoras.getText().trim();
         String anioTexto = jTextFieldAñoCurricular.getText().trim();
+        String denominacion = jTextFieldDenominacion.getText().trim();
 
         if (!Validadores.validarTextoNoVacio(denominacion)
                 || !Validadores.validarTextoNoVacio(familia)
@@ -416,41 +328,9 @@ public class CrearCiclo extends javax.swing.JFrame {
         }
     }
 
-    private void ajustarTamanioTextField(JTextField campo) {
-        String texto = campo.getText();
-
-        if (texto == null) {
-            texto = "";
-        }
-
-        FontMetrics metrics = campo.getFontMetrics(campo.getFont());
-
-        int anchoTexto = metrics.stringWidth(texto);
-        int anchoMinimo = 120;
-        int margen = 35;
-
-        int anchoFinal = Math.max(anchoMinimo, anchoTexto + margen);
-        int altoActual = campo.getPreferredSize().height;
-
-        campo.setPreferredSize(new Dimension(anchoFinal, altoActual));
-        campo.setMinimumSize(new Dimension(anchoFinal, altoActual));
-
-        campo.revalidate();
-        campo.repaint();
-    }
-
-    private void ajustarTamanioCamposAutomaticos() {
-        ajustarTamanioTextField(jTextFieldFamiliaProfresional);
-        ajustarTamanioTextField(jTextFieldNivel);
-        ajustarTamanioTextField(jTextFieldHoras);
-
-        pack();
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JComboBox<String> jComboBoxCiclos;
     private javax.swing.JLabel jLabelInfoAñoCurricular;
     private javax.swing.JLabel jLabelInfoDenominacion;
     private javax.swing.JLabel jLabelInfoFamiliaProfesional;
@@ -458,6 +338,7 @@ public class CrearCiclo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelInfoNombre4;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextFieldAñoCurricular;
+    private javax.swing.JTextField jTextFieldDenominacion;
     private javax.swing.JTextField jTextFieldFamiliaProfresional;
     private javax.swing.JTextField jTextFieldHoras;
     private javax.swing.JTextField jTextFieldNivel;

@@ -321,14 +321,22 @@ public class MenuModulo {
         }
     }
 
+    /** Escribe la lista de módulos en un fichero TXT con separador ";". */
     private static void exportarATxt() {
         exportarAFicheroTexto(Config.ficheroModulo + ".txt", false);
     }
 
+    /** Escribe la lista de módulos en un fichero CSV con separador ":". */
     private static void exportarACsv() {
         exportarAFicheroTexto(Config.ficheroModulo + ".csv", true);
     }
 
+    /**
+     * Escribe la lista de módulos en un fichero de texto, usando ";" o ":" como separador.
+     *
+     * @param rutaFichero  Ruta del fichero de destino.
+     * @param usarDosPuntos true para usar ":" como separador (CSV), false para ";" (TXT).
+     */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
             for (Modulo modulo : SesionDatos.listaModulos) {
@@ -345,12 +353,14 @@ public class MenuModulo {
         }
     }
 
+    /** Serializa la lista de módulos en un fichero binario (.dat). */
     private static void exportarABinario() {
         GestionFicheros.guardarToBinario(Config.ficheroModulo,SesionDatos.listaModulos);
         System.out.println("[OK] Exportados " + SesionDatos.listaModulos.size()
                 + " registros a: " + Config.ficheroModulo + ".dat");
     }
 
+    /** Escribe la lista de módulos en un fichero JSON, un objeto por línea. */
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroModulo + ".json", false))) {
             for (Modulo modulo : SesionDatos.listaModulos) {

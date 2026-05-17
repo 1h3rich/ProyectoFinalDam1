@@ -94,6 +94,13 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     }
 
     
+    /**
+     * Creación rápida desde un array de cadenas (tabla Swing, ResultSet ya convertido, etc.).
+     * Orden esperado: [0]=codigo, [1]=nombre, [2]=fecha_nacimiento, [3]=domicilio, [4]=telefono, [5]=correo.
+     * No realiza validaciones — úsalo solo con datos que ya vienen de la BD.
+     *
+     * @param cadena Array de cadenas con los datos del alumno.
+     */
     public Alumno(String cadena[]){
         this.codigo = Integer.parseInt(cadena[0]) ;
         this.nombre = cadena[1];
@@ -110,26 +117,33 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // =================================================================================================================================================================================================
     // ===================== GETTERS ===================================================================================================================================================================
     // =================================================================================================================================================================================================
+
+    /** @return Código único del alumno (clave primaria). */
     public int getCodigo() {
         return codigo;
     }
 
+    /** @return Nombre completo del alumno. */
     public String getNombre() {
         return nombre;
     }
 
+    /** @return Fecha de nacimiento del alumno. */
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
+    /** @return Domicilio postal del alumno. */
     public String getDomicilio() {
         return domicilio;
     }
 
+    /** @return Teléfono de contacto (9 dígitos). */
     public String getTelefono() {
         return telefono;
     }
 
+    /** @return Correo electrónico del alumno. */
     public String getCorreo() {
         return correo;
     }
@@ -138,6 +152,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // ===================== SETTERS ===========================
     // =========================================================
 
+    /**
+     * Actualiza el nombre del alumno tras validar que no esté vacío.
+     *
+     * @param nombre Nuevo nombre del alumno.
+     * @throws IllegalArgumentException si el nombre es nulo o vacío.
+     */
     public void setNombre(String nombre) {
         if (!Validadores.validarTextoNoVacio(nombre)) {
             throw new IllegalArgumentException("El nombre del alumno no puede estar vacío");
@@ -146,6 +166,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         this.nombre = nombre;
     }
 
+    /**
+     * Actualiza la fecha de nacimiento tras comprobar que no es nula ni futura.
+     *
+     * @param fechaNacimiento Nueva fecha de nacimiento.
+     * @throws IllegalArgumentException si la fecha es nula o posterior a hoy.
+     */
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         if (!Validadores.validarFechaNacimiento(fechaNacimiento)) {
             throw new IllegalArgumentException("La fecha de nacimiento no es válida");
@@ -154,6 +180,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    /**
+     * Actualiza el domicilio tras validar que no esté vacío.
+     *
+     * @param domicilio Nuevo domicilio del alumno.
+     * @throws IllegalArgumentException si el domicilio es nulo o vacío.
+     */
     public void setDomicilio(String domicilio) {
         if (!Validadores.validarTextoNoVacio(domicilio)) {
             throw new IllegalArgumentException("El domicilio no puede estar vacío");
@@ -162,6 +194,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         this.domicilio = domicilio;
     }
 
+    /**
+     * Actualiza el teléfono tras validar que tenga exactamente 9 dígitos.
+     *
+     * @param telefono Nuevo teléfono del alumno.
+     * @throws IllegalArgumentException si el teléfono no cumple el formato de 9 dígitos.
+     */
     public void setTelefono(String telefono) {
         if (!Validadores.validarTelefono(telefono)) {
             throw new IllegalArgumentException("El teléfono no es válido");
@@ -170,6 +208,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         this.telefono = telefono;
     }
 
+    /**
+     * Actualiza el correo electrónico tras validar su formato básico.
+     *
+     * @param correo Nuevo correo electrónico del alumno.
+     * @throws IllegalArgumentException si el correo no tiene formato válido.
+     */
     public void setCorreo(String correo) {
         if (!Validadores.validarCorreo(correo)) {
             throw new IllegalArgumentException("El correo no es válido");
@@ -217,6 +261,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /**
+     * Valida todos los campos del objeto actual.
+     * Se usa al deserializar desde JSON para garantizar que los datos siguen siendo correctos.
+     *
+     * @throws IllegalArgumentException si cualquier campo no supera su validación.
+     */
     private void validarObjeto() {
         if (!Validadores.validarCodigoPositivo(this.codigo)) {
             throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
@@ -247,6 +297,13 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     
     
     
+    /**
+     * Parsea una línea de texto con formato CSV (separador ";") y devuelve el Alumno correspondiente.
+     *
+     * @param linea Cadena con 6 campos separados por ";": codigo;nombre;fecha;domicilio;telefono;correo.
+     * @return Alumno construido con los datos de la línea.
+     * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
+     */
     public static Alumno obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);
 
@@ -271,6 +328,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         );
     }
 
+    /**
+     * Reemplaza la lista en sesión con los alumnos parseados desde las líneas de texto.
+     * Imprime cada alumno en consola tras la carga (útil para depuración).
+     *
+     * @param temp Lista de cadenas, cada una con los datos de un alumno en formato CSV.
+     */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
        SesionDatos.listaAlumnos.clear();
@@ -308,6 +371,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // ===================== SAVE TO ===========================
     // =========================================================
 
+    /** Serializa este alumno en formato CSV y lo añade al fichero alumno.csv. */
     @Override
     public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".csv")) {
@@ -315,6 +379,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /** Serializa este alumno en formato JSON y lo añade al fichero alumno.json. */
     @Override
     public void loadToJson() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".json")) {
@@ -322,6 +387,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /** Serializa este alumno en formato TXT (mismo separador que CSV) y lo añade al fichero alumno.txt. */
     @Override
     public void loadToTxt() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".txt")) {
@@ -329,6 +395,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /** Guarda la lista completa de alumnos en sesión como objeto serializado binario (alumno.dat). */
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
@@ -340,6 +407,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // =================== FROM FILES ==========================
     // =========================================================
 
+    /** Lee alumno.csv y reemplaza la lista en sesión con los objetos deserializados. */
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".csv")) {
@@ -348,6 +416,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /** Lee alumno.json, valida cada objeto y reemplaza la lista en sesión. */
     @Override
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".json")) {
@@ -372,6 +441,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /** Lee alumno.dat (binario serializado) y reemplaza la lista en sesión. */
     @Override
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".dat")) {
@@ -380,6 +450,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         }
     }
 
+    /** Lee alumno.txt (formato CSV con ";") y reemplaza la lista en sesión. */
     @Override
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".txt")) {
@@ -394,6 +465,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // ================= CONVERTIDORES =========================
     // =========================================================
 
+    /**
+     * Serializa el alumno como línea CSV con separador ";".
+     *
+     * @return Cadena en formato: codigo;nombre;fecha_nacimiento;domicilio;telefono;correo.
+     */
     @Override
     public String toCSV() {
         return codigo + ";"
@@ -404,11 +480,21 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
                 + correo;
     }
 
+    /**
+     * Serializa el alumno como objeto JSON usando Gson.
+     *
+     * @return Cadena JSON con todos los campos del alumno.
+     */
     @Override
     public String toJSON() {
         return new Gson().toJson(this);
     }
 
+    /**
+     * Serializa el alumno en formato texto plano (mismo formato que CSV con ";").
+     *
+     * @return Cadena idéntica a {@link #toCSV()}.
+     */
     @Override
     public String toTXT() {
         return toCSV();
@@ -418,6 +504,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // ===================== TO STRING =========================
     // =========================================================
 
+    /**
+     * Representación legible del alumno para depuración y logs.
+     *
+     * @return Cadena con todos los campos del alumno.
+     */
     @Override
     public String toString() {
         return "Alumno{"

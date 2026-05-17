@@ -7,8 +7,12 @@ package pantallas.Modificar;
 import Utils.ModoFormulario;
 import javax.swing.JOptionPane;
 import modelos.Modulo;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para crear o modificar un módulo formativo.
+ * El modo de operación (CREAR / MODIFICAR) se establece en el constructor parametrizado.
  *
  * @author Rich
  */
@@ -33,27 +37,41 @@ public class ModificarModulo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextFieldNombre = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jLabel3 = new javax.swing.JLabel();
-        jLabelInfoNombre2 = new javax.swing.JLabel();
-        jTextFieldCurso = new javax.swing.JTextField();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jTextFieldCreditos = new javax.swing.JTextField();
-        jLabelInfoNombre3 = new javax.swing.JLabel();
-        jTextFieldCod_Ciclo = new javax.swing.JTextField();
-        jLabelInfoNombre4 = new javax.swing.JLabel();
-        jTextFieldHoras = new javax.swing.JTextField();
+        jButtonCancelar = new javax.swing.JButton();
         jLabelTitulo = new javax.swing.JLabel();
-        jCheckBoxConfirmacionBDD = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
+        jButtonGuardar1 = new javax.swing.JButton();
+        jTextFieldNombre = new javax.swing.JTextField();
+        jTextFieldCurso = new javax.swing.JTextField();
+        jTextFieldCreditos = new javax.swing.JTextField();
+        jTextFieldCod_Ciclo = new javax.swing.JTextField();
         jLabelInfoNombre = new javax.swing.JLabel();
-        jButtonGuardar = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel2 = new javax.swing.JLabel();
-        jLabelInfoNombre1 = new javax.swing.JLabel();
+        jTextFieldHoras = new javax.swing.JTextField();
+        jLabelInfoCurso = new javax.swing.JLabel();
+        jLabelInfoCreditos = new javax.swing.JLabel();
+        jLabelCurso = new javax.swing.JLabel();
+        jLabelInfoNombre3 = new javax.swing.JLabel();
+        jLabelCurso1 = new javax.swing.JLabel();
+        jLabelInfoNombre4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
+
+        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitulo.setText("MODIFICAR MODULO");
+
+        jButtonGuardar1.setText("Guardar");
+        jButtonGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardar1ActionPerformed(evt);
+            }
+        });
 
         jTextFieldNombre.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.setPreferredSize(new java.awt.Dimension(64, 128));
@@ -63,26 +81,8 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox2.setText("Busqueda por nombre");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Guardado local.");
-
-        jLabelInfoNombre2.setText("Creditos");
-
         jTextFieldCurso.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCurso.setPreferredSize(new java.awt.Dimension(64, 128));
-
-        jCheckBox3.setText("Busqueda por telefono");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
-            }
-        });
 
         jTextFieldCreditos.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCreditos.setPreferredSize(new java.awt.Dimension(64, 128));
@@ -92,125 +92,87 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
-        jLabelInfoNombre3.setText("Horas:");
-
         jTextFieldCod_Ciclo.setPreferredSize(new java.awt.Dimension(64, 128));
-
-        jLabelInfoNombre4.setText("Codigo del Ciclo:");
-
-        jTextFieldHoras.setPreferredSize(new java.awt.Dimension(64, 128));
-
-        jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
-        jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("FORMULARIO ALUMNADO");
-
-        jCheckBoxConfirmacionBDD.setText("ExportarToBDD");
-        jCheckBoxConfirmacionBDD.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxConfirmacionBDDActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("NSimSun", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Lista");
 
         jLabelInfoNombre.setText("Nombre:");
 
-        jButtonGuardar.setText("Guardar");
-        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonGuardarActionPerformed(evt);
-            }
-        });
+        jTextFieldHoras.setPreferredSize(new java.awt.Dimension(64, 128));
 
-        jCheckBox1.setText("Busqueda por codigo");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
+        jLabelInfoCurso.setText("Curso:");
 
-        jLabel2.setText("Seleccione esta opción para insertar en la base de datos.");
+        jLabelInfoCreditos.setText("Creditos");
 
-        jLabelInfoNombre1.setText("Curso:");
+        jLabelCurso.setText("1 o 2");
+
+        jLabelInfoNombre3.setText("Horas:");
+
+        jLabelCurso1.setText("Desde 0 hasta 99'99 ");
+
+        jLabelInfoNombre4.setText("Codigo del Ciclo:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(387, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(555, 555, 555)
-                        .addComponent(jLabelInfoNombre3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(382, 382, 382))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox3)
-                                .addGap(408, 408, 408)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabelInfoNombre4)
                                         .addGap(86, 86, 86))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabelInfoNombre2, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelInfoNombre1, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(61, 61, 61)))))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBoxConfirmacionBDD)
-                            .addComponent(jButtonGuardar)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jCheckBox1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox2)
+                                            .addComponent(jLabelInfoCreditos, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelInfoCurso, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabelCurso))
+                                    .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabelCurso1))
+                                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(345, 345, 345)
-                                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(426, Short.MAX_VALUE))
+                                .addGap(48, 48, 48)
+                                .addComponent(jButtonCancelar)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonGuardar1)))
+                        .addGap(357, 357, 357))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox2)
-                .addGap(4, 4, 4)
+                .addGap(36, 36, 36)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre)
-                    .addComponent(jCheckBox3))
+                    .addComponent(jLabelInfoNombre))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre1))
+                    .addComponent(jLabelInfoCurso)
+                    .addComponent(jLabelCurso))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre2))
-                .addGap(25, 25, 25)
+                    .addComponent(jLabelInfoCreditos)
+                    .addComponent(jLabelCurso1))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelInfoNombre3)
                     .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -218,51 +180,35 @@ public class ModificarModulo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelInfoNombre4)
                     .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(94, 94, 94)
+                .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxConfirmacionBDD)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonGuardar)
-                    .addComponent(jLabel3))
-                .addContainerGap(46, Short.MAX_VALUE))
+                    .addComponent(jButtonGuardar1)
+                    .addComponent(jButtonCancelar))
+                .addContainerGap(328, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardar1ActionPerformed
+        if (modo == ModoFormulario.CREAR) {
+            crearModulo();
+        } else {
+            modificarModulo();
+        }
+    }//GEN-LAST:event_jButtonGuardar1ActionPerformed
+
     private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNombreActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
-
     private void jTextFieldCreditosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCreditosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldCreditosActionPerformed
-
-    private void jCheckBoxConfirmacionBDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConfirmacionBDDActionPerformed
-
-    }//GEN-LAST:event_jCheckBoxConfirmacionBDDActionPerformed
-
-    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        if(modo == ModoFormulario.CREAR){
-            crearModulo();
-        }else{
-            modificarModulo();
-        }
-    }//GEN-LAST:event_jButtonGuardarActionPerformed
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -304,7 +250,13 @@ public class ModificarModulo extends javax.swing.JFrame {
         });
     }
     
-     public ModificarModulo(ModoFormulario modo, Modulo modulo) {
+    /**
+     * Constructor para abrir el formulario en un modo concreto con un módulo preseleccionado.
+     *
+     * @param modo   CREAR para nuevo módulo o MODIFICAR para editar el módulo recibido.
+     * @param modulo Módulo a editar; puede ser null si el modo es CREAR.
+     */
+    public ModificarModulo(ModoFormulario modo, Modulo modulo) {
         initComponents();
 
         this.modo = modo;
@@ -314,14 +266,15 @@ public class ModificarModulo extends javax.swing.JFrame {
         prepararFormulario();
     }
 
+    /** Configura el título, texto del botón y campos del formulario según el modo (CREAR / MODIFICAR). */
     private void prepararFormulario() {
         if (modo == ModoFormulario.CREAR) {
             setTitle("Crear Modulo");
-            jButtonGuardar.setText("Crear Modulo");
+            jButtonGuardar1.setText("Crear Modulo");
             limpiarCampos();
         } else{
             setTitle("Modificar Modulo");
-            jButtonGuardar.setText("Modificar Modulo");
+            jButtonGuardar1.setText("Modificar Modulo");
 
             if (modulo != null) {
                 cargarDatosModulo();
@@ -331,6 +284,7 @@ public class ModificarModulo extends javax.swing.JFrame {
         }
     }
 
+    /** Valida los campos del formulario e inserta un nuevo módulo en la base de datos. */
     private void crearModulo() {
         String nombre = jTextFieldNombre.getText();
         String curso = jTextFieldCurso.getText();
@@ -348,17 +302,13 @@ public class ModificarModulo extends javax.swing.JFrame {
 
         Modulo nuevoModulo = new Modulo(cod_ciclo, nombre, curso, credits, hors);
 
-        // INSERT A LA BASE DE DATOS
-        // Insert.insertarModulo(nuevoModulo);
-        if(jCheckBoxConfirmacionBDD.isSelected()){
-           
+        String[] entradas = {nombre, curso, creditos, horas, codigo_ciclo};
+        GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MODULO, entradas);
         JOptionPane.showMessageDialog(this, "Modulo creado correctamente.");
-        }else{
-            JOptionPane.showMessageDialog(this, "Modulo creado pero no insertado.");
-        }
         dispose();
     }
 
+    /** Valida los campos del formulario y actualiza el módulo actual en la base de datos. */
     private void modificarModulo() {
        String nombre = jTextFieldNombre.getText();
         String curso = jTextFieldCurso.getText();
@@ -380,16 +330,20 @@ public class ModificarModulo extends javax.swing.JFrame {
         modulo.setHoras(hors);
         modulo.setCodigo_ciclo(cod_ciclo);
 
-        // UPDATE BASE DE DATOS
-         if(jCheckBoxConfirmacionBDD.isSelected()){
-             //No existe la consulta aun, o no se como utilizar realizarSQL
-        JOptionPane.showMessageDialog(this, "Alumno actualizado correctamente.");
-        }else{
-            JOptionPane.showMessageDialog(this, "Alumno actualizado de manera local");
-        }
+        String[] entradas = {
+            String.valueOf(modulo.getCodigo_ciclo()),
+            modulo.getNombre(),
+            modulo.getCurso(),
+            String.valueOf(modulo.getCreditos_ects()),
+            String.valueOf(modulo.getHoras()),
+            String.valueOf(modulo.getCodigo())
+        };
+        GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, entradas);
+        JOptionPane.showMessageDialog(this, "Modulo actualizado correctamente.");
         dispose();
     }
     
+    /** Vuelca los datos del módulo asignado en los campos de texto del formulario. */
     private void cargarDatosModulo(){
         String creditos = String.valueOf(modulo.getCreditos_ects());
         String horas = String.valueOf(modulo.getHoras());
@@ -402,6 +356,7 @@ public class ModificarModulo extends javax.swing.JFrame {
         jTextFieldHoras.setText(horas);
 
     }
+    /** Limpia todos los campos de texto del formulario para una nueva entrada. */
     private void limpiarCampos(){
         jTextFieldNombre.setText("");
         jTextFieldCurso.setText("");
@@ -412,17 +367,13 @@ public class ModificarModulo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBoxConfirmacionBDD;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonGuardar1;
+    private javax.swing.JLabel jLabelCurso;
+    private javax.swing.JLabel jLabelCurso1;
+    private javax.swing.JLabel jLabelInfoCreditos;
+    private javax.swing.JLabel jLabelInfoCurso;
     private javax.swing.JLabel jLabelInfoNombre;
-    private javax.swing.JLabel jLabelInfoNombre1;
-    private javax.swing.JLabel jLabelInfoNombre2;
     private javax.swing.JLabel jLabelInfoNombre3;
     private javax.swing.JLabel jLabelInfoNombre4;
     private javax.swing.JLabel jLabelTitulo;

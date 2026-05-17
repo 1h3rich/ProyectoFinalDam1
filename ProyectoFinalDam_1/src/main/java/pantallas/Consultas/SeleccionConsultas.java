@@ -7,6 +7,8 @@ package pantallas.Consultas;
 import javax.swing.JOptionPane;
 
 /**
+ * Menú de selección del módulo de consultas.
+ * Permite navegar a las consultas unitabla, multitabla o a los ejercicios SQL.
  *
  * @author Rich
  */
@@ -20,6 +22,7 @@ public class SeleccionConsultas extends javax.swing.JFrame {
         configurarVentana();
     }
 
+    /** Configura el título, la operación de cierre y el listener que pide confirmación al cerrar. */
     private void configurarVentana() {
         setLocationRelativeTo(null);
         setTitle("Menú de consultas");
@@ -34,6 +37,7 @@ public class SeleccionConsultas extends javax.swing.JFrame {
         });
     }
 
+    /** Muestra un diálogo de confirmación y cierra la ventana solo si el usuario acepta. */
     private void cerrarVentana() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,

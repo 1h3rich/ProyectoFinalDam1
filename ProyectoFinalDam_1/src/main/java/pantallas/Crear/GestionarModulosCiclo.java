@@ -10,6 +10,9 @@ import servicios.BaseDeDatos.*;
 import java.util.HashMap;
 
 /**
+ * Formulario Swing para gestionar los módulos asociados a un ciclo durante su creación.
+ * Permite añadir módulos existentes o crear nuevos, muestra un contador de módulos
+ * añadidos y habilita el botón Finalizar cuando se alcanzan los cinco mínimos requeridos.
  *
  * @author Rich
  */
@@ -33,11 +36,13 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         actualizarContador();
     }
 
+    /** Abre el formulario CrearModulo vinculado al ciclo actual y cierra esta ventana. */
     private void crearNuevoModulo() {
         new CrearModulo(idCiclo).setVisible(true);
         this.dispose();
     }
 
+    /** Configura el título, el cierre con confirmación, el texto de los botones y deshabilita Finalizar hasta alcanzar 5 módulos. */
     private void configurarVentana() {
         setLocationRelativeTo(null);
         setTitle("Gestionar módulos del ciclo");
@@ -59,6 +64,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         jButtonFinalizar.setEnabled(false);
     }
 
+    /** Consulta en la BD los módulos disponibles para el ciclo y los carga en el combo, actualizando el mapa de IDs. */
     private void cargarModulosExistentes() {
         jComboBoxModulos.removeAllItems();
         mapaModulos.clear();
@@ -73,6 +79,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         }
     }
 
+    /** Consulta el número de módulos del ciclo en la BD, actualiza la etiqueta contador y habilita Finalizar si ya hay 5 o más. */
     private void actualizarContador() {
         int total = GestionBaseDeDatos.contarModulosPorCiclo(idCiclo);
 
@@ -81,6 +88,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         jButtonFinalizar.setEnabled(total >= 5);
     }
 
+    /** Asigna al ciclo el módulo seleccionado en el combo, actualizando la tabla de módulos y el contador. */
     private void añadirModuloExistente() {
         Object seleccionado = jComboBoxModulos.getSelectedItem();
 
@@ -122,6 +130,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         }
     }
 
+    /** Verifica que el ciclo tenga al menos 5 módulos, confirma la transacción y cierra la ventana. */
     private void finalizar() {
         int total = GestionBaseDeDatos.contarModulosPorCiclo(idCiclo);
 
@@ -136,6 +145,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         this.dispose();
     }
 
+    /** Pide confirmación y, si el usuario acepta, cancela la transacción (elimina el ciclo y sus módulos) y cierra la ventana. */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,

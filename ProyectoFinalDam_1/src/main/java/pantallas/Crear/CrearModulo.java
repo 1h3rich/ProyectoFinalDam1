@@ -10,6 +10,9 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Formulario Swing para registrar un nuevo módulo formativo en la base de datos.
+ * Puede usarse de forma autónoma o vinculado a un ciclo concreto; en ese caso
+ * el código del ciclo se recibe por constructor y no es editable.
  *
  * @author Rich
  */
@@ -17,14 +20,16 @@ public class CrearModulo extends javax.swing.JFrame {
 
     private int idCiclo = -1;
 
-    /**
-     * Creates new form FormularioModul
-     */
+    /** Construye el formulario sin ciclo asociado (el usuario introduce el código manualmente). */
     public CrearModulo() {
         initComponents();
         configurarVentana();
     }
 
+    /**
+     * Construye el formulario con el ciclo preseleccionado; el campo de código de ciclo se muestra como no editable.
+     * @param idCiclo Identificador del ciclo al que pertenecerá el módulo.
+     */
     public CrearModulo(int idCiclo) {
         initComponents();
 
@@ -36,6 +41,7 @@ public class CrearModulo extends javax.swing.JFrame {
         jTextFieldCod_Ciclo.setEditable(false);
     }
 
+    /** Configura el título, el cierre con confirmación y el texto del botón de guardar. */
     private void configurarVentana() {
         setLocationRelativeTo(null);
 
@@ -275,6 +281,7 @@ public class CrearModulo extends javax.swing.JFrame {
         });
     }
 
+    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -289,6 +296,7 @@ public class CrearModulo extends javax.swing.JFrame {
         }
     }
 
+    /** Valida los campos, inserta el módulo en la BD y vuelve al formulario de gestión de módulos del ciclo. */
     private void crearModulo() {
 
         String nombre = jTextFieldNombre.getText().trim();
@@ -354,17 +362,6 @@ public class CrearModulo extends javax.swing.JFrame {
 
         } else {
             JOptionPane.showMessageDialog(this, "Error al crear el módulo.");
-        }
-    }
-
-    private void limpiarCampos() {
-        jTextFieldNombre.setText("");
-        jTextFieldCurso.setText("");
-        jTextFieldCreditos.setText("");
-        jTextFieldHoras.setText("");
-
-        if (idCiclo == -1) {
-            jTextFieldCod_Ciclo.setText("");
         }
     }
 
