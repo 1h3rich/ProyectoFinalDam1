@@ -777,31 +777,7 @@ public class GestionBaseDeDatos {
     }
 
     
-    /* ESTE METODO SI NO SE USA SE EILIMINA YA QUE EL SQL ESTA MAL REDACTADO
-    public static ArrayList<ItemCombo> obtenerModulosDisponiblesCombo() {
-        comprobarConexion();
-
-        ArrayList<ItemCombo> lista = new ArrayList<>();
-
-        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo ORDER BY nombre ASC";
-
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
-
-            while (rs.next()) {
-                int id = rs.getInt("codigo");
-                String nombre = rs.getString("nombre");
-
-                lista.add(new ItemCombo(id, nombre));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al obtener módulos disponibles: " + e.getMessage());
-        }
-
-        return lista;
-    }
-    
-    */
+ 
 
     public static void comprobarBaseActual() {
         if (!comprobarConexion()) {

@@ -5,6 +5,19 @@
 package pantallas.Concurrencia;
 
 import Control.SesionDatos;
+import excepciones.YaImportadoException;
+import java.util.ArrayList;
+import modelos.LineaMatricula;
+import modelos.Matricula;
+import servicios.Ficheros.GestionFicheros;
+import modelos.*;
+import servicios.BaseDeDatos.ConsultasSQL;
+import servicios.BaseDeDatos.GestionBaseDeDatos;
+import Config.*;
+import Utils.Validadores;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -16,6 +29,11 @@ public class Importar extends javax.swing.JFrame {
     private static boolean importadoCsv = false;
     private static boolean importadoBin = false;
     private static boolean importadoJson = false;
+     /**
+     * Registra las combinaciones (tabla + formato) ya importadas en esta
+     * sesión. Clave: "TABLA_FORMATO", p. ej. "ALUMNADO_TXT".
+     */
+    private final Set<String> yaImportados = new HashSet<>();
     
     /**
      * Creates new form Cargar
@@ -48,7 +66,499 @@ public class Importar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+  /**
+     * Comprueba si la combinación tabla+formato ya fue importada en esta sesión.
+     *
+     * @param clave Identificador único "TABLA_FORMATO"
+     * @throws YaImportadoException si ya fue importado anteriormente
+     */
+    private void comprobarYaImportado(String clave) throws YaImportadoException {
+        if (yaImportados.contains(clave)) {
+            throw new YaImportadoException(
+                    "Ya se importó esta tabla en el formato indicado durante esta sesión.\n"
+                    + "Reinicia la aplicación para volver a importar."
+            );
+        }
+    }
+ 
+    /**
+     * Despacha la importación al método concreto según tabla y formato.
+     *
+     * @param tabla  Nombre de la tabla seleccionada en el combo
+     * @param formato Formato del fichero
+     * @return Número de registros importados correctamente
+     * @throws Exception si hay error en lectura o inserción
+     */
+    private int procesarImportacion(String tabla, String formato) throws Exception {
+        return switch (tabla) {
+            case "ALUMNADO"        -> importarAlumnos(formato);
+            case "CICLOS"          -> importarCiclos(formato);
+            case "MODULOS"         -> importarModulos(formato);
+            case "MATRICULAS"      -> importarMatriculas(formato);
+            case "LINEA MATRICULA" -> importarLineasMatricula(formato);
+            default -> throw new Exception("Tabla no reconocida: " + tabla);
+        };
+    }
+ 
+    // =========================================================
+    // ============ IMPORTAR ALUMNOS ===========================
+    // =========================================================
+ 
+    /**
+     * Lee alumnos desde el fichero correspondiente al formato indicado
+     * y los inserta en la base de datos y en SesionDatos.
+     *
+     * @param formato TXT, CSV, BINARIO o JSON
+     * @return Número de alumnos importados
+     * @throws Exception si hay error de lectura o parseo
+     */
+    private int importarAlumnos(String formato) throws Exception {
+        ArrayList<String> lineas = leerFichero(Config.ficheroAlumno, formato);
+        int contador = 0;
+ 
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) {
+                continue;
+            }
+ 
+            Alumno alumno = parsearAlumno(linea, formato);
+ 
+            String[] params = {
+                alumno.getNombre(),
+                alumno.getCorreo(),
+                alumno.getDomicilio(),
+                alumno.getTelefono(),
+                alumno.getFechaNacimiento().toString()
+            };
+ 
+            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
+                    ConsultasSQL.INSERT_ALUMNO[1], params
+            );
+ 
+            if (idGenerado != -1) {
+                Alumno alumnoConId = new Alumno(
+                        idGenerado,
+                        alumno.getNombre(),
+                        alumno.getFechaNacimiento(),
+                        alumno.getDomicilio(),
+                        alumno.getTelefono(),
+                        alumno.getCorreo()
+                );
+                SesionDatos.registrarAlumno(alumnoConId, false);
+                contador++;
+            }
+        }
+ 
+        return contador;
+    }
+ 
+    // =========================================================
+    // ============ IMPORTAR CICLOS ============================
+    // =========================================================
+ 
+    /**
+     * Lee ciclos desde el fichero correspondiente al formato indicado
+     * y los inserta en la base de datos y en SesionDatos.
+     *
+     * @param formato TXT, CSV, BINARIO o JSON
+     * @return Número de ciclos importados
+     * @throws Exception si hay error de lectura o parseo
+     */
+    private int importarCiclos(String formato) throws Exception {
+        ArrayList<String> lineas = leerFichero(Config.ficheroCiclo, formato);
+        int contador = 0;
+ 
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) {
+                continue;
+            }
+ 
+            Ciclo ciclo = parsearCiclo(linea, formato);
+ 
+            String[] params = {
+                ciclo.getDenominacion(),
+                ciclo.getFamiliaProfesional(),
+                ciclo.getNivel(),
+                String.valueOf(ciclo.getHoras()),
+                String.valueOf(ciclo.getAñoCurriculum())
+            };
+ 
+            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
+                    ConsultasSQL.INSERT_CICLO[1], params
+            );
+ 
+            if (idGenerado != -1) {
+                Ciclo cicloConId = new Ciclo(
+                        idGenerado,
+                        ciclo.getDenominacion(),
+                        ciclo.getFamiliaProfesional(),
+                        ciclo.getNivel(),
+                        ciclo.getHoras(),
+                        ciclo.getAñoCurriculum()
+                );
+                SesionDatos.registrarCiclo(cicloConId, false);
+                contador++;
+            }
+        }
+ 
+        return contador;
+    }
+ 
+    // =========================================================
+    // ============ IMPORTAR MODULOS ===========================
+    // =========================================================
+ 
+    /**
+     * Lee módulos desde el fichero correspondiente al formato indicado
+     * y los inserta en la base de datos y en SesionDatos.
+     *
+     * @param formato TXT, CSV, BINARIO o JSON
+     * @return Número de módulos importados
+     * @throws Exception si hay error de lectura o parseo
+     */
+    private int importarModulos(String formato) throws Exception {
+        ArrayList<String> lineas = leerFichero(Config.ficheroModulo, formato);
+        int contador = 0;
+ 
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) {
+                continue;
+            }
+ 
+            Modulo modulo = parsearModulo(linea, formato);
+ 
+            String[] params = {
+                modulo.getNombre(),
+                modulo.getCurso(),
+                String.valueOf(modulo.getCreditos_ects()),
+                String.valueOf(modulo.getHoras()),
+                String.valueOf(modulo.getCodigo_ciclo())
+            };
+ 
+            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
+                    ConsultasSQL.INSERT_MODULO[1], params
+            );
+ 
+            if (idGenerado != -1) {
+                Modulo moduloConId = new Modulo(
+                        idGenerado,
+                        modulo.getCodigo_ciclo(),
+                        modulo.getNombre(),
+                        modulo.getCurso(),
+                        modulo.getCreditos_ects(),
+                        modulo.getHoras()
+                );
+                SesionDatos.registrarModulo(moduloConId, false);
+                contador++;
+            }
+        }
+ 
+        return contador;
+    }
+ 
+    // =========================================================
+    // ============ IMPORTAR MATRICULAS ========================
+    // =========================================================
+ 
+    /**
+     * Lee matrículas desde el fichero correspondiente al formato indicado
+     * y las inserta en la base de datos y en SesionDatos.
+     *
+     * @param formato TXT, CSV, BINARIO o JSON
+     * @return Número de matrículas importadas
+     * @throws Exception si hay error de lectura o parseo
+     */
+    private int importarMatriculas(String formato) throws Exception {
+        ArrayList<String> lineas = leerFichero(Config.ficheroMatricula, formato);
+        int contador = 0;
+ 
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) {
+                continue;
+            }
+ 
+            Matricula matricula = parsearMatricula(linea, formato);
+ 
+            String[] params = {
+                matricula.getEstado(),
+                String.valueOf(matricula.getImporte()),
+                String.valueOf(matricula.getAño_academico()),
+                String.valueOf(matricula.getCodigo_alumno())
+            };
+ 
+            int idGenerado = GestionBaseDeDatos.insertarYDevolverID(
+                    ConsultasSQL.INSERT_MATRICULA[1], params
+            );
+ 
+            if (idGenerado != -1) {
+                Matricula matriculaConId = new Matricula(
+                        idGenerado,
+                        matricula.getCodigo_alumno(),
+                        matricula.getAño_academico(),
+                        matricula.getEstado(),
+                        matricula.getImporte()
+                );
+                SesionDatos.registrarMatricula(matriculaConId, false);
+                contador++;
+            }
+        }
+ 
+        return contador;
+    }
+ 
+    // =========================================================
+    // ============ IMPORTAR LINEAS MATRICULA ==================
+    // =========================================================
+ 
+    /**
+     * Lee líneas de matrícula desde el fichero correspondiente al formato
+     * indicado y las inserta en la base de datos y en SesionDatos.
+     *
+     * @param formato TXT, CSV, BINARIO o JSON
+     * @return Número de líneas importadas
+     * @throws Exception si hay error de lectura o parseo
+     */
+    private int importarLineasMatricula(String formato) throws Exception {
+        ArrayList<String> lineas = leerFichero(Config.ficheroLineaMatricula, formato);
+        int contador = 0;
+ 
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) {
+                continue;
+            }
+ 
+            LineaMatricula lm = parsearLineaMatricula(linea, formato);
+ 
+            // Las calificaciones pueden ser nulas → pasamos null si son 0
+            String calPrimera = lm.getCal_primera() < 0
+                    ? null : String.valueOf(lm.getCal_primera());
+            String calSegunda = lm.getCal_segunda() < 0
+                    ? null : String.valueOf(lm.getCal_segunda());
+ 
+            String[] params = {
+                String.valueOf(lm.getCod_matricula()),
+                String.valueOf(lm.getCod_modulo()),
+                String.valueOf(lm.getRepeticion()),
+                calPrimera,
+                calSegunda
+            };
+ 
+            boolean ok = GestionBaseDeDatos.insertarSinID(
+                    ConsultasSQL.INSERT_LINEA_MATRICULA[1], params
+            );
+ 
+            if (ok) {
+                SesionDatos.registrarLineaMatricula(lm, false);
+                contador++;
+            }
+        }
+ 
+        return contador;
+    }
+ 
+    
+    
+    
+    // =========================================================
+    // =============== LECTURA DE FICHEROS =====================
+    // =========================================================
+ 
+    /**
+     * Lee las líneas de un fichero en el formato indicado.
+     * Para BINARIO, deserializa el ArrayList directamente.
+     *
+     * @param rutaBase Ruta base sin extensión (ej: "alumno")
+     * @param formato  "TXT", "CSV", "BINARIO" o "JSON"
+     * @return Lista de líneas leídas
+     * @throws Exception si el fichero no existe o está vacío
+     */
+    private ArrayList<String> leerFichero(String rutaBase, String formato) throws Exception {
+        ArrayList<String> lineas;
+ 
+        switch (formato) {
+            case "TXT" -> {
+                if (!Validadores.comprobarFicheroLectura(rutaBase, ".txt")) {
+                    throw new Exception("El fichero " + rutaBase + ".txt no existe o está vacío.");
+                }
+                lineas = GestionFicheros.leerTxtCsv(rutaBase, ".txt");
+            }
+            case "CSV" -> {
+                if (!Validadores.comprobarFicheroLectura(rutaBase, ".csv")) {
+                    throw new Exception("El fichero " + rutaBase + ".csv no existe o está vacío.");
+                }
+                lineas = GestionFicheros.leerTxtCsv(rutaBase, ".csv");
+            }
+            case "BINARIO" -> {
+                if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
+                    throw new Exception("El fichero " + rutaBase + ".dat no existe o está vacío.");
+                }
+                lineas = GestionFicheros.leerBinario(rutaBase);
+            }
+            case "JSON" -> {
+                if (!Validadores.comprobarFicheroLectura(rutaBase, ".json")) {
+                    throw new Exception("El fichero " + rutaBase + ".json no existe o está vacío.");
+                }
+                lineas = GestionFicheros.leerJson(rutaBase);
+            }
+            default -> throw new Exception("Formato no reconocido: " + formato);
+        }
+ 
+        if (lineas == null || lineas.isEmpty()) {
+            throw new Exception("El fichero está vacío o no se pudo leer.");
+        }
+ 
+        return lineas;
+    }
+ 
+    // =========================================================
+    // ================ PARSERS POR ENTIDAD ====================
+    // =========================================================
+ 
+    /**
+     * Parsea una línea de texto a un objeto Alumno.
+     * Los ficheros TXT/CSV usan ';' como separador (exportación estándar).
+     *
+     * @param linea   Línea de texto
+     * @param formato Formato del fichero para decidir el tipo de parseo
+     * @return Objeto Alumno creado a partir de la línea
+     * @throws Exception si el formato no es válido
+     */
+    private Alumno parsearAlumno(String linea, String formato) throws Exception {
+        if ("JSON".equals(formato)) {
+            return (Alumno) GestionFicheros.toJson(linea, Alumno.class);
+        }
+ 
+        // TXT, CSV y BINARIO usan ';' como separador (formato de exportación)
+        String[] partes = linea.split(";", -1);
+        if (partes.length < 6) {
+            throw new Exception("Línea de alumno con formato incorrecto: " + linea);
+        }
+ 
+        return new Alumno(
+                Integer.parseInt(partes[0].trim()),
+                partes[1].trim(),
+                LocalDate.parse(partes[2].trim()),
+                partes[3].trim(),
+                partes[4].trim(),
+                partes[5].trim()
+        );
+    }
+ 
+    /**
+     * Parsea una línea de texto a un objeto Ciclo.
+     *
+     * @param linea   Línea de texto
+     * @param formato Formato del fichero
+     * @return Objeto Ciclo creado a partir de la línea
+     * @throws Exception si el formato no es válido
+     */
+    private Ciclo parsearCiclo(String linea, String formato) throws Exception {
+        if ("JSON".equals(formato)) {
+            return (Ciclo) GestionFicheros.toJson(linea, Ciclo.class);
+        }
+ 
+        String[] partes = linea.split(";", -1);
+        if (partes.length < 6) {
+            throw new Exception("Línea de ciclo con formato incorrecto: " + linea);
+        }
+ 
+        return new Ciclo(
+                Integer.parseInt(partes[0].trim()),
+                partes[1].trim(),
+                partes[2].trim(),
+                partes[3].trim(),
+                Integer.parseInt(partes[4].trim()),
+                Integer.parseInt(partes[5].trim())
+        );
+    }
+ 
+    /**
+     * Parsea una línea de texto a un objeto Modulo.
+     *
+     * @param linea   Línea de texto
+     * @param formato Formato del fichero
+     * @return Objeto Modulo creado a partir de la línea
+     * @throws Exception si el formato no es válido
+     */
+    private Modulo parsearModulo(String linea, String formato) throws Exception {
+        if ("JSON".equals(formato)) {
+            return (Modulo) GestionFicheros.toJson(linea, Modulo.class);
+        }
+ 
+        String[] partes = linea.split(";", -1);
+        if (partes.length < 6) {
+            throw new Exception("Línea de módulo con formato incorrecto: " + linea);
+        }
+ 
+        return new Modulo(
+                Integer.parseInt(partes[0].trim()),
+                Integer.parseInt(partes[1].trim()),
+                partes[2].trim(),
+                partes[3].trim(),
+                Double.parseDouble(partes[4].trim()),
+                Integer.parseInt(partes[5].trim())
+        );
+    }
+ 
+    /**
+     * Parsea una línea de texto a un objeto Matricula.
+     *
+     * @param linea   Línea de texto
+     * @param formato Formato del fichero
+     * @return Objeto Matricula creado a partir de la línea
+     * @throws Exception si el formato no es válido
+     */
+    private Matricula parsearMatricula(String linea, String formato) throws Exception {
+        if ("JSON".equals(formato)) {
+            return (Matricula) GestionFicheros.toJson(linea, Matricula.class);
+        }
+ 
+        String[] partes = linea.split(";", -1);
+        if (partes.length < 5) {
+            throw new Exception("Línea de matrícula con formato incorrecto: " + linea);
+        }
+ 
+        return new Matricula(
+                Integer.parseInt(partes[0].trim()),
+                Integer.parseInt(partes[1].trim()),
+                Integer.parseInt(partes[2].trim()),
+                partes[3].trim(),
+                Double.parseDouble(partes[4].trim())
+        );
+    }
+ 
+    /**
+     * Parsea una línea de texto a un objeto LineaMatricula.
+     * Las calificaciones pueden estar vacías (null en BD).
+     *
+     * @param linea   Línea de texto
+     * @param formato Formato del fichero
+     * @return Objeto LineaMatricula creado a partir de la línea
+     * @throws Exception si el formato no es válido
+     */
+    private LineaMatricula parsearLineaMatricula(String linea, String formato) throws Exception {
+        if ("JSON".equals(formato)) {
+            return (LineaMatricula) GestionFicheros.toJson(linea, LineaMatricula.class);
+        }
+ 
+        String[] partes = linea.split(";", -1);
+        if (partes.length < 5) {
+            throw new Exception("Línea de línea_matrícula con formato incorrecto: " + linea);
+        }
+ 
+        int codMatricula  = Integer.parseInt(partes[0].trim());
+        int codModulo     = Integer.parseInt(partes[1].trim());
+        int repeticion    = Integer.parseInt(partes[2].trim());
+ 
+        // Calificaciones opcionales: si el campo está vacío se usa -1 como
+        // indicador de null (ver importarLineasMatricula)
+        double calPrimera = partes[3].trim().isEmpty() ? -1 : Double.parseDouble(partes[3].trim());
+        double calSegunda = partes[4].trim().isEmpty() ? -1 : Double.parseDouble(partes[4].trim());
+ 
+        return new LineaMatricula(codMatricula, codModulo, repeticion, calPrimera, calSegunda);
+    }
+ 
+    
     /**
      * @param args the command line arguments
      */
