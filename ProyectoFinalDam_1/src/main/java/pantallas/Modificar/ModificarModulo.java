@@ -4,28 +4,27 @@
  */
 package pantallas.Modificar;
 
-import Utils.ModoFormulario;
+import Utils.Validadores;
 import javax.swing.JOptionPane;
 import modelos.Modulo;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para crear o modificar un módulo formativo.
- * El modo de operación (CREAR / MODIFICAR) se establece en el constructor parametrizado.
+ * Formulario Swing para modificar un módulo formativo existente.
+ * Recibe el módulo a editar en el constructor y carga sus datos automáticamente.
  *
  * @author Rich
  */
 public class ModificarModulo extends javax.swing.JFrame {
 
-    
-    private ModoFormulario modo;
     private Modulo modulo;
     /**
      * Creates new form FormularioModul
      */
     public ModificarModulo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -195,11 +194,7 @@ public class ModificarModulo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardar1ActionPerformed
-        if (modo == ModoFormulario.CREAR) {
-            crearModulo();
-        } else {
-            modificarModulo();
-        }
+        modificarModulo();
     }//GEN-LAST:event_jButtonGuardar1ActionPerformed
 
     private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
@@ -251,61 +246,21 @@ public class ModificarModulo extends javax.swing.JFrame {
     }
     
     /**
-     * Constructor para abrir el formulario en un modo concreto con un módulo preseleccionado.
+     * Abre el formulario con los datos del módulo preseleccionado cargados.
      *
-     * @param modo   CREAR para nuevo módulo o MODIFICAR para editar el módulo recibido.
-     * @param modulo Módulo a editar; puede ser null si el modo es CREAR.
+     * @param modulo Módulo a modificar.
      */
-    public ModificarModulo(ModoFormulario modo, Modulo modulo) {
+    public ModificarModulo(Modulo modulo) {
         initComponents();
-
-        this.modo = modo;
         this.modulo = modulo;
-
         setLocationRelativeTo(null);
-        prepararFormulario();
-    }
-
-    /** Configura el título, texto del botón y campos del formulario según el modo (CREAR / MODIFICAR). */
-    private void prepararFormulario() {
-        if (modo == ModoFormulario.CREAR) {
-            setTitle("Crear Modulo");
-            jButtonGuardar1.setText("Crear Modulo");
-            limpiarCampos();
-        } else{
-            setTitle("Modificar Modulo");
-            jButtonGuardar1.setText("Modificar Modulo");
-
-            if (modulo != null) {
-                cargarDatosModulo();
-            }else{
-                JOptionPane.showMessageDialog(this, "No se ha seleccionado ningun Modulo,");
-            }
+        setTitle("Modificar Modulo");
+        jButtonGuardar1.setText("Modificar Modulo");
+        if (modulo != null) {
+            cargarDatosModulo();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún módulo.");
         }
-    }
-
-    /** Valida los campos del formulario e inserta un nuevo módulo en la base de datos. */
-    private void crearModulo() {
-        String nombre = jTextFieldNombre.getText();
-        String curso = jTextFieldCurso.getText();
-        String creditos = jTextFieldCreditos.getText();
-        String horas = jTextFieldHoras.getText();
-        String codigo_ciclo = jTextFieldCod_Ciclo.getText();
-
-        if (nombre.isBlank() || curso.isBlank() || creditos.isBlank() || horas.isBlank() || codigo_ciclo.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
-            return;
-        }
-        int cod_ciclo= Integer.parseInt(codigo_ciclo);
-        int credits = Integer.parseInt(creditos);
-        int hors = Integer.parseInt(horas);
-
-        Modulo nuevoModulo = new Modulo(cod_ciclo, nombre, curso, credits, hors);
-
-        String[] entradas = {nombre, curso, creditos, horas, codigo_ciclo};
-        GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MODULO, entradas);
-        JOptionPane.showMessageDialog(this, "Modulo creado correctamente.");
-        dispose();
     }
 
     /** Valida los campos del formulario y actualiza el módulo actual en la base de datos. */
@@ -316,7 +271,8 @@ public class ModificarModulo extends javax.swing.JFrame {
         String horas = jTextFieldHoras.getText();
         String codigo_ciclo = jTextFieldCod_Ciclo.getText();
 
-        if (nombre.isBlank() || curso.isBlank() || creditos.isBlank() || horas.isBlank() || codigo_ciclo.isBlank()) {
+        if (Validadores.validarTextoNoVacio(nombre)|| Validadores.validarTextoNoVacio(curso) || Validadores.validarTextoNoVacio(creditos)
+                || Validadores.validarTextoNoVacio(horas) || Validadores.validarTextoNoVacio(codigo_ciclo)) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
@@ -356,16 +312,6 @@ public class ModificarModulo extends javax.swing.JFrame {
         jTextFieldHoras.setText(horas);
 
     }
-    /** Limpia todos los campos de texto del formulario para una nueva entrada. */
-    private void limpiarCampos(){
-        jTextFieldNombre.setText("");
-        jTextFieldCurso.setText("");
-        jTextFieldCreditos.setText("");
-        jTextFieldCod_Ciclo.setText("");
-        jTextFieldHoras.setText("");
-        
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar1;

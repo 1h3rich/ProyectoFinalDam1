@@ -4,8 +4,8 @@
  */
 package pantallas.Modificar;
 
+import Utils.Validadores;
 import java.awt.HeadlessException;
-import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Alumno;
@@ -14,7 +14,8 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para consultar y modificar los datos de un alumno existente.
- * Muestra la lista completa de alumnos en una tabla y carga el seleccionado en los campos de edición.
+ * Muestra la lista completa de alumnos en una tabla y carga el seleccionado en
+ * los campos de edición.
  *
  * @author Rich
  */
@@ -28,7 +29,7 @@ public class ModificarAlumno extends javax.swing.JFrame {
      */
     public ModificarAlumno() {
         initComponents();
-
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jTextFieldFechaNacimiento.setEditable(false);
         jTextFieldFechaNacimiento.setFocusable(false);
 
@@ -36,7 +37,10 @@ public class ModificarAlumno extends javax.swing.JFrame {
         cargarAlumnosEnTabla();
     }
 
-    /** Inicializa el modelo de la tabla con columnas no editables y registra el listener de selección. */
+    /**
+     * Inicializa el modelo de la tabla con columnas no editables y registra el
+     * listener de selección.
+     */
     private void configurarTabla() {
         modeloTabla = new DefaultTableModel(
                 new Object[]{"Código", "Nombre", "Correo", "Fecha nacimiento", "Domicilio", "Teléfono"},
@@ -57,7 +61,10 @@ public class ModificarAlumno extends javax.swing.JFrame {
         });
     }
 
-    /** Consulta todos los alumnos de la BD ordenados por nombre y los muestra en la tabla. */
+    /**
+     * Consulta todos los alumnos de la BD ordenados por nombre y los muestra en
+     * la tabla.
+     */
     private void cargarAlumnosEnTabla() {
         modeloTabla.setRowCount(0);
         String sql = "SELECT codigo, nombre, correo, fecha_nacimiento, domicilio, telefono FROM alumno ORDER BY nombre ASC";
@@ -74,10 +81,15 @@ public class ModificarAlumno extends javax.swing.JFrame {
         }
     }
 
-    /** Lee la fila seleccionada en la tabla, construye el objeto Alumno y rellena los campos del formulario. */
+    /**
+     * Lee la fila seleccionada en la tabla, construye el objeto Alumno y
+     * rellena los campos del formulario.
+     */
     private void cargarAlumnoSeleccionado() {
         int fila = jTable1.getSelectedRow();
-        if (fila == -1) return;
+        if (fila == -1) {
+            return;
+        }
 
         // Table columns: 0=codigo, 1=nombre, 2=correo, 3=fecha_nacimiento, 4=domicilio, 5=telefono
         // Alumno(String[]) expects: 0=codigo, 1=nombre, 2=fecha_nacimiento, 3=domicilio, 4=telefono, 5=correo
@@ -334,7 +346,10 @@ public class ModificarAlumno extends javax.swing.JFrame {
         });
     }
 
-    /** Valida los campos editados, actualiza el objeto Alumno y persiste los cambios en la BD. */
+    /**
+     * Valida los campos editados, actualiza el objeto Alumno y persiste los
+     * cambios en la BD.
+     */
     private void modificarAlumno() {
         if (alumno == null) {
             JOptionPane.showMessageDialog(this, "Selecciona un alumno de la tabla primero.");
@@ -346,7 +361,8 @@ public class ModificarAlumno extends javax.swing.JFrame {
         String domicilio = jTextFieldDomicilio.getText().trim();
         String telefono = jTextFieldTelefono.getText().trim();
 
-        if (nombre.isBlank() || correo.isBlank() || domicilio.isBlank() || telefono.isBlank()) {
+        if (Validadores.validarTextoNoVacio(nombre)|| Validadores.validarTextoNoVacio(correo) 
+                || Validadores.validarTextoNoVacio(domicilio) || Validadores.validarTextoNoVacio(telefono)) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
@@ -376,7 +392,10 @@ public class ModificarAlumno extends javax.swing.JFrame {
         }
     }
 
-    /** Vuelca los datos del alumno actualmente seleccionado en los campos del formulario. */
+    /**
+     * Vuelca los datos del alumno actualmente seleccionado en los campos del
+     * formulario.
+     */
     private void cargarDatosAlumno() {
         jTextFieldNombre.setText(alumno.getNombre());
         jTextFieldCorreo.setText(alumno.getCorreo());

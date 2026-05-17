@@ -5,7 +5,6 @@
 package pantallas.Modificar;
 
 import Control.SesionDatos;
-import Utils.ModoFormulario;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelos.Ciclo;
@@ -28,6 +27,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
      */
     public Menu_Modificar() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jButtonAlumno.addActionListener(e -> abrirModificarAlumno());
         jButtonMatricula.addActionListener(e -> abrirModificarMatricula());
         cargarDatosSesion();
@@ -191,7 +191,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
         if (sel == null) return;
         for (Ciclo c : lista) {
             if ((c.getCodigo() + " - " + c.getDenominacion()).equals(sel)) {
-                new ModificarCiclo(ModoFormulario.MODIFICAR, c).setVisible(true);
+                new ModificarCiclo(c).setVisible(true);
                 break;
             }
         }
@@ -217,7 +217,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
         if (sel == null) return;
         for (Modulo m : lista) {
             if ((m.getCodigo() + " - " + m.getNombre()).equals(sel)) {
-                new ModificarModulo(ModoFormulario.MODIFICAR, m).setVisible(true);
+                new ModificarModulo(m).setVisible(true);
                 break;
             }
         }

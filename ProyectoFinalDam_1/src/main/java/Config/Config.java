@@ -4,9 +4,6 @@
  */
 package Config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Centraliza todos los parámetros de configuración de la aplicación:
  * credenciales de la base de datos y nombres base de los ficheros de exportación.

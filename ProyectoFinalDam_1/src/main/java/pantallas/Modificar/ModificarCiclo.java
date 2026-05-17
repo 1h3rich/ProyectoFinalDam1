@@ -4,9 +4,7 @@ package pantallas.Modificar;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-import Control.SesionDatos;
-import Utils.ModoFormulario;
+import Utils.Validadores;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -16,14 +14,13 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para crear o modificar un ciclo formativo.
- * El modo de operación (CREAR / MODIFICAR) se establece en el constructor parametrizado.
+ * Formulario Swing para modificar un ciclo formativo existente.
+ * Recibe el ciclo a editar en el constructor y carga sus datos y módulos automáticamente.
  *
  * @author Rich
  */
 public class ModificarCiclo extends javax.swing.JFrame {
 
-    private ModoFormulario modo;
     private Ciclo ciclo;
 
     /**
@@ -31,6 +28,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
      */
     public ModificarCiclo() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -140,8 +138,18 @@ public class ModificarCiclo extends javax.swing.JFrame {
         );
 
         jButtonGuardar.setText("Guardar");
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGuardarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,6 +244,14 @@ public class ModificarCiclo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNivelActionPerformed
 
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        modificarCiclo();
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -259,7 +275,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -267,47 +283,31 @@ public class ModificarCiclo extends javax.swing.JFrame {
             new ModificarCiclo().setVisible(true);
         });
     }
+
     /**
-     * Constructor para abrir el formulario en un modo concreto con un ciclo preseleccionado.
+     * Abre el formulario con los datos del ciclo preseleccionado cargados.
      *
-     * @param modo  CREAR para nuevo ciclo o MODIFICAR para editar el ciclo recibido.
-     * @param ciclo Ciclo a editar; puede ser null si el modo es CREAR.
+     * @param ciclo Ciclo a modificar.
      */
-    public ModificarCiclo(ModoFormulario modo, Ciclo ciclo) {
+    public ModificarCiclo(Ciclo ciclo) {
         initComponents();
-        this.modo = modo;
         this.ciclo = ciclo;
         setLocationRelativeTo(null);
-        prepararFormulario();
-    }
-
-    /** Configura botones, título y campos según el modo (CREAR / MODIFICAR) y carga los datos si procede. */
-    private void prepararFormulario() {
-        jButtonGuardar.addActionListener(e -> {
-            if (modo == ModoFormulario.CREAR) crearCiclo();
-            else modificarCiclo();
-        });
-        jButtonCancelar.addActionListener(e -> dispose());
-
-        if (modo == ModoFormulario.CREAR) {
-            setTitle("Crear ciclo");
-            jButtonGuardar.setText("Crear Ciclo");
-            jTextFieldCodigo.setEditable(false);
-            limpiarCampos();
+        setTitle("Modificar ciclo");
+        jButtonGuardar.setText("Guardar cambios");
+        jTextFieldCodigo.setEditable(false);
+        if (ciclo != null) {
+            cargarDatosCiclo();
+            cargarModulosEnTabla();
         } else {
-            setTitle("Modificar ciclo");
-            jButtonGuardar.setText("Guardar cambios");
-            jTextFieldCodigo.setEditable(false);
-            if (ciclo != null) {
-                cargarDatosCiclo();
-                cargarModulosEnTabla();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún ciclo.");
-            }
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún ciclo.");
         }
     }
 
-    /** Consulta los módulos del ciclo actual en la BD y los muestra en la tabla (ocultando codigo_ciclo). */
+    /**
+     * Consulta los módulos del ciclo actual en la BD y los muestra en la tabla
+     * (ocultando codigo_ciclo).
+     */
     private void cargarModulosEnTabla() {
         // Incluimos codigo_ciclo (col 1) para poder construir Modulo; lo ocultamos de la vista
         String sql = "SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas FROM modulo WHERE codigo_ciclo = ? ORDER BY nombre ASC";
@@ -315,14 +315,21 @@ public class ModificarCiclo extends javax.swing.JFrame {
         jTable1.setModel(modelo);
         jTable1.getColumnModel().removeColumn(jTable1.getColumnModel().getColumn(1));
         jTable1.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) abrirModuloSeleccionado();
+            if (!e.getValueIsAdjusting()) {
+                abrirModuloSeleccionado();
+            }
         });
     }
 
-    /** Abre el formulario ModificarModulo con el módulo correspondiente a la fila seleccionada en la tabla. */
+    /**
+     * Abre el formulario ModificarModulo con el módulo correspondiente a la
+     * fila seleccionada en la tabla.
+     */
     private void abrirModuloSeleccionado() {
         int fila = jTable1.getSelectedRow();
-        if (fila == -1) return;
+        if (fila == -1) {
+            return;
+        }
         // Usar el model (no view) para acceder a todas las columnas incluyendo la oculta
         javax.swing.table.TableModel tm = jTable1.getModel();
         // Modulo(String[]) espera: codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
@@ -334,29 +341,13 @@ public class ModificarCiclo extends javax.swing.JFrame {
             tm.getValueAt(fila, 4).toString(),
             tm.getValueAt(fila, 5).toString()
         };
-        new ModificarModulo(ModoFormulario.MODIFICAR, new Modulo(datos)).setVisible(true);
+        new ModificarModulo(new Modulo(datos)).setVisible(true);
     }
 
-    /** Valida los campos del formulario e inserta un nuevo ciclo en la base de datos. */
-    private void crearCiclo() {
-        String denominacion = jTextFieldDenominacion.getText();
-        String familia = jTextFieldFamiliaProfresional.getText();
-        String nivel = jTextFieldNivel.getText();
-        String horas = jTextFieldHoras.getText();
-        String anio = jTextFieldAñoCurricular.getText();
-
-        if (denominacion.isBlank() || familia.isBlank() || nivel.isBlank() || horas.isBlank() || anio.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
-            return;
-        }
-
-        String[] entradas = {denominacion, familia, nivel, horas, anio};
-        GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO, entradas);
-        JOptionPane.showMessageDialog(this, "Ciclo creado correctamente.");
-        dispose();
-    }
-
-    /** Valida los campos del formulario y actualiza el ciclo actual en la base de datos. */
+    /**
+     * Valida los campos del formulario y actualiza el ciclo actual en la base
+     * de datos.
+     */
     private void modificarCiclo() {
         if (ciclo == null) {
             JOptionPane.showMessageDialog(this, "No hay ciclo para modificar.");
@@ -369,7 +360,8 @@ public class ModificarCiclo extends javax.swing.JFrame {
         String horas = jTextFieldHoras.getText();
         String anio = jTextFieldAñoCurricular.getText();
 
-        if (denominacion.isBlank() || familia.isBlank() || nivel.isBlank() || horas.isBlank() || anio.isBlank()) {
+        if (Validadores.validarTextoNoVacio(denominacion) || Validadores.validarTextoNoVacio(familia) || 
+                Validadores.validarTextoNoVacio(nivel) || Validadores.validarTextoNoVacio(horas) || Validadores.validarTextoNoVacio(anio)) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
@@ -393,7 +385,10 @@ public class ModificarCiclo extends javax.swing.JFrame {
         dispose();
     }
 
-    /** Vuelca los datos del ciclo asignado en los campos de texto del formulario. */
+    /**
+     * Vuelca los datos del ciclo asignado en los campos de texto del
+     * formulario.
+     */
     private void cargarDatosCiclo() {
         jTextFieldCodigo.setText(String.valueOf(ciclo.getCodigo()));
         jTextFieldDenominacion.setText(ciclo.getDenominacion());
@@ -403,22 +398,14 @@ public class ModificarCiclo extends javax.swing.JFrame {
         jTextFieldAñoCurricular.setText(String.valueOf(ciclo.getAñoCurriculum()));
     }
 
-    /** Limpia todos los campos de texto del formulario para una nueva entrada. */
-    private void limpiarCampos() {
-        jTextFieldCodigo.setText("");
-        jTextFieldDenominacion.setText("");
-        jTextFieldFamiliaProfresional.setText("");
-        jTextFieldNivel.setText("");
-        jTextFieldHoras.setText("");
-        jTextFieldAñoCurricular.setText("");
-    }
-
     /**
-     * Muestra un diálogo con los módulos del ciclo y abre el formulario de modificación
-     * para el módulo seleccionado.
+     * Muestra un diálogo con los módulos del ciclo y abre el formulario de
+     * modificación para el módulo seleccionado.
      */
     public void abrirModificarModuloDelCiclo() {
-        if (ciclo == null) return;
+        if (ciclo == null) {
+            return;
+        }
         ArrayList<Modulo> modulos = ciclo.obtenerModulosDelCiclo();
         if (modulos.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Este ciclo no tiene módulos cargados en sesión.");
@@ -429,12 +416,14 @@ public class ModificarCiclo extends javax.swing.JFrame {
             opciones[i] = modulos.get(i).getCodigo() + " - " + modulos.get(i).getNombre();
         }
         String seleccion = (String) JOptionPane.showInputDialog(this,
-            "Selecciona el módulo a modificar:", "Módulos del ciclo",
-            JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
-        if (seleccion == null) return;
+                "Selecciona el módulo a modificar:", "Módulos del ciclo",
+                JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+        if (seleccion == null) {
+            return;
+        }
         for (int i = 0; i < opciones.length; i++) {
             if (opciones[i].equals(seleccion)) {
-                new ModificarModulo(ModoFormulario.MODIFICAR, modulos.get(i)).setVisible(true);
+                new ModificarModulo(modulos.get(i)).setVisible(true);
                 break;
             }
         }

@@ -42,6 +42,7 @@ public class GestionFicheros {
     //==========================================================================================================================================================
     //======SAVE================================================================================================================================================
     //==========================================================================================================================================================
+    
     /**
      * Guarda un objeto a csv, txt o json
      *
@@ -153,8 +154,14 @@ public class GestionFicheros {
 
                 Object obj = ois.readObject();
 
-                if (obj instanceof ArrayList<?>) {
-                    return (ArrayList<String>) obj;
+                if (obj instanceof ArrayList<?> lista) {
+                    ArrayList<String> resultado = new ArrayList<>();
+                    for (Object elemento : lista) {
+                        if (elemento instanceof String s) {
+                            resultado.add(s);
+                        }
+                    }
+                    return resultado;
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -172,14 +179,14 @@ public class GestionFicheros {
     //======================= FROM ============================================================================================================================================
     //=========================================================================================================================================================================
     /**
-     * Convierte un string en json y devuelve el objeto. Los parametros son: la
-     * cadena y el .class de la clase.
+     * Deserializa una cadena JSON al tipo indicado usando Gson.
      *
-     * @param json
-     * @param clase
-     * @return
+     * @param <T>   Tipo de objeto a devolver.
+     * @param json  Cadena JSON a deserializar.
+     * @param clase Clase del tipo destino (p.ej. {@code Alumno.class}).
+     * @return Objeto del tipo {@code T} con los datos del JSON.
      */
-    public static Object toJson(String json, Class clase) {
+    public static <T> T toJson(String json, Class<T> clase) {
         return new Gson().fromJson(json, clase);
     }
 

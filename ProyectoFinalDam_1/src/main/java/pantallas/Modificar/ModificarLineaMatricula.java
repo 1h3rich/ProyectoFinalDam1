@@ -4,7 +4,6 @@
  */
 package pantallas.Modificar;
 
-import Utils.ModoFormulario;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.LineaMatricula;
@@ -28,6 +27,7 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
      */
     public ModificarLineaMatricula() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         configurarTabla();
         cargarLineasEnTabla();
     }
@@ -35,10 +35,9 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
     /**
      * Abre el formulario con una línea de matrícula preseleccionada y sus campos rellenos.
      *
-     * @param modo           Modo de operación (normalmente MODIFICAR).
      * @param lineaMatricula Línea de matrícula a editar.
      */
-    public ModificarLineaMatricula(ModoFormulario modo, LineaMatricula lineaMatricula) {
+    public ModificarLineaMatricula(LineaMatricula lineaMatricula) {
         initComponents();
         setLocationRelativeTo(null);
         configurarTabla();
@@ -350,10 +349,8 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ModificarLineaMatricula().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ModificarLineaMatricula().setVisible(true);
         });
     }
 

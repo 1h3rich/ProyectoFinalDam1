@@ -20,7 +20,9 @@ import modelos.*;
  */
 public class GestionBaseDeDatos {
 
+    /** Conexión activa con la base de datos; {@code null} si aún no se ha establecido o fue cerrada. */
     private static Connection con;
+    /** Indica si hay una transacción explícita en curso (autocommit desactivado). */
     private static boolean transaccionActiva = false;
 
     /*
@@ -177,24 +179,18 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Ejecuta consultas SELECT.Si guardarDatos es false:
+     * Ejecuta una consulta SELECT y, opcionalmente, muestra los resultados por consola y/o los guarda en sesión.
+     * <p>
+     * Formato de {@code datosConsulta} según modo:
+     * <ul>
+     *   <li>{@code guardarDatos=false}: [0] SQL, [1..n] nombres de columna.</li>
+     *   <li>{@code guardarDatos=true}: [0] tipo Java, [1] SQL, [2..n] nombres de columna.</li>
+     * </ul>
      *
-     * datosConsulta[0] = consulta SQL datosConsulta[1...] = columnas a mostrar
-     *
-     * Ejemplo: {"SELECT * FROM alumno", "codigo", "nombre", "apellido"}
-     *
-     * Si guardarDatos es true:
-     *
-     * datosConsulta[0] = nombre del objeto datosConsulta[1] = consulta SQL
-     * datosConsulta[2...] = columnas para crear el objeto
-     *
-     * Ejemplo: {"Alumno", "SELECT * FROM alumno", "codigo", "nombre",
-     * "apellido"}
-     *
-     * @param datosConsulta
-     * @param entradas
-     * @param mostrarPorPantalla
-     * @param guardarDatos
+     * @param datosConsulta Array con la SQL y los nombres de columna (ver formato arriba).
+     * @param entradas      Valores para los marcadores {@code ?} de la SQL; puede ser {@code null}.
+     * @param mostrarPorPantalla {@code true} para imprimir cada fila por consola.
+     * @param guardarDatos  {@code true} para construir objetos del modelo y registrarlos en {@link SesionDatos}.
      */
     public static void realizarConsultaSQL(String[] datosConsulta, String[] entradas, boolean mostrarPorPantalla, boolean guardarDatos) {
         try {
@@ -891,25 +887,14 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Ejecuta cualquier INSERT con AUTO_INCREMENT y devuelve el ID generado.
+     * Ejecuta un INSERT con AUTO_INCREMENT y devuelve el ID generado por la base de datos.
+     * <p>
+     * Sustituye a los métodos específicos anteriores (insertarAlumnoYDevolverID, etc.),
+     * ya que todos eran idénticos salvo la SQL y los parámetros.
      *
-     * Este método reemplaza los 4 métodos específicos que existían antes
-     * (insertarAlumnoYDevolverID, insertarCicloYDevolverID, etc.), ya que todos
-     * eran copias idénticas que solo diferían en el SQL y los params. Ahora
-     * basta con pasar la SQL de ConsultasSQL y el array de valores.
-     *
-     * MySQL convierte automáticamente los String al tipo de columna correcto
-     * (igual que ya hace insertarDatos con pst.setString).
-     *
-     * Ejemplo de uso desde CrearAlumno: int id =
-     * GestionBaseDeDatos.insertarYDevolverID( ConsultasSQL.INSERT_ALUMNO[0],
-     * new String[]{ nombre, correo, domicilio, telefono, fecha } ); if (id !=
-     * -1) { SesionDatos.registrarAlumno(new Alumno(...)); }
-     *
-     * @param sql Sentencia INSERT con marcadores ?
-     * (ConsultasSQL.INSERT_XXX[0]).
-     * @param params Valores para los marcadores, en el mismo orden que la SQL.
-     * @return ID generado por AUTO_INCREMENT, o -1 si falla.
+     * @param sql    Sentencia INSERT con marcadores {@code ?} (p.ej. {@code ConsultasSQL.INSERT_ALUMNO[1]}).
+     * @param params Valores para los marcadores en el mismo orden que la SQL.
+     * @return ID generado por AUTO_INCREMENT, o {@code -1} si el insert falla.
      */
     public static int insertarYDevolverID(String sql, String[] params) {
         comprobarConexion();
@@ -933,16 +918,11 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Versión de insertarYDevolverID para tablas con clave primaria COMPUESTA
-     * que no usan AUTO_INCREMENT (linea_matricula).
+     * Ejecuta un INSERT sin AUTO_INCREMENT, apropiado para tablas con clave primaria compuesta (p.ej. {@code linea_matricula}).
      *
-     * Ejemplo: boolean ok = GestionBaseDeDatos.insertarSinID(
-     * ConsultasSQL.INSERT_LINEA_MATRICULA[0], new String[]{ codMatricula,
-     * codModulo, repeticion, cal1, cal2 } );
-     *
-     * @param sql Sentencia INSERT.
-     * @param params Valores para los marcadores ?.
-     * @return true si se insertó al menos una fila.
+     * @param sql    Sentencia INSERT con marcadores {@code ?} (p.ej. {@code ConsultasSQL.INSERT_LINEA_MATRICULA[1]}).
+     * @param params Valores para los marcadores en el mismo orden que la SQL.
+     * @return {@code true} si se insertó al menos una fila; {@code false} en caso de error.
      */
     public static boolean insertarSinID(String sql, String[] params) {
         comprobarConexion();

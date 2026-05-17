@@ -4,23 +4,20 @@
  */
 package pantallas.Modificar;
 
-import Utils.ModoFormulario;
+import Utils.Validadores;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import modelos.Matricula;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para crear o modificar una matrícula.
- * Muestra la lista de alumnos y, al seleccionar uno, carga su matrícula más reciente.
+ * Formulario Swing para modificar una matrícula existente.
+ * Muestra la lista de alumnos y, al seleccionar uno, carga su matrícula más reciente para editarla.
  *
  * @author Rich
  */
 public class ModificarMatricula extends javax.swing.JFrame {
 
-    private ModoFormulario modo;
-    private Matricula matricula;
     private int selectedMatriculaCodigo = -1;
     private int selectedCodigoAlumno = -1;
     private DefaultTableModel modeloTablaAlumnos;
@@ -30,6 +27,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
      */
     public ModificarMatricula() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jTextFieldCodigoAlumno.setEditable(false);
         configurarTabla();
         cargarAlumnosEnTabla();
@@ -241,8 +239,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        if (modo == null || modo == ModoFormulario.MODIFICAR) modificarMatricula();
-        else crearMatricula();
+        modificarMatricula();
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jTextFieldImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldImporteActionPerformed
@@ -280,43 +277,9 @@ public class ModificarMatricula extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ModificarMatricula().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ModificarMatricula().setVisible(true);
         });
-    }
-
-    /**
-     * Abre el formulario en modo concreto con una matrícula preseleccionada.
-     *
-     * @param modo      CREAR para nueva matrícula o MODIFICAR para editar la recibida.
-     * @param matricula Matrícula a editar; puede ser null si el modo es CREAR.
-     */
-    public ModificarMatricula(ModoFormulario modo, Matricula matricula) {
-        initComponents();
-        this.modo = modo;
-        this.matricula = matricula;
-        setLocationRelativeTo(null);
-        prepararFormulario();
-    }
-
-    /** Configura el título, botones y campos del formulario según el modo (CREAR / MODIFICAR). */
-    private void prepararFormulario() {
-        if (modo == ModoFormulario.CREAR) {
-            setTitle("Crear matrícula");
-            jButtonGuardar.setText("Crear Matrícula");
-            limpiarCampos();
-        } else {
-            setTitle("Modificar matrícula");
-            jButtonGuardar.setText("Modificar Matrícula");
-            jTextFieldCodigoAlumno.setEditable(false);
-            if (matricula != null) {
-                cargarDatosMatricula();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna matrícula.");
-            }
-        }
     }
 
     /** Inicializa la tabla de alumnos con columnas no editables y el listener de selección. */
@@ -368,24 +331,6 @@ public class ModificarMatricula extends javax.swing.JFrame {
         jTextFieldImporte.setText(temp.getValueAt(0, 3) == null ? "" : temp.getValueAt(0, 3).toString());
     }
 
-    /** Valida los campos del formulario e inserta una nueva matrícula en la base de datos. */
-    private void crearMatricula() {
-        String codigoAlumno = jTextFieldCodigoAlumno.getText();
-        String anioAcademico = jTextFieldAnioAcademico.getText();
-        String estado = jTextFieldEstado.getText();
-        String importe = jTextFieldImporte.getText();
-
-        if (codigoAlumno.isBlank() || anioAcademico.isBlank() || estado.isBlank() || importe.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
-            return;
-        }
-
-        String[] entradas = {codigoAlumno, anioAcademico, estado, importe};
-        GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA, entradas);
-        JOptionPane.showMessageDialog(this, "Matrícula creada correctamente.");
-        dispose();
-    }
-
     /** Valida los campos del formulario y actualiza la matrícula del alumno seleccionado en la BD. */
     private void modificarMatricula() {
         if (selectedMatriculaCodigo == -1) {
@@ -397,7 +342,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
         String estado = jTextFieldEstado.getText().trim();
         String importe = jTextFieldImporte.getText().trim();
 
-        if (anioAcademico.isBlank() || estado.isBlank() || importe.isBlank()) {
+        if (Validadores.validarTextoNoVacio(anioAcademico) || Validadores.validarTextoNoVacio(estado) || Validadores.validarTextoNoVacio(importe)) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
@@ -417,14 +362,6 @@ public class ModificarMatricula extends javax.swing.JFrame {
         selectedCodigoAlumno = -1;
         limpiarCampos();
         jTextFieldCodigoAlumno.setText("");
-    }
-
-    /** Vuelca los datos de la matrícula asignada en los campos de texto del formulario. */
-    private void cargarDatosMatricula() {
-        jTextFieldCodigoAlumno.setText(String.valueOf(matricula.getCodigo_alumno()));
-        jTextFieldAnioAcademico.setText(String.valueOf(matricula.getAño_academico()));
-        jTextFieldEstado.setText(matricula.getEstado());
-        jTextFieldImporte.setText(String.valueOf(matricula.getImporte()));
     }
 
     /** Limpia todos los campos de texto del formulario para una nueva entrada. */
