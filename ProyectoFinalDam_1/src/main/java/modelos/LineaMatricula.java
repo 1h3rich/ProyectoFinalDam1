@@ -4,12 +4,12 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
-import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import servicios.Ficheros.GestionFicheros;
+import interfaces.InterpolaridadDeDatos;
 
-public class LineaMatricula implements interpolaridadDeDatos, Serializable {
+public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
 
     private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
@@ -247,16 +247,16 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.getLineas().clear();
+        SesionDatos.listaLineasMatricula.clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea);
-                SesionDatos.getLineas().add(lineaMatricula);
+                SesionDatos.listaLineasMatricula.add(lineaMatricula);
             }
         }
 
-        for (LineaMatricula lineaMatricula : SesionDatos.getLineas()) {
+        for (LineaMatricula lineaMatricula : SesionDatos.listaLineasMatricula) {
             System.out.println(lineaMatricula);
         }
     }
@@ -288,7 +288,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroLineaMatricula, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.getLineas());
+            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.listaLineasMatricula);
         }
     }
 
@@ -307,7 +307,7 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".json")) {
 
-            SesionDatos.getLineas().clear();
+            SesionDatos.listaLineasMatricula.clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroLineaMatricula);
 
@@ -318,11 +318,11 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
 
                     lineaMatricula.validarObjeto();
 
-                    SesionDatos.getLineas().add(lineaMatricula);
+                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
                 }
             }
 
-            for (LineaMatricula lineaMatricula : SesionDatos.getLineas()) {
+            for (LineaMatricula lineaMatricula : SesionDatos.listaLineasMatricula) {
                 System.out.println(lineaMatricula);
             }
         }

@@ -43,24 +43,24 @@ public class SesionDatos {
     /**
      * Ciclos insertados en la base de datos.
      */
-    private static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
+    public static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
     
     
 
     /**
      * Módulos insertados en la base de datos. 
      */
-    private static final ArrayList<Modulo> listaModulos = new ArrayList<>();
+    public static final ArrayList<Modulo> listaModulos = new ArrayList<>();
 
     /**
      * Alumnos insertados en la base de datos. 
      */
-    private static final ArrayList<Alumno> listaAlumnos = new ArrayList<>();
+    public static final ArrayList<Alumno> listaAlumnos = new ArrayList<>();
 
     /**
      * Matrículas insertadas en la base de datos. 
      */
-    private static final ArrayList<Matricula> listaMatriculas = new ArrayList<>();
+    public static final ArrayList<Matricula> listaMatriculas = new ArrayList<>();
 
     // =========================================================
     // ======= COLECCIÓN 2: ArrayList (acceso por índice) ======
@@ -70,7 +70,7 @@ public class SesionDatos {
      * línea_matrícula tiene clave compuesta y no puede implementar un
      * Comparable sencillo.
      */
-    private static final ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
+    public static final ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
 
     // =========================================================
     // ======= COLECCIÓN 3: LinkedHashMap (orden inserción) ====
@@ -186,43 +186,7 @@ public class SesionDatos {
         }
     }
 
-    // =========================================================
-    // ================ GETTERS DE LISTAS ======================
-    // =========================================================
-    /**
-     * @return Copia de la lista de alumnos insertados en sesión.
-     */
-    public static ArrayList<Alumno> getAlumnos() {
-        return new ArrayList<>(listaAlumnos);
-    }
-
-    /**
-     * @return Copia de la lista de ciclos insertados en sesión.
-     */
-    public static ArrayList<Ciclo> getCiclos() {
-        return new ArrayList<>(listaCiclos);
-    }
-
-    /**
-     * @return Copia de la lista de módulos insertados en sesión.
-     */
-    public static ArrayList<Modulo> getModulos() {
-        return new ArrayList<>(listaModulos);
-    }
-
-    /**
-     * @return Copia de la lista de matrículas insertadas en sesión.
-     */
-    public static ArrayList<Matricula> getMatriculas() {
-        return new ArrayList<>(listaMatriculas);
-    }
-
-    /**
-     * @return Copia de la lista de líneas de matrícula insertadas en sesión.
-     */
-    public static ArrayList<LineaMatricula> getLineas() {
-        return new ArrayList<>(listaLineasMatricula);
-    }
+   
 
     // =========================================================
     // ============= VER REGISTRO COMPLETO =====================

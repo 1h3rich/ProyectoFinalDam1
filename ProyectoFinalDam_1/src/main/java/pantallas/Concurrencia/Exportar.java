@@ -190,10 +190,11 @@ public class Exportar extends javax.swing.JFrame {
         });
     }
 
+    
     private void exportarCSV() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
-
+/*
         switch (opcion) {
 
             case "ALUMNADO" -> {
@@ -234,12 +235,13 @@ public class Exportar extends javax.swing.JFrame {
                 this,
                 "Exportación CSV completada"
         );
+*/
     }
 
     private void exportarJSON() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
-
+/*
         switch (opcion) {
 
             case "ALUMNADO" -> {
@@ -280,10 +282,12 @@ public class Exportar extends javax.swing.JFrame {
                 this,
                 "Exportación JSON completada"
         );
+*/
     }
 
     private void exportarTodoCSV() {
 
+        /*
         for (Alumno alumno : SesionDatos.getAlumnos()) {
             alumno.loadToCsv();
         }
@@ -303,10 +307,11 @@ public class Exportar extends javax.swing.JFrame {
         for (LineaMatricula linea : SesionDatos.getLineas()) {
             linea.loadToCsv();
         }
+*/
     }
 
     private void exportarTodoJSON() {
-
+/*
         for (Alumno alumno : SesionDatos.getAlumnos()) {
             alumno.loadToJson();
         }
@@ -326,10 +331,11 @@ public class Exportar extends javax.swing.JFrame {
         for (LineaMatricula linea : SesionDatos.getLineas()) {
             linea.loadToJson();
         }
+*/
     }
 
     private void exportarTodoBinario() {
-
+/*
         if (!SesionDatos.getAlumnos().isEmpty()) {
             SesionDatos.getAlumnos().get(0).loadToBinario();
         }
@@ -349,12 +355,13 @@ public class Exportar extends javax.swing.JFrame {
         if (!SesionDatos.getLineas().isEmpty()) {
             SesionDatos.getLineas().get(0).loadToBinario();
         }
+*/
     }
 
     private void exportarTXT() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
-
+/*
         switch (opcion) {
 
             case "ALUMNADO" -> {
@@ -395,10 +402,11 @@ public class Exportar extends javax.swing.JFrame {
                 this,
                 "Exportación TXT completada"
         );
+*/
     }
 
     private void exportarTodoTXT() {
-
+/*
         for (Alumno alumno : SesionDatos.getAlumnos()) {
             alumno.loadToTxt();
         }
@@ -418,12 +426,13 @@ public class Exportar extends javax.swing.JFrame {
         for (LineaMatricula linea : SesionDatos.getLineas()) {
             linea.loadToTxt();
         }
+*/
     }
 
     private void exportarBINARIO() {
 
         String opcion = jComboBox1.getSelectedItem().toString();
-
+/*
         switch (opcion) {
 
             case "ALUMNADO" -> {
@@ -464,6 +473,7 @@ public class Exportar extends javax.swing.JFrame {
                 this,
                 "Exportación BINARIA completada"
         );
+*/
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBINARIO;

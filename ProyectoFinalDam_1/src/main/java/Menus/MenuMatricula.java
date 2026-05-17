@@ -140,7 +140,7 @@ public class MenuMatricula {
 
             Matricula matricula = new Matricula(codigoAlumno, añoAcademico, estado, importe);
             matriculasSesion.add(matricula);
-            SesionDatos.getMatriculas().add(matricula);
+            SesionDatos.listaMatriculas.add(matricula);
 
             System.out.println("[OK] Matrícula insertada correctamente.");
 
@@ -332,14 +332,14 @@ public class MenuMatricula {
 
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Matricula m : SesionDatos.getMatriculas()) {
+            for (Matricula m : SesionDatos.listaMatriculas) {
                 String linea = m.toCSV();
                 if (usarDosPuntos) {
                     linea = linea.replace(";", ":");
                 }
                 pw.println(linea);
             }
-            System.out.println("[OK] Exportados " + SesionDatos.getMatriculas().size()
+            System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -347,17 +347,17 @@ public class MenuMatricula {
     }
 
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.getMatriculas());
-        System.out.println("[OK] Exportados " + SesionDatos.getMatriculas().size()
+        GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.listaMatriculas);
+        System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
                 + " registros a: " + Config.ficheroMatricula + ".dat");
     }
 
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroMatricula + ".json", false))) {
-            for (Matricula m : SesionDatos.getMatriculas()) {
+            for (Matricula m : SesionDatos.listaMatriculas) {
                 pw.println(m.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.getMatriculas().size()
+            System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
                     + " registros a: " + Config.ficheroMatricula + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -436,7 +436,7 @@ public class MenuMatricula {
                 };
  
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.getMatriculas().add(matricula);
+                SesionDatos.listaMatriculas.add(matricula);
                 contadorImportados++;
             }
         }
@@ -477,7 +477,7 @@ public class MenuMatricula {
                 };
  
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.getMatriculas().add(matricula);
+                SesionDatos.listaMatriculas.add(matricula);
                 contadorImportados++;
             }
         }
@@ -520,7 +520,7 @@ public class MenuMatricula {
                 };
  
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.getMatriculas().add(matricula);
+                SesionDatos.listaMatriculas.add(matricula);
                 contadorImportados++;
             }
  
@@ -569,7 +569,7 @@ public class MenuMatricula {
                 };
  
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.getMatriculas().add(matricula);
+                SesionDatos.listaMatriculas.add(matricula);
                 contadorImportados++;
             }
         }
@@ -606,7 +606,7 @@ public class MenuMatricula {
      * Carga todas las matrículas de la base de datos en la lista en memoria.
      */
     private static void cargarMatriculasDesdeBD() {
-        SesionDatos.getMatriculas().clear();
+        SesionDatos.listaMatriculas.clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
     }
 

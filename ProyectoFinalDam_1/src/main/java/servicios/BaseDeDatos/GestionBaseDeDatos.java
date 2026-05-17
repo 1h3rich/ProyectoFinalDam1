@@ -776,6 +776,8 @@ public class GestionBaseDeDatos {
         return 0;
     }
 
+    
+    /* ESTE METODO SI NO SE USA SE EILIMINA YA QUE EL SQL ESTA MAL REDACTADO
     public static ArrayList<ItemCombo> obtenerModulosDisponiblesCombo() {
         comprobarConexion();
 
@@ -798,6 +800,8 @@ public class GestionBaseDeDatos {
 
         return lista;
     }
+    
+    */
 
     public static void comprobarBaseActual() {
         if (!comprobarConexion()) {

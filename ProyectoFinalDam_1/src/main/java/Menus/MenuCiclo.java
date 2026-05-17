@@ -19,27 +19,30 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
 /**
- * Menú de gestión completa de la tabla ciclo.
- * Incluye operaciones CRUD, exportación/importación de ficheros
- * y visualización de datos insertados durante la sesión.
+ * Menú de gestión completa de la tabla ciclo. Incluye operaciones CRUD,
+ * exportación/importación de ficheros y visualización de datos insertados
+ * durante la sesión.
  *
  * @author 1DAM
  */
 public class MenuCiclo {
 
-    /** Lista de ciclos insertados durante la ejecución actual. */
+    /**
+     * Lista de ciclos insertados durante la ejecución actual.
+     */
     private static final ArrayList<Ciclo> ciclosSesion = new ArrayList<>();
 
-    /** Flags que indican si ya se ha importado desde cada formato. */
-    private static boolean importadoTxt  = false;
-    private static boolean importadoCsv  = false;
-    private static boolean importadoBin  = false;
+    /**
+     * Flags que indican si ya se ha importado desde cada formato.
+     */
+    private static boolean importadoTxt = false;
+    private static boolean importadoCsv = false;
+    private static boolean importadoBin = false;
     private static boolean importadoJson = false;
 
     // =========================================================
     // =================== MENÚ PRINCIPAL ======================
     // =========================================================
-
     /**
      * Muestra el menú de gestión de ciclos y gestiona la navegación.
      *
@@ -68,16 +71,26 @@ public class MenuCiclo {
                 teclado.nextLine();
 
                 switch (opcion) {
-                    case 1 -> insertarCiclo(teclado);
-                    case 2 -> actualizarCiclo(teclado);
-                    case 3 -> eliminarCiclo(teclado);
-                    case 4 -> consultarPorCodigo(teclado);
-                    case 5 -> consultarTodos();
-                    case 6 -> mostrarMenuExportar(teclado);
-                    case 7 -> mostrarMenuImportar(teclado);
-                    case 8 -> verDatosSesion();
-                    case 9 -> volver = true;
-                    default -> System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
+                    case 1 ->
+                        insertarCiclo(teclado);
+                    case 2 ->
+                        actualizarCiclo(teclado);
+                    case 3 ->
+                        eliminarCiclo(teclado);
+                    case 4 ->
+                        consultarPorCodigo(teclado);
+                    case 5 ->
+                        consultarTodos();
+                    case 6 ->
+                        mostrarMenuExportar(teclado);
+                    case 7 ->
+                        mostrarMenuImportar(teclado);
+                    case 8 ->
+                        verDatosSesion();
+                    case 9 ->
+                        volver = true;
+                    default ->
+                        System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("[ERROR] Debe introducir un número entero.");
@@ -89,7 +102,6 @@ public class MenuCiclo {
     // =========================================================
     // ========================= CRUD ==========================
     // =========================================================
-
     /**
      * Solicita los datos de un nuevo ciclo por teclado, lo inserta en la base
      * de datos y lo añade a la colección de sesión.
@@ -137,7 +149,7 @@ public class MenuCiclo {
 
             Ciclo ciclo = new Ciclo(denominacion, familiaProfesional, nivel, horas, añoCurriculum);
             ciclosSesion.add(ciclo);
-            SesionDatos.getCiclos().add(ciclo);
+            SesionDatos.listaCiclos.add(ciclo);
 
             System.out.println("[OK] Ciclo insertado correctamente.");
 
@@ -150,8 +162,8 @@ public class MenuCiclo {
     }
 
     /**
-     * Solicita el código de un ciclo existente y los nuevos valores de sus campos,
-     * y actualiza el registro en la base de datos.
+     * Solicita el código de un ciclo existente y los nuevos valores de sus
+     * campos, y actualiza el registro en la base de datos.
      *
      * @param teclado Scanner para leer la entrada del usuario.
      */
@@ -285,7 +297,6 @@ public class MenuCiclo {
     // =========================================================
     // ==================== EXPORTAR ===========================
     // =========================================================
-
     /**
      * Submenú de exportación de la tabla ciclo a distintos formatos de fichero.
      *
@@ -306,12 +317,18 @@ public class MenuCiclo {
             cargarCiclosDesdeBD();
 
             switch (opcion) {
-                case 1 -> exportarATxt();
-                case 2 -> exportarACsv();
-                case 3 -> exportarABinario();
-                case 4 -> exportarAJson();
-                case 5 -> { /* volver */ }
-                default -> System.out.println("[ERROR] Opción no válida.");
+                case 1 ->
+                    exportarATxt();
+                case 2 ->
+                    exportarACsv();
+                case 3 ->
+                    exportarABinario();
+                case 4 ->
+                    exportarAJson();
+                case 5 -> {
+                    /* volver */ }
+                default ->
+                    System.out.println("[ERROR] Opción no válida.");
             }
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Debe introducir un número entero.");
@@ -334,21 +351,23 @@ public class MenuCiclo {
     }
 
     /**
-     * Escribe la lista de ciclos en un fichero de texto (sobreescribe si existe).
+     * Escribe la lista de ciclos en un fichero de texto (sobreescribe si
+     * existe).
      *
      * @param rutaFichero Ruta completa del fichero de salida.
-     * @param usarDosPuntos true para usar ":" como separador (CSV); false para ";" (TXT).
+     * @param usarDosPuntos true para usar ":" como separador (CSV); false para
+     * ";" (TXT).
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Ciclo ciclo : SesionDatos.getCiclos()) {
+        try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
+            for (Ciclo ciclo : SesionDatos.listaCiclos) {
                 String linea = ciclo.toCSV();
                 if (usarDosPuntos) {
                     linea = linea.replace(";", ":");
                 }
                 pw.println(linea);
             }
-            System.out.println("[OK] Exportados " + SesionDatos.getCiclos().size()
+            System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -359,8 +378,8 @@ public class MenuCiclo {
      * Exporta todos los ciclos a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.getCiclos());
-        System.out.println("[OK] Exportados " + SesionDatos.getCiclos().size()
+        GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.listaCiclos);
+        System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
                 + " registros a: " + Config.ficheroCiclo + ".dat");
     }
 
@@ -368,11 +387,11 @@ public class MenuCiclo {
      * Exporta todos los ciclos a un fichero JSON (un objeto por línea).
      */
     private static void exportarAJson() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroCiclo + ".json", false))) {
-            for (Ciclo ciclo : SesionDatos.getCiclos()) {
+        try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroCiclo + ".json", false))) {
+            for (Ciclo ciclo : SesionDatos.listaCiclos) {
                 pw.println(ciclo.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.getCiclos().size()
+            System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
                     + " registros a: " + Config.ficheroCiclo + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -382,10 +401,10 @@ public class MenuCiclo {
     // =========================================================
     // ==================== IMPORTAR ===========================
     // =========================================================
-
     /**
-     * Submenú de importación de la tabla ciclo desde distintos formatos de fichero.
-     * Lanza YaImportadoException si el formato seleccionado ya fue importado.
+     * Submenú de importación de la tabla ciclo desde distintos formatos de
+     * fichero. Lanza YaImportadoException si el formato seleccionado ya fue
+     * importado.
      *
      * @param teclado Scanner para leer la opción del usuario.
      */
@@ -403,12 +422,18 @@ public class MenuCiclo {
             teclado.nextLine();
 
             switch (opcion) {
-                case 1 -> importarDesdeTxt();
-                case 2 -> importarDesdeCsv();
-                case 3 -> importarDesdeBinario();
-                case 4 -> importarDesdeJson();
-                case 5 -> { /* volver */ }
-                default -> System.out.println("[ERROR] Opción no válida.");
+                case 1 ->
+                    importarDesdeTxt();
+                case 2 ->
+                    importarDesdeCsv();
+                case 3 ->
+                    importarDesdeBinario();
+                case 4 ->
+                    importarDesdeJson();
+                case 5 -> {
+                    /* volver */ }
+                default ->
+                    System.out.println("[ERROR] Opción no válida.");
             }
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Debe introducir un número entero.");
@@ -419,28 +444,29 @@ public class MenuCiclo {
     }
 
     /**
-     * Importa ciclos desde un fichero TXT (separador ";") e inserta
-     * cada registro en la base de datos.
+     * Importa ciclos desde un fichero TXT (separador ";") e inserta cada
+     * registro en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde TXT en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde TXT en esta
+     * sesión.
      */
     private static void importarDesdeTxt() throws YaImportadoException {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde TXT en esta sesión.");
         }
- 
+
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
- 
+
         int contadorImportados = 0;
- 
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = Ciclo.obtenerLineas(linea);
- 
+
                 // Orden según INSERT_CICLO_CON_CODIGO:
                 // codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo
                 String[] entradas = {
@@ -451,40 +477,41 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getHoras()),
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.getCiclos().add(ciclo);
+                SesionDatos.listaCiclos.add(ciclo);
                 contadorImportados++;
             }
         }
- 
+
         importadoTxt = true;
         System.out.println("[OK] Importados " + contadorImportados + " ciclos desde TXT.");
     }
- 
+
     /**
-     * Importa ciclos desde un fichero CSV (separador ":") e inserta
-     * cada registro en la base de datos.
+     * Importa ciclos desde un fichero CSV (separador ":") e inserta cada
+     * registro en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde CSV en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde CSV en esta
+     * sesión.
      */
     private static void importarDesdeCsv() throws YaImportadoException {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde CSV en esta sesión.");
         }
- 
+
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
- 
+
         int contadorImportados = 0;
- 
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = Ciclo.obtenerLineas(linea.replace(":", ";"));
- 
+
                 String[] entradas = {
                     String.valueOf(ciclo.getCodigo()),
                     ciclo.getDenominacion(),
@@ -493,41 +520,42 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getHoras()),
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.getCiclos().add(ciclo);
+                SesionDatos.listaCiclos.add(ciclo);
                 contadorImportados++;
             }
         }
- 
+
         importadoCsv = true;
         System.out.println("[OK] Importados " + contadorImportados + " ciclos desde CSV.");
     }
- 
+
     /**
-     * Importa ciclos desde un fichero binario (.dat) e inserta cada
-     * registro en la base de datos.
+     * Importa ciclos desde un fichero binario (.dat) e inserta cada registro en
+     * la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde Binario en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde Binario en esta
+     * sesión.
      */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde Binario en esta sesión.");
         }
- 
+
         int contadorImportados = 0;
- 
-        try (ObjectInputStream ois = new ObjectInputStream(
+
+        try ( ObjectInputStream ois = new ObjectInputStream(
                 new FileInputStream(Config.ficheroCiclo + ".dat"))) {
- 
+
             @SuppressWarnings("unchecked")
             ArrayList<Ciclo> lista = (ArrayList<Ciclo>) ois.readObject();
- 
+
             if (lista == null || lista.isEmpty()) {
                 System.out.println("[INFO] El fichero binario está vacío o no existe.");
                 return;
             }
- 
+
             for (Ciclo ciclo : lista) {
                 String[] entradas = {
                     String.valueOf(ciclo.getCodigo()),
@@ -537,12 +565,12 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getHoras()),
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.getCiclos().add(ciclo);
+                SesionDatos.listaCiclos.add(ciclo);
                 contadorImportados++;
             }
- 
+
         } catch (java.io.FileNotFoundException e) {
             System.out.println("[INFO] El fichero binario no existe: " + Config.ficheroCiclo + ".dat");
             return;
@@ -550,35 +578,36 @@ public class MenuCiclo {
             System.out.println("[ERROR] Error al leer el fichero binario: " + e.getMessage());
             return;
         }
- 
+
         importadoBin = true;
         System.out.println("[OK] Importados " + contadorImportados + " ciclos desde Binario.");
     }
- 
+
     /**
-     * Importa ciclos desde un fichero JSON e inserta cada registro
-     * en la base de datos.
+     * Importa ciclos desde un fichero JSON e inserta cada registro en la base
+     * de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde JSON en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde JSON en esta
+     * sesión.
      */
     private static void importarDesdeJson() throws YaImportadoException {
         if (importadoJson) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde JSON en esta sesión.");
         }
- 
+
         ArrayList<String> lineas = GestionFicheros.leerJson(Config.ficheroCiclo);
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero JSON está vacío o no existe.");
             return;
         }
- 
+
         int contadorImportados = 0;
         Gson gson = new Gson();
- 
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = gson.fromJson(linea, Ciclo.class);
- 
+
                 String[] entradas = {
                     String.valueOf(ciclo.getCodigo()),
                     ciclo.getDenominacion(),
@@ -587,21 +616,20 @@ public class MenuCiclo {
                     String.valueOf(ciclo.getHoras()),
                     String.valueOf(ciclo.getAñoCurriculum())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
-                SesionDatos.getCiclos().add(ciclo);
+                SesionDatos.listaCiclos.add(ciclo);
                 contadorImportados++;
             }
         }
- 
+
         importadoJson = true;
         System.out.println("[OK] Importados " + contadorImportados + " ciclos desde JSON.");
     }
-    
+
     // =========================================================
     // =================== SESIÓN ==============================
     // =========================================================
-
     /**
      * Muestra en consola los ciclos insertados durante la sesión actual.
      */
@@ -621,12 +649,11 @@ public class MenuCiclo {
     // =========================================================
     // ==================== AUXILIARES =========================
     // =========================================================
-
-     /**
+    /**
      * Carga todos los ciclos de la base de datos en la lista en memoria.
      */
     private static void cargarCiclosDesdeBD() {
-        SesionDatos.getCiclos().clear();
+        SesionDatos.listaCiclos.clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
     }
 

@@ -4,15 +4,15 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
-import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
+import interfaces.InterpolaridadDeDatos;
 
-public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<Alumno> {
+public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<Alumno> {
 
     private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
@@ -273,16 +273,16 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.getAlumnos().clear();
+       SesionDatos.listaAlumnos.clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Alumno alumno = Alumno.obtenerLineas(linea);
-                SesionDatos.getAlumnos().add(alumno);
+                SesionDatos.listaAlumnos.add(alumno);
             }
         }
 
-        for (Alumno alumno : SesionDatos.getAlumnos()) {
+        for (Alumno alumno : SesionDatos.listaAlumnos) {
             System.out.println(alumno);
         }
     }
@@ -295,7 +295,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
         ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();
 
-        for (Matricula matricula : SesionDatos.getMatriculas()) {
+        for (Matricula matricula : SesionDatos.listaMatriculas) {
             if (matricula.getCodigo_alumno() == this.codigo) {
                 matriculasDelAlumno.add(matricula);
             }
@@ -332,7 +332,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroAlumno, SesionDatos.getAlumnos());
+            GestionFicheros.guardarToBinario(Config.ficheroAlumno,SesionDatos.listaAlumnos);
         }
     }
 
@@ -352,7 +352,7 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".json")) {
 
-            SesionDatos.getAlumnos().clear();
+            SesionDatos.listaAlumnos.clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroAlumno);
 
@@ -362,11 +362,11 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
 
                     alumno.validarObjeto();
 
-                    SesionDatos.getAlumnos().add(alumno);
+                   SesionDatos.listaAlumnos.add(alumno);
                 }
             }
 
-            for (Alumno alumno : SesionDatos.getAlumnos()) {
+            for (Alumno alumno : SesionDatos.listaAlumnos) {
                 System.out.println(alumno);
             }
         }

@@ -4,7 +4,6 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
-import interfaces.interpolaridadDeDatos;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,8 +12,9 @@ import java.util.ArrayList;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
+import interfaces.InterpolaridadDeDatos;
 
-public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ciclo> {
+public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ciclo> {
 
     private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
@@ -269,16 +269,16 @@ public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ci
 
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.getCiclos().clear();
+        SesionDatos.listaCiclos.clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = Ciclo.obtenerLineas(linea);
-                SesionDatos.getCiclos().add(ciclo);
+                SesionDatos.listaCiclos.add(ciclo);
             }
         }
 
-        for (Ciclo ciclo : SesionDatos.getCiclos()) {
+        for (Ciclo ciclo : SesionDatos.listaCiclos) {
             System.out.println(ciclo);
         }
     }
@@ -291,7 +291,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ci
     public ArrayList<Modulo> obtenerModulosDelCiclo() {
         ArrayList<Modulo> modulosDelCiclo = new ArrayList<>();
 
-        for (Modulo modulo : SesionDatos.getModulos()) {
+        for (Modulo modulo : SesionDatos.listaModulos) {
             if (modulo.getCodigo_ciclo() == this.codigo) {
                 modulosDelCiclo.add(modulo);
             }
@@ -327,7 +327,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ci
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.getCiclos());
+            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.listaCiclos);
         }
     }
 
@@ -346,7 +346,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ci
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
 
-            SesionDatos.getCiclos().clear();
+            SesionDatos.listaCiclos.clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroCiclo);
 
@@ -356,11 +356,11 @@ public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ci
 
                     ciclo.validarObjeto();
 
-                    SesionDatos.getCiclos().add(ciclo);
+                    SesionDatos.listaCiclos.add(ciclo);
                 }
             }
 
-            for (Ciclo ciclo : SesionDatos.getCiclos()) {
+            for (Ciclo ciclo : SesionDatos.listaCiclos) {
                 System.out.println(ciclo);
             }
         }

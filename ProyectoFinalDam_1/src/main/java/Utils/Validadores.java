@@ -69,7 +69,7 @@ public class Validadores {
     }
 
     public static boolean validarRepeticion(int repeticion) {
-        return repeticion == 1 || repeticion == 2;
+        return repeticion >= 0;
     }
 
     public static boolean validarCalificacion(double calificacion) {

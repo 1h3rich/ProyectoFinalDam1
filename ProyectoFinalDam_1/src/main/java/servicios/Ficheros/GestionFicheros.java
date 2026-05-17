@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.*;
+import java.util.Collection;
 
 /**
  *
@@ -69,7 +70,7 @@ public class GestionFicheros {
      * @param direccion
      * @param lista 
      */
-    public static void guardarToBinario(String direccion, ArrayList<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
+    public static void guardarToBinario(String direccion, Collection<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
 
         if (Validadores.comprobarFicheroEscritura(direccion, ".dat")) {
             ObjectOutputStream oos = null;

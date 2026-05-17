@@ -4,6 +4,8 @@
  */
 package pantallas.Concurrencia;
 
+import Control.SesionDatos;
+
 /**
  *
  * @author 1DAM
@@ -82,6 +84,7 @@ public class Importar extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

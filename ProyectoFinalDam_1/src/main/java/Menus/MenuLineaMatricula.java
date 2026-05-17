@@ -19,36 +19,40 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
 /**
- * Menú de gestión completa de la tabla linea_matricula.
- * Incluye operaciones CRUD, exportación/importación de ficheros
- * y visualización de datos insertados durante la sesión.
+ * Menú de gestión completa de la tabla linea_matricula. Incluye operaciones
+ * CRUD, exportación/importación de ficheros y visualización de datos insertados
+ * durante la sesión.
  *
- * La clave primaria de linea_matricula es compuesta: (codigo_matricula, codigo_modulo),
- * por lo que las operaciones de consulta, actualización y eliminación solicitan
- * ambos valores al usuario.
+ * La clave primaria de linea_matricula es compuesta: (codigo_matricula,
+ * codigo_modulo), por lo que las operaciones de consulta, actualización y
+ * eliminación solicitan ambos valores al usuario.
  *
- * Las calificaciones se introducen como valores entre 0.0 y 10.0.
- * Si aún no hay calificación, el usuario puede introducir 0.0.
+ * Las calificaciones se introducen como valores entre 0.0 y 10.0. Si aún no hay
+ * calificación, el usuario puede introducir 0.0.
  *
  * @author 1DAM
  */
 public class MenuLineaMatricula {
 
-    /** Lista de líneas de matrícula insertadas durante la ejecución actual. */
+    /**
+     * Lista de líneas de matrícula insertadas durante la ejecución actual.
+     */
     private static final ArrayList<LineaMatricula> lineasSesion = new ArrayList<>();
 
-    /** Flags que indican si ya se ha importado desde cada formato. */
-    private static boolean importadoTxt  = false;
-    private static boolean importadoCsv  = false;
-    private static boolean importadoBin  = false;
+    /**
+     * Flags que indican si ya se ha importado desde cada formato.
+     */
+    private static boolean importadoTxt = false;
+    private static boolean importadoCsv = false;
+    private static boolean importadoBin = false;
     private static boolean importadoJson = false;
 
     // =========================================================
     // =================== MENÚ PRINCIPAL ======================
     // =========================================================
-
     /**
-     * Muestra el menú de gestión de líneas de matrícula y gestiona la navegación.
+     * Muestra el menú de gestión de líneas de matrícula y gestiona la
+     * navegación.
      *
      * @param teclado Scanner compartido con el Main para la entrada de datos.
      */
@@ -75,16 +79,26 @@ public class MenuLineaMatricula {
                 teclado.nextLine();
 
                 switch (opcion) {
-                    case 1 -> insertarLineaMatricula(teclado);
-                    case 2 -> actualizarLineaMatricula(teclado);
-                    case 3 -> eliminarLineaMatricula(teclado);
-                    case 4 -> consultarPorCodigo(teclado);
-                    case 5 -> consultarTodos();
-                    case 6 -> mostrarMenuExportar(teclado);
-                    case 7 -> mostrarMenuImportar(teclado);
-                    case 8 -> verDatosSesion();
-                    case 9 -> volver = true;
-                    default -> System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
+                    case 1 ->
+                        insertarLineaMatricula(teclado);
+                    case 2 ->
+                        actualizarLineaMatricula(teclado);
+                    case 3 ->
+                        eliminarLineaMatricula(teclado);
+                    case 4 ->
+                        consultarPorCodigo(teclado);
+                    case 5 ->
+                        consultarTodos();
+                    case 6 ->
+                        mostrarMenuExportar(teclado);
+                    case 7 ->
+                        mostrarMenuImportar(teclado);
+                    case 8 ->
+                        verDatosSesion();
+                    case 9 ->
+                        volver = true;
+                    default ->
+                        System.out.println("[ERROR] Opción no válida. Introduzca un número entre 1 y 9.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("[ERROR] Debe introducir un número entero.");
@@ -96,13 +110,12 @@ public class MenuLineaMatricula {
     // =========================================================
     // ========================= CRUD ==========================
     // =========================================================
-
     /**
-     * Solicita los datos de una nueva línea de matrícula por teclado, la inserta
-     * en la base de datos y la añade a la colección de sesión.
+     * Solicita los datos de una nueva línea de matrícula por teclado, la
+     * inserta en la base de datos y la añade a la colección de sesión.
      *
-     * Los campos calificacion_primera y calificacion_segunda admiten 0.0
-     * como valor provisional (aún sin calificar).
+     * Los campos calificacion_primera y calificacion_segunda admiten 0.0 como
+     * valor provisional (aún sin calificar).
      *
      * @param teclado Scanner para leer la entrada del usuario.
      */
@@ -152,7 +165,7 @@ public class MenuLineaMatricula {
                     codMatricula, codModulo, repeticion, calPrimera, calSegunda
             );
             lineasSesion.add(lineaMatricula);
-            SesionDatos.getLineas().add(lineaMatricula);
+            SesionDatos.listaLineasMatricula.add(lineaMatricula);
 
             System.out.println("[OK] Línea de matrícula insertada correctamente.");
 
@@ -165,8 +178,9 @@ public class MenuLineaMatricula {
     }
 
     /**
-     * Solicita los dos códigos que forman la clave primaria compuesta y los nuevos
-     * valores de repetición y calificaciones, y actualiza el registro en la BD.
+     * Solicita los dos códigos que forman la clave primaria compuesta y los
+     * nuevos valores de repetición y calificaciones, y actualiza el registro en
+     * la BD.
      *
      * @param teclado Scanner para leer la entrada del usuario.
      */
@@ -300,7 +314,8 @@ public class MenuLineaMatricula {
     }
 
     /**
-     * Muestra todas las líneas de matrícula ordenadas por código de matrícula ASC.
+     * Muestra todas las líneas de matrícula ordenadas por código de matrícula
+     * ASC.
      */
     private static void consultarTodos() {
         System.out.println("\n--- TODAS LAS LÍNEAS DE MATRÍCULA (ordenado por cod. matrícula ASC) ---");
@@ -311,7 +326,6 @@ public class MenuLineaMatricula {
     // =========================================================
     // ==================== EXPORTAR ===========================
     // =========================================================
-
     /**
      * Submenú de exportación de la tabla linea_matricula a distintos formatos.
      *
@@ -333,12 +347,18 @@ public class MenuLineaMatricula {
             cargarLineasDesdeBD();
 
             switch (opcion) {
-                case 1 -> exportarATxt();
-                case 2 -> exportarACsv();
-                case 3 -> exportarABinario();
-                case 4 -> exportarAJson();
-                case 5 -> { /* volver */ }
-                default -> System.out.println("[ERROR] Opción no válida.");
+                case 1 ->
+                    exportarATxt();
+                case 2 ->
+                    exportarACsv();
+                case 3 ->
+                    exportarABinario();
+                case 4 ->
+                    exportarAJson();
+                case 5 -> {
+                    /* volver */ }
+                default ->
+                    System.out.println("[ERROR] Opción no válida.");
             }
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Debe introducir un número entero.");
@@ -363,19 +383,19 @@ public class MenuLineaMatricula {
     /**
      * Escribe la lista de líneas de matrícula en un fichero de texto.
      *
-     * @param rutaFichero    Ruta completa del fichero de salida.
-     * @param usarDosPuntos  true para separador ":" (CSV); false para ";" (TXT).
+     * @param rutaFichero Ruta completa del fichero de salida.
+     * @param usarDosPuntos true para separador ":" (CSV); false para ";" (TXT).
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (LineaMatricula lm : SesionDatos.getLineas()) {
+        try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
+            for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
                 String linea = lm.toCSV();
                 if (usarDosPuntos) {
                     linea = linea.replace(";", ":");
                 }
                 pw.println(linea);
             }
-            System.out.println("[OK] Exportados " + SesionDatos.getLineas().size()
+            System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -386,20 +406,21 @@ public class MenuLineaMatricula {
      * Exporta todas las líneas de matrícula a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.getLineas());
-        System.out.println("[OK] Exportados " + SesionDatos.getLineas().size()
+        GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.listaLineasMatricula);
+        System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
                 + " registros a: " + Config.ficheroLineaMatricula + ".dat");
     }
 
     /**
-     * Exporta todas las líneas de matrícula a un fichero JSON (un objeto por línea).
+     * Exporta todas las líneas de matrícula a un fichero JSON (un objeto por
+     * línea).
      */
     private static void exportarAJson() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroLineaMatricula + ".json", false))) {
-            for (LineaMatricula lm : SesionDatos.getLineas()) {
+        try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroLineaMatricula + ".json", false))) {
+            for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
                 pw.println(lm.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.getLineas().size()
+            System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
                     + " registros a: " + Config.ficheroLineaMatricula + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -409,10 +430,10 @@ public class MenuLineaMatricula {
     // =========================================================
     // ==================== IMPORTAR ===========================
     // =========================================================
-
     /**
-     * Submenú de importación de la tabla linea_matricula desde distintos formatos.
-     * Lanza YaImportadoException si el formato ya fue importado en esta sesión.
+     * Submenú de importación de la tabla linea_matricula desde distintos
+     * formatos. Lanza YaImportadoException si el formato ya fue importado en
+     * esta sesión.
      *
      * @param teclado Scanner para leer la opción del usuario.
      */
@@ -430,12 +451,18 @@ public class MenuLineaMatricula {
             teclado.nextLine();
 
             switch (opcion) {
-                case 1 -> importarDesdeTxt();
-                case 2 -> importarDesdeCsv();
-                case 3 -> importarDesdeBinario();
-                case 4 -> importarDesdeJson();
-                case 5 -> { /* volver */ }
-                default -> System.out.println("[ERROR] Opción no válida.");
+                case 1 ->
+                    importarDesdeTxt();
+                case 2 ->
+                    importarDesdeCsv();
+                case 3 ->
+                    importarDesdeBinario();
+                case 4 ->
+                    importarDesdeJson();
+                case 5 -> {
+                    /* volver */ }
+                default ->
+                    System.out.println("[ERROR] Opción no válida.");
             }
         } catch (InputMismatchException e) {
             System.out.println("[ERROR] Debe introducir un número entero.");
@@ -445,29 +472,30 @@ public class MenuLineaMatricula {
         }
     }
 
-   /**
+    /**
      * Importa líneas de matrícula desde un fichero TXT (separador ";") e
      * inserta cada registro en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde TXT en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde TXT en esta
+     * sesión.
      */
     private static void importarDesdeTxt() throws YaImportadoException {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde TXT en esta sesión.");
         }
- 
+
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
- 
+
         int contadorImportados = 0;
- 
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea);
- 
+
                 // Orden según INSERT_LINEA_MATRICULA:
                 // codigo_matricula, codigo_modulo, repeticion,
                 // calificacion_primera, calificacion_segunda
@@ -478,40 +506,41 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_primera()),
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.getLineas().add(lineaMatricula);
+                SesionDatos.listaLineasMatricula.add(lineaMatricula);
                 contadorImportados++;
             }
         }
- 
+
         importadoTxt = true;
         System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde TXT.");
     }
- 
+
     /**
      * Importa líneas de matrícula desde un fichero CSV (separador ":") e
      * inserta cada registro en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde CSV en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde CSV en esta
+     * sesión.
      */
     private static void importarDesdeCsv() throws YaImportadoException {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde CSV en esta sesión.");
         }
- 
+
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
- 
+
         int contadorImportados = 0;
- 
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea.replace(":", ";"));
- 
+
                 String[] entradas = {
                     String.valueOf(lineaMatricula.getCod_matricula()),
                     String.valueOf(lineaMatricula.getCod_modulo()),
@@ -519,41 +548,42 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_primera()),
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.getLineas().add(lineaMatricula);
+                SesionDatos.listaLineasMatricula.add(lineaMatricula);
                 contadorImportados++;
             }
         }
- 
+
         importadoCsv = true;
         System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde CSV.");
     }
- 
+
     /**
      * Importa líneas de matrícula desde un fichero binario (.dat) e inserta
      * cada registro en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde Binario en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde Binario en esta
+     * sesión.
      */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde Binario en esta sesión.");
         }
- 
+
         int contadorImportados = 0;
- 
-        try (ObjectInputStream ois = new ObjectInputStream(
+
+        try ( ObjectInputStream ois = new ObjectInputStream(
                 new FileInputStream(Config.ficheroLineaMatricula + ".dat"))) {
- 
+
             @SuppressWarnings("unchecked")
             ArrayList<LineaMatricula> lista = (ArrayList<LineaMatricula>) ois.readObject();
- 
+
             if (lista == null || lista.isEmpty()) {
                 System.out.println("[INFO] El fichero binario está vacío o no existe.");
                 return;
             }
- 
+
             for (LineaMatricula lineaMatricula : lista) {
                 String[] entradas = {
                     String.valueOf(lineaMatricula.getCod_matricula()),
@@ -562,12 +592,12 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_primera()),
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.getLineas().add(lineaMatricula);
+                SesionDatos.listaLineasMatricula.add(lineaMatricula);
                 contadorImportados++;
             }
- 
+
         } catch (java.io.FileNotFoundException e) {
             System.out.println("[INFO] El fichero binario no existe: " + Config.ficheroLineaMatricula + ".dat");
             return;
@@ -575,35 +605,36 @@ public class MenuLineaMatricula {
             System.out.println("[ERROR] Error al leer el fichero binario: " + e.getMessage());
             return;
         }
- 
+
         importadoBin = true;
         System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde Binario.");
     }
- 
+
     /**
-     * Importa líneas de matrícula desde un fichero JSON e inserta cada
-     * registro en la base de datos.
+     * Importa líneas de matrícula desde un fichero JSON e inserta cada registro
+     * en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde JSON en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde JSON en esta
+     * sesión.
      */
     private static void importarDesdeJson() throws YaImportadoException {
         if (importadoJson) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde JSON en esta sesión.");
         }
- 
+
         ArrayList<String> lineas = GestionFicheros.leerJson(Config.ficheroLineaMatricula);
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero JSON está vacío o no existe.");
             return;
         }
- 
+
         int contadorImportados = 0;
         Gson gson = new Gson();
- 
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
                 LineaMatricula lineaMatricula = gson.fromJson(linea, LineaMatricula.class);
- 
+
                 String[] entradas = {
                     String.valueOf(lineaMatricula.getCod_matricula()),
                     String.valueOf(lineaMatricula.getCod_modulo()),
@@ -611,13 +642,13 @@ public class MenuLineaMatricula {
                     String.valueOf(lineaMatricula.getCal_primera()),
                     String.valueOf(lineaMatricula.getCal_segunda())
                 };
- 
+
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.getLineas().add(lineaMatricula);
+                SesionDatos.listaLineasMatricula.add(lineaMatricula);
                 contadorImportados++;
             }
         }
- 
+
         importadoJson = true;
         System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde JSON.");
     }
@@ -625,9 +656,9 @@ public class MenuLineaMatricula {
     // =========================================================
     // =================== SESIÓN ==============================
     // =========================================================
-
     /**
-     * Muestra en consola las líneas de matrícula insertadas durante la sesión actual.
+     * Muestra en consola las líneas de matrícula insertadas durante la sesión
+     * actual.
      */
     private static void verDatosSesion() {
         System.out.println("\n--- LÍNEAS DE MATRÍCULA INSERTADAS EN ESTA SESIÓN ---");
@@ -645,22 +676,24 @@ public class MenuLineaMatricula {
     // =========================================================
     // ==================== AUXILIARES =========================
     // =========================================================
-
     /**
-     * Carga todas las líneas de matrícula de la base de datos en la lista en memoria.
+     * Carga todas las líneas de matrícula de la base de datos en la lista en
+     * memoria.
      */
     private static void cargarLineasDesdeBD() {
-        SesionDatos.getLineas().clear();
+        SesionDatos.listaLineasMatricula.clear();
         GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true
         );
     }
 
     /**
-     * Construye una cabecera legible a partir de los nombres de columna del array de consulta.
+     * Construye una cabecera legible a partir de los nombres de columna del
+     * array de consulta.
      *
      * @param datosConsulta Array con la SQL en [0] y columnas en [1..n].
-     * @return Cadena formateada con nombres de columna separados y subrayada con guiones.
+     * @return Cadena formateada con nombres de columna separados y subrayada
+     * con guiones.
      */
     private static String formatearCabecera(String[] datosConsulta) {
         StringBuilder sb = new StringBuilder();
