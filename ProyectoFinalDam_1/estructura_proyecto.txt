@@ -144,6 +144,9 @@ GestionBaseDeDatos — MÉTODOS PÚBLICOS
 
 vincularBDD()
   Conecta Java con la BD MySQL. Se llama al iniciar la aplicación.
+  Ejecuta el DDL de creación de tablas (silencia errores si ya existen) y,
+  si la tabla ciclo está vacía, inserta los datos por defecto mediante
+  insertarDatosSiVacia() para evitar duplicados en cada arranque.
 
 cerrarBDD()
   Cierra la conexión.
@@ -236,7 +239,7 @@ ModificarLineaMatricula — LÓGICA COMPLETA, SWING PENDIENTE DE DISEÑAR
   Debes crear en NetBeans el formulario con estos nombres de campo:
     jTextFieldCodMatricula  → código de matrícula (int, solo lectura al modificar)
     jTextFieldCodModulo     → código de módulo (int, solo lectura al modificar)
-    jTextFieldRepeticion    → 0 = no repite, 1 = repite
+    jTextFieldRepeticion    → número de veces cursado el módulo (0 = primera vez, 1+ = repetición)
     jTextFieldCalPrimera    → calificación primera convocatoria (puede dejarse vacío)
     jTextFieldCalSegunda    → calificación segunda convocatoria (puede dejarse vacío)
     jCheckBoxConfirmacionBDD → marcar para guardar en BD
@@ -273,10 +276,11 @@ BASE DE DATOS — centro_formacion
 Tablas:
   ciclo          (codigo PK, denominacion, familia_profesional, nivel, horas, anio_curriculo)
   modulo         (codigo PK, nombre, curso, horas, creditos_ects, codigo_ciclo FK→ciclo)
-  alumno         (codigo PK, nombre, apellido, correo UNIQUE, domicilio, telefono, fecha_nacimiento)
+  alumno         (codigo PK, nombre, correo UNIQUE, domicilio, telefono, fecha_nacimiento)
   matricula      (codigo PK, estado, importe, anio_academico, codigo_alumno FK→alumno)
-  linea_matricula(codigo_matricula FK, codigo_modulo FK, calificacion_primera, calificacion_segunda, repeticion)
+  linea_matricula(codigo_matricula FK, codigo_modulo FK, calificacion_primera, calificacion_segunda, repeticion INT)
                   PK compuesta: (codigo_matricula, codigo_modulo)
+                  repeticion: número de veces que el alumno ha cursado el módulo (0 = primera vez)
 
 Conexión:
   URL:      jdbc:mysql://127.0.0.1:3306/centro_formacion
