@@ -216,4 +216,31 @@ public class Validadores {
         return añoCurriculum >= 1900 && añoCurriculum <= 3000;
     }
 
+    /**
+     * Comprueba que el domicilio tenga el formato obligatorio:
+     * {@code TipoVía NombreVía Número, Localidad, Provincia}.
+     * Los valores no tienen que ser reales, pero la estructura sí debe respetarse.
+     * <p>Ejemplo válido: {@code Calle Mayor 5, Madrid, Madrid}</p>
+     *
+     * @param domicilio Dirección postal a validar.
+     * @return {@code true} si el domicilio contiene tipo de vía, nombre de vía,
+     *         número, localidad y provincia en el formato indicado.
+     */
+    public static boolean validarDireccion(String domicilio) {
+        if (domicilio == null || domicilio.isBlank()) return false;
+
+        String[] partes = domicilio.split(",");
+        if (partes.length < 3) return false;
+
+        // Primera parte: "TipoVía NombreVía Número" → mínimo 3 tokens
+        String[] via = partes[0].trim().split("\\s+");
+        if (via.length < 3) return false;
+
+        // El último token debe ser un número (con posible letra de portal: 12, 3B, 4bis)
+        if (!via[via.length - 1].matches("\\d+[A-Za-z]*")) return false;
+
+        // Localidad y provincia no pueden estar vacías
+        return !partes[1].trim().isBlank() && !partes[2].trim().isBlank();
+    }
+
 }

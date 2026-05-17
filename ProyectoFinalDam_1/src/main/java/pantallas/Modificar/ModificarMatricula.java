@@ -27,7 +27,6 @@ public class ModificarMatricula extends javax.swing.JFrame {
      */
     public ModificarMatricula() {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jTextFieldCodigoAlumno.setEditable(false);
         configurarTabla();
         cargarAlumnosEnTabla();
@@ -342,7 +341,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
         String estado = jTextFieldEstado.getText().trim();
         String importe = jTextFieldImporte.getText().trim();
 
-        if (Validadores.validarTextoNoVacio(anioAcademico) || Validadores.validarTextoNoVacio(estado) || Validadores.validarTextoNoVacio(importe)) {
+        if (anioAcademico.isBlank() || estado.isBlank() || importe.isBlank()) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }

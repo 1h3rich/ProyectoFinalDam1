@@ -8,7 +8,6 @@ import pantallas.Consultas.SeleccionConsultas;
 import pantallas.Crear.*;
 import pantallas.Eliminar.MenuBorrar;
 import pantallas.Modificar.Menu_Modificar;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Ventana principal de la aplicación. Centraliza el acceso a todas las funcionalidades:
@@ -18,13 +17,11 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
  */
 public class PantallaPrincipal extends javax.swing.JFrame {
 
-    private boolean bdImportada = false;
-
     /**
      * Creates new form Pantalla
      */
     public PantallaPrincipal() {
-        initComponents();
+        initComponents();   
         setLocationRelativeTo(null);
     }
 

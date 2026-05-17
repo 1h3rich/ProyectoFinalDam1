@@ -47,8 +47,8 @@ public class ConsultasSQL {
             codigo INT PRIMARY KEY AUTO_INCREMENT,
             nombre VARCHAR(100) NOT NULL,
             correo VARCHAR(150) UNIQUE NOT NULL,
-            domicilio VARCHAR(150),
-            telefono VARCHAR(20),
+            domicilio VARCHAR(150) NOT NULL,
+            telefono VARCHAR(20) NOT NULL,
             fecha_nacimiento DATE NOT NULL
         );
         
@@ -125,10 +125,10 @@ public class ConsultasSQL {
       INSERT INTO alumno
       (nombre, correo, domicilio, telefono, fecha_nacimiento)
       VALUES
-      ('Ricardo', 'ricardo.garcia@email.com', 'Calle Mayor 12, Zaragoza', '600111222', '2003-03-13'),
-      ('Paula', 'paula.lopez@email.com', 'Avenida Central 5, Zaragoza', '600333444', '2002-08-21'),
-      ('Miguel',  'miguel.navarro@email.com', 'Calle Norte 8, Madrid', '600555666', '2001-11-02'),
-      ('Lucía',  'lucia.martinez@email.com', 'Calle Sur 22, Valencia', '600777888', '2004-05-17');
+      ('Ricardo', 'ricardo.garcia@email.com', 'Calle Mayor 12, Zaragoza, Aragón', '600111222', '2003-03-13'),
+      ('Paula', 'paula.lopez@email.com', 'Avenida Central 5, Zaragoza, Aragón', '600333444', '2002-08-21'),
+      ('Miguel',  'miguel.navarro@email.com', 'Calle Norte 8, Madrid, Madrid', '600555666', '2001-11-02'),
+      ('Lucía',  'lucia.martinez@email.com', 'Calle Sur 22, Valencia, Comunidad Valenciana', '600777888', '2004-05-17');
       
 
       
@@ -160,11 +160,11 @@ public class ConsultasSQL {
       
       
       -- 1. Creamos 4 alumnos nuevos
-      INSERT INTO alumno (nombre, correo, fecha_nacimiento) VALUES
-      ('Juan', 'juan.perez@email.com', '2000-01-01'),
-      ('Ana',  'ana.garcia@email.com', '2000-02-02'),
-      ('Luis',  'luis.rodri@email.com', '2000-03-03'),
-      ('Elena', 'elena.sanz@email.com', '2000-04-04');
+      INSERT INTO alumno (nombre, correo, domicilio, telefono, fecha_nacimiento) VALUES
+      ('Juan',  'juan.perez@email.com', 'Calle Pez 3, Madrid, Madrid',                             '600100001', '2000-01-01'),
+      ('Ana',   'ana.garcia@email.com', 'Calle Luna 7, Sevilla, Andalucía',                        '600200002', '2000-02-02'),
+      ('Luis',  'luis.rodri@email.com', 'Avenida España 14, Valencia, Comunidad Valenciana',       '600300003', '2000-03-03'),
+      ('Elena', 'elena.sanz@email.com', 'Calle Ronda 9, Barcelona, Cataluña',                     '600400004', '2000-04-04');
       
       -- 2. Creamos sus matrículas (asumiendo que toman los IDs de alumno del 5 al 8)
       INSERT INTO matricula (estado, importe, anio_academico, codigo_alumno) VALUES

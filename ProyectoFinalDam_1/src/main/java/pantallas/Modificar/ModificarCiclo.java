@@ -28,7 +28,6 @@ public class ModificarCiclo extends javax.swing.JFrame {
      */
     public ModificarCiclo() {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -354,14 +353,13 @@ public class ModificarCiclo extends javax.swing.JFrame {
             return;
         }
 
-        String denominacion = jTextFieldDenominacion.getText();
-        String familia = jTextFieldFamiliaProfresional.getText();
-        String nivel = jTextFieldNivel.getText();
-        String horas = jTextFieldHoras.getText();
-        String anio = jTextFieldAñoCurricular.getText();
+        String denominacion = jTextFieldDenominacion.getText().trim();
+        String familia = jTextFieldFamiliaProfresional.getText().trim();
+        String nivel = jTextFieldNivel.getText().trim();
+        String horas = jTextFieldHoras.getText().trim();
+        String anio = jTextFieldAñoCurricular.getText().trim();
 
-        if (Validadores.validarTextoNoVacio(denominacion) || Validadores.validarTextoNoVacio(familia) || 
-                Validadores.validarTextoNoVacio(nivel) || Validadores.validarTextoNoVacio(horas) || Validadores.validarTextoNoVacio(anio)) {
+        if (denominacion.isBlank() || familia.isBlank() || nivel.isBlank() || horas.isBlank() || anio.isBlank()) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }

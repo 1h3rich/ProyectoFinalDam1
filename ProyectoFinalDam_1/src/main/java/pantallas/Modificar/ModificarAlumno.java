@@ -83,7 +83,7 @@ public class ModificarAlumno extends javax.swing.JFrame {
 
     /**
      * Lee la fila seleccionada en la tabla, construye el objeto Alumno y
-     * rellena los campos del formulario.
+     * rellena los campos del formulario. Los campos nulos en BD se muestran vacíos.
      */
     private void cargarAlumnoSeleccionado() {
         int fila = jTable1.getSelectedRow();
@@ -94,20 +94,26 @@ public class ModificarAlumno extends javax.swing.JFrame {
         // Table columns: 0=codigo, 1=nombre, 2=correo, 3=fecha_nacimiento, 4=domicilio, 5=telefono
         // Alumno(String[]) expects: 0=codigo, 1=nombre, 2=fecha_nacimiento, 3=domicilio, 4=telefono, 5=correo
         String[] datos = {
-            modeloTabla.getValueAt(fila, 0).toString(),
-            modeloTabla.getValueAt(fila, 1).toString(),
-            modeloTabla.getValueAt(fila, 3).toString(),
-            modeloTabla.getValueAt(fila, 4).toString(),
-            modeloTabla.getValueAt(fila, 5).toString(),
-            modeloTabla.getValueAt(fila, 2).toString()
+            celda(fila, 0),
+            celda(fila, 1),
+            celda(fila, 3),
+            celda(fila, 4),
+            celda(fila, 5),
+            celda(fila, 2)
         };
         alumno = new Alumno(datos);
 
-        jTextFieldNombre.setText(alumno.getNombre());
-        jTextFieldCorreo.setText(alumno.getCorreo());
-        jTextFieldFechaNacimiento.setText(alumno.getFechaNacimiento().toString());
-        jTextFieldDomicilio.setText(alumno.getDomicilio());
-        jTextFieldTelefono.setText(alumno.getTelefono());
+        jTextFieldNombre.setText(alumno.getNombre() != null ? alumno.getNombre() : "");
+        jTextFieldCorreo.setText(alumno.getCorreo() != null ? alumno.getCorreo() : "");
+        jTextFieldFechaNacimiento.setText(alumno.getFechaNacimiento() != null ? alumno.getFechaNacimiento().toString() : "");
+        jTextFieldDomicilio.setText(alumno.getDomicilio() != null ? alumno.getDomicilio() : "");
+        jTextFieldTelefono.setText(alumno.getTelefono() != null ? alumno.getTelefono() : "");
+    }
+
+    /** Devuelve el valor de la celda como String, o "" si es null. */
+    private String celda(int fila, int col) {
+        Object val = modeloTabla.getValueAt(fila, col);
+        return val != null ? val.toString() : "";
     }
 
     /**
@@ -361,9 +367,15 @@ public class ModificarAlumno extends javax.swing.JFrame {
         String domicilio = jTextFieldDomicilio.getText().trim();
         String telefono = jTextFieldTelefono.getText().trim();
 
-        if (Validadores.validarTextoNoVacio(nombre)|| Validadores.validarTextoNoVacio(correo) 
-                || Validadores.validarTextoNoVacio(domicilio) || Validadores.validarTextoNoVacio(telefono)) {
+        if (nombre.isBlank() || correo.isBlank() || domicilio.isBlank() || telefono.isBlank()) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+            return;
+        }
+
+        if (!Validadores.validarDireccion(domicilio)) {
+            JOptionPane.showMessageDialog(this,
+                "El domicilio debe tener el formato: TipoVía Nombre Número, Localidad, Provincia\n"
+                + "Ejemplo: Calle Mayor 5, Madrid, Madrid");
             return;
         }
 

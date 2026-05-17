@@ -280,6 +280,13 @@ public class CrearAlumno extends javax.swing.JFrame {
             return;
         }
 
+        if (!Validadores.validarDireccion(domicilio)) {
+            JOptionPane.showMessageDialog(this,
+                "El domicilio debe tener el formato: TipoVía Nombre Número, Localidad, Provincia\n"
+                + "Ejemplo: Calle Mayor 5, Madrid, Madrid");
+            return;
+        }
+
         String[] datos = {
             nombre,
             correo,

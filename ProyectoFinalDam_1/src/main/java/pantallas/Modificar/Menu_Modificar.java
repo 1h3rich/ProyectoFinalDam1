@@ -27,7 +27,6 @@ public class Menu_Modificar extends javax.swing.JFrame {
      */
     public Menu_Modificar() {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jButtonAlumno.addActionListener(e -> abrirModificarAlumno());
         jButtonMatricula.addActionListener(e -> abrirModificarMatricula());
         cargarDatosSesion();

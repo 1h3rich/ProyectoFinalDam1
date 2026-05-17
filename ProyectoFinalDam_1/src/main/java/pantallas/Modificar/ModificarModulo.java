@@ -24,7 +24,6 @@ public class ModificarModulo extends javax.swing.JFrame {
      */
     public ModificarModulo() {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -265,18 +264,18 @@ public class ModificarModulo extends javax.swing.JFrame {
 
     /** Valida los campos del formulario y actualiza el módulo actual en la base de datos. */
     private void modificarModulo() {
-       String nombre = jTextFieldNombre.getText();
-        String curso = jTextFieldCurso.getText();
-        String creditos = jTextFieldCreditos.getText();
-        String horas = jTextFieldHoras.getText();
-        String codigo_ciclo = jTextFieldCod_Ciclo.getText();
+        String nombre = jTextFieldNombre.getText().trim();
+        String curso = jTextFieldCurso.getText().trim();
+        String creditos = jTextFieldCreditos.getText().trim();
+        String horas = jTextFieldHoras.getText().trim();
+        String codigo_ciclo = jTextFieldCod_Ciclo.getText().trim();
 
-        if (Validadores.validarTextoNoVacio(nombre)|| Validadores.validarTextoNoVacio(curso) || Validadores.validarTextoNoVacio(creditos)
-                || Validadores.validarTextoNoVacio(horas) || Validadores.validarTextoNoVacio(codigo_ciclo)) {
+        if (nombre.isBlank() || curso.isBlank() || creditos.isBlank() || horas.isBlank() || codigo_ciclo.isBlank()) {
             JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
             return;
         }
-        int cod_ciclo= Integer.parseInt(codigo_ciclo);
+
+        int cod_ciclo = Integer.parseInt(codigo_ciclo);
         int credits = Integer.parseInt(creditos);
         int hors = Integer.parseInt(horas);
 

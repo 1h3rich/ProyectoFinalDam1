@@ -5,11 +5,8 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 import interfaces.InterpolaridadDeDatos;

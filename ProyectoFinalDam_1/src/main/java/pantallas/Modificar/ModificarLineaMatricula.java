@@ -27,7 +27,6 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
      */
     public ModificarLineaMatricula() {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         configurarTabla();
         cargarLineasEnTabla();
     }

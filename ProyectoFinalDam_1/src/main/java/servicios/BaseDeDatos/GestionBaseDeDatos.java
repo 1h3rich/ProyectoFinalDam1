@@ -66,7 +66,7 @@ public class GestionBaseDeDatos {
 
             
             ejecutarScript(ConsultasSQL.CREACION_BASE_DE_DATOS[0]);
-            ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
+            insertarDatosSiVacia();
 
             diagnosticoConexion();
 
@@ -86,7 +86,7 @@ public class GestionBaseDeDatos {
                 System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
 
                 ejecutarScript(ConsultasSQL.CREACION_BASE_DE_DATOS[0]);
-                ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
+                insertarDatosSiVacia();
 
                 diagnosticoConexion();
                 return true;
@@ -96,6 +96,17 @@ public class GestionBaseDeDatos {
             }
 
             return false;
+        }
+    }
+
+    /** Inserta los datos por defecto solo si la tabla ciclo está vacía (BD recién creada). */
+    private static void insertarDatosSiVacia() {
+        try (java.sql.Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM ciclo")) {
+            if (rs.next() && rs.getInt(1) == 0) {
+                ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
+            }
+        } catch (SQLException ignored) {
         }
     }
 
