@@ -10,7 +10,7 @@ package interfaces;
  * @autor Luis
  * @autor David
  */
-public abstract interface interpolaridadDeDatos {
+public abstract interface InterpolaridadDeDatos {
     
     //Guardar a distintos tipos de ficheros
     
