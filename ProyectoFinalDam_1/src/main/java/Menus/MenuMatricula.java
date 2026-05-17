@@ -3,9 +3,12 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import com.google.gson.Gson;
 import excepciones.YaImportadoException;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -399,62 +402,180 @@ public class MenuMatricula {
         }
     }
 
+    /**
+     * Importa matrículas desde un fichero TXT (separador ";") e inserta
+     * cada registro en la base de datos.
+     *
+     * @throws YaImportadoException si ya fue importado desde TXT en esta sesión.
+     */
     private static void importarDesdeTxt() throws YaImportadoException {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla matricula ya fue importada desde TXT en esta sesión.");
         }
+ 
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        SesionDatos.getMatriculas().clear();
+ 
+        int contadorImportados = 0;
+ 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getMatriculas().add(Matricula.obtenerLineas(linea));
+                Matricula matricula = Matricula.obtenerLineas(linea);
+ 
+                // Orden según INSERT_MATRICULA_CON_CODIGO:
+                // codigo, codigo_alumno, anio_academico, estado, importe
+                String[] entradas = {
+                    String.valueOf(matricula.getCodigo()),
+                    String.valueOf(matricula.getCodigo_alumno()),
+                    String.valueOf(matricula.getAño_academico()),
+                    matricula.getEstado(),
+                    String.valueOf(matricula.getImporte())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
+                SesionDatos.getMatriculas().add(matricula);
+                contadorImportados++;
             }
         }
+ 
         importadoTxt = true;
-        System.out.println("[OK] Importadas " + SesionDatos.getMatriculas().size() + " matrículas desde TXT.");
+        System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde TXT.");
     }
-
+ 
+    /**
+     * Importa matrículas desde un fichero CSV (separador ":") e inserta
+     * cada registro en la base de datos.
+     *
+     * @throws YaImportadoException si ya fue importado desde CSV en esta sesión.
+     */
     private static void importarDesdeCsv() throws YaImportadoException {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla matricula ya fue importada desde CSV en esta sesión.");
         }
+ 
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-       SesionDatos.getMatriculas().clear();
+ 
+        int contadorImportados = 0;
+ 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getMatriculas().add(Matricula.obtenerLineas(linea.replace(":", ";")));
+                Matricula matricula = Matricula.obtenerLineas(linea.replace(":", ";"));
+ 
+                String[] entradas = {
+                    String.valueOf(matricula.getCodigo()),
+                    String.valueOf(matricula.getCodigo_alumno()),
+                    String.valueOf(matricula.getAño_academico()),
+                    matricula.getEstado(),
+                    String.valueOf(matricula.getImporte())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
+                SesionDatos.getMatriculas().add(matricula);
+                contadorImportados++;
             }
         }
+ 
         importadoCsv = true;
-        System.out.println("[OK] Importadas " + SesionDatos.getMatriculas().size() + " matrículas desde CSV.");
+        System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde CSV.");
     }
-
+ 
+    /**
+     * Importa matrículas desde un fichero binario (.dat) e inserta cada
+     * registro en la base de datos.
+     *
+     * @throws YaImportadoException si ya fue importado desde Binario en esta sesión.
+     */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
             throw new YaImportadoException("La tabla matricula ya fue importada desde Binario en esta sesión.");
         }
-        Matricula instancia = new Matricula(1, 2024, "parcial", 0.0);
-        instancia.objFromBinario();
+ 
+        int contadorImportados = 0;
+ 
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(Config.ficheroMatricula + ".dat"))) {
+ 
+            @SuppressWarnings("unchecked")
+            ArrayList<Matricula> lista = (ArrayList<Matricula>) ois.readObject();
+ 
+            if (lista == null || lista.isEmpty()) {
+                System.out.println("[INFO] El fichero binario está vacío o no existe.");
+                return;
+            }
+ 
+            for (Matricula matricula : lista) {
+                String[] entradas = {
+                    String.valueOf(matricula.getCodigo()),
+                    String.valueOf(matricula.getCodigo_alumno()),
+                    String.valueOf(matricula.getAño_academico()),
+                    matricula.getEstado(),
+                    String.valueOf(matricula.getImporte())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
+                SesionDatos.getMatriculas().add(matricula);
+                contadorImportados++;
+            }
+ 
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[INFO] El fichero binario no existe: " + Config.ficheroMatricula + ".dat");
+            return;
+        } catch (java.io.IOException | ClassNotFoundException e) {
+            System.out.println("[ERROR] Error al leer el fichero binario: " + e.getMessage());
+            return;
+        }
+ 
         importadoBin = true;
-        System.out.println("[OK] Importación desde binario completada.");
+        System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde Binario.");
     }
-
+ 
+    /**
+     * Importa matrículas desde un fichero JSON e inserta cada registro
+     * en la base de datos.
+     *
+     * @throws YaImportadoException si ya fue importado desde JSON en esta sesión.
+     */
     private static void importarDesdeJson() throws YaImportadoException {
         if (importadoJson) {
             throw new YaImportadoException("La tabla matricula ya fue importada desde JSON en esta sesión.");
         }
-        Matricula instancia = new Matricula(1, 2024, "parcial", 0.0);
-        instancia.objFromJSON();
+ 
+        ArrayList<String> lineas = GestionFicheros.leerJson(Config.ficheroMatricula);
+        if (lineas == null || lineas.isEmpty()) {
+            System.out.println("[INFO] El fichero JSON está vacío o no existe.");
+            return;
+        }
+ 
+        int contadorImportados = 0;
+        Gson gson = new Gson();
+ 
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                Matricula matricula = gson.fromJson(linea, Matricula.class);
+ 
+                String[] entradas = {
+                    String.valueOf(matricula.getCodigo()),
+                    String.valueOf(matricula.getCodigo_alumno()),
+                    String.valueOf(matricula.getAño_academico()),
+                    matricula.getEstado(),
+                    String.valueOf(matricula.getImporte())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
+                SesionDatos.getMatriculas().add(matricula);
+                contadorImportados++;
+            }
+        }
+ 
         importadoJson = true;
-        System.out.println("[OK] Importación desde JSON completada.");
+        System.out.println("[OK] Importadas " + contadorImportados + " matrículas desde JSON.");
     }
 
     // =========================================================

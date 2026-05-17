@@ -15,12 +15,11 @@ import servicios.Ficheros.GestionFicheros;
 
 public class Matricula implements interpolaridadDeDatos, Serializable, Comparable<Matricula> {
 
-    
+    private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
     // =========================================================
-
     private final int codigo;
     private int codigo_alumno;
     private int año_academico;
@@ -30,7 +29,6 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // =================== CONSTRUCTORES =======================
     // =========================================================
-
     /**
      * Creación manual de nueva matrícula.
      *
@@ -40,13 +38,13 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
      * @param importe
      */
     public Matricula(int codigo_alumno,
-                     int año_academico,
-                     String estado,
-                     double importe) {
+            int año_academico,
+            String estado,
+            double importe) {
 
         validarDatos(codigo_alumno, año_academico, estado, importe);
-         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("matricula") + 1;
-        
+        int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("matricula") + 1;
+
         this.codigo = codigoGenerado;
         this.codigo_alumno = codigo_alumno;
         this.año_academico = año_academico;
@@ -64,10 +62,10 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
      * @param importe
      */
     public Matricula(int codigo,
-                     int codigo_alumno,
-                     int año_academico,
-                     String estado,
-                     double importe) {
+            int codigo_alumno,
+            int año_academico,
+            String estado,
+            double importe) {
 
         validarDatos(codigo_alumno, año_academico, estado, importe);
 
@@ -77,20 +75,19 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
         this.estado = estado;
         this.importe = importe;
     }
-    
-    public Matricula(String cadena[]){
-        this.codigo = Integer.parseInt(cadena[0]) ;
-        this.codigo_alumno = Integer.parseInt(cadena[1]) ;
-        this.año_academico = Integer.parseInt(cadena[2]) ;
+
+    public Matricula(String cadena[]) {
+        this.codigo = Integer.parseInt(cadena[0]);
+        this.codigo_alumno = Integer.parseInt(cadena[1]);
+        this.año_academico = Integer.parseInt(cadena[2]);
         this.estado = cadena[3];
         this.importe = Double.parseDouble(cadena[4]);
-       
+
     }
 
     // =========================================================
     // ===================== GETTERS ===========================
     // =========================================================
-
     public int getCodigo() {
         return codigo;
     }
@@ -114,7 +111,6 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // ===================== SETTERS ===========================
     // =========================================================
-
     public void setCodigo_alumno(int codigo_alumno) {
         if (!Validadores.validarCodigoPositivo(codigo_alumno)) {
             throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
@@ -150,11 +146,10 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // ==================== VALIDACIONES =======================
     // =========================================================
-
     private static void validarDatos(int codigo_alumno,
-                                     int año_academico,
-                                     String estado,
-                                     double importe) {
+            int año_academico,
+            String estado,
+            double importe) {
 
         if (!Validadores.validarCodigoPositivo(codigo_alumno)) {
             throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
@@ -180,15 +175,15 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
-    
-    
     /**
-     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados
+     * por codigo
+     *
      * @param otro
      * @return
      */
     @Override
-    public int compareTo(Matricula otro){
+    public int compareTo(Matricula otro) {
         return Integer.compare(this.codigo, otro.codigo);
     }
 
@@ -233,7 +228,6 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // ===================== SAVE TO ===========================
     // =========================================================
-
     @Override
     public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".csv")) {
@@ -265,7 +259,6 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // =================== FROM FILES ==========================
     // =========================================================
-
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".csv")) {
@@ -314,12 +307,9 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
         }
     }
 
-   
-
     // =========================================================
     // ================= CONVERTIDORES =========================
     // =========================================================
-
     @Override
     public String toCSV() {
         return codigo + ";"
@@ -342,7 +332,6 @@ public class Matricula implements interpolaridadDeDatos, Serializable, Comparabl
     // =========================================================
     // ===================== TO STRING =========================
     // =========================================================
-
     @Override
     public String toString() {
         return "Matricula{"

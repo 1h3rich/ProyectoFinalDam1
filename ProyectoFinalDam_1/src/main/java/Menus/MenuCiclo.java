@@ -3,9 +3,12 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import com.google.gson.Gson;
 import excepciones.YaImportadoException;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -416,7 +419,8 @@ public class MenuCiclo {
     }
 
     /**
-     * Importa ciclos desde un fichero TXT con separador ";".
+     * Importa ciclos desde un fichero TXT (separador ";") e inserta
+     * cada registro en la base de datos.
      *
      * @throws YaImportadoException si ya fue importado desde TXT en esta sesión.
      */
@@ -424,23 +428,43 @@ public class MenuCiclo {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde TXT en esta sesión.");
         }
+ 
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        SesionDatos.getCiclos().clear();
+ 
+        int contadorImportados = 0;
+ 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getCiclos().add(Ciclo.obtenerLineas(linea));
+                Ciclo ciclo = Ciclo.obtenerLineas(linea);
+ 
+                // Orden según INSERT_CICLO_CON_CODIGO:
+                // codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo
+                String[] entradas = {
+                    String.valueOf(ciclo.getCodigo()),
+                    ciclo.getDenominacion(),
+                    ciclo.getFamiliaProfesional(),
+                    ciclo.getNivel(),
+                    String.valueOf(ciclo.getHoras()),
+                    String.valueOf(ciclo.getAñoCurriculum())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
+                SesionDatos.getCiclos().add(ciclo);
+                contadorImportados++;
             }
         }
+ 
         importadoTxt = true;
-        System.out.println("[OK] Importados " + SesionDatos.getCiclos().size() + " ciclos desde TXT.");
+        System.out.println("[OK] Importados " + contadorImportados + " ciclos desde TXT.");
     }
-
+ 
     /**
-     * Importa ciclos desde un fichero CSV con separador ":".
+     * Importa ciclos desde un fichero CSV (separador ":") e inserta
+     * cada registro en la base de datos.
      *
      * @throws YaImportadoException si ya fue importado desde CSV en esta sesión.
      */
@@ -448,38 +472,92 @@ public class MenuCiclo {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde CSV en esta sesión.");
         }
+ 
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-        SesionDatos.getCiclos().clear();
+ 
+        int contadorImportados = 0;
+ 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getCiclos().add(Ciclo.obtenerLineas(linea.replace(":", ";")));
+                Ciclo ciclo = Ciclo.obtenerLineas(linea.replace(":", ";"));
+ 
+                String[] entradas = {
+                    String.valueOf(ciclo.getCodigo()),
+                    ciclo.getDenominacion(),
+                    ciclo.getFamiliaProfesional(),
+                    ciclo.getNivel(),
+                    String.valueOf(ciclo.getHoras()),
+                    String.valueOf(ciclo.getAñoCurriculum())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
+                SesionDatos.getCiclos().add(ciclo);
+                contadorImportados++;
             }
         }
+ 
         importadoCsv = true;
-        System.out.println("[OK] Importados " + SesionDatos.getCiclos().size() + " ciclos desde CSV.");
+        System.out.println("[OK] Importados " + contadorImportados + " ciclos desde CSV.");
     }
-
+ 
     /**
-     * Importa ciclos desde un fichero binario (.dat).
+     * Importa ciclos desde un fichero binario (.dat) e inserta cada
+     * registro en la base de datos.
      *
-     * @throws YaImportadoException si ya fue importado desde binario en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde Binario en esta sesión.
      */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde Binario en esta sesión.");
         }
-        Ciclo instancia = new Ciclo("placeholder", "placeholder", "medio", 1, 2000);
-        instancia.objFromBinario();
+ 
+        int contadorImportados = 0;
+ 
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(Config.ficheroCiclo + ".dat"))) {
+ 
+            @SuppressWarnings("unchecked")
+            ArrayList<Ciclo> lista = (ArrayList<Ciclo>) ois.readObject();
+ 
+            if (lista == null || lista.isEmpty()) {
+                System.out.println("[INFO] El fichero binario está vacío o no existe.");
+                return;
+            }
+ 
+            for (Ciclo ciclo : lista) {
+                String[] entradas = {
+                    String.valueOf(ciclo.getCodigo()),
+                    ciclo.getDenominacion(),
+                    ciclo.getFamiliaProfesional(),
+                    ciclo.getNivel(),
+                    String.valueOf(ciclo.getHoras()),
+                    String.valueOf(ciclo.getAñoCurriculum())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
+                SesionDatos.getCiclos().add(ciclo);
+                contadorImportados++;
+            }
+ 
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[INFO] El fichero binario no existe: " + Config.ficheroCiclo + ".dat");
+            return;
+        } catch (java.io.IOException | ClassNotFoundException e) {
+            System.out.println("[ERROR] Error al leer el fichero binario: " + e.getMessage());
+            return;
+        }
+ 
         importadoBin = true;
-        System.out.println("[OK] Importación desde binario completada.");
+        System.out.println("[OK] Importados " + contadorImportados + " ciclos desde Binario.");
     }
-
+ 
     /**
-     * Importa ciclos desde un fichero JSON.
+     * Importa ciclos desde un fichero JSON e inserta cada registro
+     * en la base de datos.
      *
      * @throws YaImportadoException si ya fue importado desde JSON en esta sesión.
      */
@@ -487,12 +565,39 @@ public class MenuCiclo {
         if (importadoJson) {
             throw new YaImportadoException("La tabla ciclo ya fue importada desde JSON en esta sesión.");
         }
-        Ciclo instancia = new Ciclo("placeholder", "placeholder", "medio", 1, 2000);
-        instancia.objFromJSON();
+ 
+        ArrayList<String> lineas = GestionFicheros.leerJson(Config.ficheroCiclo);
+        if (lineas == null || lineas.isEmpty()) {
+            System.out.println("[INFO] El fichero JSON está vacío o no existe.");
+            return;
+        }
+ 
+        int contadorImportados = 0;
+        Gson gson = new Gson();
+ 
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                Ciclo ciclo = gson.fromJson(linea, Ciclo.class);
+ 
+                String[] entradas = {
+                    String.valueOf(ciclo.getCodigo()),
+                    ciclo.getDenominacion(),
+                    ciclo.getFamiliaProfesional(),
+                    ciclo.getNivel(),
+                    String.valueOf(ciclo.getHoras()),
+                    String.valueOf(ciclo.getAñoCurriculum())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_CICLO_CON_CODIGO, entradas);
+                SesionDatos.getCiclos().add(ciclo);
+                contadorImportados++;
+            }
+        }
+ 
         importadoJson = true;
-        System.out.println("[OK] Importación desde JSON completada.");
+        System.out.println("[OK] Importados " + contadorImportados + " ciclos desde JSON.");
     }
-
+    
     // =========================================================
     // =================== SESIÓN ==============================
     // =========================================================

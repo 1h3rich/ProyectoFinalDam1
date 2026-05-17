@@ -14,14 +14,13 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 
-public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<Ciclo>{
+public class Ciclo implements interpolaridadDeDatos, Serializable, Comparable<Ciclo> {
 
-   
+    private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
     // =========================================================
-
     private final int codigo;
     private String denominacion;
     private String familiaProfesional;
@@ -32,7 +31,6 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // =================== CONSTRUCTORES =======================
     // =========================================================
-
     /**
      * Creación manual de nuevo ciclo.
      *
@@ -43,10 +41,10 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
      * @param añoCurriculum
      */
     public Ciclo(String denominacion,
-                 String familiaProfesional,
-                 String nivel,
-                 int horas,
-                 int añoCurriculum) {
+            String familiaProfesional,
+            String nivel,
+            int horas,
+            int añoCurriculum) {
 
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("ciclo") + 1;
 
@@ -81,11 +79,11 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
      * @param añoCurriculum
      */
     public Ciclo(int codigo,
-                 String denominacion,
-                 String familiaProfesional,
-                 String nivel,
-                 int horas,
-                 int añoCurriculum) {
+            String denominacion,
+            String familiaProfesional,
+            String nivel,
+            int horas,
+            int añoCurriculum) {
 
         if (!Validadores.validarCodigoPositivo(codigo)) {
             throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
@@ -106,11 +104,11 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
         this.horas = horas;
         this.añoCurriculum = añoCurriculum;
     }
-    
-    public Ciclo(String cadena[]){
-        this.codigo = Integer.parseInt(cadena[0]) ;
+
+    public Ciclo(String cadena[]) {
+        this.codigo = Integer.parseInt(cadena[0]);
         this.denominacion = cadena[1];
-        this.familiaProfesional =cadena[2];
+        this.familiaProfesional = cadena[2];
         this.nivel = cadena[3];
         this.horas = Integer.parseInt(cadena[4]);
         this.añoCurriculum = Integer.parseInt(cadena[5]);
@@ -119,7 +117,6 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // ===================== GETTERS ===========================
     // =========================================================
-
     public int getCodigo() {
         return codigo;
     }
@@ -147,7 +144,6 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // ===================== SETTERS ===========================
     // =========================================================
-
     public void setDenominacion(String denominacion) {
         if (!Validadores.validarTextoNoVacio(denominacion)) {
             throw new IllegalArgumentException("La denominación no puede estar vacía");
@@ -191,12 +187,11 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // ==================== VALIDACIONES =======================
     // =========================================================
-
     private static void validarDatos(String denominacion,
-                                     String familiaProfesional,
-                                     String nivel,
-                                     int horas,
-                                     int añoCurriculum) {
+            String familiaProfesional,
+            String nivel,
+            int horas,
+            int añoCurriculum) {
 
         if (!Validadores.validarTextoNoVacio(denominacion)) {
             throw new IllegalArgumentException("La denominación no puede estar vacía");
@@ -236,15 +231,15 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
-    
-    
     /**
-     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados
+     * por codigo
+     *
      * @param otro
      * @return
      */
     @Override
-    public int compareTo(Ciclo otro){
+    public int compareTo(Ciclo otro) {
         return Integer.compare(this.codigo, otro.codigo);
     }
 
@@ -279,7 +274,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = Ciclo.obtenerLineas(linea);
-               SesionDatos.getCiclos().add(ciclo);
+                SesionDatos.getCiclos().add(ciclo);
             }
         }
 
@@ -308,7 +303,6 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // ===================== SAVE TO ===========================
     // =========================================================
-
     @Override
     public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".csv")) {
@@ -340,7 +334,6 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // =================== FROM FILES ==========================
     // =========================================================
-
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
@@ -353,7 +346,7 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
 
-           SesionDatos.getCiclos().clear();
+            SesionDatos.getCiclos().clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroCiclo);
 
@@ -389,11 +382,9 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
         }
     }
 
-    
     // =========================================================
     // ================= CONVERTIDORES =========================
     // =========================================================
-
     @Override
     public String toCSV() {
         return codigo + ";"
@@ -417,7 +408,6 @@ public class Ciclo implements interpolaridadDeDatos, Serializable , Comparable<C
     // =========================================================
     // ===================== TO STRING =========================
     // =========================================================
-
     @Override
     public String toString() {
         return "Ciclo{"

@@ -109,7 +109,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         };
 
         boolean asignado = GestionBaseDeDatos.actualizarFila(
-                GestionBaseDeDatos.ASIGNAR_MODULO_A_CICLO,
+                ConsultasSQL.ASIGNAR_MODULO_A_CICLO,
                 entradas
         );
 

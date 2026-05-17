@@ -3,9 +3,12 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import com.google.gson.Gson;
 import excepciones.YaImportadoException;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -442,86 +445,181 @@ public class MenuLineaMatricula {
         }
     }
 
-    /**
-     * Importa líneas de matrícula desde un fichero TXT con separador ";".
+   /**
+     * Importa líneas de matrícula desde un fichero TXT (separador ";") e
+     * inserta cada registro en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde TXT en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde TXT en esta sesión.
      */
     private static void importarDesdeTxt() throws YaImportadoException {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde TXT en esta sesión.");
         }
+ 
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        SesionDatos.getLineas().clear();
+ 
+        int contadorImportados = 0;
+ 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getLineas().add(LineaMatricula.obtenerLineas(linea));
+                LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea);
+ 
+                // Orden según INSERT_LINEA_MATRICULA:
+                // codigo_matricula, codigo_modulo, repeticion,
+                // calificacion_primera, calificacion_segunda
+                String[] entradas = {
+                    String.valueOf(lineaMatricula.getCod_matricula()),
+                    String.valueOf(lineaMatricula.getCod_modulo()),
+                    String.valueOf(lineaMatricula.getRepeticion()),
+                    String.valueOf(lineaMatricula.getCal_primera()),
+                    String.valueOf(lineaMatricula.getCal_segunda())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
+                SesionDatos.getLineas().add(lineaMatricula);
+                contadorImportados++;
             }
         }
+ 
         importadoTxt = true;
-        System.out.println("[OK] Importadas " + SesionDatos.getLineas().size()
-                + " líneas de matrícula desde TXT.");
+        System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde TXT.");
     }
-
+ 
     /**
-     * Importa líneas de matrícula desde un fichero CSV con separador ":".
+     * Importa líneas de matrícula desde un fichero CSV (separador ":") e
+     * inserta cada registro en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde CSV en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde CSV en esta sesión.
      */
     private static void importarDesdeCsv() throws YaImportadoException {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde CSV en esta sesión.");
         }
+ 
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-        SesionDatos.getLineas().clear();
+ 
+        int contadorImportados = 0;
+ 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getLineas().add(
-                        LineaMatricula.obtenerLineas(linea.replace(":", ";"))
-                );
+                LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea.replace(":", ";"));
+ 
+                String[] entradas = {
+                    String.valueOf(lineaMatricula.getCod_matricula()),
+                    String.valueOf(lineaMatricula.getCod_modulo()),
+                    String.valueOf(lineaMatricula.getRepeticion()),
+                    String.valueOf(lineaMatricula.getCal_primera()),
+                    String.valueOf(lineaMatricula.getCal_segunda())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
+                SesionDatos.getLineas().add(lineaMatricula);
+                contadorImportados++;
             }
         }
+ 
         importadoCsv = true;
-        System.out.println("[OK] Importadas " + SesionDatos.getLineas().size()
-                + " líneas de matrícula desde CSV.");
+        System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde CSV.");
     }
-
+ 
     /**
-     * Importa líneas de matrícula desde un fichero binario (.dat).
+     * Importa líneas de matrícula desde un fichero binario (.dat) e inserta
+     * cada registro en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde binario en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde Binario en esta sesión.
      */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde Binario en esta sesión.");
         }
-        LineaMatricula instancia = new LineaMatricula(1, 1, 1, 0.0, 0.0);
-        instancia.objFromBinario();
+ 
+        int contadorImportados = 0;
+ 
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(Config.ficheroLineaMatricula + ".dat"))) {
+ 
+            @SuppressWarnings("unchecked")
+            ArrayList<LineaMatricula> lista = (ArrayList<LineaMatricula>) ois.readObject();
+ 
+            if (lista == null || lista.isEmpty()) {
+                System.out.println("[INFO] El fichero binario está vacío o no existe.");
+                return;
+            }
+ 
+            for (LineaMatricula lineaMatricula : lista) {
+                String[] entradas = {
+                    String.valueOf(lineaMatricula.getCod_matricula()),
+                    String.valueOf(lineaMatricula.getCod_modulo()),
+                    String.valueOf(lineaMatricula.getRepeticion()),
+                    String.valueOf(lineaMatricula.getCal_primera()),
+                    String.valueOf(lineaMatricula.getCal_segunda())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
+                SesionDatos.getLineas().add(lineaMatricula);
+                contadorImportados++;
+            }
+ 
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[INFO] El fichero binario no existe: " + Config.ficheroLineaMatricula + ".dat");
+            return;
+        } catch (java.io.IOException | ClassNotFoundException e) {
+            System.out.println("[ERROR] Error al leer el fichero binario: " + e.getMessage());
+            return;
+        }
+ 
         importadoBin = true;
-        System.out.println("[OK] Importación desde binario completada.");
+        System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde Binario.");
     }
-
+ 
     /**
-     * Importa líneas de matrícula desde un fichero JSON.
+     * Importa líneas de matrícula desde un fichero JSON e inserta cada
+     * registro en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde JSON en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde JSON en esta sesión.
      */
     private static void importarDesdeJson() throws YaImportadoException {
         if (importadoJson) {
             throw new YaImportadoException("La tabla linea_matricula ya fue importada desde JSON en esta sesión.");
         }
-        LineaMatricula instancia = new LineaMatricula(1, 1, 1, 0.0, 0.0);
-        instancia.objFromJSON();
+ 
+        ArrayList<String> lineas = GestionFicheros.leerJson(Config.ficheroLineaMatricula);
+        if (lineas == null || lineas.isEmpty()) {
+            System.out.println("[INFO] El fichero JSON está vacío o no existe.");
+            return;
+        }
+ 
+        int contadorImportados = 0;
+        Gson gson = new Gson();
+ 
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                LineaMatricula lineaMatricula = gson.fromJson(linea, LineaMatricula.class);
+ 
+                String[] entradas = {
+                    String.valueOf(lineaMatricula.getCod_matricula()),
+                    String.valueOf(lineaMatricula.getCod_modulo()),
+                    String.valueOf(lineaMatricula.getRepeticion()),
+                    String.valueOf(lineaMatricula.getCal_primera()),
+                    String.valueOf(lineaMatricula.getCal_segunda())
+                };
+ 
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
+                SesionDatos.getLineas().add(lineaMatricula);
+                contadorImportados++;
+            }
+        }
+ 
         importadoJson = true;
-        System.out.println("[OK] Importación desde JSON completada.");
+        System.out.println("[OK] Importadas " + contadorImportados + " líneas de matrícula desde JSON.");
     }
 
     // =========================================================

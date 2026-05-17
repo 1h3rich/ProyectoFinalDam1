@@ -15,12 +15,11 @@ import servicios.Ficheros.GestionFicheros;
 
 public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<Modulo> {
 
-
+    private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
     // =========================================================
-
     private final int codigo;
     private int codigo_ciclo;
     private String nombre;
@@ -31,7 +30,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // =================== CONSTRUCTORES =======================
     // =========================================================
-
     /**
      * Creación manual de nuevo módulo.
      *
@@ -42,10 +40,10 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
      * @param horas
      */
     public Modulo(int codigo_ciclo,
-                  String nombre,
-                  String curso,
-                  double creditos_ects,
-                  int horas) {
+            String nombre,
+            String curso,
+            double creditos_ects,
+            int horas) {
 
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("modulo") + 1;
 
@@ -80,11 +78,11 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
      * @param horas
      */
     public Modulo(int codigo,
-                  int codigo_ciclo,
-                  String nombre,
-                  String curso,
-                  double creditos_ects,
-                  int horas) {
+            int codigo_ciclo,
+            String nombre,
+            String curso,
+            double creditos_ects,
+            int horas) {
 
         if (!Validadores.validarCodigoPositivo(codigo)) {
             throw new IllegalArgumentException("El código del módulo debe ser mayor que 0");
@@ -106,14 +104,14 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
         this.horas = horas;
     }
 
-    public Modulo(String cadena[]){
-        this.codigo = Integer.parseInt(cadena[0]) ;
-        this.codigo_ciclo = Integer.parseInt(cadena[1]) ;
-        this.nombre = cadena[2] ;
+    public Modulo(String cadena[]) {
+        this.codigo = Integer.parseInt(cadena[0]);
+        this.codigo_ciclo = Integer.parseInt(cadena[1]);
+        this.nombre = cadena[2];
         this.curso = cadena[3];
         this.creditos_ects = Double.parseDouble(cadena[4]);
         this.horas = Integer.parseInt(cadena[5]);
-       
+
     }
     // =========================================================
     // ===================== GETTERS ===========================
@@ -146,7 +144,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // ===================== SETTERS ===========================
     // =========================================================
-
     public void setCodigo_ciclo(int codigo_ciclo) {
         if (!Validadores.validarCodigoPositivo(codigo_ciclo)) {
             throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
@@ -190,12 +187,11 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // ==================== VALIDACIONES =======================
     // =========================================================
-
     private static void validarDatos(int codigo_ciclo,
-                                     String nombre,
-                                     String curso,
-                                     double creditos_ects,
-                                     int horas) {
+            String nombre,
+            String curso,
+            double creditos_ects,
+            int horas) {
 
         if (!Validadores.validarCodigoPositivo(codigo_ciclo)) {
             throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
@@ -235,16 +231,15 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
-    
-    
-    
     /**
-     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
+     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados
+     * por codigo
+     *
      * @param otro
      * @return
      */
     @Override
-    public int compareTo(Modulo otro){
+    public int compareTo(Modulo otro) {
         return Integer.compare(this.codigo, otro.codigo);
     }
 
@@ -259,7 +254,7 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
         int tempCodigoCiclo = Integer.parseInt(partes[1]);
         String tempNombre = partes[2];
         String tempCurso = partes[3];
-        int tempCreditosEcts = Integer.parseInt(partes[4]);
+        double tempCreditosEcts = Double.parseDouble(partes[4]);
         int tempHoras = Integer.parseInt(partes[5]);
 
         return new Modulo(
@@ -291,7 +286,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // ===================== SAVE TO ===========================
     // =========================================================
-
     @Override
     public void loadToCsv() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".csv")) {
@@ -323,7 +317,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // =================== FROM FILES ==========================
     // =========================================================
-
     @Override
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".csv")) {
@@ -372,11 +365,9 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
         }
     }
 
-
     // =========================================================
     // ================= CONVERTIDORES =========================
     // =========================================================
-
     @Override
     public String toCSV() {
         return codigo + ";"
@@ -400,7 +391,6 @@ public class Modulo implements interpolaridadDeDatos, Serializable, Comparable<M
     // =========================================================
     // ===================== TO STRING =========================
     // =========================================================
-
     @Override
     public String toString() {
         return "Modulo{"

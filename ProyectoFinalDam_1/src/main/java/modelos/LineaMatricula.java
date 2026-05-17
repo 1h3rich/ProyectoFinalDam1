@@ -11,7 +11,7 @@ import servicios.Ficheros.GestionFicheros;
 
 public class LineaMatricula implements interpolaridadDeDatos, Serializable {
 
-   
+    private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
@@ -25,7 +25,6 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // =================== CONSTRUCTORES =======================
     // =========================================================
-    
     /**
      * Creación manual desde objetos.
      *
@@ -97,23 +96,22 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
         this.cal_primera = cal_primera;
         this.cal_segunda = cal_segunda;
     }
-    
-     public LineaMatricula(String cadena[]){
-        this.cod_matricula = Integer.parseInt(cadena[0]) ;
-        this.cod_modulo = Integer.parseInt(cadena[1]) ;
-        this.repeticion = Integer.parseInt(cadena[2]) ;
-        if(cadena[3] == null){
+
+    public LineaMatricula(String cadena[]) {
+        this.cod_matricula = Integer.parseInt(cadena[0]);
+        this.cod_modulo = Integer.parseInt(cadena[1]);
+        this.repeticion = Integer.parseInt(cadena[2]);
+        if (cadena[3] == null) {
             this.cal_primera = 0;
-        } else{
+        } else {
             this.cal_primera = Double.parseDouble(cadena[3]);
         }
-        if(cadena[4] == null){
+        if (cadena[4] == null) {
             this.cal_segunda = 0;
-        } else{
+        } else {
             this.cal_segunda = Double.parseDouble(cadena[4]);
         }
-       
-       
+
     }
 
     // =========================================================
@@ -138,8 +136,6 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     public double getCal_segunda() {
         return cal_segunda;
     }
-    
-        
 
     // =========================================================
     // ===================== SETTERS ===========================
@@ -227,10 +223,6 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
     // =========================================================
     // ===================== MÉTODOS ===========================
     // =========================================================
-   
-    
-    
-    
     public static LineaMatricula obtenerLineas(String linea) {
         String[] partes = linea.split(";", -1);
 
@@ -351,8 +343,6 @@ public class LineaMatricula implements interpolaridadDeDatos, Serializable {
             cargarDesdeLineas(temp);
         }
     }
-
-   
 
     // =========================================================
     // ================= CONVERTIDORES =========================

@@ -45,7 +45,6 @@ public class ConsultasSQL {
         CREATE TABLE alumno (
             codigo INT PRIMARY KEY AUTO_INCREMENT,
             nombre VARCHAR(100) NOT NULL,
-            apellido VARCHAR(100) NOT NULL,
             correo VARCHAR(150) UNIQUE NOT NULL,
             domicilio VARCHAR(150),
             telefono VARCHAR(20),
@@ -89,9 +88,9 @@ public class ConsultasSQL {
         );
         """
     };
-    
+
     public static final String[] INSERTAR_DATOS_POR_DEFECTO = {
-      """
+        """
 
       
       INSERT INTO ciclo
@@ -122,12 +121,12 @@ public class ConsultasSQL {
  
       
       INSERT INTO alumno
-      (nombre, apellido, correo, domicilio, telefono, fecha_nacimiento)
+      (nombre, correo, domicilio, telefono, fecha_nacimiento)
       VALUES
-      ('Ricardo', 'Garc\u00eda', 'ricardo.garcia@email.com', 'Calle Mayor 12, Zaragoza', '600111222', '2003-03-13'),
-      ('Paula', 'L\u00f3pez', 'paula.lopez@email.com', 'Avenida Central 5, Zaragoza', '600333444', '2002-08-21'),
-      ('Miguel', 'Navarro', 'miguel.navarro@email.com', 'Calle Norte 8, Madrid', '600555666', '2001-11-02'),
-      ('Luc\u00eda', 'Mart\u00ednez', 'lucia.martinez@email.com', 'Calle Sur 22, Valencia', '600777888', '2004-05-17');
+      ('Ricardo', 'ricardo.garcia@email.com', 'Calle Mayor 12, Zaragoza', '600111222', '2003-03-13'),
+      ('Paula', 'paula.lopez@email.com', 'Avenida Central 5, Zaragoza', '600333444', '2002-08-21'),
+      ('Miguel',  'miguel.navarro@email.com', 'Calle Norte 8, Madrid', '600555666', '2001-11-02'),
+      ('Lucía',  'lucia.martinez@email.com', 'Calle Sur 22, Valencia', '600777888', '2004-05-17');
       
 
       
@@ -143,31 +142,62 @@ public class ConsultasSQL {
       INSERT INTO linea_matricula
       (codigo_matricula, codigo_modulo, calificacion_primera, calificacion_segunda, repeticion)
       VALUES
-      (1, 1, 7.50, NULL, FALSE),
-      (1, 2, 8.25, NULL, FALSE),
-      (1, 3, 6.75, NULL, FALSE),
+      (1, 1, 7.50, NULL, 2),
+      (1, 2, 8.25, NULL, 3),
+      (1, 3, 6.75, NULL, 2),
       
-      (2, 1, 5.00, NULL, FALSE),
-      (2, 2, 4.20, 6.10, TRUE),
-      (2, 3, 7.00, NULL, FALSE),
+      (2, 1, 5.00, NULL, 1),
+      (2, 2, 4.20, 6.10, 2),
+      (2, 3, 7.00, NULL, 0),
       
-      (3, 6, 6.50, NULL, FALSE),
-      (3, 7, 8.00, NULL, FALSE),
+      (3, 6, 6.50, NULL, 0),
+      (3, 7, 8.00, NULL, 0),
       
-      (4, 9, NULL, NULL, FALSE),
-      (4, 10, NULL, NULL, FALSE);
+      (4, 9, NULL, NULL, 2),
+      (4, 10, NULL, NULL, 0);
+      
+      
+      -- 1. Creamos 4 alumnos nuevos
+      INSERT INTO alumno (nombre, correo, fecha_nacimiento) VALUES
+      ('Juan', 'juan.perez@email.com', '2000-01-01'),
+      ('Ana',  'ana.garcia@email.com', '2000-02-02'),
+      ('Luis',  'luis.rodri@email.com', '2000-03-03'),
+      ('Elena', 'elena.sanz@email.com', '2000-04-04');
+      
+      -- 2. Creamos sus matrículas (asumiendo que toman los IDs de alumno del 5 al 8)
+      INSERT INTO matricula (estado, importe, anio_academico, codigo_alumno) VALUES
+      ('Activa', 420.50, '2025', 5),
+      ('Activa', 420.50, '2024', 6),
+      ('Activa', 420.50, '2025', 7),
+      ('Activa', 420.50, '2024', 8);
+      
+      -- 3. Los matriculamos en el módulo 1 (Programación) con repeticion = TRUE
+      INSERT INTO linea_matricula (codigo_matricula, codigo_modulo, repeticion) VALUES
+      (5, 1, 3),
+      (6, 1, 3),
+      (7, 1, 3),
+      (8, 1, 3);
+      
       """
     };
-    
+
     // =========================================================
     // ======================== ALUMNO =========================
     // =========================================================
     /**
-    * Sentencia INSERT para la tabla alumno.
-    */
+     * Sentencia INSERT para la tabla alumno.
+     */
     public static final String[] INSERT_ALUMNO = {
         "Alumno",
         "INSERT INTO alumno (nombre, correo, domicilio, telefono, fecha_nacimiento) VALUES (?, ?, ?, ?, ?)"
+    };
+
+    /**
+     * Sentencia INSERT para la tabla alumno.
+     */
+    public static final String[] INSERT_ALUMNO_CON_CODIGO = {
+        "Alumno",
+        "INSERT INTO alumno (codigo ,nombre, fecha_nacimiento , domicilio, telefono, correo) VALUES (?, ?, ?, ?, ?, ?)"
     };
 
     /**
@@ -247,6 +277,16 @@ public class ConsultasSQL {
     };
 
     /**
+     * INSERT para ciclo incluyendo el código explícito (importación desde
+     * fichero). Orden de entradas: codigo, denominacion, familia_profesional,
+     * nivel, horas, anio_curriculo
+     */
+    public static final String[] INSERT_CICLO_CON_CODIGO = {
+        "Ciclo",
+        "INSERT INTO ciclo (codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo) VALUES (?, ?, ?, ?, ?, ?)"
+    };
+
+    /**
      * SELECT todos los ciclos — para mostrar por pantalla (guardarDatos=false).
      */
     public static final String[] SELECT_CICLO_TODOS = {
@@ -274,6 +314,16 @@ public class ConsultasSQL {
     public static final String[] INSERT_MODULO = {
         "Modulo",
         "INSERT INTO modulo (nombre, curso, creditos_ects, horas, codigo_ciclo) VALUES (?,?,?,?,?)"
+    };
+
+    /**
+     * INSERT para modulo incluyendo el código explícito (importación desde
+     * fichero). Orden de entradas: codigo, codigo_ciclo, nombre, curso,
+     * creditos_ects, horas
+     */
+    public static final String[] INSERT_MODULO_CON_CODIGO = {
+        "Modulo",
+        "INSERT INTO modulo (codigo, codigo_ciclo, nombre, curso, creditos_ects, horas) VALUES (?, ?, ?, ?, ?, ?)"
     };
 
     /**
@@ -330,6 +380,17 @@ public class ConsultasSQL {
         "INSERT INTO matricula (estado, importe, anio_academico, codigo_alumno) VALUES (?, ?, ?, ?)"
     };
 
+    // ====================== MATRICULA ========================
+    /**
+     * INSERT para matricula incluyendo el código explícito (importación desde
+     * fichero). Orden de entradas: codigo, codigo_alumno, anio_academico,
+     * estado, importe
+     */
+    public static final String[] INSERT_MATRICULA_CON_CODIGO = {
+        "Matricula",
+        "INSERT INTO matricula (codigo, codigo_alumno, anio_academico, estado, importe) VALUES (?, ?, ?, ?, ?)"
+    };
+
     /**
      * Sentencia UPDATE para la tabla matricula.
      */
@@ -377,7 +438,7 @@ public class ConsultasSQL {
     // =================== LINEA_MATRICULA =====================
     // =========================================================
     /**
-     * Sentencia INSERT para la tabla linea_matricula.
+     * Sentencia INSERT para la tabla linea_matricula. Se puede utilizar este para los imports
      */
     public static final String[] INSERT_LINEA_MATRICULA = {
         "LineaMatricula",

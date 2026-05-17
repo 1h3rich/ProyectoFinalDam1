@@ -896,9 +896,7 @@ public class GestionBaseDeDatos {
         return false;
     }
 
-    public static final String[] ASIGNAR_MODULO_A_CICLO = {
-        "UPDATE modulo SET codigo_ciclo = ? WHERE codigo = ?"
-    };
+   
     /**
      * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],
      * params)

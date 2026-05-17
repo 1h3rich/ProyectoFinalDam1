@@ -10,6 +10,11 @@ package pantallas.Concurrencia;
  */
 public class Importar extends javax.swing.JFrame {
 
+    private static boolean importadoTxt = false;
+    private static boolean importadoCsv = false;
+    private static boolean importadoBin = false;
+    private static boolean importadoJson = false;
+    
     /**
      * Creates new form Cargar
      */

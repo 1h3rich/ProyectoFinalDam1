@@ -14,7 +14,7 @@ import servicios.Ficheros.GestionFicheros;
 
 public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<Alumno> {
 
-    
+    private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas
 
     // =========================================================
     // ===================== ATRIBUTOS =========================
@@ -101,6 +101,11 @@ public class Alumno implements interpolaridadDeDatos, Serializable, Comparable<A
         this.domicilio = cadena[3];
         this.telefono = cadena[4];
         this.correo = cadena[5];
+        
+        
+        
+        
+        
     }
     // =================================================================================================================================================================================================
     // ===================== GETTERS ===================================================================================================================================================================

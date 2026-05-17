@@ -3,9 +3,12 @@ package menus;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
+import com.google.gson.Gson;
 import excepciones.YaImportadoException;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -452,94 +455,186 @@ public class MenuAlumno {
     }
 
     /**
-     * Importa alumnos desde un fichero TXT con separador ";".
+     * Importa alumnos desde un fichero TXT (separador ";") e inserta cada
+     * registro en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde TXT en
-     * esta sesión.
+     * @throws YaImportadoException si ya fue importado desde TXT en esta
+     * sesión.
      */
     private static void importarDesdeTxt() throws YaImportadoException {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla alumno ya fue importada desde TXT en esta sesión.");
         }
+
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroAlumno, ".txt");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero TXT está vacío o no existe.");
             return;
         }
-        SesionDatos.getAlumnos().clear();
+
+        int contadorImportados = 0;
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                SesionDatos.getAlumnos().add(Alumno.obtenerLineas(linea));
+                Alumno alumno = Alumno.obtenerLineas(linea);
+
+                String[] entradas = {
+                    String.valueOf(alumno.getCodigo()),
+                    alumno.getNombre(),
+                    String.valueOf(alumno.getFechaNacimiento()),
+                    alumno.getDomicilio(),
+                    alumno.getTelefono(),
+                    alumno.getCorreo()
+                };
+
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
+                SesionDatos.getAlumnos().add(alumno);
+                contadorImportados++;
             }
         }
+
         importadoTxt = true;
-        System.out.println("[OK] Importados " + SesionDatos.getAlumnos().size() + " alumnos desde TXT.");
+        System.out.println("[OK] Importados " + contadorImportados + " alumnos desde TXT.");
     }
 
     /**
-     * Importa alumnos desde un fichero CSV con separador ":".
+     * Importa alumnos desde un fichero CSV (separador ":") e inserta cada
+     * registro en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde CSV en
-     * esta sesión.
+     * @throws YaImportadoException si ya fue importado desde CSV en esta
+     * sesión.
      */
     private static void importarDesdeCsv() throws YaImportadoException {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla alumno ya fue importada desde CSV en esta sesión.");
         }
+
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(Config.ficheroAlumno, ".csv");
         if (lineas == null || lineas.isEmpty()) {
             System.out.println("[INFO] El fichero CSV está vacío o no existe.");
             return;
         }
-        SesionDatos.getAlumnos().clear();
+
+        int contadorImportados = 0;
+
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                String lineaNormalizada = linea.replace(":", ";");
-                SesionDatos.getAlumnos().add(Alumno.obtenerLineas(lineaNormalizada));
+                // Normaliza el separador ":" a ";" para reutilizar obtenerLineas
+                Alumno alumno = Alumno.obtenerLineas(linea.replace(":", ";"));
+
+                String[] entradas = {
+                    String.valueOf(alumno.getCodigo()),
+                    alumno.getNombre(),
+                    String.valueOf(alumno.getFechaNacimiento()),
+                    alumno.getDomicilio(),
+                    alumno.getTelefono(),
+                    alumno.getCorreo()
+                };
+
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
+                SesionDatos.getAlumnos().add(alumno);
+                contadorImportados++;
             }
         }
+
         importadoCsv = true;
-        System.out.println("[OK] Importados " + SesionDatos.getAlumnos().size() + " alumnos desde CSV.");
+        System.out.println("[OK] Importados " + contadorImportados + " alumnos desde CSV.");
     }
 
     /**
-     * Importa alumnos desde un fichero binario (.dat).
+     * Importa alumnos desde un fichero binario (.dat) e inserta cada registro
+     * en la base de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde binario
-     * en esta sesión.
+     * @throws YaImportadoException si ya fue importado desde Binario en esta
+     * sesión.
      */
     private static void importarDesdeBinario() throws YaImportadoException {
         if (importadoBin) {
             throw new YaImportadoException("La tabla alumno ya fue importada desde Binario en esta sesión.");
         }
-        Alumno instancia = new Alumno(
-                1, "placeholder",
-                LocalDate.of(2000, 1, 1),
-                "placeholder", "000000000", "placeholder@a.es"
-        );
-        instancia.objFromBinario();
+
+        int contadorImportados = 0;
+
+        try ( ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(Config.ficheroAlumno + ".dat"))) {
+
+            @SuppressWarnings("unchecked")
+            ArrayList<Alumno> lista = (ArrayList<Alumno>) ois.readObject();
+
+            if (lista == null || lista.isEmpty()) {
+                System.out.println("[INFO] El fichero binario está vacío o no existe.");
+                return;
+            }
+
+            for (Alumno alumno : lista) {
+                String[] entradas = {
+                    String.valueOf(alumno.getCodigo()),
+                    alumno.getNombre(),
+                    String.valueOf(alumno.getFechaNacimiento()),
+                    alumno.getDomicilio(),
+                    alumno.getTelefono(),
+                    alumno.getCorreo()
+                };
+
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
+                SesionDatos.getAlumnos().add(alumno);
+                contadorImportados++;
+            }
+
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[INFO] El fichero binario no existe: " + Config.ficheroAlumno + ".dat");
+            return;
+        } catch (java.io.IOException | ClassNotFoundException e) {
+            System.out.println("[ERROR] Error al leer el fichero binario: " + e.getMessage());
+            return;
+        }
+
         importadoBin = true;
-        System.out.println("[OK] Importación desde binario completada.");
+        System.out.println("[OK] Importados " + contadorImportados + " alumnos desde Binario.");
     }
 
     /**
-     * Importa alumnos desde un fichero JSON.
+     * Importa alumnos desde un fichero JSON e inserta cada registro en la base
+     * de datos.
      *
-     * @throws YaImportadoException si la tabla ya fue importada desde JSON en
-     * esta sesión.
+     * @throws YaImportadoException si ya fue importado desde JSON en esta
+     * sesión.
      */
     private static void importarDesdeJson() throws YaImportadoException {
         if (importadoJson) {
             throw new YaImportadoException("La tabla alumno ya fue importada desde JSON en esta sesión.");
         }
-        Alumno instancia = new Alumno(
-                1, "placeholder",
-                LocalDate.of(2000, 1, 1),
-                "placeholder", "000000000", "placeholder@a.es"
-        );
-        instancia.objFromJSON();
+
+        ArrayList<String> lineas = GestionFicheros.leerJson(Config.ficheroAlumno);
+        if (lineas == null || lineas.isEmpty()) {
+            System.out.println("[INFO] El fichero JSON está vacío o no existe.");
+            return;
+        }
+
+        int contadorImportados = 0;
+        Gson gson = new Gson();
+
+        for (String linea : lineas) {
+            if (!linea.trim().isEmpty()) {
+                Alumno alumno = gson.fromJson(linea, Alumno.class);
+
+                String[] entradas = {
+                    String.valueOf(alumno.getCodigo()),
+                    alumno.getNombre(),
+                    String.valueOf(alumno.getFechaNacimiento()),
+                    alumno.getDomicilio(),
+                    alumno.getTelefono(),
+                    alumno.getCorreo()
+                };
+
+                GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
+                SesionDatos.getAlumnos().add(alumno);
+                contadorImportados++;
+            }
+        }
+
         importadoJson = true;
-        System.out.println("[OK] Importación desde JSON completada.");
+        System.out.println("[OK] Importados " + contadorImportados + " alumnos desde JSON.");
     }
 
     // =========================================================
