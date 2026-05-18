@@ -8,7 +8,6 @@ import Utils.Validadores;
 import javax.swing.JOptionPane;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
-
 /**
  * Formulario Swing para registrar un nuevo alumno en la base de datos.
  * Recoge nombre, correo, fecha de nacimiento, domicilio y teléfono;

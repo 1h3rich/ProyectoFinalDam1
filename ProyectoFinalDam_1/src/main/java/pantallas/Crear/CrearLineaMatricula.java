@@ -8,6 +8,7 @@ import Utils.*;
 import javax.swing.JOptionPane;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.util.HashMap;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import servicios.BaseDeDatos.ConsultasSQL;
 
@@ -36,11 +37,15 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
      */
     public CrearLineaMatricula(int idMatricula) {
         initComponents();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         this.idMatricula = idMatricula;
 
         configurarVentana();
+
+        configurarTabla(); // AÑADIR ESTO
+
         cargarCiclos();
     }
 
@@ -48,6 +53,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
      * Configura el cierre con confirmación, inicializa el combo de ciclos y
      * registra el listener de selección.
      */
+
     private void configurarVentana() {
         setLocationRelativeTo(null);
 
@@ -84,7 +90,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             });
         }
     }
-
+    
     /**
      * Consulta los ciclos disponibles en la BD y los carga en el combo,
      * actualizando el mapa de IDs.
@@ -110,6 +116,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
      * el combo.
      */
     private void cicloSeleccionado() {
+
         Object seleccionado = jComboBoxCiclos.getSelectedItem();
 
         if (seleccionado == null) {
@@ -119,6 +126,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         String textoSeleccionado = seleccionado.toString();
 
         if (!mapaCiclos.containsKey(textoSeleccionado)) {
+
             idCicloSeleccionado = -1;
             idModuloSeleccionado = -1;
 
@@ -127,8 +135,32 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         idCicloSeleccionado = mapaCiclos.get(textoSeleccionado);
 
+        cargarModulosPorCiclo(idCicloSeleccionado); // AÑADIR
     }
+    
+    private void cargarModulosPorCiclo(int idCiclo) {
 
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+
+        modelo.setRowCount(0);
+
+        mapaModulos.clear();
+
+        /*
+        EJEMPLO:
+        Debes crear este método en GestionBaseDeDatos
+        que devuelva una lista de ItemCombo
+         */
+        for (ItemCombo modulo : GestionBaseDeDatos.obtenerModulosPorCicloCombo(idCiclo)) {
+
+            modelo.addRow(new Object[]{
+                modulo.getId(),
+                modulo.toString()
+            });
+
+            mapaModulos.put(modulo.toString(), modulo.getId());
+        }
+    }
     /**
      * Pide confirmación y, si el usuario acepta, cancela la transacción activa
      * y cierra la ventana.
@@ -463,6 +495,40 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             GestionBaseDeDatos.cancelarTransaccion();
             JOptionPane.showMessageDialog(this, "Error al añadir el módulo. Se ha cancelado todo el proceso.");
         }
+    }
+
+    private void configurarTabla() {
+
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"ID", "Módulo"},
+                0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        jTable1.setModel(modelo);
+
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+
+            if (!e.getValueIsAdjusting()) {
+
+                int fila = jTable1.getSelectedRow();
+
+                if (fila != -1) {
+
+                    idModuloSeleccionado = Integer.parseInt(
+                            jTable1.getValueAt(fila, 0).toString()
+                    );
+
+                    System.out.println("Modulo seleccionado: " + idModuloSeleccionado);
+                }
+            }
+        });
     }
 
     /**
