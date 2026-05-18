@@ -25,6 +25,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     private int idMatricula = -1;
     private int idCicloSeleccionado = -1;
     private int idModuloSeleccionado = -1;
+    private DefaultTableModel modeloTabla;
 
     private HashMap<String, Integer> mapaCiclos = new HashMap<>();
     private HashMap<String, Integer> mapaModulos = new HashMap<>();
@@ -72,6 +73,24 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         jComboBoxCiclos.addActionListener(e -> cicloSeleccionado());
     }
 
+    private void cargarLineasEnTabla() {
+        modeloTabla.setRowCount(0);
+        String sql = "SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas FROM modulo order BY codigo where codigo_cilo = ?";
+        String entradas [] = new String[1];
+      
+        DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
+        for (int i = 0; i < temp.getRowCount(); i++) {
+            modeloTabla.addRow(new Object[]{
+                temp.getValueAt(i, 0),
+                temp.getValueAt(i, 1),
+                temp.getValueAt(i, 2),
+                temp.getValueAt(i, 3),
+                temp.getValueAt(i, 4),
+                temp.getValueAt(i, 5)
+            });
+        }
+    }
+    
     /**
      * Consulta los ciclos disponibles en la BD y los carga en el combo,
      * actualizando el mapa de IDs.
@@ -118,7 +137,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         cargarModulosPorCiclo(idCicloSeleccionado); // AÑADIR
     }
-
+    
     private void cargarModulosPorCiclo(int idCiclo) {
 
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
@@ -142,7 +161,6 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             mapaModulos.put(modulo.toString(), modulo.getId());
         }
     }
-
     /**
      * Pide confirmación y, si el usuario acepta, cancela la transacción activa
      * y cierra la ventana.

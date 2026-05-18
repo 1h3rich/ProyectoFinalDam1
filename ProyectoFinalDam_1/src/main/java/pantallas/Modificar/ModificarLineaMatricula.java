@@ -70,7 +70,7 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
     /** Consulta todas las líneas de matrícula de la BD y las muestra en la tabla. */
     private void cargarLineasEnTabla() {
         modeloTabla.setRowCount(0);
-        String sql = "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula GROUP BY codigo_matricula";
+        String sql = "SELECT codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda FROM linea_matricula order BY codigo_matricula";
         DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
         for (int i = 0; i < temp.getRowCount(); i++) {
             modeloTabla.addRow(new Object[]{
