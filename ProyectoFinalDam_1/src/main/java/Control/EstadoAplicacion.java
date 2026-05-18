@@ -10,7 +10,7 @@ package Control;
  *
  * @author Rich
  */
-public class EstadoAplicacion {
+public class EstadoAplicacion { // ESTA CLASE NO SE UTILIZA EN NINGUN MOMENTO, HAY QUE ELIMINARLA
 
     private boolean baseDeDatosCargada = false;
 

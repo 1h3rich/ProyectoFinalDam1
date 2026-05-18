@@ -12,17 +12,24 @@ import javax.swing.table.DefaultTableModel;
 import modelos.*;
 
 /**
- * Servicio de acceso a datos que centraliza todas las operaciones contra la base de datos MySQL.
- * Gestiona la conexión, transacciones, y proporciona métodos para CRUD, consultas y
- * obtención de modelos de tabla para componentes Swing.
+ * Servicio de acceso a datos que centraliza todas las operaciones contra la
+ * base de datos MySQL. Gestiona la conexión, transacciones, y proporciona
+ * métodos para CRUD, consultas y obtención de modelos de tabla para componentes
+ * Swing.
  *
  * @author 1DAM
  */
 public class GestionBaseDeDatos {
 
-    /** Conexión activa con la base de datos; {@code null} si aún no se ha establecido o fue cerrada. */
+    /**
+     * Conexión activa con la base de datos; {@code null} si aún no se ha
+     * establecido o fue cerrada.
+     */
     private static Connection con;
-    /** Indica si hay una transacción explícita en curso (autocommit desactivado). */
+    /**
+     * Indica si hay una transacción explícita en curso (autocommit
+     * desactivado).
+     */
     private static boolean transaccionActiva = false;
 
     /*
@@ -64,7 +71,6 @@ public class GestionBaseDeDatos {
             System.out.println("URL Java: " + Config.urlSQL);
             System.out.println("Usuario Java: " + Config.nombreUsuarioSQL);
 
-            
             ejecutarScript(ConsultasSQL.CREACION_BASE_DE_DATOS[0]);
             insertarDatosSiVacia();
 
@@ -99,10 +105,12 @@ public class GestionBaseDeDatos {
         }
     }
 
-    /** Inserta los datos por defecto solo si la tabla ciclo está vacía (BD recién creada). */
+    /**
+     * Inserta los datos por defecto solo si la tabla ciclo está vacía (BD
+     * recién creada).
+     */
     private static void insertarDatosSiVacia() {
-        try (java.sql.Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM ciclo")) {
+        try ( java.sql.Statement stmt = con.createStatement();  ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM ciclo")) {
             if (rs.next() && rs.getInt(1) == 0) {
                 ejecutarScript(ConsultasSQL.INSERTAR_DATOS_POR_DEFECTO[0]);
             }
@@ -111,18 +119,20 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Ejecuta un bloque SQL con múltiples sentencias separadas por ';'.
-     * Usa Statement.execute() en lugar de executeQuery(), por lo que soporta
-     * CREATE, INSERT, USE, etc.
-     * Los errores de "ya existe" y "entrada duplicada" se suprimen porque
-     * son esperados cuando la BD ya está inicializada.
+     * Ejecuta un bloque SQL con múltiples sentencias separadas por ';'. Usa
+     * Statement.execute() en lugar de executeQuery(), por lo que soporta
+     * CREATE, INSERT, USE, etc. Los errores de "ya existe" y "entrada
+     * duplicada" se suprimen porque son esperados cuando la BD ya está
+     * inicializada.
      */
     private static void ejecutarScript(String sql) {
         String[] sentencias = sql.split(";");
         for (String sentencia : sentencias) {
             String s = sentencia.strip();
-            if (s.isEmpty()) continue;
-            try (java.sql.Statement stmt = con.createStatement()) {
+            if (s.isEmpty()) {
+                continue;
+            }
+            try ( java.sql.Statement stmt = con.createStatement()) {
                 stmt.execute(s);
             } catch (SQLException ignored) {
                 // Silencioso: errores esperados cuando la BD ya está inicializada
@@ -131,7 +141,10 @@ public class GestionBaseDeDatos {
         }
     }
 
-    /** Imprime por consola información de diagnóstico: base activa, host, puerto, autocommit y número de alumnos. */
+    /**
+     * Imprime por consola información de diagnóstico: base activa, host,
+     * puerto, autocommit y número de alumnos.
+     */
     public static void diagnosticoConexion() {
         String sql = """
         SELECT 
@@ -190,18 +203,24 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Ejecuta una consulta SELECT y, opcionalmente, muestra los resultados por consola y/o los guarda en sesión.
+     * Ejecuta una consulta SELECT y, opcionalmente, muestra los resultados por
+     * consola y/o los guarda en sesión.
      * <p>
      * Formato de {@code datosConsulta} según modo:
      * <ul>
-     *   <li>{@code guardarDatos=false}: [0] SQL, [1..n] nombres de columna.</li>
-     *   <li>{@code guardarDatos=true}: [0] tipo Java, [1] SQL, [2..n] nombres de columna.</li>
+     * <li>{@code guardarDatos=false}: [0] SQL, [1..n] nombres de columna.</li>
+     * <li>{@code guardarDatos=true}: [0] tipo Java, [1] SQL, [2..n] nombres de
+     * columna.</li>
      * </ul>
      *
-     * @param datosConsulta Array con la SQL y los nombres de columna (ver formato arriba).
-     * @param entradas      Valores para los marcadores {@code ?} de la SQL; puede ser {@code null}.
-     * @param mostrarPorPantalla {@code true} para imprimir cada fila por consola.
-     * @param guardarDatos  {@code true} para construir objetos del modelo y registrarlos en {@link SesionDatos}.
+     * @param datosConsulta Array con la SQL y los nombres de columna (ver
+     * formato arriba).
+     * @param entradas Valores para los marcadores {@code ?} de la SQL; puede
+     * ser {@code null}.
+     * @param mostrarPorPantalla {@code true} para imprimir cada fila por
+     * consola.
+     * @param guardarDatos {@code true} para construir objetos del modelo y
+     * registrarlos en {@link SesionDatos}.
      */
     public static void realizarConsultaSQL(String[] datosConsulta, String[] entradas, boolean mostrarPorPantalla, boolean guardarDatos) {
         try {
@@ -250,10 +269,14 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Construye el objeto del tipo indicado a partir del array de datos y lo registra en {@link SesionDatos}.
-     * @param tipoObjeto Nombre del tipo Java ("Alumno", "Ciclo", "Modulo", "Matricula", "LineaMatricula").
+     * Construye el objeto del tipo indicado a partir del array de datos y lo
+     * registra en {@link SesionDatos}.
+     *
+     * @param tipoObjeto Nombre del tipo Java ("Alumno", "Ciclo", "Modulo",
+     * "Matricula", "LineaMatricula").
      * @param datos Valores en el mismo orden que el constructor del modelo.
-     * @param datosBaseDeDatos {@code true} si los datos provienen de la BD; {@code false} si se acaban de introducir.
+     * @param datosBaseDeDatos {@code true} si los datos provienen de la BD;
+     * {@code false} si se acaban de introducir.
      */
     private static void guardarObjeto(String tipoObjeto, String[] datos, boolean datosBaseDeDatos) {
         if (tipoObjeto.equalsIgnoreCase("Alumno")) {
@@ -410,9 +433,10 @@ public class GestionBaseDeDatos {
                     }
 
                     modelo.addRow(fila);
-                    System.out.println("SQL ejecutada:");
-                    System.out.println(sql);
+
                 }
+                System.out.println("SQL ejecutada:");
+                System.out.println(sql);
             }
 
         } catch (SQLException e) {
@@ -425,7 +449,9 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Busca en la BD el alumno cuyo teléfono y correo coinciden y devuelve un {@link DefaultTableModel} con las columnas de presentación.
+     * Busca en la BD el alumno cuyo teléfono y correo coinciden y devuelve un
+     * {@link DefaultTableModel} con las columnas de presentación.
+     *
      * @param telefono Teléfono del alumno.
      * @param correo Correo electrónico del alumno.
      * @return DefaultTableModel con cero o una fila.
@@ -455,12 +481,15 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Elimina de la BD el alumno identificado por código, teléfono y correo, borrando primero sus líneas de matrícula y matrículas.
-     * La operación se ejecuta en una transacción propia; hace rollback automático si falla.
+     * Elimina de la BD el alumno identificado por código, teléfono y correo,
+     * borrando primero sus líneas de matrícula y matrículas. La operación se
+     * ejecuta en una transacción propia; hace rollback automático si falla.
+     *
      * @param codigoAlumno Código primario del alumno.
      * @param telefono Teléfono del alumno (confirmación extra).
      * @param correo Correo del alumno (confirmación extra).
-     * @return {@code true} si el alumno fue eliminado; {@code false} si no coinciden los datos o hay error.
+     * @return {@code true} si el alumno fue eliminado; {@code false} si no
+     * coinciden los datos o hay error.
      */
     public static boolean eliminarAlumnoCompletoPorCodigoTelefonoCorreo(
             int codigoAlumno,
@@ -558,10 +587,13 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Elimina de la BD el ciclo indicado junto con sus módulos y las líneas de matrícula asociadas.
-     * La operación se ejecuta en una transacción propia; hace rollback automático si falla.
+     * Elimina de la BD el ciclo indicado junto con sus módulos y las líneas de
+     * matrícula asociadas. La operación se ejecuta en una transacción propia;
+     * hace rollback automático si falla.
+     *
      * @param codigoCiclo Código primario del ciclo a eliminar.
-     * @return {@code true} si el ciclo fue eliminado; {@code false} en caso de error.
+     * @return {@code true} si el ciclo fue eliminado; {@code false} en caso de
+     * error.
      */
     public static boolean eliminarCicloCompletoPorCodigo(int codigoCiclo) {
         comprobarConexion();
@@ -632,7 +664,9 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Consulta todos los ciclos de la BD con columnas de presentación en español y los devuelve como {@link DefaultTableModel}.
+     * Consulta todos los ciclos de la BD con columnas de presentación en
+     * español y los devuelve como {@link DefaultTableModel}.
+     *
      * @return DefaultTableModel con los ciclos ordenados por denominación.
      */
     public static DefaultTableModel obtenerTodosLosCiclos() {
@@ -666,6 +700,8 @@ public class GestionBaseDeDatos {
      * @return true si existe al menos un registro con ese código; false en caso
      * contrario.
      */
+    // ESTE METODO SE PUEDE ELIMINAR PORQUE NUNCA SE UTILIZA
+    /*
     public static boolean existeRegistro(String tabla, int codigo) {
         // Se construye la SQL con el nombre de tabla 
         String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
@@ -684,9 +720,11 @@ public class GestionBaseDeDatos {
         }
         return false;
     }
-
+     */
     /**
-     * Devuelve el valor máximo de la columna {@code codigo} en la tabla indicada.
+     * Devuelve el valor máximo de la columna {@code codigo} en la tabla
+     * indicada.
+     *
      * @param tabla Nombre de la tabla.
      * @return Último código generado, o 0 si la tabla está vacía o hay error.
      */
@@ -710,7 +748,10 @@ public class GestionBaseDeDatos {
         return 0;
     }
 
-    /** Desactiva el autocommit e inicia una transacción explícita para agrupar varias operaciones. */
+    /**
+     * Desactiva el autocommit e inicia una transacción explícita para agrupar
+     * varias operaciones.
+     */
     public static void iniciarTransaccion() {
         try {
             comprobarConexion();
@@ -726,7 +767,9 @@ public class GestionBaseDeDatos {
         }
     }
 
-    /** Hace commit de la transacción activa y reactiva el autocommit. */
+    /**
+     * Hace commit de la transacción activa y reactiva el autocommit.
+     */
     public static void confirmarTransaccion() {
         try {
             if (con != null && transaccionActiva) {
@@ -741,7 +784,10 @@ public class GestionBaseDeDatos {
         }
     }
 
-    /** Hace rollback de la transacción activa, deshaciendo todos los cambios, y reactiva el autocommit. */
+    /**
+     * Hace rollback de la transacción activa, deshaciendo todos los cambios, y
+     * reactiva el autocommit.
+     */
     public static void cancelarTransaccion() {
         try {
             if (con != null && transaccionActiva) {
@@ -756,10 +802,15 @@ public class GestionBaseDeDatos {
         }
     }
 
+    // ESTE METODO SE PUEDE ELIMINAR PORQUE NUNCA SE UTILIZA
     /**
-     * Rellena el JComboBox proporcionado con las denominaciones de todos los ciclos ordenadas alfabéticamente.
-     * @param comboBox JComboBox de destino; se limpia antes de añadir los elementos.
+     * Rellena el JComboBox proporcionado con las denominaciones de todos los
+     * ciclos ordenadas alfabéticamente.
+     *
+     * @param comboBox JComboBox de destino; se limpia antes de añadir los
+     * elementos.
      */
+    /*
     public static void cargarDenominacionesCiclosEnComboBox(javax.swing.JComboBox<String> comboBox) {
         comprobarConexion();
 
@@ -777,9 +828,12 @@ public class GestionBaseDeDatos {
             System.out.println("Error al cargar ciclos en ComboBox: " + e.getMessage());
         }
     }
+     */
 
     /**
-     * Devuelve la lista de ciclos como {@link ItemCombo} (id + denominación) para poblar un JComboBox.
+     * Devuelve la lista de ciclos como {@link ItemCombo} (id + denominación)
+     * para poblar un JComboBox.
+     *
      * @return Lista de ciclos ordenada alfabéticamente; vacía si hay error.
      */
     public static ArrayList<Utils.ItemCombo> obtenerCiclosCombo() {
@@ -806,16 +860,19 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Devuelve los módulos del ciclo indicado como {@link ItemCombo} (id + nombre) para poblar un JComboBox.
+     * Devuelve los módulos del ciclo indicado como {@link ItemCombo} (id +
+     * nombre) para poblar un JComboBox.
+     *
      * @param idCiclo Código del ciclo cuyos módulos se quieren obtener.
-     * @return Lista de módulos ordenada por nombre; vacía si no hay módulos o hay error.
+     * @return Lista de módulos ordenada por nombre; vacía si no hay módulos o
+     * hay error.
      */
     public static ArrayList<Utils.ItemCombo> obtenerModulosPorCicloCombo(int idCiclo) {
         comprobarConexion();
 
         ArrayList<Utils.ItemCombo> lista = new ArrayList<>();
 
-        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo != ? ORDER BY nombre ASC";
+        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo = ? ORDER BY nombre ASC";
 
         try ( PreparedStatement pst = con.prepareStatement(sql)) {
 
@@ -839,6 +896,7 @@ public class GestionBaseDeDatos {
 
     /**
      * Cuenta los módulos asociados al ciclo indicado en la BD.
+     *
      * @param idCiclo Código del ciclo.
      * @return Número de módulos del ciclo, o 0 si hay error.
      */
@@ -864,18 +922,16 @@ public class GestionBaseDeDatos {
         return 0;
     }
 
-    
- 
-
-    
-
     /**
-     * Ejecuta un INSERT con AUTO_INCREMENT y devuelve el ID generado por la base de datos.
+     * Ejecuta un INSERT con AUTO_INCREMENT y devuelve el ID generado por la
+     * base de datos.
      * <p>
-     * Sustituye a los métodos específicos anteriores (insertarAlumnoYDevolverID, etc.),
-     * ya que todos eran idénticos salvo la SQL y los parámetros.
+     * Sustituye a los métodos específicos anteriores
+     * (insertarAlumnoYDevolverID, etc.), ya que todos eran idénticos salvo la
+     * SQL y los parámetros.
      *
-     * @param sql    Sentencia INSERT con marcadores {@code ?} (p.ej. {@code ConsultasSQL.INSERT_ALUMNO[1]}).
+     * @param sql Sentencia INSERT con marcadores {@code ?} (p.ej.
+     * {@code ConsultasSQL.INSERT_ALUMNO[1]}).
      * @param params Valores para los marcadores en el mismo orden que la SQL.
      * @return ID generado por AUTO_INCREMENT, o {@code -1} si el insert falla.
      */
@@ -901,11 +957,14 @@ public class GestionBaseDeDatos {
     }
 
     /**
-     * Ejecuta un INSERT sin AUTO_INCREMENT, apropiado para tablas con clave primaria compuesta (p.ej. {@code linea_matricula}).
+     * Ejecuta un INSERT sin AUTO_INCREMENT, apropiado para tablas con clave
+     * primaria compuesta (p.ej. {@code linea_matricula}).
      *
-     * @param sql    Sentencia INSERT con marcadores {@code ?} (p.ej. {@code ConsultasSQL.INSERT_LINEA_MATRICULA[1]}).
+     * @param sql Sentencia INSERT con marcadores {@code ?} (p.ej.
+     * {@code ConsultasSQL.INSERT_LINEA_MATRICULA[1]}).
      * @param params Valores para los marcadores en el mismo orden que la SQL.
-     * @return {@code true} si se insertó al menos una fila; {@code false} en caso de error.
+     * @return {@code true} si se insertó al menos una fila; {@code false} en
+     * caso de error.
      */
     public static boolean insertarSinID(String sql, String[] params) {
         comprobarConexion();
@@ -921,7 +980,6 @@ public class GestionBaseDeDatos {
         return false;
     }
 
-   
     /**
      * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],
      * params)

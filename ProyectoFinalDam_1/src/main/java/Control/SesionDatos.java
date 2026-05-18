@@ -44,23 +44,21 @@ public class SesionDatos {
      * Ciclos insertados en la base de datos.
      */
     public static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
-    
-    
 
     /**
      * Módulos insertados en la base de datos. 
      */
-    public static final ArrayList<Modulo> listaModulos = new ArrayList<>();
+    public static final TreeSet<Modulo> listaModulos = new TreeSet<>();
 
     /**
      * Alumnos insertados en la base de datos. 
      */
-    public static final ArrayList<Alumno> listaAlumnos = new ArrayList<>();
+    public static final TreeSet<Alumno> listaAlumnos = new TreeSet<>();
 
     /**
      * Matrículas insertadas en la base de datos. 
      */
-    public static final ArrayList<Matricula> listaMatriculas = new ArrayList<>();
+    public static final TreeSet<Matricula> listaMatriculas = new TreeSet<>();
 
     // =========================================================
     // ======= COLECCIÓN 2: ArrayList (acceso por índice) ======
@@ -198,26 +196,36 @@ public class SesionDatos {
      * @return LinkedHashMap con clave "TipoClase#id" y valor descripción
      * legible.
      */
+    // ESTE METODO NO SE UTILIZA NUNCA
+    /*
     public static LinkedHashMap<String, String> getRegistroCompleto() {
         return new LinkedHashMap<>(registroSesion);
     }
-
+*/
     /**
      * Devuelve el número total de registros insertados en esta sesión sumando
      * todos los tipos.
      *
      * @return Total de inserciones realizadas desde que arrancó la aplicación.
      */
+    
+    
+    // ESTE METODO NO SE UTILIZA NUNCA
+    /*
     public static int getTotalInsertados() {
         return registroSesion.size();
     }
-
+*/
+    
+    // ESTE METODO NO SE UTILIZA NUNCA
     /**
      * Indica si no se ha insertado nada en esta sesión.
      *
      * @return true si el registro de sesión está vacío.
      */
+    /*
     public static boolean isEmpty() {
         return registroSesion.isEmpty();
     }
+    */
 }

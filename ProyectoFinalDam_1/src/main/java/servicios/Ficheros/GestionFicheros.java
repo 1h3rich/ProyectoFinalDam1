@@ -20,12 +20,17 @@ import java.util.logging.*;
  */
 public class GestionFicheros {
 
+    
+   
     /**
      * Crea el fichero; se sabe que tipo de fichero es porque por parámetro le
      * pasamos la ruta.
      *
      * @param ruta
      */
+    
+    // ESTE METODO NUNCA SE UTILIZA
+     /* 
     public static void crearFichero(String ruta) {
         File f = new File(ruta);
         try {
@@ -39,6 +44,7 @@ public class GestionFicheros {
             Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    */
 
     //==========================================================================================================================================================
     //======SAVE================================================================================================================================================

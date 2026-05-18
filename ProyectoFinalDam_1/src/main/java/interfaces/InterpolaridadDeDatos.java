@@ -12,7 +12,7 @@ package interfaces;
  * @autor Luis
  * @autor David
  */
-public abstract interface InterpolaridadDeDatos {
+public interface InterpolaridadDeDatos {
 
     /** Serializa el objeto y lo añade al fichero CSV correspondiente. */
     public void loadToCsv();
