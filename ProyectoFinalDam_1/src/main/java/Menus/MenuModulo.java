@@ -626,6 +626,82 @@ public class MenuModulo {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
     }
 
+    public static int exportar(String formato) {
+        SesionDatos.listaModulos.clear();
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
+        if (SesionDatos.listaModulos.isEmpty()) return 0;
+
+        String ruta = Config.rutaFichero(Config.ficheroModulo, formato);
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaModulos);
+        } else {
+            String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
+                for (Modulo modulo : SesionDatos.listaModulos) {
+                    pw.println("CSV".equals(formato) ? modulo.toCSV() : "JSON".equals(formato) ? modulo.toJSON() : modulo.toTXT());
+                }
+            } catch (IOException e) {
+                System.out.println("[ERROR] No se pudo exportar módulos: " + e.getMessage());
+                return 0;
+            }
+        }
+        return SesionDatos.listaModulos.size();
+    }
+
+    public static int importar(String formato) throws Exception {
+        String ruta = Config.rutaFichero(Config.ficheroModulo, formato);
+        int contador = 0;
+
+        if ("BINARIO".equals(formato)) {
+            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
+                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
+                @SuppressWarnings("unchecked")
+                java.util.Collection<Modulo> lista = (java.util.Collection<Modulo>) ois.readObject();
+                if (lista == null || lista.isEmpty()) return 0;
+                for (Modulo m : lista) {
+                    String[] p = { String.valueOf(m.getCodigo()), String.valueOf(m.getCodigo_ciclo()),
+                        m.getNombre(), m.getCurso(),
+                        String.valueOf(m.getCreditos_ects()), String.valueOf(m.getHoras()) };
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], p)) {
+                        SesionDatos.registrarModulo(m, false); contador++;
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new Exception("Error al leer binario de módulos: " + e.getMessage());
+            }
+            return contador;
+        }
+
+        ArrayList<String> lineas = "JSON".equals(formato)
+                ? GestionFicheros.leerJson(ruta)
+                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+        if (lineas == null || lineas.isEmpty()) {
+            throw new Exception("El fichero de módulos está vacío o no existe.");
+        }
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            try {
+                String[] partes;
+                if ("JSON".equals(formato)) {
+                    Modulo m = GestionFicheros.toJson(linea, Modulo.class);
+                    partes = new String[]{ String.valueOf(m.getCodigo()), String.valueOf(m.getCodigo_ciclo()),
+                        m.getNombre(), m.getCurso(),
+                        String.valueOf(m.getCreditos_ects()), String.valueOf(m.getHoras()) };
+                } else {
+                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
+                }
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], partes)) {
+                    SesionDatos.registrarModulo(new Modulo(partes), false); contador++;
+                }
+            } catch (Exception e) {
+                System.out.println("[AVISO] Línea de módulo omitida: " + e.getMessage());
+            }
+        }
+        return contador;
+    }
+
     /**
      * Construye una cabecera con los nombres de columna del array de consulta.
      *

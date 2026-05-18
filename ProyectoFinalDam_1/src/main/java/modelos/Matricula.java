@@ -109,7 +109,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
         return año_academico;
     }
 
-    /** @return Estado de la matrícula (parcial, completa o anulada). */
+    /** @return Estado de la matrícula ("Activa" o "No activa"). */
     public String getEstado() {
         return estado;
     }
@@ -152,14 +152,14 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     }
 
     /**
-     * Actualiza el estado de la matrícula tras validar que no esté vacío.
+     * Actualiza el estado de la matrícula tras validar que sea "Activa" o "No activa".
      *
-     * @param estado Nuevo estado (parcial, completa o anulada).
-     * @throws IllegalArgumentException si el estado es nulo o vacío.
+     * @param estado Nuevo estado ("Activa" o "No activa").
+     * @throws IllegalArgumentException si el estado no es uno de los valores válidos.
      */
     public void setEstado(String estado) {
-        if (!Validadores.validarTextoNoVacio(estado)) {
-            throw new IllegalArgumentException("El estado no puede estar vacío");
+        if (!Validadores.validarEstado(estado)) {
+            throw new IllegalArgumentException("El estado debe ser 'Activa' o 'No activa'");
         }
 
         this.estado = estado;
@@ -205,8 +205,8 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
             throw new IllegalArgumentException("El año académico no es válido");
         }
 
-        if (!Validadores.validarTextoNoVacio(estado)) {
-            throw new IllegalArgumentException("El estado no puede estar vacío");
+        if (!Validadores.validarEstado(estado)) {
+            throw new IllegalArgumentException("El estado debe ser 'Activa' o 'No activa'");
         }
 
         if (!Validadores.validarImporte(importe)) {

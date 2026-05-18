@@ -4,8 +4,10 @@ package pantallas.Crear;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import Control.SesionDatos;
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import modelos.Ciclo;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.awt.Dimension;
 import servicios.BaseDeDatos.ConsultasSQL;
@@ -42,14 +44,6 @@ public class CrearCiclo extends javax.swing.JFrame {
         });
 
         setTitle("Crear ciclo");
-
-        jTextFieldFamiliaProfresional.setEditable(false);
-        jTextFieldNivel.setEditable(false);
-        jTextFieldHoras.setEditable(false);
-
-        jTextFieldFamiliaProfresional.setPreferredSize(new Dimension(220, 25));
-        jTextFieldNivel.setPreferredSize(new Dimension(160, 25));
-        jTextFieldHoras.setPreferredSize(new Dimension(100, 25));
     }
 
     /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
@@ -161,18 +155,18 @@ public class CrearCiclo extends javax.swing.JFrame {
                                 .addComponent(jLabelInfoNombre3)
                                 .addComponent(jLabelInfoNombre4)))
                         .addGap(84, 84, 84)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldNivel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldHoras, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldDenominacion)))
+                            .addComponent(jTextFieldDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldNivel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(571, 571, 571)
                         .addComponent(jButtonCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonGuardar)))
-                .addContainerGap(594, Short.MAX_VALUE))
+                .addGap(350, 350, 350))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,13 +278,24 @@ public class CrearCiclo extends javax.swing.JFrame {
         String anioTexto = jTextFieldAñoCurricular.getText().trim();
         String denominacion = jTextFieldDenominacion.getText().trim();
 
-        if (!Validadores.validarTextoNoVacio(denominacion)
-                || !Validadores.validarTextoNoVacio(familia)
-                || !Validadores.validarTextoNoVacio(nivel)
-                || !Validadores.validarTextoNoVacio(horasTexto)
-                || !Validadores.validarTextoNoVacio(anioTexto)) {
-
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+        if (!Validadores.validarTextoNoVacio(denominacion)) {
+            JOptionPane.showMessageDialog(this, "La denominación no puede estar vacía.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(familia)) {
+            JOptionPane.showMessageDialog(this, "La familia profesional no puede estar vacía.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(nivel)) {
+            JOptionPane.showMessageDialog(this, "El nivel no puede estar vacío.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(horasTexto)) {
+            JOptionPane.showMessageDialog(this, "Las horas no pueden estar vacías.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(anioTexto)) {
+            JOptionPane.showMessageDialog(this, "El año curricular no puede estar vacío.");
             return;
         }
 
@@ -319,6 +324,12 @@ public class CrearCiclo extends javax.swing.JFrame {
 
         if (idCiclo != -1) {
             JOptionPane.showMessageDialog(this, "Ciclo creado correctamente con ID: " + idCiclo);
+
+            Ciclo ciclo = new Ciclo(new String[]{
+                String.valueOf(idCiclo), denominacion, familia, nivel,
+                String.valueOf(horas), String.valueOf(anioCurricular)
+            });
+            SesionDatos.registrarCiclo(ciclo, false);
 
             new GestionarModulosCiclo(idCiclo).setVisible(true);
             this.dispose();

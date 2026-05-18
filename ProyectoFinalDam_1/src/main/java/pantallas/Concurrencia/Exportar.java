@@ -4,19 +4,11 @@
  */
 package pantallas.Concurrencia;
 
-import Config.Config;
-import Control.SesionDatos;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import modelos.Alumno;
-import modelos.Ciclo;
-import modelos.LineaMatricula;
-import modelos.Matricula;
-import modelos.Modulo;
-import servicios.BaseDeDatos.ConsultasSQL;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
-import servicios.Ficheros.GestionFicheros;
+import Menus.MenuAlumno;
+import menus.MenuCiclo;
+import menus.MenuLineaMatricula;
+import menus.MenuMatricula;
+import menus.MenuModulo;
 import javax.swing.JOptionPane;
 
 /**
@@ -171,25 +163,19 @@ public class Exportar extends javax.swing.JFrame {
     // =================== LÓGICA DE EXPORTACIÓN ===============
     // =========================================================
 
-    /**
-     * Punto de entrada desde los botones. Exporta al fichero y sincroniza con la BD.
-     * Para "TODO" exporta todas las entidades en orden.
-     */
     private void ejecutarExportacion(String tabla, String formato) {
         try {
             if ("TODO".equals(tabla)) {
                 int total = 0;
-                total += exportarEntidad("ALUMNADO", formato);
-                total += exportarEntidad("CICLOS", formato);
-                total += exportarEntidad("MODULOS", formato);
-                total += exportarEntidad("MATRICULAS", formato);
-                total += exportarEntidad("LINEA MATRICULA", formato);
+                for (String t : new String[]{"ALUMNADO", "CICLOS", "MODULOS", "MATRICULAS", "LINEA MATRICULA"}) {
+                    total += exportarEntidad(t, formato);
+                }
                 JOptionPane.showMessageDialog(this,
-                        "Exportación " + formato + " completada: " + total + " registros guardados en fichero y BD.");
+                        "Exportación " + formato + " completada: " + total + " registros.");
             } else {
                 int n = exportarEntidad(tabla, formato);
                 JOptionPane.showMessageDialog(this,
-                        "Exportación " + formato + " completada: " + n + " registros guardados en fichero y BD.");
+                        "Exportación " + formato + " completada: " + n + " registros.");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -199,288 +185,13 @@ public class Exportar extends javax.swing.JFrame {
 
     private int exportarEntidad(String tabla, String formato) {
         return switch (tabla) {
-            case "ALUMNADO"        -> exportarAlumnos(formato);
-            case "CICLOS"          -> exportarCiclos(formato);
-            case "MODULOS"         -> exportarModulos(formato);
-            case "MATRICULAS"      -> exportarMatriculas(formato);
-            case "LINEA MATRICULA" -> exportarLineasMatricula(formato);
+            case "ALUMNADO"        -> MenuAlumno.exportar(formato);
+            case "CICLOS"          -> MenuCiclo.exportar(formato);
+            case "MODULOS"         -> MenuModulo.exportar(formato);
+            case "MATRICULAS"      -> MenuMatricula.exportar(formato);
+            case "LINEA MATRICULA" -> MenuLineaMatricula.exportar(formato);
             default -> throw new IllegalArgumentException("Tabla no reconocida: " + tabla);
         };
-    }
-
-    // =========================================================
-    // =================== EXPORTAR POR ENTIDAD ================
-    // =========================================================
-
-    private int exportarAlumnos(String formato) {
-        if (SesionDatos.listaAlumnos.isEmpty()) return 0;
-
-        if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(Config.ficheroAlumno, SesionDatos.listaAlumnos);
-        } else {
-            String ruta = Config.ficheroAlumno + extension(formato);
-            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
-                for (Alumno alumno : SesionDatos.listaAlumnos) {
-                    pw.println(linea(alumno.toCSV(), alumno.toTXT(), alumno.toJSON(), formato));
-                }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return 0;
-            }
-        }
-
-        int contador = 0;
-        for (Alumno alumno : SesionDatos.listaAlumnos) {
-            sincronizarAlumnoConBDD(alumno);
-            contador++;
-        }
-        return contador;
-    }
-
-    private int exportarCiclos(String formato) {
-        if (SesionDatos.listaCiclos.isEmpty()) return 0;
-
-        if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.listaCiclos);
-        } else {
-            String ruta = Config.ficheroCiclo + extension(formato);
-            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
-                for (Ciclo ciclo : SesionDatos.listaCiclos) {
-                    pw.println(linea(ciclo.toCSV(), ciclo.toTXT(), ciclo.toJSON(), formato));
-                }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return 0;
-            }
-        }
-
-        int contador = 0;
-        for (Ciclo ciclo : SesionDatos.listaCiclos) {
-            sincronizarCicloConBDD(ciclo);
-            contador++;
-        }
-        return contador;
-    }
-
-    private int exportarModulos(String formato) {
-        if (SesionDatos.listaModulos.isEmpty()) return 0;
-
-        if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(Config.ficheroModulo, SesionDatos.listaModulos);
-        } else {
-            String ruta = Config.ficheroModulo + extension(formato);
-            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
-                for (Modulo modulo : SesionDatos.listaModulos) {
-                    pw.println(linea(modulo.toCSV(), modulo.toTXT(), modulo.toJSON(), formato));
-                }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return 0;
-            }
-        }
-
-        int contador = 0;
-        for (Modulo modulo : SesionDatos.listaModulos) {
-            sincronizarModuloConBDD(modulo);
-            contador++;
-        }
-        return contador;
-    }
-
-    private int exportarMatriculas(String formato) {
-        if (SesionDatos.listaMatriculas.isEmpty()) return 0;
-
-        if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.listaMatriculas);
-        } else {
-            String ruta = Config.ficheroMatricula + extension(formato);
-            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
-                for (Matricula matricula : SesionDatos.listaMatriculas) {
-                    pw.println(linea(matricula.toCSV(), matricula.toTXT(), matricula.toJSON(), formato));
-                }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return 0;
-            }
-        }
-
-        int contador = 0;
-        for (Matricula matricula : SesionDatos.listaMatriculas) {
-            sincronizarMatriculaConBDD(matricula);
-            contador++;
-        }
-        return contador;
-    }
-
-    private int exportarLineasMatricula(String formato) {
-        if (SesionDatos.listaLineasMatricula.isEmpty()) return 0;
-
-        if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.listaLineasMatricula);
-        } else {
-            String ruta = Config.ficheroLineaMatricula + extension(formato);
-            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
-                for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
-                    pw.println(linea(lm.toCSV(), lm.toTXT(), lm.toJSON(), formato));
-                }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error al escribir fichero: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return 0;
-            }
-        }
-
-        int contador = 0;
-        for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
-            sincronizarLineaMatriculaConBDD(lm);
-            contador++;
-        }
-        return contador;
-    }
-
-    private static String extension(String formato) {
-        return switch (formato) {
-            case "CSV"  -> ".csv";
-            case "TXT"  -> ".txt";
-            case "JSON" -> ".json";
-            default -> throw new IllegalArgumentException("Formato no reconocido: " + formato);
-        };
-    }
-
-    private static String linea(String csv, String txt, String json, String formato) {
-        return switch (formato) {
-            case "CSV"  -> csv;
-            case "TXT"  -> txt;
-            case "JSON" -> json;
-            default -> throw new IllegalArgumentException("Formato no reconocido: " + formato);
-        };
-    }
-
-    // =========================================================
-    // ============= SINCRONIZACIÓN CON LA BD ==================
-    // =========================================================
-    // Para cada entidad: intenta INSERT con el código original.
-    // Si ya existe (clave duplicada), hace UPDATE.
-
-    private void sincronizarAlumnoConBDD(Alumno alumno) {
-        String[] paramsInsert = {
-            String.valueOf(alumno.getCodigo()),
-            alumno.getNombre(),
-            alumno.getFechaNacimiento().toString(),
-            alumno.getDomicilio(),
-            alumno.getTelefono(),
-            alumno.getCorreo()
-        };
-        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], paramsInsert);
-        if (!insertado) {
-            // Orden UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
-            String[] paramsUpdate = {
-                alumno.getNombre(),
-                alumno.getFechaNacimiento().toString(),
-                alumno.getDomicilio(),
-                alumno.getTelefono(),
-                alumno.getCorreo(),
-                String.valueOf(alumno.getCodigo())
-            };
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, paramsUpdate);
-        }
-    }
-
-    private void sincronizarCicloConBDD(Ciclo ciclo) {
-        String[] paramsInsert = {
-            String.valueOf(ciclo.getCodigo()),
-            ciclo.getDenominacion(),
-            ciclo.getFamiliaProfesional(),
-            ciclo.getNivel(),
-            String.valueOf(ciclo.getHoras()),
-            String.valueOf(ciclo.getAñoCurriculum())
-        };
-        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], paramsInsert);
-        if (!insertado) {
-            // Orden UPDATE_CICLO: denominacion, familia_profesional, nivel, horas, anio_curriculo, codigo
-            String[] paramsUpdate = {
-                ciclo.getDenominacion(),
-                ciclo.getFamiliaProfesional(),
-                ciclo.getNivel(),
-                String.valueOf(ciclo.getHoras()),
-                String.valueOf(ciclo.getAñoCurriculum()),
-                String.valueOf(ciclo.getCodigo())
-            };
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_CICLO, paramsUpdate);
-        }
-    }
-
-    private void sincronizarModuloConBDD(Modulo modulo) {
-        // Orden INSERT_MODULO_CON_CODIGO: codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
-        String[] paramsInsert = {
-            String.valueOf(modulo.getCodigo()),
-            String.valueOf(modulo.getCodigo_ciclo()),
-            modulo.getNombre(),
-            modulo.getCurso(),
-            String.valueOf(modulo.getCreditos_ects()),
-            String.valueOf(modulo.getHoras())
-        };
-        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], paramsInsert);
-        if (!insertado) {
-            // Orden UPDATE_MODULO: codigo_ciclo, nombre, curso, creditos_ects, horas, codigo
-            String[] paramsUpdate = {
-                String.valueOf(modulo.getCodigo_ciclo()),
-                modulo.getNombre(),
-                modulo.getCurso(),
-                String.valueOf(modulo.getCreditos_ects()),
-                String.valueOf(modulo.getHoras()),
-                String.valueOf(modulo.getCodigo())
-            };
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, paramsUpdate);
-        }
-    }
-
-    private void sincronizarMatriculaConBDD(Matricula matricula) {
-        // Orden INSERT_MATRICULA_CON_CODIGO: codigo, codigo_alumno, anio_academico, estado, importe
-        String[] paramsInsert = {
-            String.valueOf(matricula.getCodigo()),
-            String.valueOf(matricula.getCodigo_alumno()),
-            String.valueOf(matricula.getAño_academico()),
-            matricula.getEstado(),
-            String.valueOf(matricula.getImporte())
-        };
-        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], paramsInsert);
-        if (!insertado) {
-            // Orden UPDATE_MATRICULA: codigo_alumno, anio_academico, estado, importe, codigo
-            String[] paramsUpdate = {
-                String.valueOf(matricula.getCodigo_alumno()),
-                String.valueOf(matricula.getAño_academico()),
-                matricula.getEstado(),
-                String.valueOf(matricula.getImporte()),
-                String.valueOf(matricula.getCodigo())
-            };
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MATRICULA, paramsUpdate);
-        }
-    }
-
-    private void sincronizarLineaMatriculaConBDD(LineaMatricula lm) {
-        String calPrimera = (lm.getCal_primera() < 0) ? null : String.valueOf(lm.getCal_primera());
-        String calSegunda = (lm.getCal_segunda() < 0) ? null : String.valueOf(lm.getCal_segunda());
-
-        // Orden INSERT_LINEA_MATRICULA: codigo_matricula, codigo_modulo, repeticion, cal_primera, cal_segunda
-        String[] paramsInsert = {
-            String.valueOf(lm.getCod_matricula()),
-            String.valueOf(lm.getCod_modulo()),
-            String.valueOf(lm.getRepeticion()),
-            calPrimera,
-            calSegunda
-        };
-        boolean insertado = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], paramsInsert);
-        if (!insertado) {
-            // Orden UPDATE_LINEA_MATRICULA: repeticion, cal_primera, cal_segunda, codigo_matricula, codigo_modulo
-            String[] paramsUpdate = {
-                String.valueOf(lm.getRepeticion()),
-                calPrimera,
-                calSegunda,
-                String.valueOf(lm.getCod_matricula()),
-                String.valueOf(lm.getCod_modulo())
-            };
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_LINEA_MATRICULA, paramsUpdate);
-        }
     }
 
     // =========================================================

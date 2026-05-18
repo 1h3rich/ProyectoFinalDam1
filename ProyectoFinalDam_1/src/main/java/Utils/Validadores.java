@@ -126,6 +126,16 @@ public class Validadores {
     }
 
     /**
+     * Comprueba que el estado de una matrícula sea exactamente "Activa" o "No activa".
+     *
+     * @param estado Estado a validar.
+     * @return true si el estado es exactamente "Activa" o "No activa".
+     */
+    public static boolean validarEstado(String estado) {
+        return "Activa".equals(estado) || "No activa".equals(estado);
+    }
+
+    /**
      * Comprueba que el nombre del curso no sea nulo ni esté vacío.
      *
      * @param curso Nombre del curso (p.ej. "primero", "segundo").

@@ -662,6 +662,82 @@ public class MenuCiclo {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
     }
 
+    public static int exportar(String formato) {
+        SesionDatos.listaCiclos.clear();
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
+        if (SesionDatos.listaCiclos.isEmpty()) return 0;
+
+        String ruta = Config.rutaFichero(Config.ficheroCiclo, formato);
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaCiclos);
+        } else {
+            String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
+                for (Ciclo ciclo : SesionDatos.listaCiclos) {
+                    pw.println("CSV".equals(formato) ? ciclo.toCSV() : "JSON".equals(formato) ? ciclo.toJSON() : ciclo.toTXT());
+                }
+            } catch (IOException e) {
+                System.out.println("[ERROR] No se pudo exportar ciclos: " + e.getMessage());
+                return 0;
+            }
+        }
+        return SesionDatos.listaCiclos.size();
+    }
+
+    public static int importar(String formato) throws Exception {
+        String ruta = Config.rutaFichero(Config.ficheroCiclo, formato);
+        int contador = 0;
+
+        if ("BINARIO".equals(formato)) {
+            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
+                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
+                @SuppressWarnings("unchecked")
+                java.util.Collection<Ciclo> lista = (java.util.Collection<Ciclo>) ois.readObject();
+                if (lista == null || lista.isEmpty()) return 0;
+                for (Ciclo c : lista) {
+                    String[] p = { String.valueOf(c.getCodigo()), c.getDenominacion(),
+                        c.getFamiliaProfesional(), c.getNivel(),
+                        String.valueOf(c.getHoras()), String.valueOf(c.getAñoCurriculum()) };
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], p)) {
+                        SesionDatos.registrarCiclo(c, false); contador++;
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new Exception("Error al leer binario de ciclos: " + e.getMessage());
+            }
+            return contador;
+        }
+
+        ArrayList<String> lineas = "JSON".equals(formato)
+                ? GestionFicheros.leerJson(ruta)
+                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+        if (lineas == null || lineas.isEmpty()) {
+            throw new Exception("El fichero de ciclos está vacío o no existe.");
+        }
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            try {
+                String[] partes;
+                if ("JSON".equals(formato)) {
+                    Ciclo c = GestionFicheros.toJson(linea, Ciclo.class);
+                    partes = new String[]{ String.valueOf(c.getCodigo()), c.getDenominacion(),
+                        c.getFamiliaProfesional(), c.getNivel(),
+                        String.valueOf(c.getHoras()), String.valueOf(c.getAñoCurriculum()) };
+                } else {
+                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
+                }
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], partes)) {
+                    SesionDatos.registrarCiclo(new Ciclo(partes), false); contador++;
+                }
+            } catch (Exception e) {
+                System.out.println("[AVISO] Línea de ciclo omitida: " + e.getMessage());
+            }
+        }
+        return contador;
+    }
+
     /**
      * Construye una cabecera con los nombres de columna del array de consulta.
      *

@@ -4,6 +4,7 @@
  */
 package pantallas.Modificar;
 
+import Control.SesionDatos;
 import Utils.Validadores;
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
@@ -372,15 +373,22 @@ public class ModificarAlumno extends javax.swing.JFrame {
         String domicilio = jTextFieldDomicilio.getText().trim();
         String telefono = jTextFieldTelefono.getText().trim();
 
-        if (nombre.isBlank() || correo.isBlank() || domicilio.isBlank() || telefono.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+        if (nombre.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
             return;
         }
-
+        if (!Validadores.validarCorreo(correo)) {
+            JOptionPane.showMessageDialog(this, "El correo no tiene un formato válido (usuario@dominio.ext).");
+            return;
+        }
         if (!Validadores.validarDireccion(domicilio)) {
             JOptionPane.showMessageDialog(this,
                 "El domicilio debe tener el formato: TipoVía Nombre Número, Localidad, Provincia\n"
                 + "Ejemplo: Calle Mayor 5, Madrid, Madrid");
+            return;
+        }
+        if (!Validadores.validarTelefono(telefono)) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 9 dígitos numéricos.");
             return;
         }
 
@@ -400,6 +408,11 @@ public class ModificarAlumno extends javax.swing.JFrame {
                 String.valueOf(alumno.getCodigo())
             };
             GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
+
+            int codigoAlumno = alumno.getCodigo();
+            SesionDatos.listaAlumnos.removeIf(a -> a.getCodigo() == codigoAlumno);
+            SesionDatos.listaAlumnos.add(alumno);
+
             JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
             alumno = null;
             cargarAlumnosEnTabla();

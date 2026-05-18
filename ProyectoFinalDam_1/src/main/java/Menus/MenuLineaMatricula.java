@@ -687,6 +687,82 @@ public class MenuLineaMatricula {
         );
     }
 
+    public static int exportar(String formato) {
+        SesionDatos.listaLineasMatricula.clear();
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true);
+        if (SesionDatos.listaLineasMatricula.isEmpty()) return 0;
+
+        String ruta = Config.rutaFichero(Config.ficheroLineaMatricula, formato);
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaLineasMatricula);
+        } else {
+            String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
+                for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
+                    pw.println("CSV".equals(formato) ? lm.toCSV() : "JSON".equals(formato) ? lm.toJSON() : lm.toTXT());
+                }
+            } catch (IOException e) {
+                System.out.println("[ERROR] No se pudo exportar líneas de matrícula: " + e.getMessage());
+                return 0;
+            }
+        }
+        return SesionDatos.listaLineasMatricula.size();
+    }
+
+    public static int importar(String formato) throws Exception {
+        String ruta = Config.rutaFichero(Config.ficheroLineaMatricula, formato);
+        int contador = 0;
+
+        if ("BINARIO".equals(formato)) {
+            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
+                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
+                @SuppressWarnings("unchecked")
+                java.util.Collection<LineaMatricula> lista = (java.util.Collection<LineaMatricula>) ois.readObject();
+                if (lista == null || lista.isEmpty()) return 0;
+                for (LineaMatricula lm : lista) {
+                    String[] p = { String.valueOf(lm.getCod_matricula()), String.valueOf(lm.getCod_modulo()),
+                        String.valueOf(lm.getRepeticion()),
+                        String.valueOf(lm.getCal_primera()), String.valueOf(lm.getCal_segunda()) };
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], p)) {
+                        SesionDatos.registrarLineaMatricula(lm, false); contador++;
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new Exception("Error al leer binario de líneas de matrícula: " + e.getMessage());
+            }
+            return contador;
+        }
+
+        ArrayList<String> lineas = "JSON".equals(formato)
+                ? GestionFicheros.leerJson(ruta)
+                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+        if (lineas == null || lineas.isEmpty()) {
+            throw new Exception("El fichero de líneas de matrícula está vacío o no existe.");
+        }
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            try {
+                String[] partes;
+                if ("JSON".equals(formato)) {
+                    LineaMatricula lm = GestionFicheros.toJson(linea, LineaMatricula.class);
+                    partes = new String[]{ String.valueOf(lm.getCod_matricula()), String.valueOf(lm.getCod_modulo()),
+                        String.valueOf(lm.getRepeticion()),
+                        String.valueOf(lm.getCal_primera()), String.valueOf(lm.getCal_segunda()) };
+                } else {
+                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
+                }
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], partes)) {
+                    SesionDatos.registrarLineaMatricula(new LineaMatricula(partes), false); contador++;
+                }
+            } catch (Exception e) {
+                System.out.println("[AVISO] Línea de línea_matrícula omitida: " + e.getMessage());
+            }
+        }
+        return contador;
+    }
+
     /**
      * Construye una cabecera legible a partir de los nombres de columna del
      * array de consulta.

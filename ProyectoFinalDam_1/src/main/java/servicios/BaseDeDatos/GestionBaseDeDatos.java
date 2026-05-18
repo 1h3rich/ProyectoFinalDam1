@@ -815,7 +815,7 @@ public class GestionBaseDeDatos {
 
         ArrayList<Utils.ItemCombo> lista = new ArrayList<>();
 
-        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo = ? ORDER BY nombre ASC";
+        String sql = "SELECT codigo, nombre FROM modulo WHERE codigo_ciclo != ? ORDER BY nombre ASC";
 
         try ( PreparedStatement pst = con.prepareStatement(sql)) {
 

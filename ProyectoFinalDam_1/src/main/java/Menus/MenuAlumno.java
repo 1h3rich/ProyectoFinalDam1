@@ -666,6 +666,82 @@ public class MenuAlumno {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
     }
 
+    public static int exportar(String formato) {
+        SesionDatos.listaAlumnos.clear();
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
+        if (SesionDatos.listaAlumnos.isEmpty()) return 0;
+
+        String ruta = Config.rutaFichero(Config.ficheroAlumno, formato);
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaAlumnos);
+        } else {
+            String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
+                for (Alumno alumno : SesionDatos.listaAlumnos) {
+                    pw.println("CSV".equals(formato) ? alumno.toCSV() : "JSON".equals(formato) ? alumno.toJSON() : alumno.toTXT());
+                }
+            } catch (IOException e) {
+                System.out.println("[ERROR] No se pudo exportar alumnos: " + e.getMessage());
+                return 0;
+            }
+        }
+        return SesionDatos.listaAlumnos.size();
+    }
+
+    public static int importar(String formato) throws Exception {
+        String ruta = Config.rutaFichero(Config.ficheroAlumno, formato);
+        int contador = 0;
+
+        if ("BINARIO".equals(formato)) {
+            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
+                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
+                @SuppressWarnings("unchecked")
+                java.util.Collection<Alumno> lista = (java.util.Collection<Alumno>) ois.readObject();
+                if (lista == null || lista.isEmpty()) return 0;
+                for (Alumno a : lista) {
+                    String[] p = { String.valueOf(a.getCodigo()), a.getNombre(),
+                        a.getFechaNacimiento().toString(), a.getDomicilio(),
+                        a.getTelefono(), a.getCorreo() };
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], p)) {
+                        SesionDatos.registrarAlumno(a, false); contador++;
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new Exception("Error al leer binario de alumnos: " + e.getMessage());
+            }
+            return contador;
+        }
+
+        ArrayList<String> lineas = "JSON".equals(formato)
+                ? GestionFicheros.leerJson(ruta)
+                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+        if (lineas == null || lineas.isEmpty()) {
+            throw new Exception("El fichero de alumnos está vacío o no existe.");
+        }
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            try {
+                String[] partes;
+                if ("JSON".equals(formato)) {
+                    Alumno a = GestionFicheros.toJson(linea, Alumno.class);
+                    partes = new String[]{ String.valueOf(a.getCodigo()), a.getNombre(),
+                        a.getFechaNacimiento().toString(), a.getDomicilio(),
+                        a.getTelefono(), a.getCorreo() };
+                } else {
+                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
+                }
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], partes)) {
+                    SesionDatos.registrarAlumno(new Alumno(partes), false); contador++;
+                }
+            } catch (Exception e) {
+                System.out.println("[AVISO] Línea de alumno omitida: " + e.getMessage());
+            }
+        }
+        return contador;
+    }
+
     /**
      * Construye una cabecera legible a partir de los nombres de columna
      * definidos en el array de datos de la consulta.

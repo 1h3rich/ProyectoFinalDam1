@@ -4,6 +4,7 @@
  */
 package pantallas.Modificar;
 
+import Control.SesionDatos;
 import Utils.Validadores;
 import javax.swing.JOptionPane;
 import modelos.Modulo;
@@ -278,8 +279,24 @@ public class ModificarModulo extends javax.swing.JFrame {
         String horas = jTextFieldHoras.getText().trim();
         String codigo_ciclo = jTextFieldCod_Ciclo.getText().trim();
 
-        if (nombre.isBlank() || curso.isBlank() || creditos.isBlank() || horas.isBlank() || codigo_ciclo.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+        if (nombre.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El nombre del módulo no puede estar vacío.");
+            return;
+        }
+        if (curso.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El campo Curso no puede estar vacío (ej. 1 o 2).");
+            return;
+        }
+        if (creditos.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Los créditos no pueden estar vacíos.");
+            return;
+        }
+        if (horas.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Las horas no pueden estar vacías.");
+            return;
+        }
+        if (codigo_ciclo.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El código del ciclo no puede estar vacío.");
             return;
         }
 
@@ -302,6 +319,11 @@ public class ModificarModulo extends javax.swing.JFrame {
             String.valueOf(modulo.getCodigo())
         };
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, entradas);
+
+        int codigoModulo = modulo.getCodigo();
+        SesionDatos.listaModulos.removeIf(m -> m.getCodigo() == codigoModulo);
+        SesionDatos.listaModulos.add(modulo);
+
         JOptionPane.showMessageDialog(this, "Modulo actualizado correctamente.");
         dispose();
     }

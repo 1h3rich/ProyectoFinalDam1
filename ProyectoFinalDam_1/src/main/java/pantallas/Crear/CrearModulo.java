@@ -4,8 +4,10 @@
  */
 package pantallas.Crear;
 
+import Control.SesionDatos;
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import modelos.Modulo;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
@@ -307,14 +309,24 @@ public class CrearModulo extends javax.swing.JFrame {
         String horasTexto = jTextFieldHoras.getText().trim();
         String codigoCicloTexto = jTextFieldCod_Ciclo.getText().trim();
 
-        if (!Validadores.validarTextoNoVacio(nombre)
-                || !Validadores.validarTextoNoVacio(curso)
-                || !Validadores.validarTextoNoVacio(creditosTexto)
-                || !Validadores.validarTextoNoVacio(horasTexto)
-                || !Validadores.validarTextoNoVacio(codigoCicloTexto)) {
-
-            JOptionPane.showConfirmDialog(this, "Debes rellenar todos los campos", "ERROR", JOptionPane.ERROR_MESSAGE, JOptionPane.ERROR);
-            
+        if (!Validadores.validarTextoNoVacio(nombre)) {
+            JOptionPane.showMessageDialog(this, "El nombre del módulo no puede estar vacío.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(curso)) {
+            JOptionPane.showMessageDialog(this, "El campo Curso no puede estar vacío (ej. 1 o 2).");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(creditosTexto)) {
+            JOptionPane.showMessageDialog(this, "Los créditos no pueden estar vacíos.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(horasTexto)) {
+            JOptionPane.showMessageDialog(this, "Las horas no pueden estar vacías.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(codigoCicloTexto)) {
+            JOptionPane.showMessageDialog(this, "El código del ciclo no puede estar vacío.");
             return;
         }
 
@@ -358,6 +370,12 @@ public class CrearModulo extends javax.swing.JFrame {
 
         if (idModulo != -1) {
             JOptionPane.showMessageDialog(this, "Módulo creado correctamente con ID: " + idModulo);
+
+            Modulo modulo = new Modulo(new String[]{
+                String.valueOf(idModulo), String.valueOf(codigoCiclo), nombre,
+                curso, String.valueOf(creditos), String.valueOf(horas)
+            });
+            SesionDatos.registrarModulo(modulo, false);
 
             new GestionarModulosCiclo(idCiclo).setVisible(true);
             this.dispose();

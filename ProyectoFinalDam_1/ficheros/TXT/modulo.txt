@@ -1,0 +1,10 @@
+4;1;Acceso a Datos;2;9.0;120
+2;1;Bases de Datos;1;11.0;192
+9;3;Comunicación Empresarial;1;13.66;160
+5;1;Desarrollo de Interfaces;2;9.0;120
+6;2;Implantación de Sistemas Operativos;1;12.0;224
+3;1;Lenguajes de Marcas;1;7.0;128
+10;3;Operaciones Administrativas;1;12.4;190
+1;1;Programación;1;14.0;256
+7;2;Redes Locales;1;11.0;192
+8;2;Seguridad y Alta Disponibilidad;2;6.0;100

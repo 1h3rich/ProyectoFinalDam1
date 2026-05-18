@@ -4,22 +4,14 @@
  */
 package pantallas.Concurrencia;
 
-import Config.Config;
-import Control.SesionDatos;
-import Utils.Validadores;
+import Menus.MenuAlumno;
 import excepciones.YaImportadoException;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import modelos.*;
-import servicios.BaseDeDatos.ConsultasSQL;
-import servicios.BaseDeDatos.GestionBaseDeDatos;
-import servicios.Ficheros.GestionFicheros;
+import menus.MenuCiclo;
+import menus.MenuLineaMatricula;
+import menus.MenuMatricula;
+import menus.MenuModulo;
 
 /**
  *
@@ -41,6 +33,7 @@ public class Importar extends javax.swing.JFrame {
     public Importar() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jLabel1.setText("Selecciona que quieres importar: ");
     }
 
     /**
@@ -188,12 +181,14 @@ public class Importar extends javax.swing.JFrame {
                 String[] tablas = {"CICLOS", "MODULOS", "ALUMNADO", "MATRICULAS", "LINEA MATRICULA"};
                 StringBuilder sb = new StringBuilder();
                 StringBuilder errores = new StringBuilder();
+                int total = 0;
                 for (String t : tablas) {
                     String clave = t + "_" + formato;
                     try {
                         comprobarYaImportado(clave);
                         int n = procesarImportacion(t, formato);
-                        yaImportados.add(clave);
+                        if (n > 0) yaImportados.add(clave);
+                        total += n;
                         sb.append(t).append(": ").append(n).append(" registros\n");
                     } catch (YaImportadoException e) {
                         sb.append(t).append(": ya importado (omitido)\n");
@@ -205,17 +200,24 @@ public class Importar extends javax.swing.JFrame {
                 if (errores.length() > 0) {
                     mensaje += "\nTablas con error (fichero no encontrado o formato incorrecto):\n" + errores;
                 }
+                boolean sinDatosNuevos = total == 0 && errores.length() == 0;
                 javax.swing.JOptionPane.showMessageDialog(this, mensaje,
-                        errores.length() > 0 ? "Completado con advertencias" : "Éxito",
-                        errores.length() > 0 ? javax.swing.JOptionPane.WARNING_MESSAGE : javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        sinDatosNuevos ? "Sin datos nuevos" : errores.length() > 0 ? "Completado con advertencias" : "Éxito",
+                        sinDatosNuevos ? javax.swing.JOptionPane.WARNING_MESSAGE : errores.length() > 0 ? javax.swing.JOptionPane.WARNING_MESSAGE : javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } else {
                 String clave = tabla + "_" + formato;
                 comprobarYaImportado(clave);
                 int n = procesarImportacion(tabla, formato);
-                yaImportados.add(clave);
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        "Importados " + n + " registros de " + tabla + " (" + formato + ")",
-                        "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                if (n > 0) yaImportados.add(clave);
+                if (n == 0) {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "No hay datos nuevos que importar en " + tabla + " (" + formato + ").\nTodos los registros ya existen en la base de datos.",
+                            "Sin datos nuevos", javax.swing.JOptionPane.WARNING_MESSAGE);
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(this,
+                            "Importados " + n + " registros de " + tabla + " (" + formato + ")",
+                            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         } catch (YaImportadoException e) {
             javax.swing.JOptionPane.showMessageDialog(this,
@@ -252,369 +254,13 @@ public class Importar extends javax.swing.JFrame {
      */
     private int procesarImportacion(String tabla, String formato) throws Exception {
         return switch (tabla) {
-            case "ALUMNADO"        -> importarAlumnos(formato);
-            case "CICLOS"          -> importarCiclos(formato);
-            case "MODULOS"         -> importarModulos(formato);
-            case "MATRICULAS"      -> importarMatriculas(formato);
-            case "LINEA MATRICULA" -> importarLineasMatricula(formato);
+            case "ALUMNADO"        -> MenuAlumno.importar(formato);
+            case "CICLOS"          -> MenuCiclo.importar(formato);
+            case "MODULOS"         -> MenuModulo.importar(formato);
+            case "MATRICULAS"      -> MenuMatricula.importar(formato);
+            case "LINEA MATRICULA" -> MenuLineaMatricula.importar(formato);
             default -> throw new Exception("Tabla no reconocida: " + tabla);
         };
-    }
-
-    // =========================================================
-    // ============ IMPORTAR ALUMNOS ===========================
-    // =========================================================
-
-    private int importarAlumnos(String formato) throws Exception {
-        if ("BINARIO".equals(formato)) {
-            return importarBinario(Config.ficheroAlumno, lista -> {
-                int c = 0;
-                for (Object o : lista) {
-                    Alumno a = (Alumno) o;
-                    String[] p = { String.valueOf(a.getCodigo()), a.getNombre(),
-                        a.getFechaNacimiento().toString(), a.getDomicilio(),
-                        a.getTelefono(), a.getCorreo() };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], p)) {
-                        SesionDatos.registrarAlumno(a, false); c++;
-                    }
-                }
-                return c;
-            });
-        }
-
-        ArrayList<String> lineas = leerFichero(Config.ficheroAlumno, formato);
-        int contador = 0;
-        for (String linea : lineas) {
-            if (linea.trim().isEmpty()) continue;
-            Alumno alumno = parsearAlumno(linea, formato);
-            String[] params = { String.valueOf(alumno.getCodigo()), alumno.getNombre(),
-                alumno.getFechaNacimiento().toString(), alumno.getDomicilio(),
-                alumno.getTelefono(), alumno.getCorreo() };
-            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], params)) {
-                SesionDatos.registrarAlumno(alumno, false); contador++;
-            }
-        }
-        return contador;
-    }
-
-    // =========================================================
-    // ============ IMPORTAR CICLOS ============================
-    // =========================================================
-
-    private int importarCiclos(String formato) throws Exception {
-        if ("BINARIO".equals(formato)) {
-            return importarBinario(Config.ficheroCiclo, lista -> {
-                int c = 0;
-                for (Object o : lista) {
-                    Ciclo ciclo = (Ciclo) o;
-                    String[] p = { String.valueOf(ciclo.getCodigo()), ciclo.getDenominacion(),
-                        ciclo.getFamiliaProfesional(), ciclo.getNivel(),
-                        String.valueOf(ciclo.getHoras()), String.valueOf(ciclo.getAñoCurriculum()) };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], p)) {
-                        SesionDatos.registrarCiclo(ciclo, false); c++;
-                    }
-                }
-                return c;
-            });
-        }
-
-        ArrayList<String> lineas = leerFichero(Config.ficheroCiclo, formato);
-        int contador = 0;
-        for (String linea : lineas) {
-            if (linea.trim().isEmpty()) continue;
-            Ciclo ciclo = parsearCiclo(linea, formato);
-            String[] params = { String.valueOf(ciclo.getCodigo()), ciclo.getDenominacion(),
-                ciclo.getFamiliaProfesional(), ciclo.getNivel(),
-                String.valueOf(ciclo.getHoras()), String.valueOf(ciclo.getAñoCurriculum()) };
-            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], params)) {
-                SesionDatos.registrarCiclo(ciclo, false); contador++;
-            }
-        }
-        return contador;
-    }
-
-    // =========================================================
-    // ============ IMPORTAR MODULOS ===========================
-    // =========================================================
-
-    private int importarModulos(String formato) throws Exception {
-        if ("BINARIO".equals(formato)) {
-            return importarBinario(Config.ficheroModulo, lista -> {
-                int c = 0;
-                for (Object o : lista) {
-                    Modulo m = (Modulo) o;
-                    String[] p = { String.valueOf(m.getCodigo()), String.valueOf(m.getCodigo_ciclo()),
-                        m.getNombre(), m.getCurso(),
-                        String.valueOf(m.getCreditos_ects()), String.valueOf(m.getHoras()) };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], p)) {
-                        SesionDatos.registrarModulo(m, false); c++;
-                    }
-                }
-                return c;
-            });
-        }
-
-        ArrayList<String> lineas = leerFichero(Config.ficheroModulo, formato);
-        int contador = 0;
-        for (String linea : lineas) {
-            if (linea.trim().isEmpty()) continue;
-            Modulo modulo = parsearModulo(linea, formato);
-            String[] params = { String.valueOf(modulo.getCodigo()), String.valueOf(modulo.getCodigo_ciclo()),
-                modulo.getNombre(), modulo.getCurso(),
-                String.valueOf(modulo.getCreditos_ects()), String.valueOf(modulo.getHoras()) };
-            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], params)) {
-                SesionDatos.registrarModulo(modulo, false); contador++;
-            }
-        }
-        return contador;
-    }
-
-    // =========================================================
-    // ============ IMPORTAR MATRICULAS ========================
-    // =========================================================
-
-    private int importarMatriculas(String formato) throws Exception {
-        if ("BINARIO".equals(formato)) {
-            return importarBinario(Config.ficheroMatricula, lista -> {
-                int c = 0;
-                for (Object o : lista) {
-                    Matricula mat = (Matricula) o;
-                    String[] p = { String.valueOf(mat.getCodigo()), String.valueOf(mat.getCodigo_alumno()),
-                        String.valueOf(mat.getAño_academico()), mat.getEstado(),
-                        String.valueOf(mat.getImporte()) };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], p)) {
-                        SesionDatos.registrarMatricula(mat, false); c++;
-                    }
-                }
-                return c;
-            });
-        }
-
-        ArrayList<String> lineas = leerFichero(Config.ficheroMatricula, formato);
-        int contador = 0;
-        for (String linea : lineas) {
-            if (linea.trim().isEmpty()) continue;
-            Matricula matricula = parsearMatricula(linea, formato);
-            String[] params = { String.valueOf(matricula.getCodigo()), String.valueOf(matricula.getCodigo_alumno()),
-                String.valueOf(matricula.getAño_academico()), matricula.getEstado(),
-                String.valueOf(matricula.getImporte()) };
-            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], params)) {
-                SesionDatos.registrarMatricula(matricula, false); contador++;
-            }
-        }
-        return contador;
-    }
-
-    // =========================================================
-    // ========= IMPORTAR LINEAS MATRICULA =====================
-    // =========================================================
-
-    private int importarLineasMatricula(String formato) throws Exception {
-        if ("BINARIO".equals(formato)) {
-            return importarBinario(Config.ficheroLineaMatricula, lista -> {
-                int c = 0;
-                for (Object o : lista) {
-                    LineaMatricula lm = (LineaMatricula) o;
-                    String[] p = { String.valueOf(lm.getCod_matricula()), String.valueOf(lm.getCod_modulo()),
-                        String.valueOf(lm.getRepeticion()),
-                        String.valueOf(lm.getCal_primera()), String.valueOf(lm.getCal_segunda()) };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], p)) {
-                        SesionDatos.registrarLineaMatricula(lm, false); c++;
-                    }
-                }
-                return c;
-            });
-        }
-
-        ArrayList<String> lineas = leerFichero(Config.ficheroLineaMatricula, formato);
-        int contador = 0;
-        for (String linea : lineas) {
-            if (linea.trim().isEmpty()) continue;
-            LineaMatricula lm = parsearLineaMatricula(linea, formato);
-            String[] params = { String.valueOf(lm.getCod_matricula()), String.valueOf(lm.getCod_modulo()),
-                String.valueOf(lm.getRepeticion()),
-                String.valueOf(lm.getCal_primera()), String.valueOf(lm.getCal_segunda()) };
-            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], params)) {
-                SesionDatos.registrarLineaMatricula(lm, false); contador++;
-            }
-        }
-        return contador;
-    }
-
-    @FunctionalInterface
-    private interface BinarioImportador {
-        int importar(Collection<?> lista) throws Exception;
-    }
-
-    private int importarBinario(String rutaBase, BinarioImportador importador) throws Exception {
-        if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
-            throw new Exception("El fichero " + rutaBase + ".dat no existe o está vacío.");
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaBase + ".dat"))) {
-            Object obj = ois.readObject();
-            if (obj instanceof Collection<?> lista) {
-                return importador.importar(lista);
-            }
-            throw new Exception("Formato binario no reconocido en " + rutaBase + ".dat");
-        } catch (IOException | ClassNotFoundException e) {
-            throw new Exception("Error al leer binario: " + e.getMessage());
-        }
-    }
-
-    // =========================================================
-    // =============== LECTURA DE FICHEROS =====================
-    // =========================================================
-
-    private ArrayList<String> leerFichero(String rutaBase, String formato) throws Exception {
-        ArrayList<String> lineas;
-
-        switch (formato) {
-            case "TXT" -> {
-                if (!Validadores.comprobarFicheroLectura(rutaBase, ".txt")) {
-                    throw new Exception("El fichero " + rutaBase + ".txt no existe o está vacío.");
-                }
-                lineas = GestionFicheros.leerTxtCsv(rutaBase, ".txt");
-            }
-            case "CSV" -> {
-                if (!Validadores.comprobarFicheroLectura(rutaBase, ".csv")) {
-                    throw new Exception("El fichero " + rutaBase + ".csv no existe o está vacío.");
-                }
-                lineas = GestionFicheros.leerTxtCsv(rutaBase, ".csv");
-            }
-            case "BINARIO" -> {
-                if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
-                    throw new Exception("El fichero " + rutaBase + ".dat no existe o está vacío.");
-                }
-                lineas = GestionFicheros.leerBinario(rutaBase);
-            }
-            case "JSON" -> {
-                if (!Validadores.comprobarFicheroLectura(rutaBase, ".json")) {
-                    throw new Exception("El fichero " + rutaBase + ".json no existe o está vacío.");
-                }
-                lineas = GestionFicheros.leerJson(rutaBase);
-            }
-            default -> throw new Exception("Formato no reconocido: " + formato);
-        }
-
-        if (lineas == null || lineas.isEmpty()) {
-            throw new Exception("El fichero está vacío o no se pudo leer.");
-        }
-
-        return lineas;
-    }
-
-    // =========================================================
-    // ================ PARSERS POR ENTIDAD ====================
-    // =========================================================
-
-    private Alumno parsearAlumno(String linea, String formato) throws Exception {
-        if ("JSON".equals(formato)) {
-            return (Alumno) GestionFicheros.toJson(linea, Alumno.class);
-        }
-
-        // Alumno.toCSV() usa ":" como separador; toTXT() usa ";"
-        String sep = "CSV".equals(formato) ? ":" : ";";
-        String[] partes = linea.split(sep, -1);
-        if (partes.length < 6) {
-            throw new Exception("Línea de alumno con formato incorrecto: " + linea);
-        }
-
-        return new Alumno(
-                Integer.parseInt(partes[0].trim()),
-                partes[1].trim(),
-                LocalDate.parse(partes[2].trim()),
-                partes[3].trim(),
-                partes[4].trim(),
-                partes[5].trim()
-        );
-    }
-
-    private Ciclo parsearCiclo(String linea, String formato) throws Exception {
-        if ("JSON".equals(formato)) {
-            return (Ciclo) GestionFicheros.toJson(linea, Ciclo.class);
-        }
-
-        // Ciclo.toCSV() usa ":" como separador; toTXT() usa ";"
-        String sep = "CSV".equals(formato) ? ":" : ";";
-        String[] partes = linea.split(sep, -1);
-        if (partes.length < 6) {
-            throw new Exception("Línea de ciclo con formato incorrecto: " + linea);
-        }
-
-        return new Ciclo(
-                Integer.parseInt(partes[0].trim()),
-                partes[1].trim(),
-                partes[2].trim(),
-                partes[3].trim(),
-                Integer.parseInt(partes[4].trim()),
-                Integer.parseInt(partes[5].trim())
-        );
-    }
-
-    private Modulo parsearModulo(String linea, String formato) throws Exception {
-        if ("JSON".equals(formato)) {
-            return (Modulo) GestionFicheros.toJson(linea, Modulo.class);
-        }
-
-        // Modulo.toCSV() usa ":" como separador; toTXT() usa ";"
-        String sep = "CSV".equals(formato) ? ":" : ";";
-        String[] partes = linea.split(sep, -1);
-        if (partes.length < 6) {
-            throw new Exception("Línea de módulo con formato incorrecto: " + linea);
-        }
-
-        return new Modulo(
-                Integer.parseInt(partes[0].trim()),
-                Integer.parseInt(partes[1].trim()),
-                partes[2].trim(),
-                partes[3].trim(),
-                Double.parseDouble(partes[4].trim()),
-                Integer.parseInt(partes[5].trim())
-        );
-    }
-
-    private Matricula parsearMatricula(String linea, String formato) throws Exception {
-        if ("JSON".equals(formato)) {
-            return (Matricula) GestionFicheros.toJson(linea, Matricula.class);
-        }
-
-        // Matricula.toCSV() usa ":" como separador; toTXT() usa ";"
-        String sep = "CSV".equals(formato) ? ":" : ";";
-        String[] partes = linea.split(sep, -1);
-        if (partes.length < 5) {
-            throw new Exception("Línea de matrícula con formato incorrecto: " + linea);
-        }
-
-        return new Matricula(
-                Integer.parseInt(partes[0].trim()),
-                Integer.parseInt(partes[1].trim()),
-                Integer.parseInt(partes[2].trim()),
-                partes[3].trim(),
-                Double.parseDouble(partes[4].trim())
-        );
-    }
-
-    private LineaMatricula parsearLineaMatricula(String linea, String formato) throws Exception {
-        if ("JSON".equals(formato)) {
-            return (LineaMatricula) GestionFicheros.toJson(linea, LineaMatricula.class);
-        }
-
-        // LineaMatricula.toCSV() usa ":" como separador; toTXT() usa ";"
-        String sep = "CSV".equals(formato) ? ":" : ";";
-        String[] partes = linea.split(sep, -1);
-        if (partes.length < 5) {
-            throw new Exception("Línea de línea_matrícula con formato incorrecto: " + linea);
-        }
-
-        int codMatricula = Integer.parseInt(partes[0].trim());
-        int codModulo    = Integer.parseInt(partes[1].trim());
-        int repeticion   = Integer.parseInt(partes[2].trim());
-
-        // Campo vacío → 0.0 (equivalente a sin calificación, igual que NULL en BD)
-        double calPrimera = partes[3].trim().isEmpty() ? 0.0 : Double.parseDouble(partes[3].trim());
-        double calSegunda = partes[4].trim().isEmpty() ? 0.0 : Double.parseDouble(partes[4].trim());
-
-        return new LineaMatricula(codMatricula, codModulo, repeticion, calPrimera, calSegunda);
     }
 
     // =========================================================

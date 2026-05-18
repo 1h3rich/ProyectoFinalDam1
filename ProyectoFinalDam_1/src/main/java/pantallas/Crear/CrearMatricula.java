@@ -4,8 +4,10 @@
  */
 package pantallas.Crear;
 
+import Control.SesionDatos;
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import modelos.Matricula;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
@@ -282,12 +284,20 @@ public class CrearMatricula extends javax.swing.JFrame {
         String anioAcademico = jTextFieldAnioAcademico.getText().trim();
         String codigoAlumnoTexto = jTextFieldCodigoAlumno.getText().trim();
 
-        if (!Validadores.validarTextoNoVacio(estado)
-                || !Validadores.validarTextoNoVacio(importeTexto)
-                || !Validadores.validarTextoNoVacio(anioAcademico)
-                || !Validadores.validarTextoNoVacio(codigoAlumnoTexto)) {
-
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+        if (!Validadores.validarEstado(estado)) {
+            JOptionPane.showMessageDialog(this, "El estado debe ser exactamente 'Activa' o 'No activa'.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(importeTexto)) {
+            JOptionPane.showMessageDialog(this, "El importe no puede estar vacío.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(anioAcademico)) {
+            JOptionPane.showMessageDialog(this, "El año académico no puede estar vacío.");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(codigoAlumnoTexto)) {
+            JOptionPane.showMessageDialog(this, "El código del alumno no puede estar vacío.");
             return;
         }
 
@@ -297,6 +307,11 @@ public class CrearMatricula extends javax.swing.JFrame {
             importe = Double.parseDouble(importeTexto);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El importe debe ser un número válido.");
+            return;
+        }
+
+        if (!Validadores.validarImporte(importe)) {
+            JOptionPane.showMessageDialog(this, "El importe no puede ser negativo.");
             return;
         }
 
@@ -320,6 +335,10 @@ public class CrearMatricula extends javax.swing.JFrame {
 
         if (idMatricula != -1) {
             JOptionPane.showMessageDialog(this, "Matrícula creada correctamente con ID: " + idMatricula);
+
+            int anio = Integer.parseInt(anioAcademico);
+            Matricula matricula = new Matricula(idMatricula, codigoAlumno, anio, estado, importe);
+            SesionDatos.registrarMatricula(matricula, false);
 
             new CrearLineaMatricula(idMatricula).setVisible(true);
             this.dispose();

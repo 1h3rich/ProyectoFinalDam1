@@ -24,7 +24,7 @@ import servicios.Ficheros.GestionFicheros;
  * Incluye operaciones CRUD, exportación/importación de ficheros
  * y visualización de datos insertados durante la sesión.
  *
- * Estados válidos: parcial, completa, anulada.
+ * Estados válidos: Activa, No activa.
  *
  * @author 1DAM
  */
@@ -110,23 +110,27 @@ public class MenuMatricula {
             int añoAcademico = teclado.nextInt();
             teclado.nextLine();
 
-            System.out.print("Estado (parcial/completa/anulada): ");
+            System.out.print("Estado (Activa/No activa): ");
             String estado = teclado.nextLine().trim();
 
             System.out.print("Importe (ej. 350.00): ");
             double importe = teclado.nextDouble();
             teclado.nextLine();
 
-            if (!Validadores.validarCodigoPositivo(codigoAlumno)
-                    || !Validadores.validarAñoAcademico(añoAcademico)
-                    || !Validadores.validarTextoNoVacio(estado)
-                    || !Validadores.validarImporte(importe)) {
-                System.out.println("[ERROR] Datos inválidos. Compruebe el año académico y el importe.");
+            if (!Validadores.validarCodigoPositivo(codigoAlumno)) {
+                System.out.println("[ERROR] El código del alumno debe ser mayor que 0.");
                 return;
             }
-
-            if (!estado.equals("parcial") && !estado.equals("completa") && !estado.equals("anulada")) {
-                System.out.println("[ERROR] El estado debe ser: parcial, completa o anulada.");
+            if (!Validadores.validarAñoAcademico(añoAcademico)) {
+                System.out.println("[ERROR] El año académico no es válido (rango 1900-3000).");
+                return;
+            }
+            if (!Validadores.validarEstado(estado)) {
+                System.out.println("[ERROR] El estado debe ser exactamente 'Activa' o 'No activa'.");
+                return;
+            }
+            if (!Validadores.validarImporte(importe)) {
+                System.out.println("[ERROR] El importe no puede ser negativo.");
                 return;
             }
 
@@ -173,24 +177,31 @@ public class MenuMatricula {
             int añoAcademico = teclado.nextInt();
             teclado.nextLine();
 
-            System.out.print("Nuevo estado (parcial/completa/anulada): ");
+            System.out.print("Nuevo estado (Activa/No activa): ");
             String estado = teclado.nextLine().trim();
 
             System.out.print("Nuevo importe: ");
             double importe = teclado.nextDouble();
             teclado.nextLine();
 
-            if (!Validadores.validarCodigoPositivo(codigo)
-                    || !Validadores.validarCodigoPositivo(codigoAlumno)
-                    || !Validadores.validarAñoAcademico(añoAcademico)
-                    || !Validadores.validarTextoNoVacio(estado)
-                    || !Validadores.validarImporte(importe)) {
-                System.out.println("[ERROR] Datos inválidos.");
+            if (!Validadores.validarCodigoPositivo(codigo)) {
+                System.out.println("[ERROR] El código de la matrícula debe ser mayor que 0.");
                 return;
             }
-
-            if (!estado.equals("parcial") && !estado.equals("completa") && !estado.equals("anulada")) {
-                System.out.println("[ERROR] El estado debe ser: parcial, completa o anulada.");
+            if (!Validadores.validarCodigoPositivo(codigoAlumno)) {
+                System.out.println("[ERROR] El código del alumno debe ser mayor que 0.");
+                return;
+            }
+            if (!Validadores.validarAñoAcademico(añoAcademico)) {
+                System.out.println("[ERROR] El año académico no es válido (rango 1900-3000).");
+                return;
+            }
+            if (!Validadores.validarEstado(estado)) {
+                System.out.println("[ERROR] El estado debe ser exactamente 'Activa' o 'No activa'.");
+                return;
+            }
+            if (!Validadores.validarImporte(importe)) {
+                System.out.println("[ERROR] El importe no puede ser negativo.");
                 return;
             }
 
@@ -618,6 +629,82 @@ public class MenuMatricula {
     private static void cargarMatriculasDesdeBD() {
         SesionDatos.listaMatriculas.clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
+    }
+
+    public static int exportar(String formato) {
+        SesionDatos.listaMatriculas.clear();
+        GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
+        if (SesionDatos.listaMatriculas.isEmpty()) return 0;
+
+        String ruta = Config.rutaFichero(Config.ficheroMatricula, formato);
+        if ("BINARIO".equals(formato)) {
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaMatriculas);
+        } else {
+            String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
+                for (Matricula mat : SesionDatos.listaMatriculas) {
+                    pw.println("CSV".equals(formato) ? mat.toCSV() : "JSON".equals(formato) ? mat.toJSON() : mat.toTXT());
+                }
+            } catch (IOException e) {
+                System.out.println("[ERROR] No se pudo exportar matrículas: " + e.getMessage());
+                return 0;
+            }
+        }
+        return SesionDatos.listaMatriculas.size();
+    }
+
+    public static int importar(String formato) throws Exception {
+        String ruta = Config.rutaFichero(Config.ficheroMatricula, formato);
+        int contador = 0;
+
+        if ("BINARIO".equals(formato)) {
+            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
+                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
+                @SuppressWarnings("unchecked")
+                java.util.Collection<Matricula> lista = (java.util.Collection<Matricula>) ois.readObject();
+                if (lista == null || lista.isEmpty()) return 0;
+                for (Matricula mat : lista) {
+                    String[] p = { String.valueOf(mat.getCodigo()), String.valueOf(mat.getCodigo_alumno()),
+                        String.valueOf(mat.getAño_academico()), mat.getEstado(),
+                        String.valueOf(mat.getImporte()) };
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], p)) {
+                        SesionDatos.registrarMatricula(mat, false); contador++;
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new Exception("Error al leer binario de matrículas: " + e.getMessage());
+            }
+            return contador;
+        }
+
+        ArrayList<String> lineas = "JSON".equals(formato)
+                ? GestionFicheros.leerJson(ruta)
+                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+        if (lineas == null || lineas.isEmpty()) {
+            throw new Exception("El fichero de matrículas está vacío o no existe.");
+        }
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            try {
+                String[] partes;
+                if ("JSON".equals(formato)) {
+                    Matricula mat = GestionFicheros.toJson(linea, Matricula.class);
+                    partes = new String[]{ String.valueOf(mat.getCodigo()), String.valueOf(mat.getCodigo_alumno()),
+                        String.valueOf(mat.getAño_academico()), mat.getEstado(),
+                        String.valueOf(mat.getImporte()) };
+                } else {
+                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
+                }
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], partes)) {
+                    SesionDatos.registrarMatricula(new Matricula(partes), false); contador++;
+                }
+            } catch (Exception e) {
+                System.out.println("[AVISO] Línea de matrícula omitida: " + e.getMessage());
+            }
+        }
+        return contador;
     }
 
     /**

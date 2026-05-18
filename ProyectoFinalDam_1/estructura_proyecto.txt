@@ -16,6 +16,7 @@ src/main/java/
 │   ├── EstadoAplicacion.java     Estado general de la aplicación (menú activo, etc.).
 │   └── SesionDatos.java          Listas en memoria de todos los objetos cargados (alumnos, ciclos...).
 │                                 Métodos: registrarAlumno, getAlumnos, registrarCiclo, getCiclos...
+│                                 NOTA: listaCiclos es TreeSet<Ciclo> (no ArrayList); el resto son ArrayList.
 │
 ├── excepciones/
 │   ├── ErrorGenerico.java        Excepción personalizada de uso general.
@@ -32,14 +33,44 @@ src/main/java/
 │
 ├── Menus/
 │   ├── MenuAlumno.java           Menú de consola para operaciones CRUD de alumnos.
+│   │                             Paquete: Menus (M mayúscula).
+│   │                             exportarAFicheroTexto: usa toTXT() (sep ";") o toCSV() (sep ":") según formato.
+│   │                             importarDesdeTxt/Csv/Json: usa insertarSinID con comprobación boolean;
+│   │                               el contador de importados solo sube si la inserción en BD tiene éxito.
+│   │                             importarDesdeJson: usa GsonUtils.get() para deserializar LocalDate.
+│   │
 │   ├── MenuCiclo.java            Menú de consola para operaciones CRUD de ciclos.
+│   │                             Paquete: menus (m minúscula).
+│   │                             exportarAFicheroTexto: usa toTXT() o toCSV() correctamente.
+│   │                             importarDesdeBinario: cast a TreeSet<Ciclo> (no ArrayList).
+│   │                             importarDesdeTxt/Csv/Json: contador con comprobación insertarSinID.
+│   │                             actualizarCiclo: muestra "[OK]" si actualizarFila devuelve true,
+│   │                               "[ERROR] No se encontró" si devuelve false.
+│   │
 │   ├── MenuModulo.java           Menú de consola para operaciones CRUD de módulos.
+│   │                             Paquete: menus (m minúscula).
+│   │                             exportarAFicheroTexto: usa toTXT() o toCSV() correctamente.
+│   │                             importarDesdeTxt/Csv/Json: contador con comprobación insertarSinID.
+│   │                             actualizarModulo: creditosEcts es double (nextDouble()), no int.
+│   │                               Muestra "[OK]" o "[ERROR]" según resultado de actualizarFila.
+│   │
 │   ├── MenuMatricula.java        Menú de consola para operaciones CRUD de matrículas.
+│   │                             Paquete: menus (m minúscula).
+│   │                             exportarAFicheroTexto: usa toTXT() o toCSV() correctamente.
+│   │                             importarDesdeTxt/Csv/Json: usa INSERT_MATRICULA_CON_CODIGO[1]
+│   │                               con comprobación insertarSinID.
+│   │
 │   ├── MenuLineaMatricula.java   Menú de consola para operaciones CRUD de líneas de matrícula.
+│   │                             Paquete: menus (m minúscula).
+│   │                             exportarAFicheroTexto: usa toTXT() o toCSV() correctamente.
+│   │                             importarDesdeTxt/Csv/Json: usa INSERT_LINEA_MATRICULA[1]
+│   │                               con comprobación insertarSinID.
+│   │
 │   └── MenuConsultas.java        Menú de consola para las consultas especiales.
 │
 ├── modelos/
-│   ├── Alumno.java               Modelo de alumno.
+│   ├── Alumno.java               Modelo de alumno. toJSON() usa GsonUtils.get() para serializar
+│   │                             LocalDate como cadena ISO "YYYY-MM-DD".
 │   ├── Ciclo.java                Modelo de ciclo formativo.
 │   ├── Modulo.java               Modelo de módulo.
 │   ├── Matricula.java            Modelo de matrícula.
@@ -96,8 +127,13 @@ src/main/java/
 │   │
 │   └── Ficheros/
 │       └── GestionFicheros.java      Lectura y escritura de ficheros (CSV, JSON, TXT, binario).
+│                                     BufferedReader en try-with-resources (corregido: antes no se cerraba).
+│                                     leerJson usa GsonUtils.get() para soporte de LocalDate.
 │
 └── Utils/
+    ├── GsonUtils.java            Singleton Gson configurado con TypeAdapters para LocalDate.
+    │                             Serializa LocalDate como cadena ISO "YYYY-MM-DD".
+    │                             Uso: GsonUtils.get().toJson(obj) / GsonUtils.get().fromJson(json, Clase.class)
     ├── ItemCombo.java            Clase auxiliar para los elementos de los JComboBox.
     ├── ModoFormulario.java       Enum con los modos CREAR y MODIFICAR.
     ├── TipoDato.java             Enum con los tipos de dato soportados.
@@ -118,6 +154,7 @@ Alumno
   Getters: getCodigo, getNombre, getFechaNacimiento, getDomicilio, getTelefono, getCorreo
   Setters: setNombre, setFechaNacimiento, setDomicilio, setTelefono, setCorreo
   Otros: obtenerMatriculasDelAlumno(), toCSV(), toJSON(), toTXT()
+  NOTA: toJSON() y alumno.json usan LocalDate como cadena "YYYY-MM-DD" (no objeto anidado).
 
 Ciclo
   Atributos: codigo (int), denominacion (String), familiaProfesional (String),
@@ -167,10 +204,13 @@ realizarConsultaSQL(String[] datosConsulta, String[] entradas, boolean mostrar, 
 
 insertarDatos(String[] datosInsertar, String[] entradas)
   Ejecuta un INSERT. datosInsertar[0]=tipo, datosInsertar[1]=SQL.
+  No devuelve boolean. No usar para comprobar éxito/fallo de importaciones.
   Ejemplo: GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO, entradas)
 
-actualizarFila(String[] datosActualizacion, String[] entradas)
+actualizarFila(String[] datosActualizacion, String[] entradas) → boolean
   Ejecuta un UPDATE. datosActualizacion[0]=SQL.
+  Devuelve true si al menos una fila fue afectada, false si el WHERE no coincidió con ningún registro.
+  CORREGIDO: antes siempre devolvía true; ahora refleja el resultado real (filasAfectadas > 0).
   Ejemplo: GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas)
 
 eliminarFila(String[] datosEliminar, String[] entradas)
@@ -185,15 +225,22 @@ obtenerTableModel(String sql, String[] entradas)
 insertarYDevolverID(String sql, String[] params)
   INSERT con AUTO_INCREMENT; devuelve el ID generado, o -1 si falla.
 
-insertarSinID(String sql, String[] params)
+insertarSinID(String sql, String[] params) → boolean
   INSERT sin AUTO_INCREMENT (tablas con PK compuesta, o imports con código explícito).
-  Devuelve true si se insertó al menos una fila.
-  Usado por Exportar e Importar2 para el paso de sincronización con BD:
+  Devuelve true si se insertó al menos una fila, false si falla (ej. clave duplicada).
+  Usar para importaciones: el contador de registros importados solo debe subir si devuelve true.
+  Usado también por Exportar e Importar2 para el paso de sincronización con BD:
     → intenta INSERT; si falla (registro ya existe), se llama a actualizarFila.
 
 PATRÓN UPSERT usado en Exportar (sin soporte nativo de MySQL UPSERT):
   boolean ok = GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_*_CON_CODIGO[1], paramsInsert);
   if (!ok) GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_*, paramsUpdate);
+
+PATRÓN para importaciones con feedback correcto:
+  if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_*[1], entradas)) {
+      lista.add(objeto);
+      importados++;
+  }
 
 
 ----------------------------------------------------------------
@@ -201,11 +248,19 @@ ConsultasSQL — CONSTANTES SQL DISPONIBLES
 ----------------------------------------------------------------
 
 INSERT:  INSERT_ALUMNO, INSERT_CICLO, INSERT_MODULO, INSERT_MATRICULA, INSERT_LINEA_MATRICULA
+         INSERT_ALUMNO_CON_CODIGO, INSERT_CICLO_CON_CODIGO, INSERT_MODULO_CON_CODIGO,
+         INSERT_MATRICULA_CON_CODIGO, INSERT_LINEA_MATRICULA (PK compuesta, no necesita _CON_CODIGO)
 UPDATE:  UPDATE_ALUMNO, UPDATE_CICLO, UPDATE_MODULO, UPDATE_MATRICULA, UPDATE_LINEA_MATRICULA
 DELETE:  DELETE_ALUMNO, DELETE_CICLO, DELETE_MODULO, DELETE_MATRICULA, DELETE_LINEA_MATRICULA
 SELECT pantalla: SELECT_ALUMNO_TODOS, SELECT_CICLO_TODOS, SELECT_MODULO_TODOS...
 SELECT objeto:   SAVE_ALUMNO_TODOS, SAVE_CICLO_TODOS, SAVE_MODULO_TODOS...
 SELECT por id:   SELECT_ALUMNO_POR_CODIGO, SELECT_CICLO_POR_CODIGO...
+
+Estructura de constantes INSERT (String[]):
+  [0] = nombre de tabla / tipo   [1] = SQL con placeholders ?
+
+Estructura de constantes UPDATE (String[]):
+  [0] = SQL con placeholders ?   (sin nombre de tabla)
 
 Orden de parámetros UPDATE (para el array entradas[]):
   UPDATE_ALUMNO:          nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
@@ -213,6 +268,25 @@ Orden de parámetros UPDATE (para el array entradas[]):
   UPDATE_MODULO:          codigo_ciclo, nombre, curso, creditos_ects, horas, codigo
   UPDATE_MATRICULA:       codigo_alumno, anio_academico, estado, importe, codigo
   UPDATE_LINEA_MATRICULA: repeticion, calificacion_primera, calificacion_segunda, codigo_matricula, codigo_modulo
+
+
+----------------------------------------------------------------
+FORMATO DE FICHEROS DE DATOS
+----------------------------------------------------------------
+
+TXT  — separador ";" entre campos (método toTXT())
+CSV  — separador ":" entre campos (método toCSV())
+JSON — un objeto JSON por línea; LocalDate serializado como cadena "YYYY-MM-DD"
+       (requiere GsonUtils.get(), no new Gson())
+BIN  — serialización Java estándar (ObjectOutputStream/ObjectInputStream)
+       listaCiclos se deserializa como TreeSet<Ciclo>, no como ArrayList
+
+Ficheros por defecto (rutas relativas al directorio de trabajo, normalmente raíz del proyecto):
+  alumno.json, alumno.txt, alumno.csv, alumno.bin
+  ciclo.json, ciclo.txt, ciclo.csv, ciclo.bin
+  modulo.json, modulo.txt, modulo.csv, modulo.bin
+  matricula.json, matricula.txt, matricula.csv, matricula.bin
+  linea_matricula.json, linea_matricula.txt, linea_matricula.csv, linea_matricula.bin
 
 
 ----------------------------------------------------------------

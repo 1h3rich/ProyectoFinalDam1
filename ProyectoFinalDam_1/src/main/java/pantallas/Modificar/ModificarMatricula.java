@@ -4,9 +4,11 @@
  */
 package pantallas.Modificar;
 
+import Control.SesionDatos;
 import Utils.Validadores;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelos.Matricula;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
@@ -343,8 +345,39 @@ public class ModificarMatricula extends javax.swing.JFrame {
         String estado = jTextFieldEstado.getText().trim();
         String importe = jTextFieldImporte.getText().trim();
 
-        if (anioAcademico.isBlank() || estado.isBlank() || importe.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+        if (anioAcademico.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El año académico no puede estar vacío.");
+            return;
+        }
+        if (!Validadores.validarEstado(estado)) {
+            JOptionPane.showMessageDialog(this, "El estado debe ser exactamente 'Activa' o 'No activa'.");
+            return;
+        }
+        if (importe.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El importe no puede estar vacío.");
+            return;
+        }
+
+        int anio;
+        double importeVal;
+        try {
+            anio = Integer.parseInt(anioAcademico);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El año académico debe ser un número entero.");
+            return;
+        }
+        if (!Validadores.validarAñoAcademico(anio)) {
+            JOptionPane.showMessageDialog(this, "El año académico no es válido (rango 1900-3000).");
+            return;
+        }
+        try {
+            importeVal = Double.parseDouble(importe.replace(",", "."));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El importe debe ser un número válido.");
+            return;
+        }
+        if (!Validadores.validarImporte(importeVal)) {
+            JOptionPane.showMessageDialog(this, "El importe no puede ser negativo.");
             return;
         }
 
@@ -353,10 +386,18 @@ public class ModificarMatricula extends javax.swing.JFrame {
             String.valueOf(selectedCodigoAlumno),
             anioAcademico,
             estado,
-            importe,
+            String.valueOf(importeVal),
             String.valueOf(selectedMatriculaCodigo)
         };
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MATRICULA, entradas);
+
+        int codigoMatFinal = selectedMatriculaCodigo;
+        SesionDatos.listaMatriculas.removeIf(m -> m.getCodigo() == codigoMatFinal);
+        Matricula matriculaActualizada = new Matricula(
+            selectedMatriculaCodigo, selectedCodigoAlumno, anio, estado, importeVal
+        );
+        SesionDatos.listaMatriculas.add(matriculaActualizada);
+
         JOptionPane.showMessageDialog(this, "Matrícula actualizada correctamente.");
         cargarAlumnosEnTabla();
         selectedMatriculaCodigo = -1;

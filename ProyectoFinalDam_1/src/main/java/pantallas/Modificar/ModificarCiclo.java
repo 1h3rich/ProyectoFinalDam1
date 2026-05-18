@@ -4,6 +4,7 @@ package pantallas.Modificar;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import Control.SesionDatos;
 import Utils.Validadores;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -366,8 +367,24 @@ public class ModificarCiclo extends javax.swing.JFrame {
         String horas = jTextFieldHoras.getText().trim();
         String anio = jTextFieldAñoCurricular.getText().trim();
 
-        if (denominacion.isBlank() || familia.isBlank() || nivel.isBlank() || horas.isBlank() || anio.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos.");
+        if (denominacion.isBlank()) {
+            JOptionPane.showMessageDialog(this, "La denominación no puede estar vacía.");
+            return;
+        }
+        if (familia.isBlank()) {
+            JOptionPane.showMessageDialog(this, "La familia profesional no puede estar vacía.");
+            return;
+        }
+        if (nivel.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El nivel no puede estar vacío.");
+            return;
+        }
+        if (horas.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Las horas no pueden estar vacías.");
+            return;
+        }
+        if (anio.isBlank()) {
+            JOptionPane.showMessageDialog(this, "El año curricular no puede estar vacío.");
             return;
         }
 
@@ -386,6 +403,11 @@ public class ModificarCiclo extends javax.swing.JFrame {
             String.valueOf(ciclo.getCodigo())
         };
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_CICLO, entradas);
+
+        int codigoCiclo = ciclo.getCodigo();
+        SesionDatos.listaCiclos.removeIf(c -> c.getCodigo() == codigoCiclo);
+        SesionDatos.listaCiclos.add(ciclo);
+
         JOptionPane.showMessageDialog(this, "Ciclo actualizado correctamente.");
         dispose();
     }

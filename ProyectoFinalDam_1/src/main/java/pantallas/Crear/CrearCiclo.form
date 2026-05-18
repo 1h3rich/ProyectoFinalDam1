@@ -46,12 +46,12 @@
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jTextFieldNivel" alignment="1" pref="79" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jTextFieldHoras" alignment="1" max="32767" attributes="0"/>
                           <Component id="jTextFieldAñoCurricular" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jTextFieldFamiliaProfresional" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jTextFieldDenominacion" max="32767" attributes="0"/>
+                          <Component id="jTextFieldDenominacion" min="-2" pref="376" max="-2" attributes="0"/>
+                          <Component id="jTextFieldFamiliaProfresional" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTextFieldNivel" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -61,7 +61,7 @@
                       <Component id="jButtonGuardar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="594" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="350" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

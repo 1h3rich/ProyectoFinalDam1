@@ -4,6 +4,7 @@
  */
 package pantallas.Modificar;
 
+import Control.SesionDatos;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.LineaMatricula;
@@ -119,6 +120,19 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
             String.valueOf(selectedCodModulo)
         };
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_LINEA_MATRICULA, entradas);
+
+        int codMat = selectedCodMatricula;
+        int codMod = selectedCodModulo;
+        SesionDatos.listaLineasMatricula.removeIf(l -> l.getCod_matricula() == codMat && l.getCod_modulo() == codMod);
+        LineaMatricula lineaActualizada = new LineaMatricula(
+            selectedCodMatricula,
+            selectedCodModulo,
+            Integer.parseInt(repeticion),
+            cal1.isBlank() ? 0.0 : Double.parseDouble(cal1),
+            cal2.isBlank() ? 0.0 : Double.parseDouble(cal2)
+        );
+        SesionDatos.listaLineasMatricula.add(lineaActualizada);
+
         JOptionPane.showMessageDialog(this, "Línea de matrícula actualizada correctamente.");
 
         int opcion = JOptionPane.showConfirmDialog(this,

@@ -4,8 +4,10 @@
  */
 package pantallas.Crear;
 
+import Control.SesionDatos;
 import Utils.Validadores;
 import javax.swing.JOptionPane;
+import modelos.Alumno;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 /**
@@ -278,20 +280,26 @@ public class CrearAlumno extends javax.swing.JFrame {
         String telefono = jTextFieldTelefono.getText().trim();
         String correo = jTextFieldCorreo.getText().trim();
 
-        if (!Validadores.validarTextoNoVacio(nombre)
-                || !Validadores.validarTextoNoVacio(fechaNacimiento)
-                || !Validadores.validarTextoNoVacio(domicilio)
-                || !Validadores.validarTelefono(telefono)
-                || !Validadores.validarCorreo(correo)) {
-
-            JOptionPane.showMessageDialog(this, "Debes rellenar todos los campos correctamente.");
+        if (!Validadores.validarTextoNoVacio(nombre)) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
             return;
         }
-
+        if (!Validadores.validarCorreo(correo)) {
+            JOptionPane.showMessageDialog(this, "El correo no tiene un formato válido (usuario@dominio.ext).");
+            return;
+        }
+        if (!Validadores.validarTextoNoVacio(fechaNacimiento)) {
+            JOptionPane.showMessageDialog(this, "La fecha de nacimiento no puede estar vacía.");
+            return;
+        }
         if (!Validadores.validarDireccion(domicilio)) {
             JOptionPane.showMessageDialog(this,
                 "El domicilio debe tener el formato: TipoVía Nombre Número, Localidad, Provincia\n"
                 + "Ejemplo: Calle Mayor 5, Madrid, Madrid");
+            return;
+        }
+        if (!Validadores.validarTelefono(telefono)) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 9 dígitos numéricos.");
             return;
         }
 
@@ -311,6 +319,11 @@ public class CrearAlumno extends javax.swing.JFrame {
 
         if (idAlumno != -1) {
             JOptionPane.showMessageDialog(this, "Alumno guardado temporalmente con ID: " + idAlumno);
+
+            Alumno alumno = new Alumno(new String[]{
+                String.valueOf(idAlumno), nombre, fechaNacimiento, domicilio, telefono, correo
+            });
+            SesionDatos.registrarAlumno(alumno, false);
 
             new CrearMatricula(idAlumno).setVisible(true);
             this.dispose();
