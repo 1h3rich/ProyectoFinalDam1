@@ -94,7 +94,7 @@ public class Importar extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODO", "ALUMNADO", "CICLOS", "MODULOS", "MATRICULAS", "LINEA MATRICULA" }));
 
-        jLabel1.setText("Selecciona que quieres exportar: ");
+        jLabel1.setText("Selecciona que quieres importar: ");
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("NSimSun", 1, 48)); // NOI18N

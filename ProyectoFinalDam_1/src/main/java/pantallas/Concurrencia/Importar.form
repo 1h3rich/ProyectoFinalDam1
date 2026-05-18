@@ -143,7 +143,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Selecciona que quieres exportar: "/>
+        <Property name="text" type="java.lang.String" value="Selecciona que quieres importar: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
