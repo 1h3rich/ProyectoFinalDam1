@@ -867,35 +867,7 @@ public class GestionBaseDeDatos {
     
  
 
-    /** Imprime por consola la base de datos activa y el número de alumnos, módulos y ciclos para verificar el estado de la BD. */
-    public static void comprobarBaseActual() {
-        if (!comprobarConexion()) {
-            System.out.println("No hay conexión.");
-            return;
-        }
-
-        String sql = """
-                 SELECT 
-                    DATABASE() AS base_actual,
-                    (SELECT COUNT(*) FROM alumno) AS total_alumnos,
-                    (SELECT COUNT(*) FROM modulo) AS total_modulos,
-                    (SELECT COUNT(*) FROM ciclo) AS total_ciclos
-                 """;
-
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
-
-            if (rs.next()) {
-                System.out.println("Base usada por Java: " + rs.getString("base_actual"));
-                System.out.println("Alumnos vistos por Java: " + rs.getInt("total_alumnos"));
-                System.out.println("Módulos vistos por Java: " + rs.getInt("total_modulos"));
-                System.out.println("Ciclos vistos por Java: " + rs.getInt("total_ciclos"));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error comprobando base actual: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+    
 
     /**
      * Ejecuta un INSERT con AUTO_INCREMENT y devuelve el ID generado por la base de datos.

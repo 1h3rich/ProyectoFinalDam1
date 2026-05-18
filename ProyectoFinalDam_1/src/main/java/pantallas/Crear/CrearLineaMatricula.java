@@ -8,12 +8,14 @@ import Utils.*;
 import javax.swing.JOptionPane;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
 import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
- * Formulario Swing para añadir líneas de matrícula (módulos) a una matrícula existente.
- * Permite seleccionar un ciclo, introducir repetición y calificaciones, e insertar
- * tantos módulos como se desee antes de confirmar la transacción.
+ * Formulario Swing para añadir líneas de matrícula (módulos) a una matrícula
+ * existente. Permite seleccionar un ciclo, introducir repetición y
+ * calificaciones, e insertar tantos módulos como se desee antes de confirmar la
+ * transacción.
  *
  * @author Rich
  */
@@ -22,6 +24,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     private int idMatricula = -1;
     private int idCicloSeleccionado = -1;
     private int idModuloSeleccionado = -1;
+    private DefaultTableModel modeloTabla;
 
     private HashMap<String, Integer> mapaCiclos = new HashMap<>();
     private HashMap<String, Integer> mapaModulos = new HashMap<>();
@@ -41,7 +44,10 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         cargarCiclos();
     }
 
-    /** Configura el cierre con confirmación, inicializa el combo de ciclos y registra el listener de selección. */
+    /**
+     * Configura el cierre con confirmación, inicializa el combo de ciclos y
+     * registra el listener de selección.
+     */
     private void configurarVentana() {
         setLocationRelativeTo(null);
 
@@ -61,7 +67,28 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         jComboBoxCiclos.addActionListener(e -> cicloSeleccionado());
     }
 
-    /** Consulta los ciclos disponibles en la BD y los carga en el combo, actualizando el mapa de IDs. */
+    private void cargarLineasEnTabla() {
+        modeloTabla.setRowCount(0);
+        String sql = "SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas FROM modulo order BY codigo where codigo_cilo = ?";
+        String entradas [] = new String[1];
+      
+        DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
+        for (int i = 0; i < temp.getRowCount(); i++) {
+            modeloTabla.addRow(new Object[]{
+                temp.getValueAt(i, 0),
+                temp.getValueAt(i, 1),
+                temp.getValueAt(i, 2),
+                temp.getValueAt(i, 3),
+                temp.getValueAt(i, 4),
+                temp.getValueAt(i, 5)
+            });
+        }
+    }
+
+    /**
+     * Consulta los ciclos disponibles en la BD y los carga en el combo,
+     * actualizando el mapa de IDs.
+     */
     private void cargarCiclos() {
         jComboBoxCiclos.removeAllItems();
 
@@ -78,7 +105,10 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         }
     }
 
-    /** Actualiza {@code idCicloSeleccionado} cuando el usuario elige un ciclo en el combo. */
+    /**
+     * Actualiza {@code idCicloSeleccionado} cuando el usuario elige un ciclo en
+     * el combo.
+     */
     private void cicloSeleccionado() {
         Object seleccionado = jComboBoxCiclos.getSelectedItem();
 
@@ -99,7 +129,10 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
     }
 
-    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
+    /**
+     * Pide confirmación y, si el usuario acepta, cancela la transacción activa
+     * y cierra la ventana.
+     */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -338,7 +371,10 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         });
     }
 
-    /** Valida los datos introducidos, inserta la línea de matrícula y pregunta si se desea añadir otro módulo o confirmar la transacción. */
+    /**
+     * Valida los datos introducidos, inserta la línea de matrícula y pregunta
+     * si se desea añadir otro módulo o confirmar la transacción.
+     */
     private void crearLinea() {
 
         int repeticion;
@@ -367,13 +403,13 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         if (!Validadores.validarTextoNoVacio(temp1)) {
             primeraCalificacion = 0;
-        }else{
+        } else {
             primeraCalificacion = Double.parseDouble(temp1);
         }
         if (!Validadores.validarTextoNoVacio(temp2)) {
             segundaCalificacion = 0;
-        }else{
-            segundaCalificacion= Double.parseDouble(temp2);
+        } else {
+            segundaCalificacion = Double.parseDouble(temp2);
         }
 
         try {
@@ -429,7 +465,10 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         }
     }
 
-    /** Restablece el combo y los campos de repetición y calificaciones para introducir otro módulo. */
+    /**
+     * Restablece el combo y los campos de repetición y calificaciones para
+     * introducir otro módulo.
+     */
     private void limpiarCamposParciales() {
         idCicloSeleccionado = -1;
         idModuloSeleccionado = -1;
