@@ -132,7 +132,7 @@ public class Validadores {
      * @return true si el estado es exactamente "Activa" o "No activa".
      */
     public static boolean validarEstado(String estado) {
-        return "Activa".equals(estado) || "No activa".equals(estado);
+        return "Parcial".equalsIgnoreCase(estado) || "Completa".equalsIgnoreCase(estado) || "Anulada".equalsIgnoreCase(estado);
     }
 
     /**

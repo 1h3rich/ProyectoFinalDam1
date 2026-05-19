@@ -76,7 +76,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
 
         jLabelInfoEstado.setText("Estado:");
 
-        jLabelInfoActiva.setText("Activa/No Activa");
+        jLabelInfoActiva.setText("'Parcial', 'Completa' o 'Anulada'");
 
         jLabelInfoImporte.setText("Importe:");
 
@@ -101,6 +101,11 @@ public class ModificarMatricula extends javax.swing.JFrame {
 
         jTextFieldEstado.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldEstado.setPreferredSize(new java.awt.Dimension(64, 128));
+        jTextFieldEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldEstadoActionPerformed(evt);
+            }
+        });
 
         jTextFieldImporte.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldImporte.setPreferredSize(new java.awt.Dimension(64, 128));
@@ -153,7 +158,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelInfoAnioAcademico)
                     .addGroup(layout.createSequentialGroup()
@@ -248,6 +253,10 @@ public class ModificarMatricula extends javax.swing.JFrame {
     private void jTextFieldImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldImporteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldImporteActionPerformed
+
+    private void jTextFieldEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldEstadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -350,7 +359,7 @@ public class ModificarMatricula extends javax.swing.JFrame {
             return;
         }
         if (!Validadores.validarEstado(estado)) {
-            JOptionPane.showMessageDialog(this, "El estado debe ser exactamente 'Activa' o 'No activa'.");
+            JOptionPane.showMessageDialog(this, "El estado debe ser 'Parcial', 'Completa' o 'Anulada'.");
             return;
         }
         if (importe.isBlank()) {

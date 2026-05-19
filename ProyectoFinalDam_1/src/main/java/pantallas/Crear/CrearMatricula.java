@@ -135,7 +135,7 @@ public class CrearMatricula extends javax.swing.JFrame {
             }
         });
 
-        jLabelInfoActiva.setText("Activa/No Activa");
+        jLabelInfoActiva.setText("'Parcial', 'Completa' o 'Anulada'");
 
         jLabelInfoEuros.setText("Euros");
 
@@ -285,7 +285,7 @@ public class CrearMatricula extends javax.swing.JFrame {
         String codigoAlumnoTexto = jTextFieldCodigoAlumno.getText().trim();
 
         if (!Validadores.validarEstado(estado)) {
-            JOptionPane.showMessageDialog(this, "El estado debe ser exactamente 'Activa' o 'No activa'.");
+            JOptionPane.showMessageDialog(this, "El estado debe ser  'Parcial', 'Completa' o 'Anulada' .");
             return;
         }
         if (!Validadores.validarTextoNoVacio(importeTexto)) {
