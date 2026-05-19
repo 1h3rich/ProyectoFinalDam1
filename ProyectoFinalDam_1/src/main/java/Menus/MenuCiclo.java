@@ -151,7 +151,7 @@ public class MenuCiclo {
 
             Ciclo ciclo = new Ciclo(denominacion, familiaProfesional, nivel, horas, añoCurriculum);
             ciclosSesion.add(ciclo);
-            SesionDatos.listaCiclos.add(ciclo);
+            SesionDatos.getListaCiclos().add(ciclo);
 
             System.out.println("[OK] Ciclo insertado correctamente.");
 
@@ -365,10 +365,10 @@ public class MenuCiclo {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Ciclo ciclo : SesionDatos.listaCiclos) {
+            for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
                 pw.println(usarDosPuntos ? ciclo.toCSV() : ciclo.toTXT());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaCiclos().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -379,8 +379,8 @@ public class MenuCiclo {
      * Exporta todos los ciclos a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.listaCiclos);
-        System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
+        GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.getListaCiclos());
+        System.out.println("[OK] Exportados " + SesionDatos.getListaCiclos().size()
                 + " registros a: " + Config.ficheroCiclo + ".dat");
     }
 
@@ -389,10 +389,10 @@ public class MenuCiclo {
      */
     private static void exportarAJson() {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroCiclo + ".json", false))) {
-            for (Ciclo ciclo : SesionDatos.listaCiclos) {
+            for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
                 pw.println(ciclo.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaCiclos.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaCiclos().size()
                     + " registros a: " + Config.ficheroCiclo + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -480,7 +480,7 @@ public class MenuCiclo {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaCiclos.add(ciclo);
+                    SesionDatos.getListaCiclos().add(ciclo);
                     contadorImportados++;
                 }
             }
@@ -524,7 +524,7 @@ public class MenuCiclo {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaCiclos.add(ciclo);
+                    SesionDatos.getListaCiclos().add(ciclo);
                     contadorImportados++;
                 }
             }
@@ -570,7 +570,7 @@ public class MenuCiclo {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaCiclos.add(ciclo);
+                    SesionDatos.getListaCiclos().add(ciclo);
                     contadorImportados++;
                 }
             }
@@ -622,7 +622,7 @@ public class MenuCiclo {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaCiclos.add(ciclo);
+                    SesionDatos.getListaCiclos().add(ciclo);
                     contadorImportados++;
                 }
             }
@@ -658,22 +658,22 @@ public class MenuCiclo {
      * Carga todos los ciclos de la base de datos en la lista en memoria.
      */
     private static void cargarCiclosDesdeBD() {
-        SesionDatos.listaCiclos.clear();
+        SesionDatos.getListaCiclos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
     }
 
     public static int exportar(String formato) {
-        SesionDatos.listaCiclos.clear();
+        SesionDatos.getListaCiclos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
-        if (SesionDatos.listaCiclos.isEmpty()) return 0;
+        if (SesionDatos.getListaCiclos().isEmpty()) return 0;
 
         String ruta = Config.rutaFichero(Config.ficheroCiclo, formato);
         if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaCiclos);
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaCiclos());
         } else {
             String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
             try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
-                for (Ciclo ciclo : SesionDatos.listaCiclos) {
+                for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
                     pw.println("CSV".equals(formato) ? ciclo.toCSV() : "JSON".equals(formato) ? ciclo.toJSON() : ciclo.toTXT());
                 }
             } catch (IOException e) {
@@ -681,7 +681,7 @@ public class MenuCiclo {
                 return 0;
             }
         }
-        return SesionDatos.listaCiclos.size();
+        return SesionDatos.getListaCiclos().size();
     }
 
     public static int importar(String formato) throws Exception {

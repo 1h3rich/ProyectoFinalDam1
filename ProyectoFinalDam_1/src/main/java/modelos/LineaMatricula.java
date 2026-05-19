@@ -321,16 +321,16 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.listaLineasMatricula.clear();
+        SesionDatos.getListaLineasMatricula().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea);
-                SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                SesionDatos.getListaLineasMatricula().add(lineaMatricula);
             }
         }
 
-        for (LineaMatricula lineaMatricula : SesionDatos.listaLineasMatricula) {
+        for (LineaMatricula lineaMatricula : SesionDatos.getListaLineasMatricula()) {
             System.out.println(lineaMatricula);
         }
     }
@@ -367,7 +367,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroLineaMatricula, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.listaLineasMatricula);
+            GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.getListaLineasMatricula());
         }
     }
 
@@ -389,7 +389,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".json")) {
 
-            SesionDatos.listaLineasMatricula.clear();
+            SesionDatos.getListaLineasMatricula().clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroLineaMatricula);
 
@@ -400,11 +400,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
 
                     lineaMatricula.validarObjeto();
 
-                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    SesionDatos.getListaLineasMatricula().add(lineaMatricula);
                 }
             }
 
-            for (LineaMatricula lineaMatricula : SesionDatos.listaLineasMatricula) {
+            for (LineaMatricula lineaMatricula : SesionDatos.getListaLineasMatricula()) {
                 System.out.println(lineaMatricula);
             }
         }

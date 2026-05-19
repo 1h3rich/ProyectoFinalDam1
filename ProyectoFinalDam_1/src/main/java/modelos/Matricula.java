@@ -275,16 +275,16 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.listaMatriculas.clear();
+        SesionDatos.getListaMatriculas().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Matricula matricula = Matricula.obtenerLineas(linea);
-                SesionDatos.listaMatriculas.add(matricula);
+                SesionDatos.getListaMatriculas().add(matricula);
             }
         }
 
-        for (Matricula matricula : SesionDatos.listaMatriculas) {
+        for (Matricula matricula : SesionDatos.getListaMatriculas()) {
             System.out.println(matricula);
         }
     }
@@ -321,7 +321,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroMatricula, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.listaMatriculas);
+            GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.getListaMatriculas());
         }
     }
 
@@ -343,7 +343,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".json")) {
 
-            SesionDatos.listaMatriculas.clear();
+            SesionDatos.getListaMatriculas().clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroMatricula);
 
@@ -353,11 +353,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
 
                     matricula.validarObjeto();
 
-                    SesionDatos.listaMatriculas.add(matricula);
+                    SesionDatos.getListaMatriculas().add(matricula);
                 }
             }
 
-            for (Matricula matricula : SesionDatos.listaMatriculas) {
+            for (Matricula matricula : SesionDatos.getListaMatriculas()) {
                 System.out.println(matricula);
             }
         }

@@ -43,22 +43,22 @@ public class SesionDatos {
     /**
      * Ciclos insertados en la base de datos.
      */
-    public static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
+    private static final TreeSet<Ciclo> listaCiclos = new TreeSet<>();
 
     /**
-     * Módulos insertados en la base de datos. 
+     * Módulos insertados en la base de datos.
      */
-    public static final TreeSet<Modulo> listaModulos = new TreeSet<>();
+    private static final TreeSet<Modulo> listaModulos = new TreeSet<>();
 
     /**
-     * Alumnos insertados en la base de datos. 
+     * Alumnos insertados en la base de datos.
      */
-    public static final TreeSet<Alumno> listaAlumnos = new TreeSet<>();
+    private static final TreeSet<Alumno> listaAlumnos = new TreeSet<>();
 
     /**
-     * Matrículas insertadas en la base de datos. 
+     * Matrículas insertadas en la base de datos.
      */
-    public static final TreeSet<Matricula> listaMatriculas = new TreeSet<>();
+    private static final TreeSet<Matricula> listaMatriculas = new TreeSet<>();
 
     // =========================================================
     // ======= COLECCIÓN 2: ArrayList (acceso por índice) ======
@@ -68,7 +68,55 @@ public class SesionDatos {
      * línea_matrícula tiene clave compuesta y no puede implementar un
      * Comparable sencillo.
      */
-    public static final ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
+    private static final ArrayList<LineaMatricula> listaLineasMatricula = new ArrayList<>();
+
+    // =========================================================
+    // ======= GETTERS DE LAS COLECCIONES ======================
+    // =========================================================
+    /**
+     * Devuelve la colección de ciclos de la sesión actual.
+     *
+     * @return TreeSet con los ciclos insertados durante la ejecución.
+     */
+    public static TreeSet<Ciclo> getListaCiclos() {
+        return listaCiclos;
+    }
+
+    /**
+     * Devuelve la colección de módulos de la sesión actual.
+     *
+     * @return TreeSet con los módulos insertados durante la ejecución.
+     */
+    public static TreeSet<Modulo> getListaModulos() {
+        return listaModulos;
+    }
+
+    /**
+     * Devuelve la colección de alumnos de la sesión actual.
+     *
+     * @return TreeSet con los alumnos insertados durante la ejecución.
+     */
+    public static TreeSet<Alumno> getListaAlumnos() {
+        return listaAlumnos;
+    }
+
+    /**
+     * Devuelve la colección de matrículas de la sesión actual.
+     *
+     * @return TreeSet con las matrículas insertadas durante la ejecución.
+     */
+    public static TreeSet<Matricula> getListaMatriculas() {
+        return listaMatriculas;
+    }
+
+    /**
+     * Devuelve la colección de líneas de matrícula de la sesión actual.
+     *
+     * @return ArrayList con las líneas de matrícula insertadas durante la ejecución.
+     */
+    public static ArrayList<LineaMatricula> getListaLineasMatricula() {
+        return listaLineasMatricula;
+    }
 
     // =========================================================
     // ======= COLECCIÓN 3: LinkedHashMap (orden inserción) ====

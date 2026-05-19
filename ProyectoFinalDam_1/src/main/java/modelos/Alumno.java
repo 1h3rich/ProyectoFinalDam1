@@ -336,16 +336,16 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-       SesionDatos.listaAlumnos.clear();
+       SesionDatos.getListaAlumnos().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Alumno alumno = Alumno.obtenerLineas(linea);
-                SesionDatos.listaAlumnos.add(alumno);
+                SesionDatos.getListaAlumnos().add(alumno);
             }
         }
 
-        for (Alumno alumno : SesionDatos.listaAlumnos) {
+        for (Alumno alumno : SesionDatos.getListaAlumnos()) {
             System.out.println(alumno);
         }
     }
@@ -358,7 +358,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
         ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();
 
-        for (Matricula matricula : SesionDatos.listaMatriculas) {
+        for (Matricula matricula : SesionDatos.getListaMatriculas()) {
             if (matricula.getCodigo_alumno() == this.codigo) {
                 matriculasDelAlumno.add(matricula);
             }
@@ -399,7 +399,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroAlumno, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroAlumno,SesionDatos.listaAlumnos);
+            GestionFicheros.guardarToBinario(Config.ficheroAlumno,SesionDatos.getListaAlumnos());
         }
     }
 
@@ -421,7 +421,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".json")) {
 
-            SesionDatos.listaAlumnos.clear();
+            SesionDatos.getListaAlumnos().clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroAlumno);
 
@@ -431,11 +431,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
 
                     alumno.validarObjeto();
 
-                   SesionDatos.listaAlumnos.add(alumno);
+                   SesionDatos.getListaAlumnos().add(alumno);
                 }
             }
 
-            for (Alumno alumno : SesionDatos.listaAlumnos) {
+            for (Alumno alumno : SesionDatos.getListaAlumnos()) {
                 System.out.println(alumno);
             }
         }

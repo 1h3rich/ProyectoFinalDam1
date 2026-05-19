@@ -157,7 +157,7 @@ public class MenuAlumno {
 
             Alumno alumno = new Alumno(nombre, fechaNacimiento, domicilio, telefono, correo);
             alumnosSesion.add(alumno);
-            SesionDatos.listaAlumnos.add(alumno);
+            SesionDatos.getListaAlumnos().add(alumno);
 
             System.out.println("[OK] Alumno insertado correctamente.");
 
@@ -371,10 +371,10 @@ public class MenuAlumno {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Alumno alumno : SesionDatos.listaAlumnos) {
+            for (Alumno alumno : SesionDatos.getListaAlumnos()) {
                 pw.println(usarDosPuntos ? alumno.toCSV() : alumno.toTXT());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaAlumnos.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaAlumnos().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -385,8 +385,8 @@ public class MenuAlumno {
      * Exporta todos los alumnos a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroAlumno, SesionDatos.listaAlumnos);
-        System.out.println("[OK] Exportados " + SesionDatos.listaAlumnos.size()
+        GestionFicheros.guardarToBinario(Config.ficheroAlumno, SesionDatos.getListaAlumnos());
+        System.out.println("[OK] Exportados " + SesionDatos.getListaAlumnos().size()
                 + " registros a: " + Config.ficheroAlumno + ".dat");
     }
 
@@ -395,10 +395,10 @@ public class MenuAlumno {
      */
     private static void exportarAJson() {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroAlumno + ".json", false))) {
-            for (Alumno alumno : SesionDatos.listaAlumnos) {
+            for (Alumno alumno : SesionDatos.getListaAlumnos()) {
                 pw.println(alumno.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaAlumnos.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaAlumnos().size()
                     + " registros a: " + Config.ficheroAlumno + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -484,7 +484,7 @@ public class MenuAlumno {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaAlumnos.add(alumno);
+                    SesionDatos.getListaAlumnos().add(alumno);
                     contadorImportados++;
                 }
             }
@@ -529,7 +529,7 @@ public class MenuAlumno {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaAlumnos.add(alumno);
+                    SesionDatos.getListaAlumnos().add(alumno);
                     contadorImportados++;
                 }
             }
@@ -575,7 +575,7 @@ public class MenuAlumno {
                 };
 
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO, entradas);
-                SesionDatos.listaAlumnos.add(alumno);
+                SesionDatos.getListaAlumnos().add(alumno);
                 contadorImportados++;
             }
 
@@ -626,7 +626,7 @@ public class MenuAlumno {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaAlumnos.add(alumno);
+                    SesionDatos.getListaAlumnos().add(alumno);
                     contadorImportados++;
                 }
             }
@@ -662,22 +662,22 @@ public class MenuAlumno {
      * Carga todos los alumnos de la base de datos en la lista en memoria.
      */
     private static void cargarAlumnosDesdeBD() {
-        SesionDatos.listaAlumnos.clear();
+        SesionDatos.getListaAlumnos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
     }
 
     public static int exportar(String formato) {
-        SesionDatos.listaAlumnos.clear();
+        SesionDatos.getListaAlumnos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
-        if (SesionDatos.listaAlumnos.isEmpty()) return 0;
+        if (SesionDatos.getListaAlumnos().isEmpty()) return 0;
 
         String ruta = Config.rutaFichero(Config.ficheroAlumno, formato);
         if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaAlumnos);
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaAlumnos());
         } else {
             String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
             try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
-                for (Alumno alumno : SesionDatos.listaAlumnos) {
+                for (Alumno alumno : SesionDatos.getListaAlumnos()) {
                     pw.println("CSV".equals(formato) ? alumno.toCSV() : "JSON".equals(formato) ? alumno.toJSON() : alumno.toTXT());
                 }
             } catch (IOException e) {
@@ -685,7 +685,7 @@ public class MenuAlumno {
                 return 0;
             }
         }
-        return SesionDatos.listaAlumnos.size();
+        return SesionDatos.getListaAlumnos().size();
     }
 
     public static int importar(String formato) throws Exception {

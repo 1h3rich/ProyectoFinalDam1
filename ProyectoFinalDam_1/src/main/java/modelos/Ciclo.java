@@ -340,16 +340,16 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.listaCiclos.clear();
+        SesionDatos.getListaCiclos().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Ciclo ciclo = Ciclo.obtenerLineas(linea);
-                SesionDatos.listaCiclos.add(ciclo);
+                SesionDatos.getListaCiclos().add(ciclo);
             }
         }
 
-        for (Ciclo ciclo : SesionDatos.listaCiclos) {
+        for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
             System.out.println(ciclo);
         }
     }
@@ -362,7 +362,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     public ArrayList<Modulo> obtenerModulosDelCiclo() {
         ArrayList<Modulo> modulosDelCiclo = new ArrayList<>();
 
-        for (Modulo modulo : SesionDatos.listaModulos) {
+        for (Modulo modulo : SesionDatos.getListaModulos()) {
             if (modulo.getCodigo_ciclo() == this.codigo) {
                 modulosDelCiclo.add(modulo);
             }
@@ -403,7 +403,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroCiclo, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.listaCiclos);
+            GestionFicheros.guardarToBinario(Config.ficheroCiclo, SesionDatos.getListaCiclos());
         }
     }
 
@@ -425,7 +425,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".json")) {
 
-            SesionDatos.listaCiclos.clear();
+            SesionDatos.getListaCiclos().clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroCiclo);
 
@@ -435,11 +435,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
 
                     ciclo.validarObjeto();
 
-                    SesionDatos.listaCiclos.add(ciclo);
+                    SesionDatos.getListaCiclos().add(ciclo);
                 }
             }
 
-            for (Ciclo ciclo : SesionDatos.listaCiclos) {
+            for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
                 System.out.println(ciclo);
             }
         }

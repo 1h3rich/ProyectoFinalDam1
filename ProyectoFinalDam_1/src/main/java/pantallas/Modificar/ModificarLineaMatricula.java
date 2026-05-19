@@ -123,7 +123,7 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
 
         int codMat = selectedCodMatricula;
         int codMod = selectedCodModulo;
-        SesionDatos.listaLineasMatricula.removeIf(l -> l.getCod_matricula() == codMat && l.getCod_modulo() == codMod);
+        SesionDatos.getListaLineasMatricula().removeIf(l -> l.getCod_matricula() == codMat && l.getCod_modulo() == codMod);
         LineaMatricula lineaActualizada = new LineaMatricula(
             selectedCodMatricula,
             selectedCodModulo,
@@ -131,7 +131,7 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
             cal1.isBlank() ? 0.0 : Double.parseDouble(cal1),
             cal2.isBlank() ? 0.0 : Double.parseDouble(cal2)
         );
-        SesionDatos.listaLineasMatricula.add(lineaActualizada);
+        SesionDatos.getListaLineasMatricula().add(lineaActualizada);
 
         JOptionPane.showMessageDialog(this, "Línea de matrícula actualizada correctamente.");
 

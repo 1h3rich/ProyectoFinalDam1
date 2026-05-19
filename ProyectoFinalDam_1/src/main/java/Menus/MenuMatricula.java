@@ -145,7 +145,7 @@ public class MenuMatricula {
 
             Matricula matricula = new Matricula(codigoAlumno, añoAcademico, estado, importe);
             matriculasSesion.add(matricula);
-            SesionDatos.listaMatriculas.add(matricula);
+            SesionDatos.getListaMatriculas().add(matricula);
 
             System.out.println("[OK] Matrícula insertada correctamente.");
 
@@ -352,10 +352,10 @@ public class MenuMatricula {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Matricula m : SesionDatos.listaMatriculas) {
+            for (Matricula m : SesionDatos.getListaMatriculas()) {
                 pw.println(usarDosPuntos ? m.toCSV() : m.toTXT());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaMatriculas().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -364,18 +364,18 @@ public class MenuMatricula {
 
     /** Serializa la lista de matrículas en un fichero binario (.dat). */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.listaMatriculas);
-        System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
+        GestionFicheros.guardarToBinario(Config.ficheroMatricula, SesionDatos.getListaMatriculas());
+        System.out.println("[OK] Exportados " + SesionDatos.getListaMatriculas().size()
                 + " registros a: " + Config.ficheroMatricula + ".dat");
     }
 
     /** Escribe la lista de matrículas en un fichero JSON, un objeto por línea. */
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroMatricula + ".json", false))) {
-            for (Matricula m : SesionDatos.listaMatriculas) {
+            for (Matricula m : SesionDatos.getListaMatriculas()) {
                 pw.println(m.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaMatriculas.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaMatriculas().size()
                     + " registros a: " + Config.ficheroMatricula + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -454,7 +454,7 @@ public class MenuMatricula {
                 };
  
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaMatriculas.add(matricula);
+                    SesionDatos.getListaMatriculas().add(matricula);
                     contadorImportados++;
                 }
             }
@@ -496,7 +496,7 @@ public class MenuMatricula {
                 };
  
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaMatriculas.add(matricula);
+                    SesionDatos.getListaMatriculas().add(matricula);
                     contadorImportados++;
                 }
             }
@@ -540,7 +540,7 @@ public class MenuMatricula {
                 };
  
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO, entradas);
-                SesionDatos.listaMatriculas.add(matricula);
+                SesionDatos.getListaMatriculas().add(matricula);
                 contadorImportados++;
             }
  
@@ -589,7 +589,7 @@ public class MenuMatricula {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaMatriculas.add(matricula);
+                    SesionDatos.getListaMatriculas().add(matricula);
                     contadorImportados++;
                 }
             }
@@ -627,22 +627,22 @@ public class MenuMatricula {
      * Carga todas las matrículas de la base de datos en la lista en memoria.
      */
     private static void cargarMatriculasDesdeBD() {
-        SesionDatos.listaMatriculas.clear();
+        SesionDatos.getListaMatriculas().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
     }
 
     public static int exportar(String formato) {
-        SesionDatos.listaMatriculas.clear();
+        SesionDatos.getListaMatriculas().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
-        if (SesionDatos.listaMatriculas.isEmpty()) return 0;
+        if (SesionDatos.getListaMatriculas().isEmpty()) return 0;
 
         String ruta = Config.rutaFichero(Config.ficheroMatricula, formato);
         if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaMatriculas);
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaMatriculas());
         } else {
             String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
             try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
-                for (Matricula mat : SesionDatos.listaMatriculas) {
+                for (Matricula mat : SesionDatos.getListaMatriculas()) {
                     pw.println("CSV".equals(formato) ? mat.toCSV() : "JSON".equals(formato) ? mat.toJSON() : mat.toTXT());
                 }
             } catch (IOException e) {
@@ -650,7 +650,7 @@ public class MenuMatricula {
                 return 0;
             }
         }
-        return SesionDatos.listaMatriculas.size();
+        return SesionDatos.getListaMatriculas().size();
     }
 
     public static int importar(String formato) throws Exception {

@@ -392,11 +392,11 @@ public class ModificarMatricula extends javax.swing.JFrame {
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MATRICULA, entradas);
 
         int codigoMatFinal = selectedMatriculaCodigo;
-        SesionDatos.listaMatriculas.removeIf(m -> m.getCodigo() == codigoMatFinal);
+        SesionDatos.getListaMatriculas().removeIf(m -> m.getCodigo() == codigoMatFinal);
         Matricula matriculaActualizada = new Matricula(
             selectedMatriculaCodigo, selectedCodigoAlumno, anio, estado, importeVal
         );
-        SesionDatos.listaMatriculas.add(matriculaActualizada);
+        SesionDatos.getListaMatriculas().add(matriculaActualizada);
 
         JOptionPane.showMessageDialog(this, "Matrícula actualizada correctamente.");
         cargarAlumnosEnTabla();

@@ -139,7 +139,7 @@ public class MenuModulo {
 
             Modulo modulo = new Modulo(codigoCiclo, nombre, curso, creditosEcts, horas);
             modulosSesion.add(modulo);
-            SesionDatos.listaModulos.add(modulo);
+            SesionDatos.getListaModulos().add(modulo);
 
             System.out.println("[OK] Módulo insertado correctamente.");
 
@@ -343,10 +343,10 @@ public class MenuModulo {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (Modulo modulo : SesionDatos.listaModulos) {
+            for (Modulo modulo : SesionDatos.getListaModulos()) {
                 pw.println(usarDosPuntos ? modulo.toCSV() : modulo.toTXT());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaModulos.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaModulos().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -355,18 +355,18 @@ public class MenuModulo {
 
     /** Serializa la lista de módulos en un fichero binario (.dat). */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroModulo,SesionDatos.listaModulos);
-        System.out.println("[OK] Exportados " + SesionDatos.listaModulos.size()
+        GestionFicheros.guardarToBinario(Config.ficheroModulo,SesionDatos.getListaModulos());
+        System.out.println("[OK] Exportados " + SesionDatos.getListaModulos().size()
                 + " registros a: " + Config.ficheroModulo + ".dat");
     }
 
     /** Escribe la lista de módulos en un fichero JSON, un objeto por línea. */
     private static void exportarAJson() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroModulo + ".json", false))) {
-            for (Modulo modulo : SesionDatos.listaModulos) {
+            for (Modulo modulo : SesionDatos.getListaModulos()) {
                 pw.println(modulo.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaModulos.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaModulos().size()
                     + " registros a: " + Config.ficheroModulo + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -446,7 +446,7 @@ public class MenuModulo {
                 };
  
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaModulos.add(modulo);
+                    SesionDatos.getListaModulos().add(modulo);
                     contadorImportados++;
                 }
             }
@@ -489,7 +489,7 @@ public class MenuModulo {
                 };
  
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaModulos.add(modulo);
+                    SesionDatos.getListaModulos().add(modulo);
                     contadorImportados++;
                 }
             }
@@ -534,7 +534,7 @@ public class MenuModulo {
                 };
  
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_MODULO_CON_CODIGO, entradas);
-                SesionDatos.listaModulos.add(modulo);
+                SesionDatos.getListaModulos().add(modulo);
                 contadorImportados++;
             }
  
@@ -584,7 +584,7 @@ public class MenuModulo {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.listaModulos.add(modulo);
+                    SesionDatos.getListaModulos().add(modulo);
                     contadorImportados++;
                 }
             }
@@ -622,22 +622,22 @@ public class MenuModulo {
      * Carga todos los módulos de la base de datos en la lista en memoria.
      */
     private static void cargarModulosDesdeBD() {
-        SesionDatos.listaModulos.clear();
+        SesionDatos.getListaModulos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
     }
 
     public static int exportar(String formato) {
-        SesionDatos.listaModulos.clear();
+        SesionDatos.getListaModulos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
-        if (SesionDatos.listaModulos.isEmpty()) return 0;
+        if (SesionDatos.getListaModulos().isEmpty()) return 0;
 
         String ruta = Config.rutaFichero(Config.ficheroModulo, formato);
         if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaModulos);
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaModulos());
         } else {
             String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
             try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
-                for (Modulo modulo : SesionDatos.listaModulos) {
+                for (Modulo modulo : SesionDatos.getListaModulos()) {
                     pw.println("CSV".equals(formato) ? modulo.toCSV() : "JSON".equals(formato) ? modulo.toJSON() : modulo.toTXT());
                 }
             } catch (IOException e) {
@@ -645,7 +645,7 @@ public class MenuModulo {
                 return 0;
             }
         }
-        return SesionDatos.listaModulos.size();
+        return SesionDatos.getListaModulos().size();
     }
 
     public static int importar(String formato) throws Exception {

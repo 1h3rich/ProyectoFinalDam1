@@ -321,8 +321,8 @@ public class ModificarModulo extends javax.swing.JFrame {
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_MODULO, entradas);
 
         int codigoModulo = modulo.getCodigo();
-        SesionDatos.listaModulos.removeIf(m -> m.getCodigo() == codigoModulo);
-        SesionDatos.listaModulos.add(modulo);
+        SesionDatos.getListaModulos().removeIf(m -> m.getCodigo() == codigoModulo);
+        SesionDatos.getListaModulos().add(modulo);
 
         JOptionPane.showMessageDialog(this, "Modulo actualizado correctamente.");
         dispose();

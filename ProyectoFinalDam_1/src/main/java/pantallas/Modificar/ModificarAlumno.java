@@ -410,8 +410,8 @@ public class ModificarAlumno extends javax.swing.JFrame {
             GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
 
             int codigoAlumno = alumno.getCodigo();
-            SesionDatos.listaAlumnos.removeIf(a -> a.getCodigo() == codigoAlumno);
-            SesionDatos.listaAlumnos.add(alumno);
+            SesionDatos.getListaAlumnos().removeIf(a -> a.getCodigo() == codigoAlumno);
+            SesionDatos.getListaAlumnos().add(alumno);
 
             JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
             alumno = null;

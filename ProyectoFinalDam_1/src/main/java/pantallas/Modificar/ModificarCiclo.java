@@ -405,8 +405,8 @@ public class ModificarCiclo extends javax.swing.JFrame {
         GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_CICLO, entradas);
 
         int codigoCiclo = ciclo.getCodigo();
-        SesionDatos.listaCiclos.removeIf(c -> c.getCodigo() == codigoCiclo);
-        SesionDatos.listaCiclos.add(ciclo);
+        SesionDatos.getListaCiclos().removeIf(c -> c.getCodigo() == codigoCiclo);
+        SesionDatos.getListaCiclos().add(ciclo);
 
         JOptionPane.showMessageDialog(this, "Ciclo actualizado correctamente.");
         dispose();

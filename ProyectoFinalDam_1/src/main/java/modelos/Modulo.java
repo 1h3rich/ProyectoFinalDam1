@@ -340,16 +340,16 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      */
     private void cargarDesdeLineas(ArrayList<String> temp) {
 
-        SesionDatos.listaModulos.clear();
+        SesionDatos.getListaModulos().clear();
 
         for (String linea : temp) {
             if (!linea.trim().isEmpty()) {
                 Modulo modulo = Modulo.obtenerLineas(linea);
-                SesionDatos.listaModulos.add(modulo);
+                SesionDatos.getListaModulos().add(modulo);
             }
         }
 
-        for (Modulo modulo : SesionDatos.listaModulos) {
+        for (Modulo modulo : SesionDatos.getListaModulos()) {
             System.out.println(modulo);
         }
     }
@@ -386,7 +386,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     @Override
     public void loadToBinario() {
         if (Validadores.comprobarFicheroEscritura(Config.ficheroModulo, ".dat")) {
-            GestionFicheros.guardarToBinario(Config.ficheroModulo, SesionDatos.listaModulos);
+            GestionFicheros.guardarToBinario(Config.ficheroModulo, SesionDatos.getListaModulos());
         }
     }
 
@@ -408,7 +408,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     public void objFromJSON() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".json")) {
 
-            SesionDatos.listaModulos.clear();
+            SesionDatos.getListaModulos().clear();
 
             ArrayList<String> temp = GestionFicheros.leerJson(Config.ficheroModulo);
 
@@ -418,11 +418,11 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
 
                     modulo.validarObjeto();
 
-                    SesionDatos.listaModulos.add(modulo);
+                    SesionDatos.getListaModulos().add(modulo);
                 }
             }
 
-            for (Modulo modulo : SesionDatos.listaModulos) {
+            for (Modulo modulo : SesionDatos.getListaModulos()) {
                 System.out.println(modulo);
             }
         }

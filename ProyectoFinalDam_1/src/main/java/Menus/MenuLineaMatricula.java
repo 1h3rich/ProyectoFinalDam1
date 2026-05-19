@@ -166,7 +166,7 @@ public class MenuLineaMatricula {
                     codMatricula, codModulo, repeticion, calPrimera, calSegunda
             );
             lineasSesion.add(lineaMatricula);
-            SesionDatos.listaLineasMatricula.add(lineaMatricula);
+            SesionDatos.getListaLineasMatricula().add(lineaMatricula);
 
             System.out.println("[OK] Línea de matrícula insertada correctamente.");
 
@@ -389,10 +389,10 @@ public class MenuLineaMatricula {
      */
     private static void exportarAFicheroTexto(String rutaFichero, boolean usarDosPuntos) {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(rutaFichero, false))) {
-            for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
+            for (LineaMatricula lm : SesionDatos.getListaLineasMatricula()) {
                 pw.println(usarDosPuntos ? lm.toCSV() : lm.toTXT());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaLineasMatricula().size()
                     + " registros a: " + rutaFichero);
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar: " + e.getMessage());
@@ -403,8 +403,8 @@ public class MenuLineaMatricula {
      * Exporta todas las líneas de matrícula a un fichero binario (.dat).
      */
     private static void exportarABinario() {
-        GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.listaLineasMatricula);
-        System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
+        GestionFicheros.guardarToBinario(Config.ficheroLineaMatricula, SesionDatos.getListaLineasMatricula());
+        System.out.println("[OK] Exportados " + SesionDatos.getListaLineasMatricula().size()
                 + " registros a: " + Config.ficheroLineaMatricula + ".dat");
     }
 
@@ -414,10 +414,10 @@ public class MenuLineaMatricula {
      */
     private static void exportarAJson() {
         try ( PrintWriter pw = new PrintWriter(new FileWriter(Config.ficheroLineaMatricula + ".json", false))) {
-            for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
+            for (LineaMatricula lm : SesionDatos.getListaLineasMatricula()) {
                 pw.println(lm.toJSON());
             }
-            System.out.println("[OK] Exportados " + SesionDatos.listaLineasMatricula.size()
+            System.out.println("[OK] Exportados " + SesionDatos.getListaLineasMatricula().size()
                     + " registros a: " + Config.ficheroLineaMatricula + ".json");
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo exportar a JSON: " + e.getMessage());
@@ -505,7 +505,7 @@ public class MenuLineaMatricula {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
-                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    SesionDatos.getListaLineasMatricula().add(lineaMatricula);
                     contadorImportados++;
                 }
             }
@@ -548,7 +548,7 @@ public class MenuLineaMatricula {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
-                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    SesionDatos.getListaLineasMatricula().add(lineaMatricula);
                     contadorImportados++;
                 }
             }
@@ -593,7 +593,7 @@ public class MenuLineaMatricula {
                 };
 
                 GestionBaseDeDatos.insertarDatos(ConsultasSQL.INSERT_LINEA_MATRICULA, entradas);
-                SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                SesionDatos.getListaLineasMatricula().add(lineaMatricula);
                 contadorImportados++;
             }
 
@@ -643,7 +643,7 @@ public class MenuLineaMatricula {
                 };
 
                 if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
-                    SesionDatos.listaLineasMatricula.add(lineaMatricula);
+                    SesionDatos.getListaLineasMatricula().add(lineaMatricula);
                     contadorImportados++;
                 }
             }
@@ -681,24 +681,24 @@ public class MenuLineaMatricula {
      * memoria.
      */
     private static void cargarLineasDesdeBD() {
-        SesionDatos.listaLineasMatricula.clear();
+        SesionDatos.getListaLineasMatricula().clear();
         GestionBaseDeDatos.realizarConsultaSQL(
                 ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true
         );
     }
 
     public static int exportar(String formato) {
-        SesionDatos.listaLineasMatricula.clear();
+        SesionDatos.getListaLineasMatricula().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true);
-        if (SesionDatos.listaLineasMatricula.isEmpty()) return 0;
+        if (SesionDatos.getListaLineasMatricula().isEmpty()) return 0;
 
         String ruta = Config.rutaFichero(Config.ficheroLineaMatricula, formato);
         if ("BINARIO".equals(formato)) {
-            GestionFicheros.guardarToBinario(ruta, SesionDatos.listaLineasMatricula);
+            GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaLineasMatricula());
         } else {
             String ext = "CSV".equals(formato) ? ".csv" : "JSON".equals(formato) ? ".json" : ".txt";
             try (PrintWriter pw = new PrintWriter(new FileWriter(ruta + ext, false))) {
-                for (LineaMatricula lm : SesionDatos.listaLineasMatricula) {
+                for (LineaMatricula lm : SesionDatos.getListaLineasMatricula()) {
                     pw.println("CSV".equals(formato) ? lm.toCSV() : "JSON".equals(formato) ? lm.toJSON() : lm.toTXT());
                 }
             } catch (IOException e) {
@@ -706,7 +706,7 @@ public class MenuLineaMatricula {
                 return 0;
             }
         }
-        return SesionDatos.listaLineasMatricula.size();
+        return SesionDatos.getListaLineasMatricula().size();
     }
 
     public static int importar(String formato) throws Exception {

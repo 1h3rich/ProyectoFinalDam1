@@ -34,12 +34,12 @@ public class Menu_Modificar extends javax.swing.JFrame {
         cargarDatosSesion();
     }
 
-    /** Precarga en sesión los ciclos y módulos desde la BD si las listas están vacías. */
+    //** Precarga en sesión los ciclos y módulos desde la BD si las listas están vacías. */
     private void cargarDatosSesion() {
-        if (SesionDatos.listaCiclos.isEmpty()) {
+        if (SesionDatos.getListaCiclos().isEmpty()) {
             GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
         }
-        if (SesionDatos.listaModulos.isEmpty()) {
+        if (SesionDatos.getListaModulos().isEmpty()) {
             GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
         }
     }
@@ -179,7 +179,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
      * y abre el formulario de modificación para el ciclo elegido.
      */
     public void abrirModificarCiclo() {
-        ArrayList<Ciclo> lista = new ArrayList<>(SesionDatos.listaCiclos);
+        ArrayList<Ciclo> lista = new ArrayList<>(SesionDatos.getListaCiclos());
         if (lista.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No hay ciclos cargados en sesión.");
             return;
@@ -205,7 +205,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
      * y abre el formulario de modificación para el módulo elegido.
      */
     public void abrirModificarModulo() {
-        ArrayList<Modulo> lista = new ArrayList<>(SesionDatos.listaModulos);
+        ArrayList<Modulo> lista = new ArrayList<>(SesionDatos.getListaModulos());
         if (lista.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No hay módulos cargados en sesión.");
             return;
