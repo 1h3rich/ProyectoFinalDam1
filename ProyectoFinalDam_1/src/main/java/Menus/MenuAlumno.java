@@ -666,6 +666,147 @@ public class MenuAlumno {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
     }
 
+    // =========================================================
+    // =================== IMPORTAR (GUI) ======================
+    // =========================================================
+
+    /**
+     * Importa alumnos desde la ruta por defecto según el formato.
+     * @param formato
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public static int importar(String formato) throws Exception {
+        return importar(formato, Config.rutaFichero(Config.ficheroAlumno, formato));
+    }
+
+    /**
+     * Importa alumnos desde una ruta base personalizada.
+     * El código del fichero se ignora; la BD asigna el siguiente código disponible.
+     * @param formato
+     * @param rutaBase
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public static int importar(String formato, String rutaBase) throws Exception {
+        return switch (formato) {
+            case "TXT", "CSV" -> importarAlumnosDesdeTxtCsv(formato, rutaBase);
+            case "JSON"       -> importarAlumnosDesdeJson(rutaBase);
+            case "BINARIO"    -> importarAlumnosDesdeBinario(rutaBase);
+            default -> throw new Exception("Formato no reconocido: " + formato);
+        };
+    }
+
+    private static int importarAlumnosDesdeTxtCsv(String formato, String rutaBase) throws Exception {
+        String extension = "CSV".equals(formato) ? ".csv" : ".txt";
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(rutaBase, extension);
+
+        if (lineas == null || lineas.isEmpty()) {
+            return 0;
+        }
+
+        // Validar formato: la primera línea no vacía debe tener 6 campos
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            String lineaNorm = "CSV".equals(formato) ? linea.replace(":", ";") : linea;
+            int numCampos = lineaNorm.split(";", -1).length;
+            if (numCampos != 6) {
+                throw new Exception("Formato incorrecto para alumno: se esperan 6 campos, se encontraron " + numCampos + ".");
+            }
+            break;
+        }
+
+        int contador = 0;
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+
+            String lineaNorm = "CSV".equals(formato) ? linea.replace(":", ";") : linea;
+            String[] campos = lineaNorm.split(";", -1);
+
+            // Orden en fichero: codigo;nombre;fecha_nacimiento;domicilio;telefono;correo
+            // Se ignora campos[0] (codigo); la BD asigna el siguiente disponible
+            String[] datos = { campos[1], campos[2], campos[3], campos[4], campos[5] };
+
+            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_DESDE_FICHERO[1], datos)) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    private static int importarAlumnosDesdeJson(String rutaBase) throws Exception {
+        ArrayList<String> lineas = GestionFicheros.leerJson(rutaBase);
+
+        if (lineas == null || lineas.isEmpty()) {
+            return 0;
+        }
+
+        // Validar formato con la primera línea no vacía
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            Alumno prueba = GestionFicheros.toJson(linea, Alumno.class);
+            if (prueba == null || prueba.getNombre() == null) {
+                throw new Exception("Formato JSON incorrecto para alumno.");
+            }
+            break;
+        }
+
+        int contador = 0;
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+
+            Alumno a = GestionFicheros.toJson(linea, Alumno.class);
+            if (a == null || a.getNombre() == null) continue;
+
+            // Se ignora el codigo del fichero; la BD asigna el siguiente disponible
+            String[] datos = {
+                a.getNombre(),
+                a.getFechaNacimiento().toString(),
+                a.getDomicilio(),
+                a.getTelefono(),
+                a.getCorreo()
+            };
+
+            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_DESDE_FICHERO[1], datos)) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    private static int importarAlumnosDesdeBinario(String rutaBase) throws Exception {
+        if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
+            return 0;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaBase + ".dat"))) {
+            @SuppressWarnings("unchecked")
+            java.util.Collection<Alumno> lista = (java.util.Collection<Alumno>) ois.readObject();
+
+            if (lista == null || lista.isEmpty()) {
+                return 0;
+            }
+
+            int contador = 0;
+            for (Alumno a : lista) {
+                // Se ignora el codigo del fichero; la BD asigna el siguiente disponible
+                String[] datos = {
+                    a.getNombre(),
+                    a.getFechaNacimiento().toString(),
+                    a.getDomicilio(),
+                    a.getTelefono(),
+                    a.getCorreo()
+                };
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_DESDE_FICHERO[1], datos)) {
+                    contador++;
+                }
+            }
+            return contador;
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new Exception("El fichero binario no tiene el formato correcto de alumno.");
+        }
+    }
+
     public static int exportar(String formato) {
         SesionDatos.getListaAlumnos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
@@ -686,60 +827,6 @@ public class MenuAlumno {
             }
         }
         return SesionDatos.getListaAlumnos().size();
-    }
-
-    public static int importar(String formato) throws Exception {
-        String ruta = Config.rutaFichero(Config.ficheroAlumno, formato);
-        int contador = 0;
-
-        if ("BINARIO".equals(formato)) {
-            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
-                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
-            }
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
-                @SuppressWarnings("unchecked")
-                java.util.Collection<Alumno> lista = (java.util.Collection<Alumno>) ois.readObject();
-                if (lista == null || lista.isEmpty()) return 0;
-                for (Alumno a : lista) {
-                    String[] p = { String.valueOf(a.getCodigo()), a.getNombre(),
-                        a.getFechaNacimiento().toString(), a.getDomicilio(),
-                        a.getTelefono(), a.getCorreo() };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], p)) {
-                        SesionDatos.registrarAlumno(a, false); contador++;
-                    }
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                throw new Exception("Error al leer binario de alumnos: " + e.getMessage());
-            }
-            return contador;
-        }
-
-        ArrayList<String> lineas = "JSON".equals(formato)
-                ? GestionFicheros.leerJson(ruta)
-                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
-        if (lineas == null || lineas.isEmpty()) {
-            throw new Exception("El fichero de alumnos está vacío o no existe.");
-        }
-        for (String linea : lineas) {
-            if (linea.trim().isEmpty()) continue;
-            try {
-                String[] partes;
-                if ("JSON".equals(formato)) {
-                    Alumno a = GestionFicheros.toJson(linea, Alumno.class);
-                    partes = new String[]{ String.valueOf(a.getCodigo()), a.getNombre(),
-                        a.getFechaNacimiento().toString(), a.getDomicilio(),
-                        a.getTelefono(), a.getCorreo() };
-                } else {
-                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
-                }
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_ALUMNO_CON_CODIGO[1], partes)) {
-                    SesionDatos.registrarAlumno(new Alumno(partes), false); contador++;
-                }
-            } catch (Exception e) {
-                System.out.println("[AVISO] Línea de alumno omitida: " + e.getMessage());
-            }
-        }
-        return contador;
     }
 
     /**

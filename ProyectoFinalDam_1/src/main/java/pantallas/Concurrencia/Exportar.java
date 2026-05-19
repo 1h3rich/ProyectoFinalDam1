@@ -5,10 +5,10 @@
 package pantallas.Concurrencia;
 
 import Menus.MenuAlumno;
-import menus.MenuCiclo;
-import menus.MenuLineaMatricula;
-import menus.MenuMatricula;
-import menus.MenuModulo;
+import Menus.MenuCiclo;
+import Menus.MenuLineaMatricula;
+import Menus.MenuMatricula;
+import Menus.MenuModulo;
 import javax.swing.JOptionPane;
 
 /**

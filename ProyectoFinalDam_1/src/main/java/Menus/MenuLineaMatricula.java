@@ -1,4 +1,4 @@
-package menus;
+package Menus;
 
 import Config.Config;
 import Control.SesionDatos;
@@ -709,58 +709,140 @@ public class MenuLineaMatricula {
         return SesionDatos.getListaLineasMatricula().size();
     }
 
+    /**
+     * Importa líneas de matrícula desde la ruta por defecto según el formato.
+     * @param formato
+     * @return 
+     * @throws java.lang.Exception 
+     */
     public static int importar(String formato) throws Exception {
-        String ruta = Config.rutaFichero(Config.ficheroLineaMatricula, formato);
-        int contador = 0;
+        return importar(formato, Config.rutaFichero(Config.ficheroLineaMatricula, formato));
+    }
 
-        if ("BINARIO".equals(formato)) {
-            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
-                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
-            }
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
-                @SuppressWarnings("unchecked")
-                java.util.Collection<LineaMatricula> lista = (java.util.Collection<LineaMatricula>) ois.readObject();
-                if (lista == null || lista.isEmpty()) return 0;
-                for (LineaMatricula lm : lista) {
-                    String[] p = { String.valueOf(lm.getCod_matricula()), String.valueOf(lm.getCod_modulo()),
-                        String.valueOf(lm.getRepeticion()),
-                        String.valueOf(lm.getCal_primera()), String.valueOf(lm.getCal_segunda()) };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], p)) {
-                        SesionDatos.registrarLineaMatricula(lm, false); contador++;
-                    }
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                throw new Exception("Error al leer binario de líneas de matrícula: " + e.getMessage());
-            }
-            return contador;
-        }
+    /**
+     * Importa líneas de matrícula desde una ruta base personalizada.
+     * La línea de matrícula no tiene código propio (PK compuesta), se insertan todos los campos.
+     * @param formato
+     * @param rutaBase
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public static int importar(String formato, String rutaBase) throws Exception {
+        return switch (formato) {
+            case "TXT", "CSV" -> importarLineasDesdeTxtCsv(formato, rutaBase);
+            case "JSON"       -> importarLineasDesdeJson(rutaBase);
+            case "BINARIO"    -> importarLineasDesdeBinario(rutaBase);
+            default -> throw new Exception("Formato no reconocido: " + formato);
+        };
+    }
 
-        ArrayList<String> lineas = "JSON".equals(formato)
-                ? GestionFicheros.leerJson(ruta)
-                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+    private static int importarLineasDesdeTxtCsv(String formato, String rutaBase) throws Exception {
+        String extension = "CSV".equals(formato) ? ".csv" : ".txt";
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(rutaBase, extension);
+
         if (lineas == null || lineas.isEmpty()) {
-            throw new Exception("El fichero de líneas de matrícula está vacío o no existe.");
+            return 0;
         }
+
+        // Validar formato: la primera línea no vacía debe tener 5 campos
         for (String linea : lineas) {
             if (linea.trim().isEmpty()) continue;
-            try {
-                String[] partes;
-                if ("JSON".equals(formato)) {
-                    LineaMatricula lm = GestionFicheros.toJson(linea, LineaMatricula.class);
-                    partes = new String[]{ String.valueOf(lm.getCod_matricula()), String.valueOf(lm.getCod_modulo()),
-                        String.valueOf(lm.getRepeticion()),
-                        String.valueOf(lm.getCal_primera()), String.valueOf(lm.getCal_segunda()) };
-                } else {
-                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
-                }
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], partes)) {
-                    SesionDatos.registrarLineaMatricula(new LineaMatricula(partes), false); contador++;
-                }
-            } catch (Exception e) {
-                System.out.println("[AVISO] Línea de línea_matrícula omitida: " + e.getMessage());
+            String lineaNorm = "CSV".equals(formato) ? linea.replace(":", ";") : linea;
+            int numCampos = lineaNorm.split(";", -1).length;
+            if (numCampos != 5) {
+                throw new Exception("Formato incorrecto para línea de matrícula: se esperan 5 campos, se encontraron " + numCampos + ".");
+            }
+            break;
+        }
+
+        int contador = 0;
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+
+            String lineaNorm = "CSV".equals(formato) ? linea.replace(":", ";") : linea;
+            String[] campos = lineaNorm.split(";", -1);
+
+            // Orden en fichero: cod_matricula;cod_modulo;repeticion;cal_primera;cal_segunda
+            // Se insertan todos los campos (la PK es compuesta, no hay auto-increment)
+            // INSERT_LINEA_MATRICULA espera: codigo_matricula, codigo_modulo, repeticion, calificacion_primera, calificacion_segunda
+            String[] datos = { campos[0], campos[1], campos[2], campos[3], campos[4] };
+
+            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], datos)) {
+                contador++;
             }
         }
         return contador;
+    }
+
+    private static int importarLineasDesdeJson(String rutaBase) throws Exception {
+        ArrayList<String> lineas = GestionFicheros.leerJson(rutaBase);
+
+        if (lineas == null || lineas.isEmpty()) {
+            return 0;
+        }
+
+        // Validar formato con la primera línea no vacía
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            LineaMatricula prueba = GestionFicheros.toJson(linea, LineaMatricula.class);
+            if (prueba == null || prueba.getCod_matricula() == 0) {
+                throw new Exception("Formato JSON incorrecto para línea de matrícula.");
+            }
+            break;
+        }
+
+        int contador = 0;
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+
+            LineaMatricula lm = GestionFicheros.toJson(linea, LineaMatricula.class);
+            if (lm == null) continue;
+
+            String[] datos = {
+                String.valueOf(lm.getCod_matricula()),
+                String.valueOf(lm.getCod_modulo()),
+                String.valueOf(lm.getRepeticion()),
+                String.valueOf(lm.getCal_primera()),
+                String.valueOf(lm.getCal_segunda())
+            };
+
+            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], datos)) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    private static int importarLineasDesdeBinario(String rutaBase) throws Exception {
+        if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
+            return 0;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaBase + ".dat"))) {
+            @SuppressWarnings("unchecked")
+            java.util.Collection<LineaMatricula> lista = (java.util.Collection<LineaMatricula>) ois.readObject();
+
+            if (lista == null || lista.isEmpty()) {
+                return 0;
+            }
+
+            int contador = 0;
+            for (LineaMatricula lm : lista) {
+                String[] datos = {
+                    String.valueOf(lm.getCod_matricula()),
+                    String.valueOf(lm.getCod_modulo()),
+                    String.valueOf(lm.getRepeticion()),
+                    String.valueOf(lm.getCal_primera()),
+                    String.valueOf(lm.getCal_segunda())
+                };
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], datos)) {
+                    contador++;
+                }
+            }
+            return contador;
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new Exception("El fichero binario no tiene el formato correcto de línea de matrícula.");
+        }
     }
 
     /**

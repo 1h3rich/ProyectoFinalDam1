@@ -2,12 +2,7 @@ package Main;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import Menus.MenuAlumno;
-import menus.MenuCiclo;
-import menus.MenuConsultas;
-import menus.MenuLineaMatricula;
-import menus.MenuMatricula;
-import menus.MenuModulo;
+import Menus.*;
 import pantallas.PantallaPrincipal;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 

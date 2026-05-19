@@ -19,6 +19,7 @@ public class NoHagasClick extends javax.swing.JFrame {
 
     public NoHagasClick() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         mostrarUrl();
     }
 

@@ -17,6 +17,7 @@ public class Creditos extends javax.swing.JFrame {
      */
     public Creditos() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**

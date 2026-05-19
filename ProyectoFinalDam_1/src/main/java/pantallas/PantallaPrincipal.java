@@ -99,7 +99,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonCargar.setBackground(new java.awt.Color(255, 255, 255));
         jButtonCargar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonCargar.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonCargar.setText("Cargar");
+        jButtonCargar.setText("Importar");
         jButtonCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCargarActionPerformed(evt);
@@ -109,7 +109,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonGuardar.setBackground(new java.awt.Color(255, 255, 255));
         jButtonGuardar.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonGuardar.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonGuardar.setText("Guardar");
+        jButtonGuardar.setText("Exportar");
         jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonGuardarActionPerformed(evt);

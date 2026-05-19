@@ -1,39 +1,45 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package pantallas.Concurrencia;
 
 import Menus.MenuAlumno;
-import excepciones.YaImportadoException;
-import java.util.HashSet;
-import java.util.Set;
-import menus.MenuCiclo;
-import menus.MenuLineaMatricula;
-import menus.MenuMatricula;
-import menus.MenuModulo;
+import Menus.MenuCiclo;
+import Menus.MenuLineaMatricula;
+import Menus.MenuMatricula;
+import Menus.MenuModulo;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author rich
- */
 public class Importar extends javax.swing.JFrame {
-
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Importar.class.getName());
-
-    /**
-     * Registra las combinaciones (tabla + formato) ya importadas en esta
-     * sesión. Clave: "TABLA_FORMATO", p. ej. "ALUMNADO_TXT".
-     */
-    private final Set<String> yaImportados = new HashSet<>();
+    
 
     /**
-     * Creates new form Importar2
+     * Creates new form Importar
      */
     public Importar() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        jLabel1.setText("Selecciona que quieres importar: ");
+        setLocationRelativeTo(null);
+        configurarOtro();
+    }
+
+    private void configurarOtro() {
+        jTextField1.setEnabled(false);
+        jTextField1.setToolTipText("Ruta del fichero con extensión (ej: /home/usuario/alumno.csv)");
+
+        javax.swing.JCheckBox checkOtro = new javax.swing.JCheckBox("Otro (ruta personalizada)");
+        checkOtro.addItemListener(e -> {
+            boolean activo = checkOtro.isSelected();
+            jTextField1.setEnabled(activo);
+            if (!activo) jTextField1.setText("");
+        });
+
+        javax.swing.JPanel panelExtra = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        panelExtra.add(checkOtro);
+
+        javax.swing.JPanel wrapper = new javax.swing.JPanel(new java.awt.BorderLayout());
+        wrapper.add(getContentPane(), java.awt.BorderLayout.CENTER);
+        wrapper.add(panelExtra, java.awt.BorderLayout.SOUTH);
+
+        setContentPane(wrapper);
+        pack();
     }
 
     /**
@@ -45,15 +51,31 @@ public class Importar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel5 = new javax.swing.JLabel();
+        jButtonTXT = new javax.swing.JButton();
         jButtonCSV = new javax.swing.JButton();
         jButtonBINARIO = new javax.swing.JButton();
         jButtonJSON = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jButtonTXT = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("NSimSun", 1, 48)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("IMPORTAR DATOS");
+
+        jButtonTXT.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonTXT.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jButtonTXT.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonTXT.setText("TXT");
+        jButtonTXT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTXTActionPerformed(evt);
+            }
+        });
 
         jButtonCSV.setBackground(new java.awt.Color(255, 255, 255));
         jButtonCSV.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
@@ -91,18 +113,11 @@ public class Importar extends javax.swing.JFrame {
 
         jLabel1.setText("Selecciona que quieres importar: ");
 
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("NSimSun", 1, 48)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("IMPORTAR DATOS");
-
-        jButtonTXT.setBackground(new java.awt.Color(255, 255, 255));
-        jButtonTXT.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
-        jButtonTXT.setForeground(new java.awt.Color(0, 0, 0));
-        jButtonTXT.setText("TXT");
-        jButtonTXT.addActionListener(new java.awt.event.ActionListener() {
+        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonTXTActionPerformed(evt);
+                jTextField1ActionPerformed(evt);
             }
         });
 
@@ -111,16 +126,8 @@ public class Importar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(129, 129, 129))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(86, 86, 86))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonCSV, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(59, 59, 59)
@@ -128,29 +135,46 @@ public class Importar extends javax.swing.JFrame {
                         .addGap(61, 61, 61)
                         .addComponent(jButtonJSON, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(64, 64, 64)
-                        .addComponent(jButtonBINARIO, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(jButtonBINARIO, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(76, 76, 76))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextField1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(119, 119, 119)))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(14, 14, 14)
                 .addComponent(jLabel5)
                 .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(162, 162, 162)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(173, 173, 173)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonTXT)
                     .addComponent(jButtonJSON)
                     .addComponent(jButtonBINARIO)
                     .addComponent(jButtonCSV))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTXTActionPerformed
+        ejecutarImportacion((String) jComboBox1.getSelectedItem(), "TXT");
+    }//GEN-LAST:event_jButtonTXTActionPerformed
 
     private void jButtonCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCSVActionPerformed
         ejecutarImportacion((String) jComboBox1.getSelectedItem(), "CSV");
@@ -164,114 +188,122 @@ public class Importar extends javax.swing.JFrame {
         ejecutarImportacion((String) jComboBox1.getSelectedItem(), "JSON");
     }//GEN-LAST:event_jButtonJSONActionPerformed
 
-    private void jButtonTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTXTActionPerformed
-        ejecutarImportacion((String) jComboBox1.getSelectedItem(), "TXT");
-    }//GEN-LAST:event_jButtonTXTActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // vacío: el usuario pulsa Enter en el campo de ruta, no hace falta acción
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
-    // =========================================================
-    // =================== LÓGICA DE IMPORTACIÓN ===============
-    // =========================================================
+    // -------------------------------------------------------------------------
+    // Lógica de importación
+    // -------------------------------------------------------------------------
 
-    /**
-     * Punto de entrada desde los botones. Gestiona "TODO" y las tablas
-     * individuales, comprueba duplicados y muestra el resultado al usuario.
-     */
-    private void ejecutarImportacion(String tabla, String formato) {
-        try {
-            if ("TODO".equals(tabla)) {
-                // Orden respetando dependencias FK: ciclos → módulos → alumnos → matrículas → líneas
-                String[] tablas = {"CICLOS", "MODULOS", "ALUMNADO", "MATRICULAS", "LINEA MATRICULA"};
-                StringBuilder sb = new StringBuilder();
-                StringBuilder errores = new StringBuilder();
-                int total = 0;
-                for (String t : tablas) {
-                    String clave = t + "_" + formato;
-                    try {
-                        comprobarYaImportado(clave);
-                        int n = procesarImportacion(t, formato);
-                        if (n > 0) yaImportados.add(clave);
-                        total += n;
-                        sb.append(t).append(": ").append(n).append(" registros\n");
-                    } catch (YaImportadoException e) {
-                        sb.append(t).append(": ya importado (omitido)\n");
-                    } catch (Exception e) {
-                        errores.append(t).append(": ").append(e.getMessage()).append("\n");
-                    }
-                }
-                String mensaje = "Importación completada:\n" + sb;
-                if (errores.length() > 0) {
-                    mensaje += "\nTablas con error (fichero no encontrado o formato incorrecto):\n" + errores;
-                }
-                boolean sinDatosNuevos = total == 0 && errores.length() == 0;
-                javax.swing.JOptionPane.showMessageDialog(this, mensaje,
-                        sinDatosNuevos ? "Sin datos nuevos" : errores.length() > 0 ? "Completado con advertencias" : "Éxito",
-                        sinDatosNuevos ? javax.swing.JOptionPane.WARNING_MESSAGE : errores.length() > 0 ? javax.swing.JOptionPane.WARNING_MESSAGE : javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                String clave = tabla + "_" + formato;
-                comprobarYaImportado(clave);
-                int n = procesarImportacion(tabla, formato);
-                if (n > 0) yaImportados.add(clave);
-                if (n == 0) {
-                    javax.swing.JOptionPane.showMessageDialog(this,
-                            "No hay datos nuevos que importar en " + tabla + " (" + formato + ").\nTodos los registros ya existen en la base de datos.",
-                            "Sin datos nuevos", javax.swing.JOptionPane.WARNING_MESSAGE);
-                } else {
-                    javax.swing.JOptionPane.showMessageDialog(this,
-                            "Importados " + n + " registros de " + tabla + " (" + formato + ")",
-                            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                }
+    private void ejecutarImportacion(String entidad, String formato) {
+        String ruta = jTextField1.getText().trim();
+
+        if (jTextField1.isEnabled()) {
+            // Modo Otro: la ruta manda, el formato se detecta por extensión
+            if (ruta.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Debes introducir la ruta del fichero.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
             }
-        } catch (YaImportadoException e) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    e.getMessage(), "Ya importado", javax.swing.JOptionPane.WARNING_MESSAGE);
+            if ("TODO".equals(entidad)) {
+                JOptionPane.showMessageDialog(this,
+                        "No se puede usar ruta personalizada con la opción TODO.\nSelecciona una entidad concreta.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            formato = detectarFormatoPorExtension(ruta);
+            if (formato == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se reconoce el formato del fichero.\nUsa extensión .csv, .txt, .json o .dat",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            ruta = null; // usa la ruta por defecto de Config
+        }
+
+        try {
+            int total = importarEntidad(entidad, formato, ruta != null ? quitarExtension(ruta) : null);
+
+            if (total == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "No hay nueva información.",
+                        "Importación", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Importados " + total + " registros correctamente.",
+                        "Importación completada", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error al importar: " + e.getMessage(),
-                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error al importar:\n" + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /**
-     * Comprueba si la combinación tabla+formato ya fue importada en esta sesión.
-     *
-     * @param clave Identificador único "TABLA_FORMATO"
-     * @throws YaImportadoException si ya fue importado anteriormente
-     */
-    private void comprobarYaImportado(String clave) throws YaImportadoException {
-        if (yaImportados.contains(clave)) {
-            throw new YaImportadoException(
-                    """
-                    Ya se importo esta tabla en el formato indicado durante esta sesion.
-                    Reinicia la aplicacion para volver a importar.""");
-        }
+    private String detectarFormatoPorExtension(String ruta) {
+        if (ruta.endsWith(".csv"))  return "CSV";
+        if (ruta.endsWith(".txt"))  return "TXT";
+        if (ruta.endsWith(".json")) return "JSON";
+        if (ruta.endsWith(".dat"))  return "BINARIO";
+        return null;
     }
 
-    /**
-     * Despacha la importación al método concreto según tabla y formato.
-     *
-     * @param tabla   Nombre de la tabla seleccionada en el combo
-     * @param formato Formato del fichero
-     * @return Número de registros importados correctamente
-     * @throws Exception si hay error en lectura o inserción
-     */
-    private int procesarImportacion(String tabla, String formato) throws Exception {
-        return switch (tabla) {
+    private String quitarExtension(String ruta) {
+        int posicion = ruta.lastIndexOf('.');
+        return posicion > 0 ? ruta.substring(0, posicion) : ruta;
+    }
+
+    private int importarEntidad(String entidad, String formato, String rutaBase) throws Exception {
+        if ("TODO".equals(entidad)) {
+            return importarTodo(formato);
+        }
+        return importarUna(entidad, formato, rutaBase);
+    }
+
+    private int importarTodo(String formato) throws Exception {
+        int total = 0;
+        total += MenuCiclo.importar(formato);
+        total += MenuModulo.importar(formato);
+        total += MenuAlumno.importar(formato);
+        total += MenuMatricula.importar(formato);
+        total += MenuLineaMatricula.importar(formato);
+        return total;
+    }
+
+    private int importarUna(String entidad, String formato, String rutaBase) throws Exception {
+        if (rutaBase != null) {
+            return switch (entidad) {
+                case "ALUMNADO"        -> MenuAlumno.importar(formato, rutaBase);
+                case "CICLOS"          -> MenuCiclo.importar(formato, rutaBase);
+                case "MODULOS"         -> MenuModulo.importar(formato, rutaBase);
+                case "MATRICULAS"      -> MenuMatricula.importar(formato, rutaBase);
+                case "LINEA MATRICULA" -> MenuLineaMatricula.importar(formato, rutaBase);
+                default -> throw new Exception("Entidad no reconocida: " + entidad);
+            };
+        }
+        return switch (entidad) {
             case "ALUMNADO"        -> MenuAlumno.importar(formato);
             case "CICLOS"          -> MenuCiclo.importar(formato);
             case "MODULOS"         -> MenuModulo.importar(formato);
             case "MATRICULAS"      -> MenuMatricula.importar(formato);
             case "LINEA MATRICULA" -> MenuLineaMatricula.importar(formato);
-            default -> throw new Exception("Tabla no reconocida: " + tabla);
+            default -> throw new Exception("Entidad no reconocida: " + entidad);
         };
     }
-
-    // =========================================================
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -280,10 +312,11 @@ public class Importar extends javax.swing.JFrame {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Importar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Importar().setVisible(true));
     }
 
@@ -295,5 +328,6 @@ public class Importar extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,4 +1,4 @@
-package menus;
+package Menus;
 
 import Config.Config;
 import Control.SesionDatos;
@@ -648,58 +648,142 @@ public class MenuModulo {
         return SesionDatos.getListaModulos().size();
     }
 
+    /**
+     * Importa módulos desde la ruta por defecto según el formato.
+     * @param formato
+     * @return 
+     * @throws java.lang.Exception 
+     */
     public static int importar(String formato) throws Exception {
-        String ruta = Config.rutaFichero(Config.ficheroModulo, formato);
-        int contador = 0;
+        return importar(formato, Config.rutaFichero(Config.ficheroModulo, formato));
+    }
 
-        if ("BINARIO".equals(formato)) {
-            if (!Validadores.comprobarFicheroLectura(ruta, ".dat")) {
-                throw new Exception("El fichero " + ruta + ".dat no existe o está vacío.");
-            }
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta + ".dat"))) {
-                @SuppressWarnings("unchecked")
-                java.util.Collection<Modulo> lista = (java.util.Collection<Modulo>) ois.readObject();
-                if (lista == null || lista.isEmpty()) return 0;
-                for (Modulo m : lista) {
-                    String[] p = { String.valueOf(m.getCodigo()), String.valueOf(m.getCodigo_ciclo()),
-                        m.getNombre(), m.getCurso(),
-                        String.valueOf(m.getCreditos_ects()), String.valueOf(m.getHoras()) };
-                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], p)) {
-                        SesionDatos.registrarModulo(m, false); contador++;
-                    }
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                throw new Exception("Error al leer binario de módulos: " + e.getMessage());
-            }
-            return contador;
-        }
+    /**
+     * Importa módulos desde una ruta base personalizada.
+     * El código del fichero se ignora; la BD asigna el siguiente código disponible.
+     * @param formato
+     * @param rutaBase
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public static int importar(String formato, String rutaBase) throws Exception {
+        return switch (formato) {
+            case "TXT", "CSV" -> importarModulosDesdeTxtCsv(formato, rutaBase);
+            case "JSON"       -> importarModulosDesdeJson(rutaBase);
+            case "BINARIO"    -> importarModulosDesdeBinario(rutaBase);
+            default -> throw new Exception("Formato no reconocido: " + formato);
+        };
+    }
 
-        ArrayList<String> lineas = "JSON".equals(formato)
-                ? GestionFicheros.leerJson(ruta)
-                : GestionFicheros.leerTxtCsv(ruta, "TXT".equals(formato) ? ".txt" : ".csv");
+    private static int importarModulosDesdeTxtCsv(String formato, String rutaBase) throws Exception {
+        String extension = "CSV".equals(formato) ? ".csv" : ".txt";
+        ArrayList<String> lineas = GestionFicheros.leerTxtCsv(rutaBase, extension);
+
         if (lineas == null || lineas.isEmpty()) {
-            throw new Exception("El fichero de módulos está vacío o no existe.");
+            return 0;
         }
+
+        // Validar formato: la primera línea no vacía debe tener 6 campos
         for (String linea : lineas) {
             if (linea.trim().isEmpty()) continue;
-            try {
-                String[] partes;
-                if ("JSON".equals(formato)) {
-                    Modulo m = GestionFicheros.toJson(linea, Modulo.class);
-                    partes = new String[]{ String.valueOf(m.getCodigo()), String.valueOf(m.getCodigo_ciclo()),
-                        m.getNombre(), m.getCurso(),
-                        String.valueOf(m.getCreditos_ects()), String.valueOf(m.getHoras()) };
-                } else {
-                    partes = ("CSV".equals(formato) ? linea.replace(":", ";") : linea).split(";", -1);
-                }
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], partes)) {
-                    SesionDatos.registrarModulo(new Modulo(partes), false); contador++;
-                }
-            } catch (Exception e) {
-                System.out.println("[AVISO] Línea de módulo omitida: " + e.getMessage());
+            String lineaNorm = "CSV".equals(formato) ? linea.replace(":", ";") : linea;
+            int numCampos = lineaNorm.split(";", -1).length;
+            if (numCampos != 6) {
+                throw new Exception("Formato incorrecto para módulo: se esperan 6 campos, se encontraron " + numCampos + ".");
+            }
+            break;
+        }
+
+        int contador = 0;
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+
+            String lineaNorm = "CSV".equals(formato) ? linea.replace(":", ";") : linea;
+            String[] campos = lineaNorm.split(";", -1);
+
+            // Orden en fichero: codigo;codigo_ciclo;nombre;curso;creditos_ects;horas
+            // Se ignora campos[0] (codigo); la BD asigna el siguiente disponible
+            // INSERT_MODULO_DESDE_FICHERO espera: codigo_ciclo, nombre, curso, creditos_ects, horas
+            String[] datos = { campos[1], campos[2], campos[3], campos[4], campos[5] };
+
+            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_DESDE_FICHERO[1], datos)) {
+                contador++;
             }
         }
         return contador;
+    }
+
+    private static int importarModulosDesdeJson(String rutaBase) throws Exception {
+        ArrayList<String> lineas = GestionFicheros.leerJson(rutaBase);
+
+        if (lineas == null || lineas.isEmpty()) {
+            return 0;
+        }
+
+        // Validar formato con la primera línea no vacía
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+            Modulo prueba = GestionFicheros.toJson(linea, Modulo.class);
+            if (prueba == null || prueba.getNombre() == null) {
+                throw new Exception("Formato JSON incorrecto para módulo.");
+            }
+            break;
+        }
+
+        int contador = 0;
+        for (String linea : lineas) {
+            if (linea.trim().isEmpty()) continue;
+
+            Modulo m = GestionFicheros.toJson(linea, Modulo.class);
+            if (m == null || m.getNombre() == null) continue;
+
+            // Se ignora el codigo del fichero; la BD asigna el siguiente disponible
+            String[] datos = {
+                String.valueOf(m.getCodigo_ciclo()),
+                m.getNombre(),
+                m.getCurso(),
+                String.valueOf(m.getCreditos_ects()),
+                String.valueOf(m.getHoras())
+            };
+
+            if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_DESDE_FICHERO[1], datos)) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    private static int importarModulosDesdeBinario(String rutaBase) throws Exception {
+        if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
+            return 0;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaBase + ".dat"))) {
+            @SuppressWarnings("unchecked")
+            java.util.Collection<Modulo> lista = (java.util.Collection<Modulo>) ois.readObject();
+
+            if (lista == null || lista.isEmpty()) {
+                return 0;
+            }
+
+            int contador = 0;
+            for (Modulo m : lista) {
+                // Se ignora el codigo del fichero; la BD asigna el siguiente disponible
+                String[] datos = {
+                    String.valueOf(m.getCodigo_ciclo()),
+                    m.getNombre(),
+                    m.getCurso(),
+                    String.valueOf(m.getCreditos_ects()),
+                    String.valueOf(m.getHoras())
+                };
+                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_DESDE_FICHERO[1], datos)) {
+                    contador++;
+                }
+            }
+            return contador;
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new Exception("El fichero binario no tiene el formato correcto de módulo.");
+        }
     }
 
     /**

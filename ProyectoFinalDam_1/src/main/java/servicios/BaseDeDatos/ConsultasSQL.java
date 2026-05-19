@@ -203,6 +203,16 @@ public class ConsultasSQL {
     };
 
     /**
+     * INSERT para alumno desde fichero sin especificar código (AUTO_INCREMENT).
+     * Orden de campos igual al formato TXT/CSV del fichero, sin el primer campo (codigo):
+     * nombre, fecha_nacimiento, domicilio, telefono, correo
+     */
+    public static final String[] INSERT_ALUMNO_DESDE_FICHERO = {
+        "Alumno",
+        "INSERT INTO alumno (nombre, fecha_nacimiento, domicilio, telefono, correo) VALUES (?, ?, ?, ?, ?)"
+    };
+
+    /**
      * Sentencia UPDATE para la tabla alumno.
      */
     public static final String[] UPDATE_ALUMNO = {
@@ -329,6 +339,16 @@ public class ConsultasSQL {
     };
 
     /**
+     * INSERT para modulo desde fichero sin especificar código (AUTO_INCREMENT).
+     * Orden de campos igual al formato TXT/CSV del fichero, sin el primer campo (codigo):
+     * codigo_ciclo, nombre, curso, creditos_ects, horas
+     */
+    public static final String[] INSERT_MODULO_DESDE_FICHERO = {
+        "Modulo",
+        "INSERT INTO modulo (codigo_ciclo, nombre, curso, creditos_ects, horas) VALUES (?, ?, ?, ?, ?)"
+    };
+
+    /**
      * Sentencia UPDATE para la tabla modulo.
      */
     public static final String[] UPDATE_MODULO = {
@@ -391,6 +411,16 @@ public class ConsultasSQL {
     public static final String[] INSERT_MATRICULA_CON_CODIGO = {
         "Matricula",
         "INSERT INTO matricula (codigo, codigo_alumno, anio_academico, estado, importe) VALUES (?, ?, ?, ?, ?)"
+    };
+
+    /**
+     * INSERT para matricula desde fichero sin especificar código (AUTO_INCREMENT).
+     * Orden de campos igual al formato TXT/CSV del fichero, sin el primer campo (codigo):
+     * codigo_alumno, anio_academico, estado, importe
+     */
+    public static final String[] INSERT_MATRICULA_DESDE_FICHERO = {
+        "Matricula",
+        "INSERT INTO matricula (codigo_alumno, anio_academico, estado, importe) VALUES (?, ?, ?, ?)"
     };
 
     /**
