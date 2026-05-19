@@ -40,7 +40,6 @@ public class EliminarCiclo extends javax.swing.JFrame {
 
         jLabelTitulo.setText("ELIMINAR CICLO");
         jLabelEliminar.setText("Elimina el ciclo, sus módulos y las líneas de matrícula asociadas.");
-        jLabel2.setText("Selecciona el ciclo correcto en la tabla antes de eliminarlo.");
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         Dimension tamañoTabla = new Dimension(948, 427);
@@ -205,14 +204,12 @@ public class EliminarCiclo extends javax.swing.JFrame {
                                 .addComponent(jButton1)
                                 .addGap(18, 18, 18))))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonEliminar)
                         .addGap(22, 22, 22)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,7 +228,7 @@ public class EliminarCiclo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEliminar)
                     .addComponent(jLabelEliminar))
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
