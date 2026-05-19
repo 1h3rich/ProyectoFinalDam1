@@ -242,6 +242,8 @@ public class EliminarModulo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButtonEliminar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonEliminar.setForeground(new java.awt.Color(0, 0, 0));
         jButtonEliminar.setText("Eliminar");
         jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
