@@ -169,15 +169,15 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     /**
      * Actualiza la fecha de nacimiento tras comprobar que no es nula ni futura.
      *
-     * @param fechaNacimiento Nueva fecha de nacimiento.
+     * @param temp
      * @throws IllegalArgumentException si la fecha es nula o posterior a hoy.
      */
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        if (!Validadores.validarFechaNacimiento(fechaNacimiento)) {
+    public void setFechaNacimiento(String temp) {
+        if (!Validadores.validarFechaNacimiento(temp)) {
             throw new IllegalArgumentException("La fecha de nacimiento no es válida");
         }
-
-        this.fechaNacimiento = fechaNacimiento;
+        
+        fechaNacimiento = LocalDate.parse(temp);
     }
 
     /**
@@ -244,7 +244,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
             throw new IllegalArgumentException("El nombre del alumno no puede estar vacío");
         }
 
-        if (!Validadores.validarFechaNacimiento(fechaNacimiento)) {
+        if (!Validadores.validarFechaNacimiento(fechaNacimiento.toString())) {
             throw new IllegalArgumentException("La fecha de nacimiento no es válida");
         }
 

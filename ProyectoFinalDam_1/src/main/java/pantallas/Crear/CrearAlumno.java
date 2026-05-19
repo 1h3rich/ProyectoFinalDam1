@@ -6,14 +6,16 @@ package pantallas.Crear;
 
 import Control.SesionDatos;
 import Utils.Validadores;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import modelos.Alumno;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
+
 /**
- * Formulario Swing para registrar un nuevo alumno en la base de datos.
- * Recoge nombre, correo, fecha de nacimiento, domicilio y teléfono;
- * tras insertar el alumno, abre automáticamente el formulario de creación de matrícula.
+ * Formulario Swing para registrar un nuevo alumno en la base de datos. Recoge
+ * nombre, correo, fecha de nacimiento, domicilio y teléfono; tras insertar el
+ * alumno, abre automáticamente el formulario de creación de matrícula.
  *
  * @author Rich
  */
@@ -62,9 +64,13 @@ public class CrearAlumno extends javax.swing.JFrame {
         jButtonCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButtonGuardar.setBackground(new java.awt.Color(75, 75, 75));
+        jButtonGuardar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonGuardar.setText("Siguiente");
         jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,6 +78,8 @@ public class CrearAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldNombre.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldNombre.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldNombre.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -80,6 +88,8 @@ public class CrearAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldCorreo.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCorreo.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCorreo.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCorreo.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldCorreo.addActionListener(new java.awt.event.ActionListener() {
@@ -88,10 +98,16 @@ public class CrearAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldTelefono.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldTelefono.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldTelefono.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldDomicilio.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldDomicilio.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldDomicilio.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldFechaNacimiento.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldFechaNacimiento.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldFechaNacimiento.setPreferredSize(new java.awt.Dimension(64, 128));
 
         jLabelInfoNombre.setText("Nombre:");
@@ -104,10 +120,14 @@ public class CrearAlumno extends javax.swing.JFrame {
 
         jLabelInfoNombre5.setText("Telefono:");
 
+        jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("CREAR ALUMNADO");
 
+        jButtonCancelar.setBackground(new java.awt.Color(75, 75, 75));
+        jButtonCancelar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCancelar.setText("Cancelar");
         jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,88 +137,90 @@ public class CrearAlumno extends javax.swing.JFrame {
 
         jLabel1.setText("Importante usar el formato 2002-03-13");
 
-        jLabel2.setText("TipoVía Nombre Número, Localidad, Provincia");
+        jLabel2.setText("Avenida Santa Isabel 18, Zaragoza, Zaragoza.");
+
+        jLabel3.setText("123456789");
+
+        jLabel4.setText("Alguien@gmail.com");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(557, 557, 557)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelInfoNombre2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelInfoNombre5, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelInfoNombre4, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(61, 61, 61))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonCancelar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelInfoNombre5)
+                            .addComponent(jLabelInfoNombre3)
+                            .addComponent(jLabelInfoNombre4)
+                            .addComponent(jLabelInfoNombre)
+                            .addComponent(jLabelInfoNombre2))
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonGuardar)
-                                .addGap(0, 208, Short.MAX_VALUE))
-                            .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(319, 319, 319))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(27, 27, 27))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(428, 428, 428))
+                                .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4))
+                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButtonCancelar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButtonGuardar))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)))))
+                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(575, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoNombre))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelInfoNombre2)
-                    .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelInfoNombre3)
                             .addComponent(jTextFieldFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelInfoNombre4)
-                            .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)))
-                .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextFieldDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))))
+                    .addComponent(jLabel1))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelInfoNombre5)
-                    .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(115, 115, 115)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)))
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(383, Short.MAX_VALUE))
         );
 
         pack();
@@ -264,7 +286,10 @@ public class CrearAlumno extends javax.swing.JFrame {
         });
     }
 
-    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
+    /**
+     * Pide confirmación y, si el usuario acepta, cancela la transacción activa
+     * y cierra la ventana.
+     */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -279,7 +304,10 @@ public class CrearAlumno extends javax.swing.JFrame {
         }
     }
 
-    /** Valida los campos, inicia una transacción, inserta el alumno en la BD y abre el formulario de matrícula si el insert es correcto. */
+    /**
+     * Valida los campos, inicia una transacción, inserta el alumno en la BD y
+     * abre el formulario de matrícula si el insert es correcto.
+     */
     private void crearAlumno() {
 
         String nombre = jTextFieldNombre.getText().trim();
@@ -311,6 +339,11 @@ public class CrearAlumno extends javax.swing.JFrame {
             return;
         }
 
+        if (!Validadores.validarFechaNacimiento(fechaNacimiento)) {
+            JOptionPane.showMessageDialog(this, "La fecha debe ser YY-MM-DD con guiones");
+            return;
+        }
+
         String[] datos = {
             nombre,
             correo,
@@ -319,9 +352,7 @@ public class CrearAlumno extends javax.swing.JFrame {
             fechaNacimiento
         };
 
-        GestionBaseDeDatos.iniciarTransaccion();
-
-        int idAlumno = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[1],datos);
+        int idAlumno = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[1], datos);
 
         System.out.println("ID alumno generado: " + idAlumno);
 
@@ -347,6 +378,8 @@ public class CrearAlumno extends javax.swing.JFrame {
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelInfoNombre;
     private javax.swing.JLabel jLabelInfoNombre2;
     private javax.swing.JLabel jLabelInfoNombre3;

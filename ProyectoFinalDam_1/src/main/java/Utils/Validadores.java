@@ -168,10 +168,16 @@ public class Validadores {
     /**
      * Comprueba que la fecha de nacimiento no sea nula ni posterior a la fecha actual.
      *
-     * @param fechaNacimiento Fecha de nacimiento a validar.
+     * @param temp
      * @return true si la fecha es válida y no está en el futuro.
      */
-    public static boolean validarFechaNacimiento(LocalDate fechaNacimiento) {
+    public static boolean validarFechaNacimiento(String temp) {
+        LocalDate fechaNacimiento = null;
+        try {
+            fechaNacimiento = LocalDate.parse(temp);
+        } catch (Exception e) {
+        }
+        
         return fechaNacimiento != null && !fechaNacimiento.isAfter(LocalDate.now());
     }
 

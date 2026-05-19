@@ -184,6 +184,8 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jComboBoxModulos.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxModulos.setForeground(new java.awt.Color(0, 0, 0));
         jComboBoxModulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBoxModulos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,6 +193,8 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
             }
         });
 
+        jButtonAñadirModuloExistente.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonAñadirModuloExistente.setForeground(new java.awt.Color(0, 0, 0));
         jButtonAñadirModuloExistente.setText("Añador Modulo Existente");
         jButtonAñadirModuloExistente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,6 +202,8 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
             }
         });
 
+        jButtonCrearModulo.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonCrearModulo.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCrearModulo.setText("Crear Nuevo Modulo");
         jButtonCrearModulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,6 +211,8 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
             }
         });
 
+        jButtonFinalizar.setBackground(new java.awt.Color(75, 75, 75));
+        jButtonFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonFinalizar.setText("Finalizar");
         jButtonFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,6 +220,8 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
             }
         });
 
+        jButtonCancelar.setBackground(new java.awt.Color(75, 75, 75));
+        jButtonCancelar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCancelar.setText("Cancelar");
         jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,6 +229,8 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
             }
         });
 
+        jLabelContador.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelContador.setForeground(new java.awt.Color(0, 0, 0));
         jLabelContador.setText("0/5");
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -230,14 +242,13 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 211, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(197, 197, 197))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(340, 340, 340)
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(135, 135, 135)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jButtonAñadirModuloExistente, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -247,21 +258,21 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButtonCancelar)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButtonFinalizar))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(418, 418, 418)
-                        .addComponent(jLabelContador))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(386, 386, 386)
-                        .addComponent(jComboBoxModulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jButtonFinalizar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(78, 78, 78)
+                                .addComponent(jLabelContador))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addComponent(jComboBoxModulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(85, 85, 85)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(54, 54, 54)
+                .addGap(18, 18, 18)
                 .addComponent(jComboBoxModulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonAñadirModuloExistente, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,7 +284,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
                     .addComponent(jButtonFinalizar))
                 .addGap(18, 18, 18)
                 .addComponent(jLabelContador)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
