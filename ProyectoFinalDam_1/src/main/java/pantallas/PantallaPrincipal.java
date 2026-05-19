@@ -8,8 +8,10 @@ import pantallas.Concurrencia.Exportar;
 import pantallas.Concurrencia.Importar;
 import pantallas.Consultas.SeleccionConsultas;
 import pantallas.Crear.*;
+import pantallas.Creditos.Creditos;
 import pantallas.Eliminar.MenuBorrar;
 import pantallas.Modificar.Menu_Modificar;
+import pantallas.Registro.Registro;
 
 /**
  * Ventana principal de la aplicación. Centraliza el acceso a todas las funcionalidades:
@@ -53,6 +55,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jButtonCrearModulo = new javax.swing.JButton();
         jLabelModificar1 = new javax.swing.JLabel();
         jLabelModificar2 = new javax.swing.JLabel();
+        jButtonRegistro = new javax.swing.JButton();
+        jLabelRegistro = new javax.swing.JLabel();
+        jButtonCreditos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -173,35 +178,64 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabelModificar2.setForeground(new java.awt.Color(0, 0, 0));
         jLabelModificar2.setText("Crea nuevos ciclos.");
 
+        jButtonRegistro.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonRegistro.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonRegistro.setText("Registro");
+        jButtonRegistro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegistroActionPerformed(evt);
+            }
+        });
+
+        jLabelRegistro.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelRegistro.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
+        jLabelRegistro.setForeground(new java.awt.Color(0, 0, 0));
+        jLabelRegistro.setText("Muestra el registro de la actual sesión.");
+
+        jButtonCreditos.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonCreditos.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonCreditos.setText("Creditos");
+        jButtonCreditos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCreditosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(562, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabelTitulo)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonConsultas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButtonGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCrearCiclo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCrearModulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jButtonRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonModificar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonCrear, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonBorrar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonConsultas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonCrearCiclo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonCrearModulo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonCargar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCrear)
                             .addComponent(jLabelBorrar)
                             .addComponent(jLabelModificar)
-                            .addComponent(jLabelGuardar)
                             .addComponent(jLabelModificar1)
                             .addComponent(jLabelModificar2)
                             .addComponent(jLabelConsultas)
-                            .addComponent(jLabelCargar))))
+                            .addComponent(jLabelGuardar)
+                            .addComponent(jLabelCargar)
+                            .addComponent(jLabelRegistro))))
                 .addGap(531, 531, 531))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonCreditos)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,13 +268,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabelConsultas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRegistro)
+                    .addComponent(jLabelRegistro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCargar)
                     .addComponent(jLabelCargar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jLabelGuardar))
-                .addContainerGap(380, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                .addComponent(jButtonCreditos)
+                .addContainerGap())
         );
 
         pack();
@@ -286,6 +326,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         e.setVisible(true);
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
+    private void jButtonRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistroActionPerformed
+        Registro r = new Registro();
+        r.setVisible(true);
+    }//GEN-LAST:event_jButtonRegistroActionPerformed
+
+    private void jButtonCreditosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreditosActionPerformed
+        Creditos c = new Creditos();
+        c.setVisible(true);
+    }//GEN-LAST:event_jButtonCreditosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -327,8 +377,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCrear;
     private javax.swing.JButton jButtonCrearCiclo;
     private javax.swing.JButton jButtonCrearModulo;
+    private javax.swing.JButton jButtonCreditos;
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JButton jButtonModificar;
+    private javax.swing.JButton jButtonRegistro;
     private javax.swing.JLabel jLabelBorrar;
     private javax.swing.JLabel jLabelCargar;
     private javax.swing.JLabel jLabelConsultas;
@@ -337,6 +389,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelModificar;
     private javax.swing.JLabel jLabelModificar1;
     private javax.swing.JLabel jLabelModificar2;
+    private javax.swing.JLabel jLabelRegistro;
     private javax.swing.JLabel jLabelTitulo;
     // End of variables declaration//GEN-END:variables
 }

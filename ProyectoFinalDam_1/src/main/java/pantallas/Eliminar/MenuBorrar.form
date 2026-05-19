@@ -28,7 +28,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="260" max="-2" attributes="0"/>
                       <Component id="jButtonBorrarAlumno" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="jButtonBorrarModulo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="jButtonBorrarCiclo" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -36,7 +38,7 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="0" pref="271" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="229" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -49,6 +51,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonBorrarAlumno" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonBorrarCiclo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonBorrarModulo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="215" max="32767" attributes="0"/>
           </Group>
@@ -58,6 +61,12 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="jButtonBorrarAlumno">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Borrar Alumno"/>
       </Properties>
       <Events>
@@ -66,6 +75,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonBorrarCiclo">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Borrar Ciclo"/>
       </Properties>
       <Events>
@@ -85,6 +100,20 @@
         </Property>
         <Property name="text" type="java.lang.String" value="BORRAR"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonBorrarModulo">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Borrar Modulo"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBorrarModuloActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

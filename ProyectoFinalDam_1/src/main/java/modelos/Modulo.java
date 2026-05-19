@@ -204,7 +204,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @param creditos_ects Nuevos créditos ECTS.
      * @throws IllegalArgumentException si los créditos son 0 o negativos.
      */
-    public void setCreditos_ects(int creditos_ects) {
+    public void setCreditos_ects(double creditos_ects) {
         if (!Validadores.validarCreditosEcts(creditos_ects)) {
             throw new IllegalArgumentException("Los créditos ECTS deben ser mayores que 0");
         }

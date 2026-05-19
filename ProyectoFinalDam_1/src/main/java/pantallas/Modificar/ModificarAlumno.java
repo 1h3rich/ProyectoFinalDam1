@@ -6,7 +6,6 @@ package pantallas.Modificar;
 
 import Control.SesionDatos;
 import Utils.Validadores;
-import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Alumno;
@@ -163,6 +162,8 @@ public class ModificarAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldCorreo.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCorreo.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCorreo.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCorreo.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldCorreo.addActionListener(new java.awt.event.ActionListener() {
@@ -171,20 +172,36 @@ public class ModificarAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldTelefono.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldTelefono.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldTelefono.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldDomicilio.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldDomicilio.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldDomicilio.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldFechaNacimiento.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldFechaNacimiento.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldFechaNacimiento.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jLabelInfoNombre.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre.setText("Nombre:");
 
+        jLabelInfoNombre2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre2.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre2.setText("Correo:");
 
+        jLabelInfoNombre3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre3.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre3.setText("F:/ Nacimiento");
 
+        jLabelInfoNombre4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre4.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre4.setText("Domicilio:");
 
+        jLabelInfoNombre5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre5.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre5.setText("Telefono:");
 
         jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
@@ -200,6 +217,8 @@ public class ModificarAlumno extends javax.swing.JFrame {
             }
         });
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -392,34 +411,29 @@ public class ModificarAlumno extends javax.swing.JFrame {
             return;
         }
 
-        try {
-            alumno.setNombre(nombre);
-            alumno.setCorreo(correo);
-            alumno.setDomicilio(domicilio);
-            alumno.setTelefono(telefono);
+        alumno.setNombre(nombre);
+        alumno.setCorreo(correo);
+        alumno.setDomicilio(domicilio);
+        alumno.setTelefono(telefono);
 
-            // UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
-            String[] entradas = {
-                alumno.getNombre(),
-                alumno.getFechaNacimiento().toString(),
-                alumno.getDomicilio(),
-                alumno.getTelefono(),
-                alumno.getCorreo(),
-                String.valueOf(alumno.getCodigo())
-            };
-            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
+        // UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
+        String[] entradas = {
+            alumno.getNombre(),
+            alumno.getFechaNacimiento().toString(),
+            alumno.getDomicilio(),
+            alumno.getTelefono(),
+            alumno.getCorreo(),
+            String.valueOf(alumno.getCodigo())
+        };
+        GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
 
-            int codigoAlumno = alumno.getCodigo();
-            SesionDatos.getListaAlumnos().removeIf(a -> a.getCodigo() == codigoAlumno);
-            SesionDatos.getListaAlumnos().add(alumno);
+        int codigoAlumno = alumno.getCodigo();
+        SesionDatos.getListaAlumnos().removeIf(a -> a.getCodigo() == codigoAlumno);
+        SesionDatos.getListaAlumnos().add(alumno);
 
-            JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
-            alumno = null;
-            cargarAlumnosEnTabla();
-
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, "Error al modificar el alumno: " + e.getMessage());
-        }
+        JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
+        alumno = null;
+        cargarAlumnosEnTabla();
     }
 
     /**

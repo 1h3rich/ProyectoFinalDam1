@@ -67,8 +67,9 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
+        jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
-        jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setText("MODIFICAR MODULO");
 
         jButtonGuardar1.setText("Guardar");
@@ -78,6 +79,8 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldNombre.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldNombre.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldNombre.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -86,9 +89,13 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldCurso.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCurso.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCurso.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCurso.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldCreditos.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCreditos.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCreditos.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCreditos.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldCreditos.addActionListener(new java.awt.event.ActionListener() {
@@ -97,22 +104,36 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldCod_Ciclo.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCod_Ciclo.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCod_Ciclo.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jLabelInfoNombre.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre.setText("Nombre:");
 
+        jTextFieldHoras.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldHoras.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldHoras.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jLabelInfoCurso.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoCurso.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoCurso.setText("Curso:");
 
+        jLabelInfoCreditos.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoCreditos.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoCreditos.setText("Creditos");
 
         jLabelCurso.setText("1 o 2");
 
+        jLabelInfoNombre3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre3.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre3.setText("Horas:");
 
         jLabelCurso1.setText("Desde 0 hasta 99'99 ");
 
+        jLabelInfoNombre4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre4.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre4.setText("Codigo del Ciclo:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,9 +321,29 @@ public class ModificarModulo extends javax.swing.JFrame {
             return;
         }
 
-        int cod_ciclo = Integer.parseInt(codigo_ciclo);
-        int credits = Integer.parseInt(creditos);
-        int hors = Integer.parseInt(horas);
+        int cod_ciclo;
+        double credits;
+        int hors;
+        try {
+            cod_ciclo = Integer.parseInt(codigo_ciclo);
+            credits = Double.parseDouble(creditos.replace(",", "."));
+            hors = Integer.parseInt(horas);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Créditos y horas deben ser números.");
+            return;
+        }
+        if (!Validadores.validarCurso(curso)) {
+            JOptionPane.showMessageDialog(this, "El curso debe ser 1 o 2.");
+            return;
+        }
+        if (!Validadores.validarCreditosEcts(credits)) {
+            JOptionPane.showMessageDialog(this, "Los créditos deben estar entre 0 y 99.99.");
+            return;
+        }
+        if (!Validadores.validarHorasModulo(hors)) {
+            JOptionPane.showMessageDialog(this, "Las horas deben ser mayores que 0.");
+            return;
+        }
 
         modulo.setNombre(nombre);
         modulo.setCurso(curso);

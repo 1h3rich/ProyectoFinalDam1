@@ -12,15 +12,13 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para crear una nueva matrícula asociada a un alumno.
- * El código del alumno se recibe del formulario anterior y no es editable;
- * tras insertar la matrícula, abre el formulario de creación de líneas de matrícula.
+ * Formulario Swing para crear una nueva matrícula asociada a un alumno. El
+ * código del alumno se recibe del formulario anterior y no es editable; tras
+ * insertar la matrícula, abre el formulario de creación de líneas de matrícula.
  *
  * @author Rich
  */
 public class CrearMatricula extends javax.swing.JFrame {
-
-    private int idAlumno = -1;
 
     /**
      * Creates new form FormularioMatricula
@@ -31,15 +29,16 @@ public class CrearMatricula extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        this.idAlumno = idAlumno;
         configurarVentana();
         jTextFieldCodigoAlumno.setText(String.valueOf(idAlumno));
         jTextFieldCodigoAlumno.setEditable(false);
     }
 
-    /** Configura el cierre con confirmación y el texto del botón de guardar. */
+    /**
+     * Configura el cierre con confirmación y el texto del botón de guardar.
+     */
     private void configurarVentana() {
-         setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -53,7 +52,10 @@ public class CrearMatricula extends javax.swing.JFrame {
         jButtonGuardar.setText("Crear matrícula");
     }
 
-    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
+    /**
+     * Pide confirmación y, si el usuario acepta, cancela la transacción activa
+     * y cierra la ventana.
+     */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -276,7 +278,10 @@ public class CrearMatricula extends javax.swing.JFrame {
         });
     }
 
-    /** Valida los campos, inserta la matrícula en la BD dentro de la transacción activa y abre el formulario de líneas de matrícula. */
+    /**
+     * Valida los campos, inserta la matrícula en la BD dentro de la transacción
+     * activa y abre el formulario de líneas de matrícula.
+     */
     private void crearMatricula() {
 
         String estado = jTextFieldEstado.getText().trim();
@@ -300,13 +305,17 @@ public class CrearMatricula extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El código del alumno no puede estar vacío.");
             return;
         }
-
-        double importe;
+        
+        double importe = 0;
+        int codigoAlumno = 0;
+        int anio = 0;
 
         try {
             importe = Double.parseDouble(importeTexto);
+            codigoAlumno = Integer.parseInt(codigoAlumnoTexto);
+            anio = Integer.parseInt(anioAcademico);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El importe debe ser un número válido.");
+            JOptionPane.showMessageDialog(this, "El importe y el año académico deben ser números.");
             return;
         }
 
@@ -314,13 +323,12 @@ public class CrearMatricula extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El importe no puede ser negativo.");
             return;
         }
-
-        int codigoAlumno;
-
-        try {
-            codigoAlumno = Integer.parseInt(codigoAlumnoTexto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El código del alumno debe ser un número entero.");
+        if (!Validadores.validarCodigoPositivo(codigoAlumno)) {
+            JOptionPane.showMessageDialog(this, "El código del alumno debe ser un número positivo.");
+            return;
+        }
+        if (!Validadores.validarAñoAcademico(anio)) {
+            JOptionPane.showMessageDialog(this, "El año académico no es válido (rango 1900-3000).");
             return;
         }
 
@@ -331,12 +339,11 @@ public class CrearMatricula extends javax.swing.JFrame {
             String.valueOf(codigoAlumno)
         };
 
-        int idMatricula = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[1],datos);
+        int idMatricula = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[1], datos);
 
         if (idMatricula != -1) {
             JOptionPane.showMessageDialog(this, "Matrícula creada correctamente con ID: " + idMatricula);
 
-            int anio = Integer.parseInt(anioAcademico);
             Matricula matricula = new Matricula(idMatricula, codigoAlumno, anio, estado, importe);
             SesionDatos.registrarMatricula(matricula, false);
 

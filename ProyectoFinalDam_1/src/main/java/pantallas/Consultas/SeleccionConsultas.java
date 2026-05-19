@@ -74,6 +74,8 @@ public class SeleccionConsultas extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("MENU CONSULTAS");
 
+        jButtonUniTabla.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonUniTabla.setForeground(new java.awt.Color(0, 0, 0));
         jButtonUniTabla.setText("UNITABLA");
         jButtonUniTabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,6 +83,8 @@ public class SeleccionConsultas extends javax.swing.JFrame {
             }
         });
 
+        jButtonMultitabla.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonMultitabla.setForeground(new java.awt.Color(0, 0, 0));
         jButtonMultitabla.setText("MULTITABLA");
         jButtonMultitabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,6 +92,8 @@ public class SeleccionConsultas extends javax.swing.JFrame {
             }
         });
 
+        jButtonEjercicios.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonEjercicios.setForeground(new java.awt.Color(0, 0, 0));
         jButtonEjercicios.setText("EJERCICIOS");
         jButtonEjercicios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,34 +109,27 @@ public class SeleccionConsultas extends javax.swing.JFrame {
                 .addContainerGap(490, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonEjercicios)
-                            .addComponent(jButtonUniTabla))
-                        .addGap(585, 585, 585))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(454, 454, 454))))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(618, Short.MAX_VALUE)
-                    .addComponent(jButtonMultitabla)
-                    .addGap(581, 581, 581)))
+                        .addGap(454, 454, 454))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButtonMultitabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonUniTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonEjercicios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(619, 619, 619))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jLabel1)
-                .addGap(156, 156, 156)
+                .addGap(96, 96, 96)
+                .addComponent(jButtonMultitabla)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonUniTabla)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonEjercicios)
-                .addContainerGap(406, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(203, 203, 203)
-                    .addComponent(jButtonMultitabla)
-                    .addContainerGap(493, Short.MAX_VALUE)))
+                .addContainerGap(424, Short.MAX_VALUE))
         );
 
         pack();

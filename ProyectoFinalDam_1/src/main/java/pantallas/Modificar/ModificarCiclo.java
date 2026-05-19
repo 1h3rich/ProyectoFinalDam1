@@ -67,6 +67,8 @@ public class ModificarCiclo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextFieldFamiliaProfresional.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldFamiliaProfresional.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldFamiliaProfresional.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldFamiliaProfresional.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldFamiliaProfresional.addActionListener(new java.awt.event.ActionListener() {
@@ -75,10 +77,16 @@ public class ModificarCiclo extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldAñoCurricular.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldAñoCurricular.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldAñoCurricular.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldHoras.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldHoras.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldHoras.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldNivel.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldNivel.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldNivel.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldNivel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,16 +94,28 @@ public class ModificarCiclo extends javax.swing.JFrame {
             }
         });
 
+        jLabelInfoCodigo.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoCodigo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoCodigo.setText("Codigo:");
 
+        jLabelInfoDenominacion.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoDenominacion.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoDenominacion.setText("Denominación:");
 
+        jLabelInfoFamiliaProfesional.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoFamiliaProfesional.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoFamiliaProfesional.setText("Familia profesional:");
 
+        jLabelInfoNombre3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre3.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre3.setText("Nivel:");
 
+        jLabelInfoNombre4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoNombre4.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre4.setText("Horas:");
 
+        jTextFieldCodigo.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCodigo.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCodigo.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldCodigo.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldCodigo.addActionListener(new java.awt.event.ActionListener() {
@@ -104,15 +124,23 @@ public class ModificarCiclo extends javax.swing.JFrame {
             }
         });
 
+        jLabelInfoAñoCurricular.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoAñoCurricular.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoAñoCurricular.setText("AñoCurricular");
 
+        jTextFieldDenominacion.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldDenominacion.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldDenominacion.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldDenominacion.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("MODIFICAR CICLO");
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -375,8 +403,8 @@ public class ModificarCiclo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "La familia profesional no puede estar vacía.");
             return;
         }
-        if (nivel.isBlank()) {
-            JOptionPane.showMessageDialog(this, "El nivel no puede estar vacío.");
+        if (!Validadores.validarNivel(nivel)) {
+            JOptionPane.showMessageDialog(this, "Nivel inválido. Debe ser Basico, Medio o Superior.");
             return;
         }
         if (horas.isBlank()) {
@@ -388,11 +416,29 @@ public class ModificarCiclo extends javax.swing.JFrame {
             return;
         }
 
+        int horasVal;
+        int anioVal;
+        try {
+            horasVal = Integer.parseInt(horas);
+            anioVal = Integer.parseInt(anio);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Las horas y el año curricular deben ser números enteros.");
+            return;
+        }
+        if (!Validadores.validarHorasCiclo(horasVal)) {
+            JOptionPane.showMessageDialog(this, "Las horas deben ser mayores que 0.");
+            return;
+        }
+        if (!Validadores.validarAñoCurriculum(anioVal)) {
+            JOptionPane.showMessageDialog(this, "El año curricular debe estar entre 1900 y 3000.");
+            return;
+        }
+
         ciclo.setDenominacion(denominacion);
         ciclo.setFamiliaProfesional(familia);
         ciclo.setNivel(nivel);
-        ciclo.setHoras(Integer.parseInt(horas));
-        ciclo.setAñoCurriculum(Integer.parseInt(anio));
+        ciclo.setHoras(horasVal);
+        ciclo.setAñoCurriculum(anioVal);
 
         String[] entradas = {
             ciclo.getDenominacion(),

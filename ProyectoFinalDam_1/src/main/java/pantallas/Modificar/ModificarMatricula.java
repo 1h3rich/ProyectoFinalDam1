@@ -65,6 +65,8 @@ public class ModificarMatricula extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextFieldAnioAcademico.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldAnioAcademico.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldAnioAcademico.setPreferredSize(new java.awt.Dimension(64, 128));
 
         jButtonCancelar.setText("Cancelar");
@@ -74,21 +76,37 @@ public class ModificarMatricula extends javax.swing.JFrame {
             }
         });
 
+        jLabelInfoEstado.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoEstado.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoEstado.setText("Estado:");
 
+        jLabelInfoActiva.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoActiva.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoActiva.setText("'Parcial', 'Completa' o 'Anulada'");
 
+        jLabelInfoImporte.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoImporte.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoImporte.setText("Importe:");
 
+        jLabelInfoEuros.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoEuros.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoEuros.setText("Euros");
 
+        jLabelInfoAnioAcademico.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoAnioAcademico.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoAnioAcademico.setText("Año Académico:");
 
+        jLabelInfoEuros1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoEuros1.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoEuros1.setText("Formato 20XX/20XX +1");
 
+        jLabelInfoCodigoAlumno.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoCodigoAlumno.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoCodigoAlumno.setText("Codigo del Alumno:");
 
+        jLabelTitulo.setBackground(new java.awt.Color(255, 255, 255));
         jLabelTitulo.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("RELLENAR MATRICULA");
 
@@ -99,6 +117,8 @@ public class ModificarMatricula extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldEstado.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldEstado.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldEstado.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldEstado.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldEstado.addActionListener(new java.awt.event.ActionListener() {
@@ -107,6 +127,8 @@ public class ModificarMatricula extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldImporte.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldImporte.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldImporte.setMinimumSize(new java.awt.Dimension(64, 128));
         jTextFieldImporte.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldImporte.addActionListener(new java.awt.event.ActionListener() {
@@ -115,8 +137,12 @@ public class ModificarMatricula extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldCodigoAlumno.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldCodigoAlumno.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCodigoAlumno.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

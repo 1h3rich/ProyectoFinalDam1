@@ -981,6 +981,22 @@ public class GestionBaseDeDatos {
     }
 
     /**
+     * Elimina de la BD el módulo indicado por su código.
+     * Las líneas de matrícula asociadas se eliminan automáticamente por CASCADE.
+     *
+     * @param codigoModulo Código primario del módulo a eliminar.
+     * @return {@code true} si el módulo fue eliminado; {@code false} en caso de error.
+     */
+    public static boolean eliminarModuloPorCodigo(int codigoModulo) {
+        comprobarConexion();
+        return ejecutarActualizacion(
+                ConsultasSQL.DELETE_MODULO[0],
+                new String[]{String.valueOf(codigoModulo)},
+                "Módulo eliminado"
+        );
+    }
+
+    /**
      * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],
      * params)
      */

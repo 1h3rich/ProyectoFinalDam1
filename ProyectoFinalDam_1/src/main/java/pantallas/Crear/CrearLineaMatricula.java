@@ -53,7 +53,6 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
      * Configura el cierre con confirmación, inicializa el combo de ciclos y
      * registra el listener de selección.
      */
-
     private void configurarVentana() {
         setLocationRelativeTo(null);
 
@@ -73,24 +72,6 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         jComboBoxCiclos.addActionListener(e -> cicloSeleccionado());
     }
 
-    private void cargarLineasEnTabla() {
-        modeloTabla.setRowCount(0);
-        String sql = "SELECT codigo, codigo_ciclo, nombre, curso, creditos_ects, horas FROM modulo order BY codigo where codigo_cilo = ?";
-        String entradas [] = new String[1];
-      
-        DefaultTableModel temp = GestionBaseDeDatos.obtenerTableModel(sql, new String[0]);
-        for (int i = 0; i < temp.getRowCount(); i++) {
-            modeloTabla.addRow(new Object[]{
-                temp.getValueAt(i, 0),
-                temp.getValueAt(i, 1),
-                temp.getValueAt(i, 2),
-                temp.getValueAt(i, 3),
-                temp.getValueAt(i, 4),
-                temp.getValueAt(i, 5)
-            });
-        }
-    }
-    
     /**
      * Consulta los ciclos disponibles en la BD y los carga en el combo,
      * actualizando el mapa de IDs.
@@ -137,7 +118,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
 
         cargarModulosPorCiclo(idCicloSeleccionado); // AÑADIR
     }
-    
+
     private void cargarModulosPorCiclo(int idCiclo) {
 
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
@@ -161,6 +142,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             mapaModulos.put(modulo.toString(), modulo.getId());
         }
     }
+
     /**
      * Pide confirmación y, si el usuario acepta, cancela la transacción activa
      * y cierra la ventana.
@@ -241,6 +223,11 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         });
 
         jComboBoxCiclos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxCiclos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxCiclosActionPerformed(evt);
+            }
+        });
 
         jTextFieldRepeticion.setPreferredSize(new java.awt.Dimension(64, 128));
 
@@ -367,6 +354,10 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldPrimeraCalificacionActionPerformed
 
+    private void jComboBoxCiclosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCiclosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxCiclosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -409,7 +400,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
      */
     private void crearLinea() {
 
-        int repeticion;
+        int repeticion = 0;
         double primeraCalificacion = 0;
         double segundaCalificacion = 0;
 
@@ -423,6 +414,11 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             return;
         }
 
+        if (idModuloSeleccionado == -1) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un módulo de la lista.");
+            return;
+        }
+
         String repeticionTexto = jTextFieldRepeticion.getText().trim();
         String temp1 = jTextFieldPrimeraCalificacion.getText().trim().replace(",", ".");
         String temp2 = jTextFieldSegundaCalificacion.getText().trim().replace(",", ".");
@@ -433,36 +429,27 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             return;
         }
 
-        if (!Validadores.validarTextoNoVacio(temp1)) {
-            primeraCalificacion = 0;
-        } else {
-            primeraCalificacion = Double.parseDouble(temp1);
-        }
-        if (!Validadores.validarTextoNoVacio(temp2)) {
-            segundaCalificacion = 0;
-        } else {
-            segundaCalificacion = Double.parseDouble(temp2);
-        }
-
         try {
+            primeraCalificacion = Validadores.validarTextoNoVacio(temp1) ? Double.parseDouble(temp1) : 0;
+            segundaCalificacion = Validadores.validarTextoNoVacio(temp2) ? Double.parseDouble(temp2) : 0;
             repeticion = Integer.parseInt(repeticionTexto);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Repetición y calificaciones deben ser numéricas.");
+            JOptionPane.showMessageDialog(this, "Repetición y calificaciones deben ser números.");
             return;
         }
-
-        if (repeticion < 0) {
-            JOptionPane.showMessageDialog(this, "La repetición no puede ser negativa.");
+        if (!Validadores.validarRepeticion(repeticion)) {
+            JOptionPane.showMessageDialog(this, "La repetición debe ser 1 o mayor.");
             return;
         }
-
-        if (primeraCalificacion < 0 || primeraCalificacion > 10
-                || segundaCalificacion < 0 || segundaCalificacion > 10) {
-
-            JOptionPane.showMessageDialog(this, "Las calificaciones deben estar entre 0 y 10.");
+        if (!Validadores.validarCalificacion(primeraCalificacion)) {
+            JOptionPane.showMessageDialog(this, "La primera calificación debe estar entre 0 y 10.");
             return;
         }
-
+        if (!Validadores.validarCalificacion(segundaCalificacion)) {
+            JOptionPane.showMessageDialog(this, "La segunda calificación debe estar entre 0 y 10.");
+            return;
+        }
+        
         String[] datos = {
             String.valueOf(idMatricula),
             String.valueOf(idModuloSeleccionado),

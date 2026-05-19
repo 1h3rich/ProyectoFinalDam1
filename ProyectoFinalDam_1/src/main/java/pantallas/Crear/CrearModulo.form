@@ -40,22 +40,19 @@
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jTextFieldCurso" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jLabelCurso" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jTextFieldHoras" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jTextFieldCreditos" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jLabelCurso1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jTextFieldNombre" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldCod_Ciclo" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="jTextFieldCod_Ciclo" pref="155" max="32767" attributes="0"/>
+                  <Component id="jTextFieldHoras" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jTextFieldCurso" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jTextFieldCreditos" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jTextFieldNombre" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="352" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabelCurso" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelCurso1" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="267" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -85,16 +82,20 @@
                   <Component id="jLabelInfoNombre" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jTextFieldCurso" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                  <Component id="jLabelInfoCurso" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabelCurso" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jTextFieldCreditos" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                  <Component id="jLabelInfoCreditos" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabelCurso1" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jTextFieldCurso" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="jLabelInfoCurso" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jTextFieldCreditos" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="jLabelInfoCreditos" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelCurso1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="jLabelCurso" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">

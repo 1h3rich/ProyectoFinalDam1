@@ -197,13 +197,14 @@ public class Validadores {
     }
 
     /**
-     * Comprueba que el nivel del ciclo formativo no sea nulo ni esté vacío.
+     * Comprueba que el nivel del ciclo sea exactamente "Basico", "Medio" o "Superior".
+     * Si el nivel no es válido, muestra el mensaje: "Nivel inválido. Debe ser Basico, Medio o Superior."
      *
-     * @param nivel Nivel del ciclo (p.ej. "básico", "medio", "superior").
-     * @return true si el nivel es una cadena no vacía.
+     * @param nivel Nivel del ciclo a validar.
+     * @return true si el nivel es exactamente "Basico", "Medio" o "Superior".
      */
     public static boolean validarNivel(String nivel) {
-        return nivel != null && !nivel.trim().isEmpty();
+        return "Basico".equalsIgnoreCase(nivel) || "Medio".equalsIgnoreCase(nivel) || "Superior".equalsIgnoreCase(nivel);
     }
 
     /**

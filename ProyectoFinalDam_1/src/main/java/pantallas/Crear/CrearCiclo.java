@@ -9,7 +9,6 @@ import Utils.Validadores;
 import javax.swing.JOptionPane;
 import modelos.Ciclo;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
-import java.awt.Dimension;
 import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
@@ -83,6 +82,7 @@ public class CrearCiclo extends javax.swing.JFrame {
         jLabelTitulo = new javax.swing.JLabel();
         jButtonCancelar = new javax.swing.JButton();
         jTextFieldDenominacion = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,6 +133,8 @@ public class CrearCiclo extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Básico, medio o superior.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,7 +168,9 @@ public class CrearCiclo extends javax.swing.JFrame {
                         .addComponent(jButtonCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonGuardar)))
-                .addGap(350, 350, 350))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(290, 290, 290))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,7 +188,8 @@ public class CrearCiclo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoNombre3))
+                    .addComponent(jLabelInfoNombre3)
+                    .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,6 +233,8 @@ public class CrearCiclo extends javax.swing.JFrame {
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         crearCiclo();
     }//GEN-LAST:event_jButtonGuardarActionPerformed
+    // TODO add your handling code here:
+
 
     private void jComboBoxCiclosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCiclosActionPerformed
         // TODO add your handling code here:
@@ -286,8 +293,8 @@ public class CrearCiclo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "La familia profesional no puede estar vacía.");
             return;
         }
-        if (!Validadores.validarTextoNoVacio(nivel)) {
-            JOptionPane.showMessageDialog(this, "El nivel no puede estar vacío.");
+        if (!Validadores.validarNivel(nivel)) {
+            JOptionPane.showMessageDialog(this, "Nivel inválido. Debe ser Basico, Medio o Superior.");
             return;
         }
         if (!Validadores.validarTextoNoVacio(horasTexto)) {
@@ -307,6 +314,15 @@ public class CrearCiclo extends javax.swing.JFrame {
             anioCurricular = Integer.parseInt(anioTexto);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Las horas y el año curricular deben ser números enteros.");
+            return;
+        }
+        
+        if (!Validadores.validarHorasCiclo(horas)) {
+            JOptionPane.showMessageDialog(this, "Las horas deben ser mayores que 0.");
+            return;
+        }
+        if (!Validadores.validarAñoCurriculum(anioCurricular)) {
+            JOptionPane.showMessageDialog(this, "El año curricular debe estar entre 1900 y 3000.");
             return;
         }
 
@@ -343,6 +359,7 @@ public class CrearCiclo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelInfoAñoCurricular;
     private javax.swing.JLabel jLabelInfoDenominacion;
     private javax.swing.JLabel jLabelInfoFamiliaProfesional;

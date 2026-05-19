@@ -4,20 +4,28 @@ package pantallas.Eliminar;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import Utils.ItemCombo;
 import java.awt.Dimension;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para eliminar un ciclo formativo de la base de datos.
- * Muestra todos los ciclos en una tabla y, tras confirmación, elimina el seleccionado
- * junto con sus módulos y las líneas de matrícula asociadas.
+ * Formulario Swing para eliminar un módulo de un ciclo formativo.
+ * Permite seleccionar el ciclo, luego el módulo, y elimina el módulo
+ * junto con sus líneas de matrícula asociadas (CASCADE en BD).
  *
  * @author Rich
  */
 public class EliminarModulo extends javax.swing.JFrame {
+
+    private int idCicloSeleccionado = -1;
+    private int idModuloSeleccionado = -1;
+
+    private HashMap<String, Integer> mapaCiclos = new HashMap<>();
+    private HashMap<String, Integer> mapaModulos = new HashMap<>();
 
     /**
      * Creates new form FormularioCiclo
@@ -26,74 +34,150 @@ public class EliminarModulo extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         configurarVentana();
-        cargarTodosLosCiclos();
+
+        configurarTabla(); // AÑADIR ESTO
+
+        cargarCiclos();
     }
 
-    /** Configura título, textos de etiquetas, modo de selección de la tabla y tamaño del scroll panel. */
+    /**
+     * Configura título, textos de etiquetas, modo de selección de la tabla,
+     * tamaño del scroll panel y listener del comboBox de ciclos.
+     */
     private void configurarVentana() {
         setLocationRelativeTo(null);
-        setTitle("Eliminar ciclo");
+        setTitle("Eliminar módulo");
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jButtonEliminar.setText("Eliminar ciclo");
         jButton1.setText("Actualizar");
 
-        jLabelTitulo.setText("ELIMINAR CICLO");
-        jLabelEliminar.setText("Elimina el ciclo, sus módulos y las líneas de matrícula asociadas.");
-        jLabel2.setText("Selecciona el ciclo correcto en la tabla antes de eliminarlo.");
+        jLabelTitulo.setText("ELIMINAR MÓDULO");
+        jLabelEliminar.setText("Elimina el módulo seleccionado y sus líneas de matrícula asociadas.");
+        jLabel2.setText("Selecciona el ciclo y luego el módulo de la tabla antes de eliminarlo.");
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         Dimension tamañoTabla = new Dimension(948, 427);
         jScrollPane1.setPreferredSize(tamañoTabla);
 
+        jComboBoxCiclos.addItemListener(e -> {
+            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                cicloSeleccionado();
+            }
+        });
+
         pack();
     }
 
-    /** Consulta todos los ciclos de la BD y los muestra en la tabla. */
-    private void cargarTodosLosCiclos() {
-        DefaultTableModel modelo = GestionBaseDeDatos.obtenerTodosLosCiclos();
+    private void configurarTabla() {
+
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"ID", "Módulo"},
+                0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         jTable1.setModel(modelo);
+
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+
+            if (!e.getValueIsAdjusting()) {
+
+                int fila = jTable1.getSelectedRow();
+
+                if (fila != -1) {
+
+                    idModuloSeleccionado = Integer.parseInt(
+                            jTable1.getValueAt(fila, 0).toString()
+                    );
+
+                    System.out.println("Modulo seleccionado: " + idModuloSeleccionado);
+                }
+            }
+        });
     }
 
-    /** Solicita confirmación y elimina de la BD el ciclo seleccionado junto con sus módulos y líneas de matrícula. */
-    private void eliminarCicloSeleccionado() {
-        int filaVista = jTable1.getSelectedRow();
+    private void cargarCiclos() {
+        jComboBoxCiclos.removeAllItems();
 
-        if (filaVista == -1) {
-            JOptionPane.showMessageDialog(this, "Debes seleccionar un ciclo de la tabla.");
+        mapaCiclos.clear();
+        mapaModulos.clear();
+
+        jComboBoxCiclos.addItem("Selecciona un ciclo");
+
+        for (ItemCombo ciclo : GestionBaseDeDatos.obtenerCiclosCombo()) {
+            String texto = ciclo.toString();
+
+            jComboBoxCiclos.addItem(texto);
+            mapaCiclos.put(texto, ciclo.getId());
+        }
+    }
+
+    private void cicloSeleccionado() {
+
+        Object seleccionado = jComboBoxCiclos.getSelectedItem();
+
+        if (seleccionado == null) {
             return;
         }
 
-        int filaModelo = jTable1.convertRowIndexToModel(filaVista);
+        String textoSeleccionado = seleccionado.toString();
 
-        Object codigoObj = jTable1.getModel().getValueAt(filaModelo, 0);
-        Object denominacionObj = jTable1.getModel().getValueAt(filaModelo, 1);
-        Object familiaObj = jTable1.getModel().getValueAt(filaModelo, 2);
-        Object nivelObj = jTable1.getModel().getValueAt(filaModelo, 3);
-        Object horasObj = jTable1.getModel().getValueAt(filaModelo, 4);
-        Object anioObj = jTable1.getModel().getValueAt(filaModelo, 5);
+        if (!mapaCiclos.containsKey(textoSeleccionado)) {
 
-        int codigoCiclo;
+            idCicloSeleccionado = -1;
+            idModuloSeleccionado = -1;
 
-        try {
-            codigoCiclo = Integer.parseInt(codigoObj.toString());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El código del ciclo no es válido.");
             return;
+        }
+
+        idCicloSeleccionado = mapaCiclos.get(textoSeleccionado);
+
+        cargarModulosPorCiclo(idCicloSeleccionado); // AÑADIR
+    }
+
+    /**
+     * Recarga el comboBox de ciclos desde la BD (llamado por el botón Actualizar).
+     */
+    private void cargarTodosLosCiclos() {
+        cargarCiclos();
+    }
+
+    /**
+     * Solicita confirmación y elimina de la BD el módulo seleccionado.
+     * Las líneas de matrícula asociadas se borran automáticamente por CASCADE.
+     */
+    private void eliminarModulo() {
+        if (idCicloSeleccionado == -1) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un ciclo.");
+            return;
+        }
+
+        if (idModuloSeleccionado == -1) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un módulo de la tabla.");
+            return;
+        }
+
+        int filaVista = jTable1.getSelectedRow();
+        String nombreModulo = "(sin nombre)";
+        if (filaVista != -1) {
+            Object nombre = jTable1.getValueAt(filaVista, 1);
+            if (nombre != null) {
+                nombreModulo = nombre.toString();
+            }
         }
 
         int opcion = JOptionPane.showConfirmDialog(
                 this,
-                "Vas a eliminar el ciclo:\n\n"
-                + "Código: " + codigoCiclo + "\n"
-                + "Denominación: " + denominacionObj + "\n"
-                + "Familia profesional: " + familiaObj + "\n"
-                + "Nivel: " + nivelObj + "\n"
-                + "Horas: " + horasObj + "\n"
-                + "Año curricular: " + anioObj + "\n\n"
-                + "También se eliminarán sus módulos y las líneas de matrícula asociadas.\n"
-                + "No se eliminarán alumnos ni matrículas.\n\n"
-                + "¿Seguro que quieres continuar?",
+                "¿Seguro que quieres eliminar el módulo?\n\n"
+                + "ID: " + idModuloSeleccionado + "\n"
+                + "Nombre: " + nombreModulo + "\n\n"
+                + "También se eliminarán sus líneas de matrícula asociadas.",
                 "Confirmar eliminación",
                 JOptionPane.YES_NO_OPTION
         );
@@ -102,13 +186,38 @@ public class EliminarModulo extends javax.swing.JFrame {
             return;
         }
 
-        boolean eliminado = GestionBaseDeDatos.eliminarCicloCompletoPorCodigo(codigoCiclo);
+        boolean eliminado = GestionBaseDeDatos.eliminarModuloPorCodigo(idModuloSeleccionado);
 
         if (eliminado) {
-            JOptionPane.showMessageDialog(this, "Ciclo eliminado correctamente.");
-            cargarTodosLosCiclos();
+            JOptionPane.showMessageDialog(this, "Módulo eliminado correctamente.");
+            idModuloSeleccionado = -1;
+            cargarModulosPorCiclo(idCicloSeleccionado);
         } else {
-            JOptionPane.showMessageDialog(this, "No se pudo eliminar el ciclo.");
+            JOptionPane.showMessageDialog(this, "No se pudo eliminar el módulo.");
+        }
+    }
+
+    private void cargarModulosPorCiclo(int idCiclo) {
+
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+
+        modelo.setRowCount(0);
+
+        mapaModulos.clear();
+
+        /*
+        EJEMPLO:
+        Debes crear este método en GestionBaseDeDatos
+        que devuelva una lista de ItemCombo
+         */
+        for (ItemCombo modulo : GestionBaseDeDatos.obtenerModulosPorCicloCombo(idCiclo)) {
+
+            modelo.addRow(new Object[]{
+                modulo.getId(),
+                modulo.toString()
+            });
+
+            mapaModulos.put(modulo.toString(), modulo.getId());
         }
     }
 
@@ -129,6 +238,7 @@ public class EliminarModulo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jComboBoxCiclos = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,6 +249,8 @@ public class EliminarModulo extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(255, 255, 255));
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Actualizar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,8 +262,10 @@ public class EliminarModulo extends javax.swing.JFrame {
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("ELIMINAR CICLO");
 
-        jLabelEliminar.setText("Elimina el ciclo y los modulos del mismo.");
+        jLabelEliminar.setText("Eliminar el modulo");
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -181,35 +295,41 @@ public class EliminarModulo extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jComboBoxCiclos.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxCiclos.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBoxCiclos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(236, 236, 236)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(538, 538, 538)
-                                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1)
-                                .addGap(18, 18, 18))))
+                                .addGap(236, 236, 236)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(538, 538, 538)
+                                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jButton1)
+                                    .addGap(18, 18, 18))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabelEliminar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButtonEliminar)
+                            .addGap(22, 22, 22)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabelEliminar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonEliminar)
-                        .addGap(22, 22, 22)))
+                        .addGap(567, 567, 567)
+                        .addComponent(jLabel2)))
                 .addContainerGap(217, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(567, 567, 567)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,7 +337,9 @@ public class EliminarModulo extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -233,7 +355,7 @@ public class EliminarModulo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        eliminarCicloSeleccionado();
+        eliminarModulo();
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -304,6 +426,7 @@ public class EliminarModulo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonEliminar;
+    private javax.swing.JComboBox<String> jComboBoxCiclos;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelEliminar;
     private javax.swing.JLabel jLabelTitulo;

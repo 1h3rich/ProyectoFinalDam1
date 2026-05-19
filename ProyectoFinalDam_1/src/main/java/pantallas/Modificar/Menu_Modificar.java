@@ -62,10 +62,16 @@ public class Menu_Modificar extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButtonAlumno.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonAlumno.setForeground(new java.awt.Color(0, 0, 0));
         jButtonAlumno.setText("Alumno");
 
+        jButtonMatricula.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonMatricula.setForeground(new java.awt.Color(0, 0, 0));
         jButtonMatricula.setText("Matricula");
 
+        jButtonLineaMatricula.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonLineaMatricula.setForeground(new java.awt.Color(0, 0, 0));
         jButtonLineaMatricula.setText("LineaMatricula");
         jButtonLineaMatricula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,6 +79,8 @@ public class Menu_Modificar extends javax.swing.JFrame {
             }
         });
 
+        jButtonModulo.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonModulo.setForeground(new java.awt.Color(0, 0, 0));
         jButtonModulo.setText("Modulo");
         jButtonModulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,6 +88,8 @@ public class Menu_Modificar extends javax.swing.JFrame {
             }
         });
 
+        jButtonCiclo.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonCiclo.setForeground(new java.awt.Color(0, 0, 0));
         jButtonCiclo.setText("Ciclo");
         jButtonCiclo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

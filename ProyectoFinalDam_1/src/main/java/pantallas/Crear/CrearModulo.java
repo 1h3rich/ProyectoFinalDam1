@@ -12,9 +12,9 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para registrar un nuevo módulo formativo en la base de datos.
- * Puede usarse de forma autónoma o vinculado a un ciclo concreto; en ese caso
- * el código del ciclo se recibe por constructor y no es editable.
+ * Formulario Swing para registrar un nuevo módulo formativo en la base de
+ * datos. Puede usarse de forma autónoma o vinculado a un ciclo concreto; en ese
+ * caso el código del ciclo se recibe por constructor y no es editable.
  *
  * @author Rich
  */
@@ -22,7 +22,10 @@ public class CrearModulo extends javax.swing.JFrame {
 
     private int idCiclo = -1;
 
-    /** Construye el formulario sin ciclo asociado (el usuario introduce el código manualmente). */
+    /**
+     * Construye el formulario sin ciclo asociado (el usuario introduce el
+     * código manualmente).
+     */
     public CrearModulo() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -30,7 +33,9 @@ public class CrearModulo extends javax.swing.JFrame {
     }
 
     /**
-     * Construye el formulario con el ciclo preseleccionado; el campo de código de ciclo se muestra como no editable.
+     * Construye el formulario con el ciclo preseleccionado; el campo de código
+     * de ciclo se muestra como no editable.
+     *
      * @param idCiclo Identificador del ciclo al que pertenecerá el módulo.
      */
     public CrearModulo(int idCiclo) {
@@ -45,7 +50,10 @@ public class CrearModulo extends javax.swing.JFrame {
         jTextFieldCod_Ciclo.setEditable(false);
     }
 
-    /** Configura el título, el cierre con confirmación y el texto del botón de guardar. */
+    /**
+     * Configura el título, el cierre con confirmación y el texto del botón de
+     * guardar.
+     */
     private void configurarVentana() {
         setLocationRelativeTo(null);
 
@@ -161,19 +169,17 @@ public class CrearModulo extends javax.swing.JFrame {
                             .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(jTextFieldHoras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldCurso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelCurso))
-                    .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelCurso1))
-                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(352, Short.MAX_VALUE))
+                    .addComponent(jLabelCurso)
+                    .addComponent(jLabelCurso1))
+                .addContainerGap(267, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,15 +202,17 @@ public class CrearModulo extends javax.swing.JFrame {
                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoNombre))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoCurso)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoCurso))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfoCreditos)
+                            .addComponent(jLabelCurso1)))
                     .addComponent(jLabelCurso))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfoCreditos)
-                    .addComponent(jLabelCurso1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelInfoNombre3)
@@ -285,7 +293,10 @@ public class CrearModulo extends javax.swing.JFrame {
         });
     }
 
-    /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
+    /**
+     * Pide confirmación y, si el usuario acepta, cancela la transacción activa
+     * y cierra la ventana.
+     */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -300,7 +311,10 @@ public class CrearModulo extends javax.swing.JFrame {
         }
     }
 
-    /** Valida los campos, inserta el módulo en la BD y vuelve al formulario de gestión de módulos del ciclo. */
+    /**
+     * Valida los campos, inserta el módulo en la BD y vuelve al formulario de
+     * gestión de módulos del ciclo.
+     */
     private void crearModulo() {
 
         String nombre = jTextFieldNombre.getText().trim();
@@ -329,32 +343,33 @@ public class CrearModulo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El código del ciclo no puede estar vacío.");
             return;
         }
-
-        int creditos;
-        int horas;
-        int codigoCiclo;
-
+        
+        double creditos = 0;
+        int horas = 0;
+        int codigoCiclo = 0;
+        
         try {
-            creditos = Integer.parseInt(creditosTexto);
+            creditos = Double.parseDouble(creditosTexto);
             horas = Integer.parseInt(horasTexto);
             codigoCiclo = Integer.parseInt(codigoCicloTexto);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Créditos, horas y código de ciclo deben ser números enteros.");
+            JOptionPane.showMessageDialog(this, "Creditos y horas deben de ser números.");
             return;
         }
-
-        if (creditos <= 0) {
-            JOptionPane.showMessageDialog(this, "Los créditos deben ser mayores que 0.");
+        if (!Validadores.validarCurso(curso)) {
+            JOptionPane.showMessageDialog(this, "El curso debe ser 1 o 2.");
             return;
         }
-
-        if (horas <= 0) {
+        if (!Validadores.validarCreditosEcts(creditos)) {
+            JOptionPane.showMessageDialog(this, "Los créditos deben estar entre 0 y 99.99.");
+            return;
+        }
+        if (!Validadores.validarHorasModulo(horas)) {
             JOptionPane.showMessageDialog(this, "Las horas deben ser mayores que 0.");
             return;
         }
-
-        if (codigoCiclo <= 0) {
-            JOptionPane.showMessageDialog(this, "El código de ciclo no es válido.");
+        if (!Validadores.validarCodigoPositivo(codigoCiclo)) {
+            JOptionPane.showMessageDialog(this, "El código del ciclo debe ser un número positivo.");
             return;
         }
 
@@ -366,7 +381,7 @@ public class CrearModulo extends javax.swing.JFrame {
             String.valueOf(codigoCiclo)
         };
 
-        int idModulo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MODULO[1],datos);
+        int idModulo = GestionBaseDeDatos.insertarYDevolverID(ConsultasSQL.INSERT_MODULO[1], datos);
 
         if (idModulo != -1) {
             JOptionPane.showMessageDialog(this, "Módulo creado correctamente con ID: " + idModulo);

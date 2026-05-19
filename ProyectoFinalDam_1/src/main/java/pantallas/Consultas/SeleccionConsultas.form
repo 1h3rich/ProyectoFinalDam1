@@ -27,23 +27,17 @@
               <EmptySpace pref="490" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButtonEjercicios" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonUniTabla" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="585" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="454" max="-2" attributes="0"/>
                   </Group>
-              </Group>
-          </Group>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="618" max="32767" attributes="0"/>
-                  <Component id="jButtonMultitabla" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="581" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jButtonMultitabla" max="32767" attributes="0"/>
+                          <Component id="jButtonUniTabla" max="32767" attributes="0"/>
+                          <Component id="jButtonEjercicios" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="619" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
       </Group>
@@ -53,18 +47,13 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="156" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
+              <Component id="jButtonMultitabla" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jButtonUniTabla" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jButtonEjercicios" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="406" max="32767" attributes="0"/>
-          </Group>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="203" max="-2" attributes="0"/>
-                  <Component id="jButtonMultitabla" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="493" max="32767" attributes="0"/>
-              </Group>
+              <EmptySpace pref="424" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -87,6 +76,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonUniTabla">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="UNITABLA"/>
       </Properties>
       <Events>
@@ -95,6 +90,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonMultitabla">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="MULTITABLA"/>
       </Properties>
       <Events>
@@ -103,6 +104,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonEjercicios">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="EJERCICIOS"/>
       </Properties>
       <Events>

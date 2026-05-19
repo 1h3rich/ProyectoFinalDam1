@@ -34,9 +34,12 @@ public class MenuBorrar extends javax.swing.JFrame {
         jButtonBorrarAlumno = new javax.swing.JButton();
         jButtonBorrarCiclo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButtonBorrarModulo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButtonBorrarAlumno.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonBorrarAlumno.setForeground(new java.awt.Color(0, 0, 0));
         jButtonBorrarAlumno.setText("Borrar Alumno");
         jButtonBorrarAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -44,6 +47,8 @@ public class MenuBorrar extends javax.swing.JFrame {
             }
         });
 
+        jButtonBorrarCiclo.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonBorrarCiclo.setForeground(new java.awt.Color(0, 0, 0));
         jButtonBorrarCiclo.setText("Borrar Ciclo");
         jButtonBorrarCiclo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -56,6 +61,15 @@ public class MenuBorrar extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("BORRAR");
 
+        jButtonBorrarModulo.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonBorrarModulo.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonBorrarModulo.setText("Borrar Modulo");
+        jButtonBorrarModulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarModuloActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -65,12 +79,14 @@ public class MenuBorrar extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(260, 260, 260)
                         .addComponent(jButtonBorrarAlumno)
-                        .addGap(139, 139, 139)
+                        .addGap(36, 36, 36)
+                        .addComponent(jButtonBorrarModulo)
+                        .addGap(27, 27, 27)
                         .addComponent(jButtonBorrarCiclo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(349, 349, 349)
                         .addComponent(jLabel1)))
-                .addGap(0, 271, Short.MAX_VALUE))
+                .addGap(0, 229, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,7 +96,8 @@ public class MenuBorrar extends javax.swing.JFrame {
                 .addGap(134, 134, 134)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBorrarAlumno)
-                    .addComponent(jButtonBorrarCiclo))
+                    .addComponent(jButtonBorrarCiclo)
+                    .addComponent(jButtonBorrarModulo))
                 .addContainerGap(215, Short.MAX_VALUE))
         );
 
@@ -96,6 +113,11 @@ public class MenuBorrar extends javax.swing.JFrame {
         EliminarCiclo eliminarCiclo = new EliminarCiclo();
         eliminarCiclo.setVisible(true);
     }//GEN-LAST:event_jButtonBorrarCicloActionPerformed
+
+    private void jButtonBorrarModuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarModuloActionPerformed
+        EliminarModulo em = new EliminarModulo();
+        em.setVisible(true);
+    }//GEN-LAST:event_jButtonBorrarModuloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,6 +147,7 @@ public class MenuBorrar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBorrarAlumno;
     private javax.swing.JButton jButtonBorrarCiclo;
+    private javax.swing.JButton jButtonBorrarModulo;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

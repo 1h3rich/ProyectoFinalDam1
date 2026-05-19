@@ -6,6 +6,7 @@ package pantallas.Crear;
 
 import Utils.ItemCombo;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import servicios.BaseDeDatos.*;
 import java.util.HashMap;
 
@@ -65,18 +66,21 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         jButtonFinalizar.setEnabled(false);
     }
 
-    /** Consulta en la BD los módulos disponibles para el ciclo y los carga en el combo, actualizando el mapa de IDs. */
+    /** Carga en el combo todos los módulos de la BD disponibles para asignar a este ciclo. */
     private void cargarModulosExistentes() {
         jComboBoxModulos.removeAllItems();
         mapaModulos.clear();
 
         jComboBoxModulos.addItem("Selecciona un módulo");
 
-        for (ItemCombo modulo : GestionBaseDeDatos.obtenerModulosPorCicloCombo(idCiclo)) {
-            String nombreModulo = modulo.toString();
+        DefaultTableModel tm = GestionBaseDeDatos.obtenerTableModel(
+                "SELECT codigo, nombre FROM modulo ORDER BY nombre ASC", new String[0]);
 
-            jComboBoxModulos.addItem(nombreModulo);
-            mapaModulos.put(nombreModulo, modulo.getId());
+        for (int i = 0; i < tm.getRowCount(); i++) {
+            int id = Integer.parseInt(tm.getValueAt(i, 0).toString());
+            String nombre = tm.getValueAt(i, 1).toString();
+            jComboBoxModulos.addItem(nombre);
+            mapaModulos.put(nombre, id);
         }
     }
 

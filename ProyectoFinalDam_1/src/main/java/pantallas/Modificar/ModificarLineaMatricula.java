@@ -5,6 +5,7 @@
 package pantallas.Modificar;
 
 import Control.SesionDatos;
+import Utils.Validadores;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.LineaMatricula;
@@ -111,6 +112,31 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "La repetición es obligatoria.");
             return;
         }
+
+        int repVal;
+        double cal1Val;
+        double cal2Val;
+        try {
+            repVal = Integer.parseInt(repeticion);
+            cal1Val = cal1.isBlank() ? 0.0 : Double.parseDouble(cal1);
+            cal2Val = cal2.isBlank() ? 0.0 : Double.parseDouble(cal2);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Repetición y calificaciones deben ser números.");
+            return;
+        }
+        if (!Validadores.validarRepeticion(repVal)) {
+            JOptionPane.showMessageDialog(this, "La repetición debe ser 1 o mayor.");
+            return;
+        }
+        if (!Validadores.validarCalificacion(cal1Val)) {
+            JOptionPane.showMessageDialog(this, "La primera calificación debe estar entre 0 y 10.");
+            return;
+        }
+        if (!Validadores.validarCalificacion(cal2Val)) {
+            JOptionPane.showMessageDialog(this, "La segunda calificación debe estar entre 0 y 10.");
+            return;
+        }
+
         // UPDATE_LINEA_MATRICULA: repeticion, cal_primera, cal_segunda, cod_matricula, cod_modulo
         String[] entradas = {
             repeticion,
@@ -127,9 +153,9 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
         LineaMatricula lineaActualizada = new LineaMatricula(
             selectedCodMatricula,
             selectedCodModulo,
-            Integer.parseInt(repeticion),
-            cal1.isBlank() ? 0.0 : Double.parseDouble(cal1),
-            cal2.isBlank() ? 0.0 : Double.parseDouble(cal2)
+            repVal,
+            cal1Val,
+            cal2Val
         );
         SesionDatos.getListaLineasMatricula().add(lineaActualizada);
 
@@ -173,10 +199,16 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabelInfoPrimeraCalificacion.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoPrimeraCalificacion.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoPrimeraCalificacion.setText("1ª Calificacion: ");
 
+        jTextFieldSegundaCalificacion.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldSegundaCalificacion.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldSegundaCalificacion.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jTextFieldPrimeraCalificacion.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldPrimeraCalificacion.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldPrimeraCalificacion.setPreferredSize(new java.awt.Dimension(64, 128));
         jTextFieldPrimeraCalificacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,6 +216,8 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
             }
         });
 
+        jLabelInfoSegundaCalificacion.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoSegundaCalificacion.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoSegundaCalificacion.setText("2ª Calificacion:");
 
         jButtonCancelar.setText("Cancelar");
@@ -193,10 +227,16 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldRepeticion.setBackground(new java.awt.Color(255, 255, 255));
+        jTextFieldRepeticion.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldRepeticion.setPreferredSize(new java.awt.Dimension(64, 128));
 
+        jLabelInfoRepeticion.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelInfoRepeticion.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoRepeticion.setText("Repeticion:");
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -238,7 +278,9 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
             }
         });
 
+        jLabelTitulo1.setBackground(new java.awt.Color(255, 255, 255));
         jLabelTitulo1.setFont(new java.awt.Font("NSimSun", 0, 36)); // NOI18N
+        jLabelTitulo1.setForeground(new java.awt.Color(0, 0, 0));
         jLabelTitulo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo1.setText("MODIFICAR LINEA MATRICULA");
 
@@ -266,15 +308,14 @@ public class ModificarLineaMatricula extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(217, 217, 217)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(jButtonCancelar)
                             .addGap(29, 29, 29)
-                            .addComponent(jButtonGuardar)
-                            .addContainerGap(768, Short.MAX_VALUE))
+                            .addComponent(jButtonGuardar))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(287, 287, 287)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap(218, Short.MAX_VALUE)))))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(218, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
