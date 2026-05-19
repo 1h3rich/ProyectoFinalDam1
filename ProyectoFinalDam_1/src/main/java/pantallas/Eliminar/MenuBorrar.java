@@ -75,30 +75,30 @@ public class MenuBorrar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(260, 260, 260)
                         .addComponent(jButtonBorrarAlumno)
                         .addGap(36, 36, 36)
                         .addComponent(jButtonBorrarModulo)
                         .addGap(27, 27, 27)
                         .addComponent(jButtonBorrarCiclo))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(349, 349, 349)
+                        .addGap(89, 89, 89)
                         .addComponent(jLabel1)))
-                .addGap(0, 229, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(82, 82, 82)
+                .addGap(33, 33, 33)
                 .addComponent(jLabel1)
                 .addGap(134, 134, 134)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBorrarAlumno)
                     .addComponent(jButtonBorrarCiclo)
                     .addComponent(jButtonBorrarModulo))
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();

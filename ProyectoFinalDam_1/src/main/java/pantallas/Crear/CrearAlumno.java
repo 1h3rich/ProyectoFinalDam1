@@ -135,13 +135,13 @@ public class CrearAlumno extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Importante usar el formato 2002-03-13");
+        jLabel1.setText("Ej: 2002-03-13");
 
-        jLabel2.setText("Avenida Santa Isabel 18, Zaragoza, Zaragoza.");
+        jLabel2.setText("Ej: Avenida Santa Isabel 18, Zaragoza, Zaragoza.");
 
-        jLabel3.setText("123456789");
+        jLabel3.setText("Ej: 123456789");
 
-        jLabel4.setText("Alguien@gmail.com");
+        jLabel4.setText("Ej: Alguien@gmail.com");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,7 +181,7 @@ public class CrearAlumno extends javax.swing.JFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3)))))
                     .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(575, Short.MAX_VALUE))
+                .addContainerGap(559, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

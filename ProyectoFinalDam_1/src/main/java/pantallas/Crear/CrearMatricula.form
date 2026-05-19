@@ -258,7 +258,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelInfoEuros1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Formato 20XX/20XX +1"/>
+        <Property name="text" type="java.lang.String" value="Ej: 2024"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -67,7 +67,7 @@
                   </Group>
                   <Component id="jLabelTitulo" min="-2" pref="391" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="575" max="32767" attributes="0"/>
+              <EmptySpace pref="559" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -271,22 +271,22 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Importante usar el formato 2002-03-13"/>
+        <Property name="text" type="java.lang.String" value="Ej: 2002-03-13"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Avenida Santa Isabel 18, Zaragoza, Zaragoza."/>
+        <Property name="text" type="java.lang.String" value="Ej: Avenida Santa Isabel 18, Zaragoza, Zaragoza."/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="123456789"/>
+        <Property name="text" type="java.lang.String" value="Ej: 123456789"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Alguien@gmail.com"/>
+        <Property name="text" type="java.lang.String" value="Ej: Alguien@gmail.com"/>
       </Properties>
     </Component>
   </SubComponents>

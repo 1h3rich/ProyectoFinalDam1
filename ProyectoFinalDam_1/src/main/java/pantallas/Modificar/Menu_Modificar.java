@@ -107,7 +107,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(423, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonAlumno)
@@ -118,16 +118,16 @@ public class Menu_Modificar extends javax.swing.JFrame {
                         .addGap(31, 31, 31)
                         .addComponent(jButtonModulo)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonCiclo)
-                        .addGap(404, 404, 404))
+                        .addComponent(jButtonCiclo))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(520, 520, 520))))
+                        .addGap(116, 116, 116)))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(58, 58, 58)
                 .addComponent(jLabel1)
                 .addGap(72, 72, 72)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -136,7 +136,7 @@ public class Menu_Modificar extends javax.swing.JFrame {
                     .addComponent(jButtonLineaMatricula)
                     .addComponent(jButtonModulo)
                     .addComponent(jButtonCiclo))
-                .addContainerGap(472, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();

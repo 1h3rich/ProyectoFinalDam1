@@ -155,7 +155,7 @@ public class CrearMatricula extends javax.swing.JFrame {
 
         jLabelInfoEuros.setText("Euros");
 
-        jLabelInfoEuros1.setText("Formato 20XX/20XX +1");
+        jLabelInfoEuros1.setText("Ej: 2024");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
