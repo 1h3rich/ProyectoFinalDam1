@@ -1,0 +1,12 @@
+1;1;Programación;1;14.0;256
+2;9;Bases de Datos;1;11.0;192
+3;1;Lenguajes de Marcas;1;7.0;128
+4;9;Acceso a Datos;2;9.0;120
+5;1;Desarrollo de Interfaces;2;9.0;120
+6;9;Implantación de Sistemas Operativos;1;12.0;224
+7;2;Redes Locales;1;11.0;192
+8;2;Seguridad y Alta Disponibilidad;2;6.0;100
+9;9;Comunicación Empresarial;1;13.66;160
+10;3;Operaciones Administrativas;1;12.4;190
+11;9;asdad;1;2.0;2
+12;1;Prueba 8;1;10.0;2000

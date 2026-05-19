@@ -45,7 +45,7 @@ public class ConsultasEjercicios {
         WHERE c.nivel = ? 
           AND m.curso = ?
         GROUP BY m.nombre, c.horas, c.denominacion
-        ORDER BY m.nombre ASC
+        ORDER BY c.denominacion ASC
         """
     };
 

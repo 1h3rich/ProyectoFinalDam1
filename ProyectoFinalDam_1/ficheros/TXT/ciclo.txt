@@ -1,0 +1,5 @@
+1;Desarrollo de Aplicaciones Multiplataforma;Informática y Comunicaciones;Grado Superior;2000;2024
+2;Administración de Sistemas Informáticos en Red;Informática y Comunicaciones;Grado Superior;2150;2024
+3;Gestión Administrativa;Administración y Gestión;Grado Medio;2000;2023
+8;asd;asd;basico;2000;2000
+9;Prueba 7;Prueba 7;basico;2000;2024
