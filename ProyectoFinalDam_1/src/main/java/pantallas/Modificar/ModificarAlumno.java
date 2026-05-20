@@ -6,6 +6,10 @@ package pantallas.Modificar;
 
 import Control.SesionDatos;
 import Utils.Validadores;
+import excepciones.Alumno.AlumnoVacioException;
+import excepciones.Alumno.CorreoNoValidoException;
+import excepciones.Alumno.DomicilioVacioException;
+import excepciones.Alumno.TelefonoInvalidoException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Alumno;
@@ -391,15 +395,14 @@ public class ModificarAlumno extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ModificarAlumno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -416,70 +419,62 @@ public class ModificarAlumno extends javax.swing.JFrame {
      * cambios en la BD.
      */
     private void modificarAlumno() {
-        if (alumno == null) {
-            JOptionPane.showMessageDialog(this, "Selecciona un alumno de la tabla primero.");
-            return;
+        try {
+            if (alumno == null) {
+                JOptionPane.showMessageDialog(this, "Selecciona un alumno de la tabla primero.");
+                return;
+            }
+            
+            String nombre = jTextFieldNombre.getText().trim();
+            String correo = jTextFieldCorreo.getText().trim();
+            String domicilio = jTextFieldDomicilio.getText().trim();
+            String telefono = jTextFieldTelefono.getText().trim();
+            
+            if (nombre.isBlank()) {
+                JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
+                return;
+            }
+            if (!Validadores.validarCorreo(correo)) {
+                JOptionPane.showMessageDialog(this, "El correo no tiene un formato válido (usuario@dominio.ext).");
+                return;
+            }
+            if (!Validadores.validarDireccion(domicilio)) {
+                JOptionPane.showMessageDialog(this, """
+                                                    El domicilio debe tener el formato: TipoV\u00eda Nombre N\u00famero, Localidad, Provincia
+                                                    Ejemplo: Calle Mayor 5, Madrid, Madrid""");
+                return;
+            }
+            if (!Validadores.validarTelefono(telefono)) {
+                JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 9 dígitos numéricos.");
+                return;
+            }
+            
+            alumno.setNombre(nombre);
+            alumno.setCorreo(correo);
+            alumno.setDomicilio(domicilio);
+            alumno.setTelefono(telefono);
+            
+            // UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
+            String[] entradas = {
+                alumno.getNombre(),
+                alumno.getFechaNacimiento().toString(),
+                alumno.getDomicilio(),
+                alumno.getTelefono(),
+                alumno.getCorreo(),
+                String.valueOf(alumno.getCodigo())
+            };
+            GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
+            
+            int codigoAlumno = alumno.getCodigo();
+            SesionDatos.getListaAlumnos().removeIf(a -> a.getCodigo() == codigoAlumno);
+            SesionDatos.getListaAlumnos().add(alumno);
+            
+            JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
+            alumno = null;
+            cargarAlumnosEnTabla();
+        } catch (AlumnoVacioException | CorreoNoValidoException | DomicilioVacioException | TelefonoInvalidoException ex) {
+            System.getLogger(ModificarAlumno.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-
-        String nombre = jTextFieldNombre.getText().trim();
-        String correo = jTextFieldCorreo.getText().trim();
-        String domicilio = jTextFieldDomicilio.getText().trim();
-        String telefono = jTextFieldTelefono.getText().trim();
-
-        if (nombre.isBlank()) {
-            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
-            return;
-        }
-        if (!Validadores.validarCorreo(correo)) {
-            JOptionPane.showMessageDialog(this, "El correo no tiene un formato válido (usuario@dominio.ext).");
-            return;
-        }
-        if (!Validadores.validarDireccion(domicilio)) {
-            JOptionPane.showMessageDialog(this,
-                "El domicilio debe tener el formato: TipoVía Nombre Número, Localidad, Provincia\n"
-                + "Ejemplo: Calle Mayor 5, Madrid, Madrid");
-            return;
-        }
-        if (!Validadores.validarTelefono(telefono)) {
-            JOptionPane.showMessageDialog(this, "El teléfono debe tener exactamente 9 dígitos numéricos.");
-            return;
-        }
-
-        alumno.setNombre(nombre);
-        alumno.setCorreo(correo);
-        alumno.setDomicilio(domicilio);
-        alumno.setTelefono(telefono);
-
-        // UPDATE_ALUMNO: nombre, fecha_nacimiento, domicilio, telefono, correo, codigo
-        String[] entradas = {
-            alumno.getNombre(),
-            alumno.getFechaNacimiento().toString(),
-            alumno.getDomicilio(),
-            alumno.getTelefono(),
-            alumno.getCorreo(),
-            String.valueOf(alumno.getCodigo())
-        };
-        GestionBaseDeDatos.actualizarFila(ConsultasSQL.UPDATE_ALUMNO, entradas);
-
-        int codigoAlumno = alumno.getCodigo();
-        SesionDatos.getListaAlumnos().removeIf(a -> a.getCodigo() == codigoAlumno);
-        SesionDatos.getListaAlumnos().add(alumno);
-
-        JOptionPane.showMessageDialog(this, "Alumno modificado correctamente.");
-        alumno = null;
-        cargarAlumnosEnTabla();
-    }
-
-    /**
-     * Vuelca los datos del alumno actualmente seleccionado en los campos del
-     * formulario.
-     */
-    private void cargarDatosAlumno() {
-        jTextFieldNombre.setText(alumno.getNombre());
-        jTextFieldCorreo.setText(alumno.getCorreo());
-        jTextFieldDomicilio.setText(alumno.getDomicilio());
-        jTextFieldFechaNacimiento.setText(alumno.getFechaNacimiento().toString());
-        jTextFieldTelefono.setText(alumno.getTelefono());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

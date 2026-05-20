@@ -4,6 +4,8 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import Utils.GsonUtils;
 import com.google.gson.Gson;
+import excepciones.Alumno.CodigMayor0Exception;
+import excepciones.Alumno.LineaInvalidaAlumnoException;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -165,6 +167,8 @@ public class MenuAlumno {
             System.out.println("[ERROR] Formato de fecha incorrecto. Use dd/MM/yyyy.");
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] " + e.getMessage());
+        } catch (CodigMayor0Exception ex) {
+            System.getLogger(MenuAlumno.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
 
@@ -447,6 +451,8 @@ public class MenuAlumno {
             teclado.nextLine();
         } catch (YaImportadoException e) {
             System.out.println("[AVISO] " + e.getMessage());
+        } catch (LineaInvalidaAlumnoException ex) {
+            System.getLogger(MenuAlumno.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
 
@@ -457,7 +463,7 @@ public class MenuAlumno {
      * @throws YaImportadoException si ya fue importado desde TXT en esta
      * sesión.
      */
-    private static void importarDesdeTxt() throws YaImportadoException {
+    private static void importarDesdeTxt() throws YaImportadoException, LineaInvalidaAlumnoException {
         if (importadoTxt) {
             throw new YaImportadoException("La tabla alumno ya fue importada desde TXT en esta sesión.");
         }
@@ -501,7 +507,7 @@ public class MenuAlumno {
      * @throws YaImportadoException si ya fue importado desde CSV en esta
      * sesión.
      */
-    private static void importarDesdeCsv() throws YaImportadoException {
+    private static void importarDesdeCsv() throws YaImportadoException, LineaInvalidaAlumnoException {
         if (importadoCsv) {
             throw new YaImportadoException("La tabla alumno ya fue importada desde CSV en esta sesión.");
         }
