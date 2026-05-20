@@ -2,26 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package excepciones.excepciones;
+package excepciones.Modulo;
 
 /**
  *
  * @author isard
  */
-public class FechaNoValidaException extends Exception{
+public class CursoVacioException extends Exception{
 
     /** Construye la excepción sin mensaje de detalle. */
-    public FechaNoValidaException() {
+    public CursoVacioException() {
     }
 
-     /**
+    /**
      * Construye la excepción con un mensaje descriptivo del error.
      *
      * @param message Descripción del error.
      */
-    public FechaNoValidaException(String message) {
+    public CursoVacioException(String message) {
         super(message);
     }
-    
     
 }

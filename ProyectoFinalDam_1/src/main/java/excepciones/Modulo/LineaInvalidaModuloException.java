@@ -2,24 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package excepciones.Alumno;
+package excepciones.Modulo;
 
 /**
  *
  * @author isard
  */
-public class CodigMayor0Exception extends Exception{
+public class LineaInvalidaModuloException extends Exception{
 
     /** Construye la excepción sin mensaje de detalle. */
-    public CodigMayor0Exception() {
+    public LineaInvalidaModuloException() {
     }
+
     /**
      * Construye la excepción con un mensaje descriptivo del error.
      *
      * @param message Descripción del error.
      */
-    public CodigMayor0Exception(String message) {
+    public LineaInvalidaModuloException(String message) {
         super(message);
     }
+    
     
 }

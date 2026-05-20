@@ -4,12 +4,20 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
+import excepciones.Ciclo.HorasMayor0Exception;
+import excepciones.CodigMayor0Exception;
+import excepciones.Modulo.CreditosMayor0Exception;
+import excepciones.Modulo.CursoVacioException;
+import excepciones.Modulo.LineaInvalidaModuloException;
+import excepciones.Modulo.NombreVacioException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 import interfaces.InterpolaridadDeDatos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<Modulo> {
 
@@ -41,12 +49,12 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
             String nombre,
             String curso,
             double creditos_ects,
-            int horas) {
+            int horas) throws CodigMayor0Exception {
 
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("modulo") + 1;
 
         if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
-            throw new IllegalArgumentException("El código generado del módulo debe ser mayor que 0");
+                throw new CodigMayor0Exception("El código generado del módulo debe ser mayor que 0");
         }
 
         validarDatos(
@@ -80,10 +88,10 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
             String nombre,
             String curso,
             double creditos_ects,
-            int horas) {
+            int horas) throws CodigMayor0Exception {
 
         if (!Validadores.validarCodigoPositivo(codigo)) {
-            throw new IllegalArgumentException("El código del módulo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del módulo debe ser mayor que 0");
         }
 
         validarDatos(
@@ -162,9 +170,9 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @param codigo_ciclo Nuevo código del ciclo.
      * @throws IllegalArgumentException si el código es 0 o negativo.
      */
-    public void setCodigo_ciclo(int codigo_ciclo) {
+    public void setCodigo_ciclo(int codigo_ciclo) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(codigo_ciclo)) {
-            throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del ciclo debe ser mayor que 0");
         }
 
         this.codigo_ciclo = codigo_ciclo;
@@ -176,9 +184,9 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @param nombre Nuevo nombre del módulo.
      * @throws IllegalArgumentException si el nombre es nulo o vacío.
      */
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre) throws NombreVacioException {
         if (!Validadores.validarTextoNoVacio(nombre)) {
-            throw new IllegalArgumentException("El nombre del módulo no puede estar vacío");
+            throw new NombreVacioException("El nombre del módulo no puede estar vacío");
         }
 
         this.nombre = nombre;
@@ -190,9 +198,9 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @param curso Nuevo curso (p.ej. "primero", "segundo").
      * @throws IllegalArgumentException si el curso es nulo o vacío.
      */
-    public void setCurso(String curso) {
+    public void setCurso(String curso) throws CursoVacioException {
         if (!Validadores.validarCurso(curso)) {
-            throw new IllegalArgumentException("El curso no puede estar vacío");
+            throw new CursoVacioException("El curso no puede estar vacío");
         }
 
         this.curso = curso;
@@ -204,9 +212,9 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @param creditos_ects Nuevos créditos ECTS.
      * @throws IllegalArgumentException si los créditos son 0 o negativos.
      */
-    public void setCreditos_ects(double creditos_ects) {
+    public void setCreditos_ects(double creditos_ects) throws CreditosMayor0Exception {
         if (!Validadores.validarCreditosEcts(creditos_ects)) {
-            throw new IllegalArgumentException("Los créditos ECTS deben ser mayores que 0");
+            throw new CreditosMayor0Exception("Los créditos ECTS deben ser mayores que 0");
         }
 
         this.creditos_ects = creditos_ects;
@@ -218,9 +226,9 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @param horas Nuevo número de horas lectivas.
      * @throws IllegalArgumentException si las horas son 0 o negativas.
      */
-    public void setHoras(int horas) {
+    public void setHoras(int horas) throws HorasMayor0Exception {
         if (!Validadores.validarHorasModulo(horas)) {
-            throw new IllegalArgumentException("Las horas del módulo deben ser mayores que 0");
+            throw new HorasMayor0Exception("Las horas del módulo deben ser mayores que 0");
         }
 
         this.horas = horas;
@@ -244,26 +252,26 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
             String nombre,
             String curso,
             double creditos_ects,
-            int horas) {
+            int horas) throws CodigMayor0Exception, NombreVacioException, CursoVacioException, CreditosMayor0Exception, HorasMayor0Exception {
 
         if (!Validadores.validarCodigoPositivo(codigo_ciclo)) {
-            throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del ciclo debe ser mayor que 0");
         }
 
         if (!Validadores.validarTextoNoVacio(nombre)) {
-            throw new IllegalArgumentException("El nombre del módulo no puede estar vacío");
+            throw new NombreVacioException("El nombre del módulo no puede estar vacío");
         }
 
         if (!Validadores.validarCurso(curso)) {
-            throw new IllegalArgumentException("El curso no puede estar vacío");
+            throw new CursoVacioException("El curso no puede estar vacío");
         }
 
         if (!Validadores.validarCreditosEcts(creditos_ects)) {
-            throw new IllegalArgumentException("Los créditos ECTS deben ser mayores que 0");
+            throw new CreditosMayor0Exception("Los créditos ECTS deben ser mayores que 0");
         }
 
         if (!Validadores.validarHorasModulo(horas)) {
-            throw new IllegalArgumentException("Las horas del módulo deben ser mayores que 0");
+            throw new HorasMayor0Exception("Las horas del módulo deben ser mayores que 0");
         }
     }
 
@@ -273,18 +281,30 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      *
      * @throws IllegalArgumentException si cualquier campo no supera su validación.
      */
-    private void validarObjeto() {
+    private void validarObjeto() throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(this.codigo)) {
-            throw new IllegalArgumentException("El código del módulo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del módulo debe ser mayor que 0");
         }
 
-        validarDatos(
-                this.codigo_ciclo,
-                this.nombre,
-                this.curso,
-                this.creditos_ects,
-                this.horas
-        );
+        try {
+            validarDatos(
+                    this.codigo_ciclo,
+                    this.nombre,
+                    this.curso,
+                    this.creditos_ects,
+                    this.horas
+            );
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NombreVacioException ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CursoVacioException ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CreditosMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HorasMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // =========================================================
@@ -309,11 +329,11 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * @return Módulo construido con los datos de la línea.
      * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
      */
-    public static Modulo obtenerLineas(String linea) {
+    public static Modulo obtenerLineas(String linea) throws CodigMayor0Exception, LineaInvalidaModuloException {
         String[] partes = linea.split(";", -1);
 
         if (partes.length != 6) {
-            throw new IllegalArgumentException("Línea inválida para Modulo: " + linea);
+            throw new LineaInvalidaModuloException("Línea inválida para Modulo: " + linea);
         }
 
         int tempCodigo = Integer.parseInt(partes[0]);
@@ -338,7 +358,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      *
      * @param temp Lista de cadenas, cada una con los datos de un módulo en formato CSV.
      */
-    private void cargarDesdeLineas(ArrayList<String> temp) {
+    private void cargarDesdeLineas(ArrayList<String> temp) throws CodigMayor0Exception, LineaInvalidaModuloException {
 
         SesionDatos.getListaModulos().clear();
 
@@ -399,7 +419,13 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".csv")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroModulo, ".csv");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (LineaInvalidaModuloException ex) {
+                Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -416,7 +442,11 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
                 if (!string.trim().isEmpty()) {
                     Modulo modulo = (Modulo) GestionFicheros.toJson(string, Modulo.class);
 
-                    modulo.validarObjeto();
+                    try {
+                        modulo.validarObjeto();
+                    } catch (CodigMayor0Exception ex) {
+                        Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                     SesionDatos.getListaModulos().add(modulo);
                 }
@@ -433,7 +463,13 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".dat")) {
             ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroModulo);
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (LineaInvalidaModuloException ex) {
+                Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -442,7 +478,13 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroModulo, ".txt")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroModulo, ".txt");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (LineaInvalidaModuloException ex) {
+                Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
