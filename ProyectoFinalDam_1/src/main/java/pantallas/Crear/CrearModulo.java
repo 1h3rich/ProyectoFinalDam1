@@ -434,6 +434,7 @@ public class CrearModulo extends javax.swing.JFrame {
                 curso, String.valueOf(creditos), String.valueOf(horas)
             });
             SesionDatos.registrarModulo(modulo, false);
+            
 
         } else {
             JOptionPane.showMessageDialog(this, "Error al crear el módulo.");

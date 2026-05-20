@@ -9,7 +9,7 @@ package pantallas.Registro;
  * @author rich
  */
 public class Registro extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Registro.class.getName());
 
     /**
@@ -17,6 +17,9 @@ public class Registro extends javax.swing.JFrame {
      */
     public Registro() {
         initComponents();
+        configurarTablas();
+        cargarDatosDeSesion();
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -29,29 +32,195 @@ public class Registro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
+        jlbTotalInsertados = new javax.swing.JLabel();
+        tabbedPane = new javax.swing.JTabbedPane();
+        jScrollTodos = new javax.swing.JScrollPane();
+        tablaTodos = new javax.swing.JTable();
+        jScrollAlumnos = new javax.swing.JScrollPane();
+        tablaAlumnos = new javax.swing.JTable();
+        jScrollCiclos = new javax.swing.JScrollPane();
+        tablaCiclos = new javax.swing.JTable();
+        jScrollModulos = new javax.swing.JScrollPane();
+        tablaModulos = new javax.swing.JTable();
+        jScrollMatriculas = new javax.swing.JScrollPane();
+        tablaMatriculas = new javax.swing.JTable();
+        jScrollLineasMatricula = new javax.swing.JScrollPane();
+        tablaLineas = new javax.swing.JTable();
+        btnCerrar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registro de sesión - Datos insertados");
+        setSize(new java.awt.Dimension(900, 580));
+
+        jlbTotalInsertados.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlbTotalInsertados.setText("Total insertado en sesion: 0 registro(s)");
+
+        tablaTodos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollTodos.setViewportView(tablaTodos);
+
+        tabbedPane.addTab("tab1", jScrollTodos);
+
+        tablaAlumnos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollAlumnos.setViewportView(tablaAlumnos);
+
+        tabbedPane.addTab("tab2", jScrollAlumnos);
+
+        tablaCiclos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollCiclos.setViewportView(tablaCiclos);
+
+        tabbedPane.addTab("tab3", jScrollCiclos);
+
+        tablaModulos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollModulos.setViewportView(tablaModulos);
+
+        tabbedPane.addTab("tab4", jScrollModulos);
+
+        tablaMatriculas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollMatriculas.setViewportView(tablaMatriculas);
+
+        tabbedPane.addTab("tab5", jScrollMatriculas);
+
+        tablaLineas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollLineasMatricula.setViewportView(tablaLineas);
+
+        tabbedPane.addTab("tab6", jScrollLineasMatricula);
+
+        btnCerrar.setText("Cerrar");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("NSimSun", 1, 36)); // NOI18N
+        jLabel1.setText("Registro de Datos de la Sesion");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(120, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(741, 741, 741))
+                .addContainerGap(419, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnCerrar)
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlbTotalInsertados)
+                                .addGap(19, 19, 19))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(48, 48, 48))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(349, 349, 349)
-                .addComponent(jLabel8)
-                .addContainerGap(319, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(jlbTotalInsertados)
+                        .addGap(357, 357, 357)
+                        .addComponent(jLabel8))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel1)
+                        .addGap(37, 37, 37)
+                        .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(591, 591, 591)
+                .addComponent(btnCerrar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,6 +248,258 @@ public class Registro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollAlumnos;
+    private javax.swing.JScrollPane jScrollCiclos;
+    private javax.swing.JScrollPane jScrollLineasMatricula;
+    private javax.swing.JScrollPane jScrollMatriculas;
+    private javax.swing.JScrollPane jScrollModulos;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollTodos;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JLabel jlbTotalInsertados;
+    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTable tablaAlumnos;
+    private javax.swing.JTable tablaCiclos;
+    private javax.swing.JTable tablaLineas;
+    private javax.swing.JTable tablaMatriculas;
+    private javax.swing.JTable tablaModulos;
+    private javax.swing.JTable tablaTodos;
     // End of variables declaration//GEN-END:variables
+
+    // =========================================================
+// ========= CONFIGURACIÓN DE COLUMNAS DE TABLAS ===========
+// =========================================================
+    /**
+     * Establece los nombres de columna de cada JTable y las hace no editables.
+     * Se llama una sola vez desde el constructor, tras initComponents().
+     */
+    private void configurarTablas() {
+        configurarModelo(tablaTodos,
+                new String[]{"Tipo", "Descripción"});
+
+        configurarModelo(tablaAlumnos,
+                new String[]{"ID", "Nombre", "Fecha Nacimiento", "Domicilio", "Teléfono", "Correo"});
+
+        configurarModelo(tablaCiclos,
+                new String[]{"ID", "Denominación", "Familia Prof.", "Nivel", "Horas", "Año Curr."});
+
+        configurarModelo(tablaModulos,
+                new String[]{"ID", "Nombre", "CicloID", "Curso", "Créditos ECTS", "Horas"});
+
+        configurarModelo(tablaMatriculas,
+                new String[]{"ID", "AlumnoID", "Año Académico", "Estado", "Importe"});
+
+        configurarModelo(tablaLineas,
+                new String[]{"MatrículaID", "MóduloID", "Repetición", "Calif. 1ª", "Calif. 2ª"});
+    }
+
+    /**
+     * Aplica un DefaultTableModel no editable con las columnas indicadas a una
+     * tabla.
+     *
+     * @param tabla JTable a configurar.
+     * @param columnas Nombres de las columnas.
+     */
+    private void configurarModelo(javax.swing.JTable tabla, String[] columnas) {
+        javax.swing.table.DefaultTableModel modelo
+                = new javax.swing.table.DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tabla.setModel(modelo);
+        tabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabla.getTableHeader().setReorderingAllowed(false);
+        tabla.setRowHeight(22);
+    }
+
+// =========================================================
+// ============== CARGA DE DATOS DE SESIÓN =================
+// =========================================================
+    /**
+     * Método principal que coordina el relleno de todas las tablas. Lee los
+     * datos de {@link Control.SesionDatos} y los vuelca en cada JTable.
+     */
+    private void cargarDatosDeSesion() {
+        rellenarTablaResumen();
+        rellenarTablaAlumnos();
+        rellenarTablaCiclos();
+        rellenarTablaModulos();
+        rellenarTablaMatriculas();
+        rellenarTablaLineas();
+        actualizarContador();
+        actualizarTitulosPestañas();
+    }
+
+    /**
+     * Rellena la pestaña Resumen con el LinkedHashMap cronológico de la sesión.
+     */
+    private void rellenarTablaResumen() {
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) tablaTodos.getModel();
+        modelo.setRowCount(0);
+
+        java.util.LinkedHashMap<String, String> registro
+                = Control.SesionDatos.getRegistroCompleto();
+
+        for (java.util.Map.Entry<String, String> entry : registro.entrySet()) {
+            String clave = entry.getKey();
+            String tipo = clave.contains("#")
+                    ? clave.substring(0, clave.indexOf('#'))
+                    : clave;
+            modelo.addRow(new Object[]{tipo, entry.getValue()});
+        }
+    }
+
+    /**
+     * Rellena la tabla de Alumnos solo con los insertados en esta sesión.
+     */
+    private void rellenarTablaAlumnos() {
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) tablaAlumnos.getModel();
+        modelo.setRowCount(0);
+
+        java.util.LinkedHashMap<String, String> registro
+                = Control.SesionDatos.getRegistroCompleto();
+
+        for (modelos.Alumno a : Control.SesionDatos.getListaAlumnos()) {
+            if (registro.containsKey("Alumno#" + a.getCodigo())) {
+                modelo.addRow(new Object[]{
+                    a.getCodigo(),
+                    a.getNombre(),
+                    a.getFechaNacimiento(),
+                    a.getDomicilio(),
+                    a.getTelefono(),
+                    a.getCorreo()
+                });
+            }
+        }
+    }
+
+    /**
+     * Rellena la tabla de Ciclos solo con los insertados en esta sesión.
+     */
+    private void rellenarTablaCiclos() {
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) tablaCiclos.getModel();
+        modelo.setRowCount(0);
+
+        java.util.LinkedHashMap<String, String> registro
+                = Control.SesionDatos.getRegistroCompleto();
+
+        for (modelos.Ciclo c : Control.SesionDatos.getListaCiclos()) {
+            if (registro.containsKey("Ciclo#" + c.getCodigo())) {
+                modelo.addRow(new Object[]{
+                    c.getCodigo(),
+                    c.getDenominacion(),
+                    c.getFamiliaProfesional(),
+                    c.getNivel(),
+                    c.getHoras(),
+                    c.getAñoCurriculum()
+                });
+            }
+        }
+    }
+
+    /**
+     * Rellena la tabla de Módulos solo con los insertados en esta sesión.
+     */
+    private void rellenarTablaModulos() {
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) tablaModulos.getModel();
+        modelo.setRowCount(0);
+
+        java.util.LinkedHashMap<String, String> registro
+                = Control.SesionDatos.getRegistroCompleto();
+
+        for (modelos.Modulo m : Control.SesionDatos.getListaModulos()) {
+            if (registro.containsKey("Modulo#" + m.getCodigo())) {
+                modelo.addRow(new Object[]{
+                    m.getCodigo(),
+                    m.getNombre(),
+                    m.getCodigo_ciclo(),
+                    m.getCurso(),
+                    m.getCreditos_ects(),
+                    m.getHoras()
+                });
+            }
+        }
+    }
+
+    /**
+     * Rellena la tabla de Matrículas solo con las insertadas en esta sesión.
+     */
+    private void rellenarTablaMatriculas() {
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) tablaMatriculas.getModel();
+        modelo.setRowCount(0);
+
+        java.util.LinkedHashMap<String, String> registro
+                = Control.SesionDatos.getRegistroCompleto();
+
+        for (modelos.Matricula m : Control.SesionDatos.getListaMatriculas()) {
+            if (registro.containsKey("Matricula#" + m.getCodigo())) {
+                modelo.addRow(new Object[]{
+                    m.getCodigo(),
+                    m.getCodigo_alumno(),
+                    m.getAño_academico(),
+                    m.getEstado(),
+                    m.getImporte()
+                });
+            }
+        }
+    }
+
+    /**
+     * Rellena la tabla de Líneas de Matrícula solo con las insertadas en esta
+     * sesión.
+     */
+    private void rellenarTablaLineas() {
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) tablaLineas.getModel();
+        modelo.setRowCount(0);
+
+        java.util.LinkedHashMap<String, String> registro
+                = Control.SesionDatos.getRegistroCompleto();
+
+        for (modelos.LineaMatricula l : Control.SesionDatos.getListaLineasMatricula()) {
+            String clave = "Linea#" + l.getCod_matricula() + "_" + l.getCod_modulo();
+            if (registro.containsKey(clave)) {
+                modelo.addRow(new Object[]{
+                    l.getCod_matricula(),
+                    l.getCod_modulo(),
+                    l.getRepeticion(),
+                    l.getCal_primera()== 0.0 ? "—": l.getCal_primera() , //Esto es para que si es 0 (null) mostrar los guiones vacios
+                    l.getCal_segunda()== 0.0 ? "—": l.getCal_segunda()
+                });
+            }
+        }
+    }
+
+    /**
+     * Actualiza el JLabel superior con el total de registros insertados en
+     * sesión.
+     */
+    private void actualizarContador() {
+        int total = Control.SesionDatos.getRegistroCompleto().size();
+        jlbTotalInsertados.setText("Total insertado en sesión: " + total + " registro(s)");
+    }
+
+    /**
+     * Añade el contador de filas entre paréntesis al título de cada pestaña.
+     * Ejemplo: "Alumnos (3)"
+     */
+    private void actualizarTitulosPestañas() {
+        tabbedPane.setTitleAt(0, "Resumen (" + tablaTodos.getRowCount() + ")");
+        tabbedPane.setTitleAt(1, "Alumnos (" + tablaAlumnos.getRowCount() + ")");
+        tabbedPane.setTitleAt(2, "Ciclos (" + tablaCiclos.getRowCount() + ")");
+        tabbedPane.setTitleAt(3, "Módulos (" + tablaModulos.getRowCount() + ")");
+        tabbedPane.setTitleAt(4, "Matrículas (" + tablaMatriculas.getRowCount() + ")");
+        tabbedPane.setTitleAt(5, "Líneas Matr. (" + tablaLineas.getRowCount() + ")");
+    }
+
 }

@@ -245,11 +245,11 @@ public class SesionDatos {
      * legible.
      */
     // ESTE METODO NO SE UTILIZA NUNCA
-    /*
+    
     public static LinkedHashMap<String, String> getRegistroCompleto() {
         return new LinkedHashMap<>(registroSesion);
     }
-*/
+
     /**
      * Devuelve el número total de registros insertados en esta sesión sumando
      * todos los tipos.
@@ -258,22 +258,21 @@ public class SesionDatos {
      */
     
     
-    // ESTE METODO NO SE UTILIZA NUNCA
-    /*
+    
     public static int getTotalInsertados() {
         return registroSesion.size();
     }
-*/
+
     
-    // ESTE METODO NO SE UTILIZA NUNCA
+   
     /**
      * Indica si no se ha insertado nada en esta sesión.
      *
      * @return true si el registro de sesión está vacío.
      */
-    /*
+   
     public static boolean isEmpty() {
         return registroSesion.isEmpty();
     }
-    */
+  
 }

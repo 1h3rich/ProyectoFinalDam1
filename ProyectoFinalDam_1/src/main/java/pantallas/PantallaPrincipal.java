@@ -179,6 +179,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabelModificar2.setText("Crea nuevos ciclos.");
 
         jButtonRegistro.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonRegistro.setFont(new java.awt.Font("NSimSun", 0, 12)); // NOI18N
         jButtonRegistro.setForeground(new java.awt.Color(0, 0, 0));
         jButtonRegistro.setText("Registro");
         jButtonRegistro.addActionListener(new java.awt.event.ActionListener() {
@@ -278,7 +279,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jLabelGuardar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
                 .addComponent(jButtonCreditos)
                 .addContainerGap())
         );

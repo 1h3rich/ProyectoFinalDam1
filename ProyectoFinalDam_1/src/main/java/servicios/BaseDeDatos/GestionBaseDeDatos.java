@@ -996,39 +996,5 @@ public class GestionBaseDeDatos {
         );
     }
 
-    /**
-     * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0],
-     * params)
-     */
-    /*
-    public static int insertarAlumnoYDevolverID(String[] entradas) {
-        return insertarYDevolverID(ConsultasSQL.INSERT_ALUMNO[0], entradas);
-    }
-     */
-    /**
-     * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[0],
-     * datos)
-     */
-    /*
-    public static int insertarMatriculaYDevolverID(String[] datos) {
-        return insertarYDevolverID(ConsultasSQL.INSERT_MATRICULA[0], datos);
-    }
-     */
-    /**
-     * @deprecated Usa insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[0],
-     * datos)
-     */
-    /*
-    public static boolean insertarLineaMatricula(String[] datos) {
-        return insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[0], datos);
-    }
-     */
-    /**
-     * @deprecated Usa insertarYDevolverID(ConsultasSQL.INSERT_CICLO[0], datos)
-     */
-    /*
-    public static int insertarCicloYDevolverID(String[] datos) {
-        return insertarYDevolverID(ConsultasSQL.INSERT_CICLO[0], datos);
-    }
-     */
+    
 }
