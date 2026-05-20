@@ -4,6 +4,13 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import Utils.GsonUtils;
+import excepciones.Alumno.AlumnoVacioException;
+import excepciones.Alumno.CorreoNoValidoException;
+import excepciones.Alumno.DomicilioVacioException;
+import excepciones.Alumno.FechaNoValidaException;
+import excepciones.Alumno.TelefonoInvalidoException;
+import excepciones.Alumno.CodigMayor0Exception;
+import excepciones.Alumno.LineaInvalidaAlumnoException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +18,8 @@ import java.util.ArrayList;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 import interfaces.InterpolaridadDeDatos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<Alumno> {
 
@@ -44,15 +53,27 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
                   LocalDate fechaNacimiento,
                   String domicilio,
                   String telefono,
-                  String correo) {
+                  String correo) throws CodigMayor0Exception {
 
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("alumno") + 1;
 
         if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
-            throw new IllegalArgumentException("El código generado del alumno debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código generado del alumno debe ser mayor que 0");
         }
 
-        validarDatos(nombre, fechaNacimiento, domicilio, telefono, correo);
+        try {
+            validarDatos(nombre, fechaNacimiento, domicilio, telefono, correo);
+        } catch (AlumnoVacioException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FechaNoValidaException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DomicilioVacioException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TelefonoInvalidoException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CorreoNoValidoException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigoGenerado;
         this.nombre = nombre;
@@ -77,13 +98,25 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
                   LocalDate fechaNacimiento,
                   String domicilio,
                   String telefono,
-                  String correo) {
+                  String correo) throws CodigMayor0Exception {
 
         if (!Validadores.validarCodigoPositivo(codigo)) {
-            throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del alumno debe ser mayor que 0");
         }
 
-        validarDatos(nombre, fechaNacimiento, domicilio, telefono, correo);
+        try {
+            validarDatos(nombre, fechaNacimiento, domicilio, telefono, correo);
+        } catch (AlumnoVacioException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FechaNoValidaException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DomicilioVacioException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TelefonoInvalidoException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CorreoNoValidoException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigo;
         this.nombre = nombre;
@@ -158,9 +191,9 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * @param nombre Nuevo nombre del alumno.
      * @throws IllegalArgumentException si el nombre es nulo o vacío.
      */
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre) throws AlumnoVacioException {
         if (!Validadores.validarTextoNoVacio(nombre)) {
-            throw new IllegalArgumentException("El nombre del alumno no puede estar vacío");
+            throw new AlumnoVacioException("El nombre del alumno no puede estar vacío");
         }
 
         this.nombre = nombre;
@@ -172,9 +205,9 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * @param temp
      * @throws IllegalArgumentException si la fecha es nula o posterior a hoy.
      */
-    public void setFechaNacimiento(String temp) {
+    public void setFechaNacimiento(String temp) throws FechaNoValidaException {
         if (!Validadores.validarFechaNacimiento(temp)) {
-            throw new IllegalArgumentException("La fecha de nacimiento no es válida");
+            throw new FechaNoValidaException("La fecha de nacimiento no es válida");
         }
         
         fechaNacimiento = LocalDate.parse(temp);
@@ -186,9 +219,9 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * @param domicilio Nuevo domicilio del alumno.
      * @throws IllegalArgumentException si el domicilio es nulo o vacío.
      */
-    public void setDomicilio(String domicilio) {
+    public void setDomicilio(String domicilio) throws DomicilioVacioException {
         if (!Validadores.validarTextoNoVacio(domicilio)) {
-            throw new IllegalArgumentException("El domicilio no puede estar vacío");
+            throw new DomicilioVacioException("El domicilio no puede estar vacío");
         }
 
         this.domicilio = domicilio;
@@ -200,9 +233,9 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * @param telefono Nuevo teléfono del alumno.
      * @throws IllegalArgumentException si el teléfono no cumple el formato de 9 dígitos.
      */
-    public void setTelefono(String telefono) {
+    public void setTelefono(String telefono) throws TelefonoInvalidoException {
         if (!Validadores.validarTelefono(telefono)) {
-            throw new IllegalArgumentException("El teléfono no es válido");
+            throw new TelefonoInvalidoException("El teléfono no es válido");
         }
 
         this.telefono = telefono;
@@ -214,9 +247,9 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * @param correo Nuevo correo electrónico del alumno.
      * @throws IllegalArgumentException si el correo no tiene formato válido.
      */
-    public void setCorreo(String correo) {
+    public void setCorreo(String correo) throws CorreoNoValidoException {
         if (!Validadores.validarCorreo(correo)) {
-            throw new IllegalArgumentException("El correo no es válido");
+            throw new CorreoNoValidoException("El correo no es válido");
         }
 
         this.correo = correo;
@@ -238,26 +271,26 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
                                      LocalDate fechaNacimiento,
                                      String domicilio,
                                      String telefono,
-                                     String correo) {
+                                     String correo) throws AlumnoVacioException, FechaNoValidaException, DomicilioVacioException, TelefonoInvalidoException, CorreoNoValidoException {
 
         if (!Validadores.validarTextoNoVacio(nombre)) {
-            throw new IllegalArgumentException("El nombre del alumno no puede estar vacío");
+            throw new AlumnoVacioException("El nombre del alumno no puede estar vacío");
         }
 
         if (!Validadores.validarFechaNacimiento(fechaNacimiento.toString())) {
-            throw new IllegalArgumentException("La fecha de nacimiento no es válida");
+            throw new FechaNoValidaException("La fecha de nacimiento no es válida");
         }
 
         if (!Validadores.validarTextoNoVacio(domicilio)) {
-            throw new IllegalArgumentException("El domicilio no puede estar vacío");
+            throw new DomicilioVacioException("El domicilio no puede estar vacío");
         }
 
         if (!Validadores.validarTelefono(telefono)) {
-            throw new IllegalArgumentException("El teléfono no es válido");
+            throw new TelefonoInvalidoException("El teléfono no es válido");
         }
 
         if (!Validadores.validarCorreo(correo)) {
-            throw new IllegalArgumentException("El correo no es válido");
+            throw new CorreoNoValidoException("El correo no es válido");
         }
     }
 
@@ -267,18 +300,30 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      *
      * @throws IllegalArgumentException si cualquier campo no supera su validación.
      */
-    private void validarObjeto() {
-        if (!Validadores.validarCodigoPositivo(this.codigo)) {
-            throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
+    private void validarObjeto() throws CodigMayor0Exception {
+        if (!Validadores.validarCodigoPositivo(this.codigo)){
+            throw new CodigMayor0Exception("El código del alumno debe ser mayor que 0");
         }
 
-        validarDatos(
-                this.nombre,
-                this.fechaNacimiento,
-                this.domicilio,
-                this.telefono,
-                this.correo
-        );
+        try {
+            validarDatos(
+                    this.nombre,
+                    this.fechaNacimiento,
+                    this.domicilio,
+                    this.telefono,
+                    this.correo
+            );
+        } catch (AlumnoVacioException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FechaNoValidaException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DomicilioVacioException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TelefonoInvalidoException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CorreoNoValidoException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // =========================================================
@@ -304,11 +349,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * @return Alumno construido con los datos de la línea.
      * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
      */
-    public static Alumno obtenerLineas(String linea) {
+    public static Alumno obtenerLineas(String linea) throws LineaInvalidaAlumnoException {
         String[] partes = linea.split(";", -1);
 
         if (partes.length != 6) {
-            throw new IllegalArgumentException("Línea inválida para Alumno: " + linea);
+            throw new LineaInvalidaAlumnoException("Línea inválida para Alumno: " + linea);
         }
 
         int tempCodigo = Integer.parseInt(partes[0]);
@@ -318,14 +363,19 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
         String tempTelefono = partes[4];
         String tempCorreo = partes[5];
 
-        return new Alumno(
-                tempCodigo,
-                tempNombre,
-                tempFechaNacimiento,
-                tempDomicilio,
-                tempTelefono,
-                tempCorreo
-        );
+        try {
+            return new Alumno(
+                    tempCodigo,
+                    tempNombre,
+                    tempFechaNacimiento,
+                    tempDomicilio,
+                    tempTelefono,
+                    tempCorreo
+            );
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -334,7 +384,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      *
      * @param temp Lista de cadenas, cada una con los datos de un alumno en formato CSV.
      */
-    private void cargarDesdeLineas(ArrayList<String> temp) {
+    private void cargarDesdeLineas(ArrayList<String> temp) throws LineaInvalidaAlumnoException {
 
        SesionDatos.getListaAlumnos().clear();
 
@@ -412,7 +462,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".csv")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroAlumno, ".csv");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaAlumnoException ex) {
+                Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -429,7 +483,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
                 if (!string.trim().isEmpty()) {
                     Alumno alumno = (Alumno) GestionFicheros.toJson(string, Alumno.class);
 
-                    alumno.validarObjeto();
+                    try {
+                        alumno.validarObjeto();
+                    } catch (CodigMayor0Exception ex) {
+                        Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                    SesionDatos.getListaAlumnos().add(alumno);
                 }
@@ -446,7 +504,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".dat")) {
             ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroAlumno);
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaAlumnoException ex) {
+                Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -455,7 +517,11 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroAlumno, ".txt")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroAlumno, ".txt");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaAlumnoException ex) {
+                Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
