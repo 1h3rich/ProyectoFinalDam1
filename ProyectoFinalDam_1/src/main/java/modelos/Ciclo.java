@@ -8,6 +8,7 @@ import excepciones.Ciclo.AñoNoValidoException;
 import excepciones.Ciclo.DenominacionVaciaException;
 import excepciones.Ciclo.FamiliaVaciaException;
 import excepciones.Ciclo.HorasMayor0Exception;
+import excepciones.Ciclo.LineaInvalidaCicloException;
 import excepciones.Ciclo.NivelVacioException;
 import excepciones.CodigMayor0Exception;
 import java.io.Serializable;
@@ -353,11 +354,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @return Ciclo construido con los datos de la línea.
      * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
      */
-    public static Ciclo obtenerLineas(String linea) throws CodigMayor0Exception {
+    public static Ciclo obtenerLineas(String linea) throws LineaInvalidaCicloException, CodigMayor0Exception {
         String[] partes = linea.split(";", -1);
 
         if (partes.length != 6) {
-            throw new IllegalArgumentException("Línea inválida para Ciclo: " + linea);
+            throw new LineaInvalidaCicloException("Línea inválida para Ciclo: " + linea);
         }
 
         int tempCodigo = Integer.parseInt(partes[0]);
@@ -382,7 +383,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      *
      * @param temp Lista de cadenas, cada una con los datos de un ciclo en formato CSV.
      */
-    private void cargarDesdeLineas(ArrayList<String> temp) throws CodigMayor0Exception {
+    private void cargarDesdeLineas(ArrayList<String> temp) throws CodigMayor0Exception, LineaInvalidaCicloException {
 
         SesionDatos.getListaCiclos().clear();
 
@@ -464,6 +465,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
                 cargarDesdeLineas(temp);
             } catch (CodigMayor0Exception ex) {
                 Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (LineaInvalidaCicloException ex) {
+                Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -506,6 +509,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
                 cargarDesdeLineas(temp);
             } catch (CodigMayor0Exception ex) {
                 Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (LineaInvalidaCicloException ex) {
+                Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -518,6 +523,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
             try {
                 cargarDesdeLineas(temp);
             } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (LineaInvalidaCicloException ex) {
                 Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
