@@ -4,12 +4,20 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
+import excepciones.Ciclo.AñoNoValidoException;
+import excepciones.Ciclo.DenominacionVaciaException;
+import excepciones.Ciclo.FamiliaVaciaException;
+import excepciones.Ciclo.HorasMayor0Exception;
+import excepciones.Ciclo.NivelVacioException;
+import excepciones.CodigMayor0Exception;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 import interfaces.InterpolaridadDeDatos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ciclo> {
 
@@ -41,21 +49,33 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
             String familiaProfesional,
             String nivel,
             int horas,
-            int añoCurriculum) {
+            int añoCurriculum) throws CodigMayor0Exception {
 
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("ciclo") + 1;
 
         if (!Validadores.validarCodigoPositivo(codigoGenerado)) {
-            throw new IllegalArgumentException("El código generado del ciclo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código generado del ciclo debe ser mayor que 0");
         }
 
-        validarDatos(
-                denominacion,
-                familiaProfesional,
-                nivel,
-                horas,
-                añoCurriculum
-        );
+        try {
+            validarDatos(
+                    denominacion,
+                    familiaProfesional,
+                    nivel,
+                    horas,
+                    añoCurriculum
+            );
+        } catch (DenominacionVaciaException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FamiliaVaciaException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NivelVacioException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HorasMayor0Exception ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AñoNoValidoException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigoGenerado;
         this.denominacion = denominacion;
@@ -80,19 +100,31 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
             String familiaProfesional,
             String nivel,
             int horas,
-            int añoCurriculum) {
+            int añoCurriculum) throws CodigMayor0Exception {
 
         if (!Validadores.validarCodigoPositivo(codigo)) {
-            throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del ciclo debe ser mayor que 0");
         }
 
-        validarDatos(
-                denominacion,
-                familiaProfesional,
-                nivel,
-                horas,
-                añoCurriculum
-        );
+        try {
+            validarDatos(
+                    denominacion,
+                    familiaProfesional,
+                    nivel,
+                    horas,
+                    añoCurriculum
+            );
+        } catch (DenominacionVaciaException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FamiliaVaciaException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NivelVacioException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HorasMayor0Exception ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AñoNoValidoException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigo;
         this.denominacion = denominacion;
@@ -162,9 +194,9 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @param denominacion Nueva denominación del ciclo.
      * @throws IllegalArgumentException si la denominación es nula o vacía.
      */
-    public void setDenominacion(String denominacion) {
+    public void setDenominacion(String denominacion) throws DenominacionVaciaException {
         if (!Validadores.validarTextoNoVacio(denominacion)) {
-            throw new IllegalArgumentException("La denominación no puede estar vacía");
+            throw new DenominacionVaciaException("La denominación no puede estar vacía");
         }
 
         this.denominacion = denominacion;
@@ -176,9 +208,9 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @param familiaProfesional Nueva familia profesional.
      * @throws IllegalArgumentException si es nula o vacía.
      */
-    public void setFamiliaProfesional(String familiaProfesional) {
+    public void setFamiliaProfesional(String familiaProfesional) throws FamiliaVaciaException {
         if (!Validadores.validarTextoNoVacio(familiaProfesional)) {
-            throw new IllegalArgumentException("La familia profesional no puede estar vacía");
+            throw new FamiliaVaciaException("La familia profesional no puede estar vacía");
         }
 
         this.familiaProfesional = familiaProfesional;
@@ -190,9 +222,9 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @param nivel Nuevo nivel del ciclo.
      * @throws IllegalArgumentException si es nulo o vacío.
      */
-    public void setNivel(String nivel) {
+    public void setNivel(String nivel) throws NivelVacioException {
         if (!Validadores.validarNivel(nivel)) {
-            throw new IllegalArgumentException("El nivel no puede estar vacío");
+            throw new NivelVacioException("El nivel no puede estar vacío");
         }
 
         this.nivel = nivel;
@@ -204,9 +236,9 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @param horas Nuevas horas totales del ciclo.
      * @throws IllegalArgumentException si las horas son 0 o negativas.
      */
-    public void setHoras(int horas) {
+    public void setHoras(int horas) throws HorasMayor0Exception {
         if (!Validadores.validarHorasCiclo(horas)) {
-            throw new IllegalArgumentException("Las horas del ciclo deben ser mayores que 0");
+            throw new HorasMayor0Exception("Las horas del ciclo deben ser mayores que 0");
         }
 
         this.horas = horas;
@@ -218,9 +250,9 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @param añoCurriculum Nuevo año del currículum.
      * @throws IllegalArgumentException si el año está fuera del rango válido.
      */
-    public void setAñoCurriculum(int añoCurriculum) {
+    public void setAñoCurriculum(int añoCurriculum) throws AñoNoValidoException {
         if (!Validadores.validarAñoCurriculum(añoCurriculum)) {
-            throw new IllegalArgumentException("El año del currículum no es válido");
+            throw new AñoNoValidoException("El año del currículum no es válido");
         }
 
         this.añoCurriculum = añoCurriculum;
@@ -244,26 +276,26 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
             String familiaProfesional,
             String nivel,
             int horas,
-            int añoCurriculum) {
+            int añoCurriculum) throws DenominacionVaciaException, FamiliaVaciaException, NivelVacioException, HorasMayor0Exception, AñoNoValidoException {
 
         if (!Validadores.validarTextoNoVacio(denominacion)) {
-            throw new IllegalArgumentException("La denominación no puede estar vacía");
+            throw new DenominacionVaciaException("La denominación no puede estar vacía");
         }
 
         if (!Validadores.validarTextoNoVacio(familiaProfesional)) {
-            throw new IllegalArgumentException("La familia profesional no puede estar vacía");
+            throw new FamiliaVaciaException("La familia profesional no puede estar vacía");
         }
 
         if (!Validadores.validarNivel(nivel)) {
-            throw new IllegalArgumentException("El nivel no puede estar vacío");
+            throw new NivelVacioException("El nivel no puede estar vacío");
         }
 
         if (!Validadores.validarHorasCiclo(horas)) {
-            throw new IllegalArgumentException("Las horas del ciclo deben ser mayores que 0");
+            throw new HorasMayor0Exception("Las horas del ciclo deben ser mayores que 0");
         }
 
         if (!Validadores.validarAñoCurriculum(añoCurriculum)) {
-            throw new IllegalArgumentException("El año del currículum no es válido");
+            throw new AñoNoValidoException("El año del currículum no es válido");
         }
     }
 
@@ -273,18 +305,30 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      *
      * @throws IllegalArgumentException si cualquier campo no supera su validación.
      */
-    private void validarObjeto() {
+    private void validarObjeto() throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(this.codigo)) {
-            throw new IllegalArgumentException("El código del ciclo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del ciclo debe ser mayor que 0");
         }
 
-        validarDatos(
-                this.denominacion,
-                this.familiaProfesional,
-                this.nivel,
-                this.horas,
-                this.añoCurriculum
-        );
+        try {
+            validarDatos(
+                    this.denominacion,
+                    this.familiaProfesional,
+                    this.nivel,
+                    this.horas,
+                    this.añoCurriculum
+            );
+        } catch (DenominacionVaciaException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FamiliaVaciaException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NivelVacioException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HorasMayor0Exception ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AñoNoValidoException ex) {
+            Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // =========================================================
@@ -309,7 +353,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * @return Ciclo construido con los datos de la línea.
      * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
      */
-    public static Ciclo obtenerLineas(String linea) {
+    public static Ciclo obtenerLineas(String linea) throws CodigMayor0Exception {
         String[] partes = linea.split(";", -1);
 
         if (partes.length != 6) {
@@ -338,7 +382,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      *
      * @param temp Lista de cadenas, cada una con los datos de un ciclo en formato CSV.
      */
-    private void cargarDesdeLineas(ArrayList<String> temp) {
+    private void cargarDesdeLineas(ArrayList<String> temp) throws CodigMayor0Exception {
 
         SesionDatos.getListaCiclos().clear();
 
@@ -416,7 +460,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".csv")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".csv");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -433,7 +481,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
                 if (!string.trim().isEmpty()) {
                     Ciclo ciclo = (Ciclo) GestionFicheros.toJson(string, Ciclo.class);
 
-                    ciclo.validarObjeto();
+                    try {
+                        ciclo.validarObjeto();
+                    } catch (CodigMayor0Exception ex) {
+                        Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                     SesionDatos.getListaCiclos().add(ciclo);
                 }
@@ -450,7 +502,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".dat")) {
             ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroCiclo);
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -459,7 +515,11 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroCiclo, ".txt")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroCiclo, ".txt");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (CodigMayor0Exception ex) {
+                Logger.getLogger(Ciclo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
