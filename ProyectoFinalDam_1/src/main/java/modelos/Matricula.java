@@ -4,12 +4,19 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
+import excepciones.CodigMayor0Exception;
+import excepciones.Matricula.AñoAcademicoException;
+import excepciones.Matricula.EstadoNoValidoException;
+import excepciones.Matricula.ImporteNoValidoException;
+import excepciones.Matricula.LineaInvalidaMatriculaException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 import servicios.Ficheros.GestionFicheros;
 import interfaces.InterpolaridadDeDatos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Matricula implements InterpolaridadDeDatos, Serializable, Comparable<Matricula> {
 
@@ -40,7 +47,17 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
             String estado,
             double importe) {
 
-        validarDatos(codigo_alumno, año_academico, estado, importe);
+        try {
+            validarDatos(codigo_alumno, año_academico, estado, importe);
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AñoAcademicoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EstadoNoValidoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ImporteNoValidoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        }
         int codigoGenerado = GestionBaseDeDatos.obtenerUltimoCodigo("matricula") + 1;
 
         this.codigo = codigoGenerado;
@@ -65,7 +82,17 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
             String estado,
             double importe) {
 
-        validarDatos(codigo_alumno, año_academico, estado, importe);
+        try {
+            validarDatos(codigo_alumno, año_academico, estado, importe);
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AñoAcademicoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EstadoNoValidoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ImporteNoValidoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigo;
         this.codigo_alumno = codigo_alumno;
@@ -129,9 +156,9 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * @param codigo_alumno Nuevo código del alumno.
      * @throws IllegalArgumentException si el código es 0 o negativo.
      */
-    public void setCodigo_alumno(int codigo_alumno) {
+    public void setCodigo_alumno(int codigo_alumno) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(codigo_alumno)) {
-            throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del alumno debe ser mayor que 0");
         }
 
         this.codigo_alumno = codigo_alumno;
@@ -143,9 +170,9 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * @param año_academico Nuevo año académico.
      * @throws IllegalArgumentException si el año está fuera del rango válido.
      */
-    public void setAño_academico(int año_academico) {
+    public void setAño_academico(int año_academico) throws AñoAcademicoException {
         if (!Validadores.validarAñoAcademico(año_academico)) {
-            throw new IllegalArgumentException("El año académico no es válido");
+            throw new AñoAcademicoException("El año académico no es válido");
         }
 
         this.año_academico = año_academico;
@@ -157,9 +184,9 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * @param estado Nuevo estado ("Activa" o "No activa").
      * @throws IllegalArgumentException si el estado no es uno de los valores válidos.
      */
-    public void setEstado(String estado) {
+    public void setEstado(String estado) throws EstadoNoValidoException {
         if (!Validadores.validarEstado(estado)) {
-            throw new IllegalArgumentException("El estado debe ser 'Activa' o 'No activa'");
+            throw new EstadoNoValidoException("El estado debe ser 'Activa' o 'No activa'");
         }
 
         this.estado = estado;
@@ -171,9 +198,9 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * @param importe Nuevo importe.
      * @throws IllegalArgumentException si el importe es negativo.
      */
-    public void setImporte(double importe) {
+    public void setImporte(double importe) throws ImporteNoValidoException {
         if (!Validadores.validarImporte(importe)) {
-            throw new IllegalArgumentException("El importe no puede ser negativo");
+            throw new ImporteNoValidoException("El importe no puede ser negativo");
         }
 
         this.importe = importe;
@@ -195,22 +222,22 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     private static void validarDatos(int codigo_alumno,
             int año_academico,
             String estado,
-            double importe) {
+            double importe) throws CodigMayor0Exception, AñoAcademicoException, EstadoNoValidoException, ImporteNoValidoException {
 
         if (!Validadores.validarCodigoPositivo(codigo_alumno)) {
-            throw new IllegalArgumentException("El código del alumno debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del alumno debe ser mayor que 0");
         }
 
         if (!Validadores.validarAñoAcademico(año_academico)) {
-            throw new IllegalArgumentException("El año académico no es válido");
+            throw new AñoAcademicoException("El año académico no es válido");
         }
 
         if (!Validadores.validarEstado(estado)) {
-            throw new IllegalArgumentException("El estado debe ser 'Activa' o 'No activa'");
+            throw new EstadoNoValidoException("El estado debe ser 'Activa' o 'No activa'");
         }
 
         if (!Validadores.validarImporte(importe)) {
-            throw new IllegalArgumentException("El importe no puede ser negativo");
+            throw new ImporteNoValidoException("El importe no puede ser negativo");
         }
     }
 
@@ -221,7 +248,17 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * @throws IllegalArgumentException si cualquier campo no supera su validación.
      */
     private void validarObjeto() {
-        validarDatos(this.codigo_alumno, this.año_academico, this.estado, this.importe);
+        try {
+            validarDatos(this.codigo_alumno, this.año_academico, this.estado, this.importe);
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AñoAcademicoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EstadoNoValidoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ImporteNoValidoException ex) {
+            Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // =========================================================
@@ -246,11 +283,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * @return Matrícula construida con los datos de la línea.
      * @throws IllegalArgumentException si la línea no tiene exactamente 5 campos.
      */
-    public static Matricula obtenerLineas(String linea) {
+    public static Matricula obtenerLineas(String linea) throws LineaInvalidaMatriculaException {
         String[] partes = linea.split(";", -1);
 
         if (partes.length != 5) {
-            throw new IllegalArgumentException("Línea inválida para Matricula: " + linea);
+            throw new LineaInvalidaMatriculaException("Línea inválida para Matricula: " + linea);
         }
 
         int tempCodigo = Integer.parseInt(partes[0]);
@@ -273,7 +310,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      *
      * @param temp Lista de cadenas, cada una con los datos de una matrícula en formato CSV.
      */
-    private void cargarDesdeLineas(ArrayList<String> temp) {
+    private void cargarDesdeLineas(ArrayList<String> temp) throws LineaInvalidaMatriculaException {
 
         SesionDatos.getListaMatriculas().clear();
 
@@ -334,7 +371,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".csv")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".csv");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaMatriculaException ex) {
+                Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -368,7 +409,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".dat")) {
             ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroMatricula);
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaMatriculaException ex) {
+                Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -377,7 +422,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroMatricula, ".txt")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroMatricula, ".txt");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaMatriculaException ex) {
+                Logger.getLogger(Matricula.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
