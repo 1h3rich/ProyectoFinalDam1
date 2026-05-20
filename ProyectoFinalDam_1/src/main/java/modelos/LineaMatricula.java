@@ -4,10 +4,19 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
+import excepciones.CodigMayor0Exception;
+import excepciones.LineaMatricula.LineaInvalidaLineaMatriculaException;
+import excepciones.LineaMatricula.MatriculaNotNullException;
+import excepciones.LineaMatricula.ModuloNotNullException;
+import excepciones.LineaMatricula.PrimeraCalifException;
+import excepciones.LineaMatricula.RepeticionException;
+import excepciones.LineaMatricula.SegundaCalifException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import servicios.Ficheros.GestionFicheros;
 import interfaces.InterpolaridadDeDatos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
 
@@ -40,23 +49,33 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
             Modulo modulo,
             int repeticion,
             double cal_primera,
-            double cal_segunda) {
+            double cal_segunda) throws MatriculaNotNullException, ModuloNotNullException {
 
         if (matricula == null) {
-            throw new IllegalArgumentException("La matrícula no puede ser null");
+            throw new MatriculaNotNullException("La matrícula no puede ser null");
         }
 
         if (modulo == null) {
-            throw new IllegalArgumentException("El módulo no puede ser null");
+            throw new ModuloNotNullException("El módulo no puede ser null");
         }
 
-        validarDatos(
-                matricula.getCodigo(),
-                modulo.getCodigo(),
-                repeticion,
-                cal_primera,
-                cal_segunda
-        );
+        try {
+            validarDatos(
+                    matricula.getCodigo(),
+                    modulo.getCodigo(),
+                    repeticion,
+                    cal_primera,
+                    cal_segunda
+            );
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RepeticionException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PrimeraCalifException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SegundaCalifException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.cod_matricula = matricula.getCodigo();
         this.cod_modulo = modulo.getCodigo();
@@ -82,13 +101,23 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
             double cal_primera,
             double cal_segunda) {
 
-        validarDatos(
-                cod_matricula,
-                cod_modulo,
-                repeticion,
-                cal_primera,
-                cal_segunda
-        );
+        try {
+            validarDatos(
+                    cod_matricula,
+                    cod_modulo,
+                    repeticion,
+                    cal_primera,
+                    cal_segunda
+            );
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RepeticionException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PrimeraCalifException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SegundaCalifException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.cod_matricula = cod_matricula;
         this.cod_modulo = cod_modulo;
@@ -160,9 +189,9 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @param cod_matricula Nuevo código de matrícula.
      * @throws IllegalArgumentException si el código es 0 o negativo.
      */
-    public void setCod_matricula(int cod_matricula) {
+    public void setCod_matricula(int cod_matricula) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(cod_matricula)) {
-            throw new IllegalArgumentException("El código de matrícula debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código de matrícula debe ser mayor que 0");
         }
 
         this.cod_matricula = cod_matricula;
@@ -174,9 +203,9 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @param cod_modulo Nuevo código de módulo.
      * @throws IllegalArgumentException si el código es 0 o negativo.
      */
-    public void setCod_modulo(int cod_modulo) {
+    public void setCod_modulo(int cod_modulo) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(cod_modulo)) {
-            throw new IllegalArgumentException("El código del módulo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del módulo debe ser mayor que 0");
         }
 
         this.cod_modulo = cod_modulo;
@@ -188,9 +217,9 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @param repeticion Nuevo número de repetición.
      * @throws IllegalArgumentException si la repetición es negativa.
      */
-    public void setRepeticion(int repeticion) {
+    public void setRepeticion(int repeticion) throws RepeticionException {
         if (!Validadores.validarRepeticion(repeticion)) {
-            throw new IllegalArgumentException("La repetición debe ser 1 o 2");
+            throw new RepeticionException("La repetición debe ser 1 o 2");
         }
 
         this.repeticion = repeticion;
@@ -202,9 +231,9 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @param cal_primera Nueva calificación de primera convocatoria.
      * @throws IllegalArgumentException si la calificación está fuera del rango válido.
      */
-    public void setCal_primera(double cal_primera) {
+    public void setCal_primera(double cal_primera) throws PrimeraCalifException {
         if (!Validadores.validarCalificacion(cal_primera)) {
-            throw new IllegalArgumentException("La primera calificación debe estar entre 0 y 10");
+            throw new PrimeraCalifException("La primera calificación debe estar entre 0 y 10");
         }
 
         this.cal_primera = cal_primera;
@@ -216,9 +245,9 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @param cal_segunda Nueva calificación de segunda convocatoria.
      * @throws IllegalArgumentException si la calificación está fuera del rango válido.
      */
-    public void setCal_segunda(double cal_segunda) {
+    public void setCal_segunda(double cal_segunda) throws SegundaCalifException {
         if (!Validadores.validarCalificacion(cal_segunda)) {
-            throw new IllegalArgumentException("La segunda calificación debe estar entre 0 y 10");
+            throw new SegundaCalifException("La segunda calificación debe estar entre 0 y 10");
         }
 
         this.cal_segunda = cal_segunda;
@@ -242,26 +271,26 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
             int cod_modulo,
             int repeticion,
             double cal_primera,
-            double cal_segunda) {
+            double cal_segunda) throws CodigMayor0Exception, RepeticionException, PrimeraCalifException, SegundaCalifException {
 
         if (!Validadores.validarCodigoPositivo(cod_matricula)) {
-            throw new IllegalArgumentException("El código de matrícula debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código de matrícula debe ser mayor que 0");
         }
 
         if (!Validadores.validarCodigoPositivo(cod_modulo)) {
-            throw new IllegalArgumentException("El código del módulo debe ser mayor que 0");
+            throw new CodigMayor0Exception("El código del módulo debe ser mayor que 0");
         }
 
         if (!Validadores.validarRepeticion(repeticion)) {
-            throw new IllegalArgumentException("La repetición debe ser 1 o 2");
+            throw new RepeticionException("La repetición debe ser 1 o 2");
         }
 
         if (!Validadores.validarCalificacion(cal_primera)) {
-            throw new IllegalArgumentException("La primera calificación debe estar entre 0 y 10");
+            throw new PrimeraCalifException("La primera calificación debe estar entre 0 y 10");
         }
 
         if (!Validadores.validarCalificacion(cal_segunda)) {
-            throw new IllegalArgumentException("La segunda calificación debe estar entre 0 y 10");
+            throw new SegundaCalifException("La segunda calificación debe estar entre 0 y 10");
         }
     }
 
@@ -272,13 +301,23 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @throws IllegalArgumentException si cualquier campo no supera su validación.
      */
     private void validarObjeto() {
-        validarDatos(
-                this.cod_matricula,
-                this.cod_modulo,
-                this.repeticion,
-                this.cal_primera,
-                this.cal_segunda
-        );
+        try {
+            validarDatos(
+                    this.cod_matricula,
+                    this.cod_modulo,
+                    this.repeticion,
+                    this.cal_primera,
+                    this.cal_segunda
+            );
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RepeticionException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PrimeraCalifException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SegundaCalifException ex) {
+            Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // =========================================================
@@ -292,11 +331,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * @return LineaMatricula construida con los datos de la línea.
      * @throws IllegalArgumentException si la línea no tiene exactamente 5 campos.
      */
-    public static LineaMatricula obtenerLineas(String linea) {
+    public static LineaMatricula obtenerLineas(String linea) throws LineaInvalidaLineaMatriculaException {
         String[] partes = linea.split(";", -1);
 
         if (partes.length != 5) {
-            throw new IllegalArgumentException("Línea inválida para LineaMatricula: " + linea);
+            throw new LineaInvalidaLineaMatriculaException("Línea inválida para LineaMatricula: " + linea);
         }
 
         int tempCodMatricula = Integer.parseInt(partes[0]);
@@ -319,7 +358,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      *
      * @param temp Lista de cadenas, cada una con los datos de una línea de matrícula en formato CSV.
      */
-    private void cargarDesdeLineas(ArrayList<String> temp) {
+    private void cargarDesdeLineas(ArrayList<String> temp) throws LineaInvalidaLineaMatriculaException {
 
         SesionDatos.getListaLineasMatricula().clear();
 
@@ -380,7 +419,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     public void objFromCSV() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".csv")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".csv");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaLineaMatriculaException ex) {
+                Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -415,7 +458,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     public void objFromBinario() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".dat")) {
             ArrayList<String> temp = GestionFicheros.leerBinario(Config.ficheroLineaMatricula);
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaLineaMatriculaException ex) {
+                Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -424,7 +471,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     public void objFromTXT() {
         if (Validadores.comprobarFicheroLectura(Config.ficheroLineaMatricula, ".txt")) {
             ArrayList<String> temp = GestionFicheros.leerTxtCsv(Config.ficheroLineaMatricula, ".txt");
-            cargarDesdeLineas(temp);
+            try {
+                cargarDesdeLineas(temp);
+            } catch (LineaInvalidaLineaMatriculaException ex) {
+                Logger.getLogger(LineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
