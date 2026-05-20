@@ -57,13 +57,23 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
                 throw new CodigMayor0Exception("El código generado del módulo debe ser mayor que 0");
         }
 
-        validarDatos(
-                codigo_ciclo,
-                nombre,
-                curso,
-                creditos_ects,
-                horas
-        );
+        try {
+            validarDatos(
+                    codigo_ciclo,
+                    nombre,
+                    curso,
+                    creditos_ects,
+                    horas
+            );
+        } catch (NombreVacioException ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CursoVacioException ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CreditosMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HorasMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigoGenerado;
         this.codigo_ciclo = codigo_ciclo;
@@ -94,13 +104,23 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
             throw new CodigMayor0Exception("El código del módulo debe ser mayor que 0");
         }
 
-        validarDatos(
-                codigo_ciclo,
-                nombre,
-                curso,
-                creditos_ects,
-                horas
-        );
+        try {
+            validarDatos(
+                    codigo_ciclo,
+                    nombre,
+                    curso,
+                    creditos_ects,
+                    horas
+            );
+        } catch (NombreVacioException ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CursoVacioException ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CreditosMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HorasMayor0Exception ex) {
+            Logger.getLogger(Modulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.codigo = codigo;
         this.codigo_ciclo = codigo_ciclo;
