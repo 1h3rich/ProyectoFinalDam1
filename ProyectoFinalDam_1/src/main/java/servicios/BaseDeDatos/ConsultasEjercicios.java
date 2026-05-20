@@ -44,7 +44,7 @@ public class ConsultasEjercicios {
         JOIN alumno a ON a.codigo = ma.codigo_alumno
         WHERE c.nivel = ? 
           AND m.curso = ?
-        GROUP BY m.nombre, c.horas, c.denominacion
+        GROUP BY m.nombre, m.horas, c.denominacion
         ORDER BY c.denominacion ASC
         """
     };
