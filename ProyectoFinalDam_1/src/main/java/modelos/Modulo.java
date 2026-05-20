@@ -5,7 +5,7 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
 import excepciones.Ciclo.HorasMayor0Exception;
-import excepciones.CodigMayor0Exception;
+import excepciones.Alumno.CodigMayor0Exception;
 import excepciones.Modulo.CreditosMayor0Exception;
 import excepciones.Modulo.CursoVacioException;
 import excepciones.Modulo.LineaInvalidaModuloException;
@@ -389,9 +389,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
             }
         }
 
-        for (Modulo modulo : SesionDatos.getListaModulos()) {
-            System.out.println(modulo);
-        }
+      
     }
 
     // =========================================================
@@ -472,9 +470,6 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
                 }
             }
 
-            for (Modulo modulo : SesionDatos.getListaModulos()) {
-                System.out.println(modulo);
-            }
         }
     }
 

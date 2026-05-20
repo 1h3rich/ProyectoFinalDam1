@@ -4,7 +4,7 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
-import excepciones.CodigMayor0Exception;
+import excepciones.Alumno.CodigMayor0Exception;
 import excepciones.Matricula.AñoAcademicoException;
 import excepciones.Matricula.EstadoNoValidoException;
 import excepciones.Matricula.ImporteNoValidoException;
@@ -321,9 +321,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
             }
         }
 
-        for (Matricula matricula : SesionDatos.getListaMatriculas()) {
-            System.out.println(matricula);
-        }
+       
     }
 
     // =========================================================
@@ -398,9 +396,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
                 }
             }
 
-            for (Matricula matricula : SesionDatos.getListaMatriculas()) {
-                System.out.println(matricula);
-            }
+          
         }
     }
 

@@ -5,6 +5,7 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import Utils.GsonUtils;
 import com.google.gson.Gson;
+import excepciones.Matricula.LineaInvalidaMatriculaException;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -14,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelos.Matricula;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
@@ -441,21 +444,25 @@ public class MenuMatricula {
  
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                Matricula matricula = Matricula.obtenerLineas(linea);
- 
-                // Orden según INSERT_MATRICULA_CON_CODIGO:
-                // codigo, codigo_alumno, anio_academico, estado, importe
-                String[] entradas = {
-                    String.valueOf(matricula.getCodigo()),
-                    String.valueOf(matricula.getCodigo_alumno()),
-                    String.valueOf(matricula.getAño_academico()),
-                    matricula.getEstado(),
-                    String.valueOf(matricula.getImporte())
-                };
- 
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
-                    SesionDatos.getListaMatriculas().add(matricula);
-                    contadorImportados++;
+                try {
+                    Matricula matricula = Matricula.obtenerLineas(linea);
+                    
+                    // Orden según INSERT_MATRICULA_CON_CODIGO:
+                    // codigo, codigo_alumno, anio_academico, estado, importe
+                    String[] entradas = {
+                        String.valueOf(matricula.getCodigo()),
+                        String.valueOf(matricula.getCodigo_alumno()),
+                        String.valueOf(matricula.getAño_academico()),
+                        matricula.getEstado(),
+                        String.valueOf(matricula.getImporte())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
+                        SesionDatos.getListaMatriculas().add(matricula);
+                        contadorImportados++;
+                    }
+                } catch (LineaInvalidaMatriculaException ex) {
+                    Logger.getLogger(MenuMatricula.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -485,19 +492,23 @@ public class MenuMatricula {
  
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                Matricula matricula = Matricula.obtenerLineas(linea.replace(":", ";"));
- 
-                String[] entradas = {
-                    String.valueOf(matricula.getCodigo()),
-                    String.valueOf(matricula.getCodigo_alumno()),
-                    String.valueOf(matricula.getAño_academico()),
-                    matricula.getEstado(),
-                    String.valueOf(matricula.getImporte())
-                };
- 
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
-                    SesionDatos.getListaMatriculas().add(matricula);
-                    contadorImportados++;
+                try {
+                    Matricula matricula = Matricula.obtenerLineas(linea.replace(":", ";"));
+                    
+                    String[] entradas = {
+                        String.valueOf(matricula.getCodigo()),
+                        String.valueOf(matricula.getCodigo_alumno()),
+                        String.valueOf(matricula.getAño_academico()),
+                        matricula.getEstado(),
+                        String.valueOf(matricula.getImporte())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MATRICULA_CON_CODIGO[1], entradas)) {
+                        SesionDatos.getListaMatriculas().add(matricula);
+                        contadorImportados++;
+                    }
+                } catch (LineaInvalidaMatriculaException ex) {
+                    Logger.getLogger(MenuMatricula.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

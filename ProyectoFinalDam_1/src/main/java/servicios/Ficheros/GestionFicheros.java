@@ -22,29 +22,7 @@ public class GestionFicheros {
 
     
    
-    /**
-     * Crea el fichero; se sabe que tipo de fichero es porque por parámetro le
-     * pasamos la ruta.
-     *
-     * @param ruta
-     */
-    
-    // ESTE METODO NUNCA SE UTILIZA
-     /* 
-    public static void crearFichero(String ruta) {
-        File f = new File(ruta);
-        try {
-            if (f.createNewFile()) {
-                System.out.println("Fichero creado correctamente");
-            } else {
-                System.out.println("Fichero ya existente");
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    */
+   
 
     //==========================================================================================================================================================
     //======SAVE================================================================================================================================================

@@ -4,7 +4,7 @@ import Config.Config;
 import Control.SesionDatos;
 import Utils.Validadores;
 import com.google.gson.Gson;
-import excepciones.CodigMayor0Exception;
+import excepciones.Alumno.CodigMayor0Exception;
 import excepciones.LineaMatricula.LineaInvalidaLineaMatriculaException;
 import excepciones.LineaMatricula.MatriculaNotNullException;
 import excepciones.LineaMatricula.ModuloNotNullException;
@@ -369,9 +369,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
             }
         }
 
-        for (LineaMatricula lineaMatricula : SesionDatos.getListaLineasMatricula()) {
-            System.out.println(lineaMatricula);
-        }
+       
     }
 
     // =========================================================
@@ -447,9 +445,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
                 }
             }
 
-            for (LineaMatricula lineaMatricula : SesionDatos.getListaLineasMatricula()) {
-                System.out.println(lineaMatricula);
-            }
+           
         }
     }
 

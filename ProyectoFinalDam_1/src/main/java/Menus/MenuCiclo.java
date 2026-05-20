@@ -5,6 +5,8 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import Utils.GsonUtils;
 import com.google.gson.Gson;
+import excepciones.Alumno.CodigMayor0Exception;
+import excepciones.Ciclo.LineaInvalidaCicloException;
 import java.util.TreeSet;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
@@ -15,6 +17,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelos.Ciclo;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
@@ -160,6 +164,8 @@ public class MenuCiclo {
             teclado.nextLine();
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] " + e.getMessage());
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(MenuCiclo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -466,22 +472,28 @@ public class MenuCiclo {
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                Ciclo ciclo = Ciclo.obtenerLineas(linea);
-
-                // Orden según INSERT_CICLO_CON_CODIGO:
-                // codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo
-                String[] entradas = {
-                    String.valueOf(ciclo.getCodigo()),
-                    ciclo.getDenominacion(),
-                    ciclo.getFamiliaProfesional(),
-                    ciclo.getNivel(),
-                    String.valueOf(ciclo.getHoras()),
-                    String.valueOf(ciclo.getAñoCurriculum())
-                };
-
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.getListaCiclos().add(ciclo);
-                    contadorImportados++;
+                try {
+                    Ciclo ciclo = Ciclo.obtenerLineas(linea);
+                    
+                    // Orden según INSERT_CICLO_CON_CODIGO:
+                    // codigo, denominacion, familia_profesional, nivel, horas, anio_curriculo
+                    String[] entradas = {
+                        String.valueOf(ciclo.getCodigo()),
+                        ciclo.getDenominacion(),
+                        ciclo.getFamiliaProfesional(),
+                        ciclo.getNivel(),
+                        String.valueOf(ciclo.getHoras()),
+                        String.valueOf(ciclo.getAñoCurriculum())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
+                        SesionDatos.getListaCiclos().add(ciclo);
+                        contadorImportados++;
+                    }
+                } catch (LineaInvalidaCicloException ex) {
+                    Logger.getLogger(MenuCiclo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (CodigMayor0Exception ex) {
+                    Logger.getLogger(MenuCiclo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -512,20 +524,26 @@ public class MenuCiclo {
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                Ciclo ciclo = Ciclo.obtenerLineas(linea.replace(":", ";"));
-
-                String[] entradas = {
-                    String.valueOf(ciclo.getCodigo()),
-                    ciclo.getDenominacion(),
-                    ciclo.getFamiliaProfesional(),
-                    ciclo.getNivel(),
-                    String.valueOf(ciclo.getHoras()),
-                    String.valueOf(ciclo.getAñoCurriculum())
-                };
-
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.getListaCiclos().add(ciclo);
-                    contadorImportados++;
+                try {
+                    Ciclo ciclo = Ciclo.obtenerLineas(linea.replace(":", ";"));
+                    
+                    String[] entradas = {
+                        String.valueOf(ciclo.getCodigo()),
+                        ciclo.getDenominacion(),
+                        ciclo.getFamiliaProfesional(),
+                        ciclo.getNivel(),
+                        String.valueOf(ciclo.getHoras()),
+                        String.valueOf(ciclo.getAñoCurriculum())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_CICLO_CON_CODIGO[1], entradas)) {
+                        SesionDatos.getListaCiclos().add(ciclo);
+                        contadorImportados++;
+                    }
+                } catch (LineaInvalidaCicloException ex) {
+                    Logger.getLogger(MenuCiclo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (CodigMayor0Exception ex) {
+                    Logger.getLogger(MenuCiclo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

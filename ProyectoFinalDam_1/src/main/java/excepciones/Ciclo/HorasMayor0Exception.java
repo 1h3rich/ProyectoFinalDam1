@@ -2,16 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package excepciones.LineaMatricula;
+package excepciones.Ciclo;
 
 /**
  *
  * @author isard
  */
-public class SegundaCalifException extends Exception{
+public class HorasMayor0Exception extends Exception{
 
+    
     /** Construye la excepción sin mensaje de detalle. */
-    public SegundaCalifException() {
+    public HorasMayor0Exception() {
     }
 
      /**
@@ -19,7 +20,7 @@ public class SegundaCalifException extends Exception{
      *
      * @param message Descripción del error.
      */
-    public SegundaCalifException(String message) {
+    public HorasMayor0Exception(String message) {
         super(message);
     }
     

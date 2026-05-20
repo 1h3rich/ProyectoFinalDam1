@@ -10,7 +10,7 @@ import excepciones.Ciclo.FamiliaVaciaException;
 import excepciones.Ciclo.HorasMayor0Exception;
 import excepciones.Ciclo.LineaInvalidaCicloException;
 import excepciones.Ciclo.NivelVacioException;
-import excepciones.CodigMayor0Exception;
+import excepciones.Alumno.CodigMayor0Exception;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -394,9 +394,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
             }
         }
 
-        for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
-            System.out.println(ciclo);
-        }
+      
     }
 
     /**
@@ -494,9 +492,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
                 }
             }
 
-            for (Ciclo ciclo : SesionDatos.getListaCiclos()) {
-                System.out.println(ciclo);
-            }
+           
         }
     }
 

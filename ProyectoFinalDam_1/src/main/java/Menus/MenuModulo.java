@@ -5,6 +5,8 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import Utils.GsonUtils;
 import com.google.gson.Gson;
+import excepciones.Alumno.CodigMayor0Exception;
+import excepciones.Modulo.LineaInvalidaModuloException;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -14,6 +16,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelos.Modulo;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
@@ -148,6 +152,8 @@ public class MenuModulo {
             teclado.nextLine();
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] " + e.getMessage());
+        } catch (CodigMayor0Exception ex) {
+            Logger.getLogger(MenuModulo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -432,22 +438,28 @@ public class MenuModulo {
  
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                Modulo modulo = Modulo.obtenerLineas(linea);
- 
-                // Orden según INSERT_MODULO_CON_CODIGO:
-                // codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
-                String[] entradas = {
-                    String.valueOf(modulo.getCodigo()),
-                    String.valueOf(modulo.getCodigo_ciclo()),
-                    modulo.getNombre(),
-                    modulo.getCurso(),
-                    String.valueOf(modulo.getCreditos_ects()),
-                    String.valueOf(modulo.getHoras())
-                };
- 
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.getListaModulos().add(modulo);
-                    contadorImportados++;
+                try {
+                    Modulo modulo = Modulo.obtenerLineas(linea);
+                    
+                    // Orden según INSERT_MODULO_CON_CODIGO:
+                    // codigo, codigo_ciclo, nombre, curso, creditos_ects, horas
+                    String[] entradas = {
+                        String.valueOf(modulo.getCodigo()),
+                        String.valueOf(modulo.getCodigo_ciclo()),
+                        modulo.getNombre(),
+                        modulo.getCurso(),
+                        String.valueOf(modulo.getCreditos_ects()),
+                        String.valueOf(modulo.getHoras())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
+                        SesionDatos.getListaModulos().add(modulo);
+                        contadorImportados++;
+                    }
+                } catch (CodigMayor0Exception ex) {
+                    Logger.getLogger(MenuModulo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (LineaInvalidaModuloException ex) {
+                    Logger.getLogger(MenuModulo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -477,20 +489,26 @@ public class MenuModulo {
  
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                Modulo modulo = Modulo.obtenerLineas(linea.replace(":", ";"));
- 
-                String[] entradas = {
-                    String.valueOf(modulo.getCodigo()),
-                    String.valueOf(modulo.getCodigo_ciclo()),
-                    modulo.getNombre(),
-                    modulo.getCurso(),
-                    String.valueOf(modulo.getCreditos_ects()),
-                    String.valueOf(modulo.getHoras())
-                };
- 
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
-                    SesionDatos.getListaModulos().add(modulo);
-                    contadorImportados++;
+                try {
+                    Modulo modulo = Modulo.obtenerLineas(linea.replace(":", ";"));
+                    
+                    String[] entradas = {
+                        String.valueOf(modulo.getCodigo()),
+                        String.valueOf(modulo.getCodigo_ciclo()),
+                        modulo.getNombre(),
+                        modulo.getCurso(),
+                        String.valueOf(modulo.getCreditos_ects()),
+                        String.valueOf(modulo.getHoras())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_MODULO_CON_CODIGO[1], entradas)) {
+                        SesionDatos.getListaModulos().add(modulo);
+                        contadorImportados++;
+                    }
+                } catch (CodigMayor0Exception ex) {
+                    Logger.getLogger(MenuModulo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (LineaInvalidaModuloException ex) {
+                    Logger.getLogger(MenuModulo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

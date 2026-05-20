@@ -244,7 +244,7 @@ public class SesionDatos {
      * @return LinkedHashMap con clave "TipoClase#id" y valor descripción
      * legible.
      */
-    // ESTE METODO NO SE UTILIZA NUNCA
+    
     
     public static LinkedHashMap<String, String> getRegistroCompleto() {
         return new LinkedHashMap<>(registroSesion);

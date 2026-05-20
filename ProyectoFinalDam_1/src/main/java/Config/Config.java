@@ -27,19 +27,19 @@ public class Config {
     // Ficheros (nombre base sin extensión; se le añade .csv / .json / .txt / .dat según el método)
 
     /** Nombre base del fichero de alumnos (sin extensión). */
-    public static final String ficheroAlumno = "alumno";
+    public static final String ficheroAlumno = "ficheros/alumno/alumno";
 
     /** Nombre base del fichero de ciclos (sin extensión). */
-    public static final String ficheroCiclo = "ciclo";
+    public static final String ficheroCiclo = "ficheros/ciclo/ciclo";
 
     /** Nombre base del fichero de módulos (sin extensión). */
-    public static final String ficheroModulo = "modulo";
+    public static final String ficheroModulo = "ficheros/modulo/modulo";
 
     /** Nombre base del fichero de líneas de matrícula (sin extensión). */
-    public static final String ficheroLineaMatricula = "linea_matricula";
+    public static final String ficheroLineaMatricula = "ficheros/lineaMatricula/linea_matricula";
 
     /** Nombre base del fichero de matrículas (sin extensión). */
-    public static final String ficheroMatricula = "matricula";
+    public static final String ficheroMatricula = "ficheros/matricula/matricula";
 
     /**
      * Devuelve la ruta completa (sin extensión) al fichero según el formato seleccionado.

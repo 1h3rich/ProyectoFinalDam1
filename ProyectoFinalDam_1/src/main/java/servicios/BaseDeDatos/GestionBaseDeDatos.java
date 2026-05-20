@@ -32,18 +32,6 @@ public class GestionBaseDeDatos {
      */
     private static boolean transaccionActiva = false;
 
-    /*
-    public static TreeSet<Alumno> listaAlumno = new TreeSet<>();
-    public static TreeSet<Matricula> listaMatricula = new TreeSet<>();
-    public static TreeSet<LineaMatricula> listaLineaMatricula = new TreeSet<>();
-    public static TreeSet<Ciclo> listaCiclo = new TreeSet<>();
-    public static TreeSet<Modulo> listaModulo = new TreeSet<>();
-
-    //En esta lista hay que guaradr los datos que insertan cada vez que se hace un insert
-    public static ArrayList<String> datosInsertados = new ArrayList<>(); //Aqui no estoy seguro si es String o podria Ser de Tipo Object, si se puede elegir pondria Object
-
-    
-     */
     /**
      * Conecta Java con la base de datos MySQL.
      *
@@ -687,40 +675,7 @@ public class GestionBaseDeDatos {
         return obtenerTableModel(sql, new String[0]);
     }
 
-    /**
-     * Comprueba si existe un registro con el código dado en la tabla indicada.
-     * Se usa para validar claves foráneas ANTES de insertar o actualizar.
-     *
-     * Ejemplos de uso en formularios Swing: if
-     * (!GestionBaseDeDatos.existeRegistro("ciclo", codigoCiclo)) {
-     * JOptionPane.showMessageDialog(this, "El ciclo no existe."); return; }
-     *
-     * @param tabla Nombre de la tabla (p. ej. "ciclo", "alumno", "modulo").
-     * @param codigo Código a buscar (clave primaria entera).
-     * @return true si existe al menos un registro con ese código; false en caso
-     * contrario.
-     */
-    // ESTE METODO SE PUEDE ELIMINAR PORQUE NUNCA SE UTILIZA
-    /*
-    public static boolean existeRegistro(String tabla, int codigo) {
-        // Se construye la SQL con el nombre de tabla 
-        String sql = "SELECT COUNT(*) FROM " + tabla + " WHERE codigo = ?";
-        try {
-            comprobarConexion();
-            try ( PreparedStatement pst = con.prepareStatement(sql)) {
-                pst.setInt(1, codigo);
-                try ( ResultSet rs = pst.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getInt(1) > 0;
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(GestionBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
-     */
+   
     /**
      * Devuelve el valor máximo de la columna {@code codigo} en la tabla
      * indicada.
@@ -802,33 +757,7 @@ public class GestionBaseDeDatos {
         }
     }
 
-    // ESTE METODO SE PUEDE ELIMINAR PORQUE NUNCA SE UTILIZA
-    /**
-     * Rellena el JComboBox proporcionado con las denominaciones de todos los
-     * ciclos ordenadas alfabéticamente.
-     *
-     * @param comboBox JComboBox de destino; se limpia antes de añadir los
-     * elementos.
-     */
-    /*
-    public static void cargarDenominacionesCiclosEnComboBox(javax.swing.JComboBox<String> comboBox) {
-        comprobarConexion();
-
-        String sql = "SELECT denominacion FROM ciclo ORDER BY denominacion ASC";
-
-        comboBox.removeAllItems();
-
-        try ( PreparedStatement pst = con.prepareStatement(sql);  ResultSet rs = pst.executeQuery()) {
-
-            while (rs.next()) {
-                comboBox.addItem(rs.getString("denominacion"));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al cargar ciclos en ComboBox: " + e.getMessage());
-        }
-    }
-     */
+   
 
     /**
      * Devuelve la lista de ciclos como {@link ItemCombo} (id + denominación)

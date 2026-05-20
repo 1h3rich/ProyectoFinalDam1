@@ -9,7 +9,7 @@ import excepciones.Alumno.CorreoNoValidoException;
 import excepciones.Alumno.DomicilioVacioException;
 import excepciones.Alumno.FechaNoValidaException;
 import excepciones.Alumno.TelefonoInvalidoException;
-import excepciones.CodigMayor0Exception;
+import excepciones.Alumno.CodigMayor0Exception;
 import excepciones.Alumno.LineaInvalidaAlumnoException;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -395,9 +395,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
             }
         }
 
-        for (Alumno alumno : SesionDatos.getListaAlumnos()) {
-            System.out.println(alumno);
-        }
+       
     }
 
     /**
@@ -493,9 +491,6 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
                 }
             }
 
-            for (Alumno alumno : SesionDatos.getListaAlumnos()) {
-                System.out.println(alumno);
-            }
         }
     }
 
