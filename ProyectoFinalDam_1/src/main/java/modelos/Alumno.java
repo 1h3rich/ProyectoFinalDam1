@@ -9,7 +9,7 @@ import excepciones.Alumno.CorreoNoValidoException;
 import excepciones.Alumno.DomicilioVacioException;
 import excepciones.Alumno.FechaNoValidaException;
 import excepciones.Alumno.TelefonoInvalidoException;
-import excepciones.Alumno.CodigMayor0Exception;
+import excepciones.CodigMayor0Exception;
 import excepciones.Alumno.LineaInvalidaAlumnoException;
 import java.io.Serializable;
 import java.time.LocalDate;
