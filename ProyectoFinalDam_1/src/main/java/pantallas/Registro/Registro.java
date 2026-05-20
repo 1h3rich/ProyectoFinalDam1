@@ -473,7 +473,8 @@ public class Registro extends javax.swing.JFrame {
                     l.getCod_matricula(),
                     l.getCod_modulo(),
                     l.getRepeticion(),
-                    l.getCal_primera()== 0.0 ? "—": l.getCal_primera() , //Esto es para que si es 0 (null) mostrar los guiones vacios
+                    //Esto es para que si es 0 (null) mostrar los guiones vacios
+                    l.getCal_primera()== 0.0 ? "—": l.getCal_primera() , 
                     l.getCal_segunda()== 0.0 ? "—": l.getCal_segunda()
                 });
             }
@@ -494,6 +495,7 @@ public class Registro extends javax.swing.JFrame {
      * Ejemplo: "Alumnos (3)"
      */
     private void actualizarTitulosPestañas() {
+        
         tabbedPane.setTitleAt(0, "Resumen (" + tablaTodos.getRowCount() + ")");
         tabbedPane.setTitleAt(1, "Alumnos (" + tablaAlumnos.getRowCount() + ")");
         tabbedPane.setTitleAt(2, "Ciclos (" + tablaCiclos.getRowCount() + ")");
