@@ -685,7 +685,7 @@ public class MenuCiclo {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
         if (SesionDatos.getListaCiclos().isEmpty()) return 0;
 
-        String ruta = Config.rutaFichero(Config.ficheroCiclo, formato);
+        String ruta = Config.ficheroCiclo;
         if ("BINARIO".equals(formato)) {
             GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaCiclos());
         } else {
@@ -709,7 +709,7 @@ public class MenuCiclo {
      * @throws java.lang.Exception
      */
     public static int importar(String formato) throws Exception {
-        return importar(formato, Config.rutaFichero(Config.ficheroCiclo, formato));
+        return importar(formato, Config.ficheroCiclo);
     }
 
     /**

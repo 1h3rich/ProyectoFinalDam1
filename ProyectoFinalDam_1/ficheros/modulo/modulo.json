@@ -1,12 +1,72 @@
-{"codigo":1,"codigo_ciclo":1,"nombre":"Programación","curso":"1","creditos_ects":14.0,"horas":256}
-{"codigo":2,"codigo_ciclo":9,"nombre":"Bases de Datos","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":1,"codigo_ciclo":4,"nombre":"Programaciu00f3n","curso":"1","creditos_ects":14.0,"horas":256}
+{"codigo":2,"codigo_ciclo":4,"nombre":"Bases de Datos","curso":"1","creditos_ects":11.0,"horas":192}
 {"codigo":3,"codigo_ciclo":1,"nombre":"Lenguajes de Marcas","curso":"1","creditos_ects":7.0,"horas":128}
-{"codigo":4,"codigo_ciclo":9,"nombre":"Acceso a Datos","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":4,"codigo_ciclo":1,"nombre":"Acceso a Datos","curso":"2","creditos_ects":9.0,"horas":120}
 {"codigo":5,"codigo_ciclo":1,"nombre":"Desarrollo de Interfaces","curso":"2","creditos_ects":9.0,"horas":120}
-{"codigo":6,"codigo_ciclo":9,"nombre":"Implantación de Sistemas Operativos","curso":"1","creditos_ects":12.0,"horas":224}
-{"codigo":7,"codigo_ciclo":2,"nombre":"Redes Locales","curso":"1","creditos_ects":11.0,"horas":192}
-{"codigo":8,"codigo_ciclo":2,"nombre":"Seguridad y Alta Disponibilidad","curso":"2","creditos_ects":6.0,"horas":100}
-{"codigo":9,"codigo_ciclo":9,"nombre":"Comunicación Empresarial","curso":"1","creditos_ects":13.66,"horas":160}
+{"codigo":6,"codigo_ciclo":2,"nombre":"Implantaciu00f3n de Sistemas Operativos","curso":"1","creditos_ects":12.0,"horas":224}
+{"codigo":7,"codigo_ciclo":4,"nombre":"Redes Locales","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":8,"codigo_ciclo":4,"nombre":"Seguridad y Alta Disponibilidad","curso":"2","creditos_ects":6.0,"horas":100}
+{"codigo":9,"codigo_ciclo":4,"nombre":"Comunicaciu00f3n Empresarial","curso":"1","creditos_ects":13.66,"horas":160}
 {"codigo":10,"codigo_ciclo":3,"nombre":"Operaciones Administrativas","curso":"1","creditos_ects":12.4,"horas":190}
-{"codigo":11,"codigo_ciclo":9,"nombre":"asdad","curso":"1","creditos_ects":2.0,"horas":2}
-{"codigo":12,"codigo_ciclo":1,"nombre":"Prueba 8","curso":"1","creditos_ects":10.0,"horas":2000}
+{"codigo":11,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":12,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":13,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":14,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":15,"codigo_ciclo":4,"nombre":"a","curso":"1","creditos_ects":1.0,"horas":200}
+{"codigo":16,"codigo_ciclo":1,"nombre":"Modulo 1","curso":"2","creditos_ects":50.0,"horas":2000}
+{"codigo":17,"codigo_ciclo":2,"nombre":"Luis","curso":"1","creditos_ects":1.0,"horas":2000}
+{"codigo":19,"codigo_ciclo":1,"nombre":"a","curso":"1","creditos_ects":1.0,"horas":1}
+{"codigo":21,"codigo_ciclo":1,"nombre":"Programación","curso":"1","creditos_ects":14.0,"horas":256}
+{"codigo":22,"codigo_ciclo":9,"nombre":"Bases de Datos","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":23,"codigo_ciclo":1,"nombre":"Lenguajes de Marcas","curso":"1","creditos_ects":7.0,"horas":128}
+{"codigo":24,"codigo_ciclo":9,"nombre":"Acceso a Datos","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":25,"codigo_ciclo":1,"nombre":"Desarrollo de Interfaces","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":26,"codigo_ciclo":9,"nombre":"Implantación de Sistemas Operativos","curso":"1","creditos_ects":12.0,"horas":224}
+{"codigo":27,"codigo_ciclo":2,"nombre":"Redes Locales","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":28,"codigo_ciclo":2,"nombre":"Seguridad y Alta Disponibilidad","curso":"2","creditos_ects":6.0,"horas":100}
+{"codigo":29,"codigo_ciclo":9,"nombre":"Comunicación Empresarial","curso":"1","creditos_ects":13.66,"horas":160}
+{"codigo":30,"codigo_ciclo":3,"nombre":"Operaciones Administrativas","curso":"1","creditos_ects":12.4,"horas":190}
+{"codigo":31,"codigo_ciclo":9,"nombre":"asdad","curso":"1","creditos_ects":2.0,"horas":2}
+{"codigo":32,"codigo_ciclo":1,"nombre":"Prueba 8","curso":"1","creditos_ects":10.0,"horas":2000}
+{"codigo":33,"codigo_ciclo":1,"nombre":"Programación","curso":"1","creditos_ects":14.0,"horas":256}
+{"codigo":34,"codigo_ciclo":9,"nombre":"Bases de Datos","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":35,"codigo_ciclo":1,"nombre":"Lenguajes de Marcas","curso":"1","creditos_ects":7.0,"horas":128}
+{"codigo":36,"codigo_ciclo":9,"nombre":"Acceso a Datos","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":37,"codigo_ciclo":1,"nombre":"Desarrollo de Interfaces","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":38,"codigo_ciclo":9,"nombre":"Implantación de Sistemas Operativos","curso":"1","creditos_ects":12.0,"horas":224}
+{"codigo":39,"codigo_ciclo":2,"nombre":"Redes Locales","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":40,"codigo_ciclo":2,"nombre":"Seguridad y Alta Disponibilidad","curso":"2","creditos_ects":6.0,"horas":100}
+{"codigo":41,"codigo_ciclo":9,"nombre":"Comunicación Empresarial","curso":"1","creditos_ects":13.66,"horas":160}
+{"codigo":42,"codigo_ciclo":3,"nombre":"Operaciones Administrativas","curso":"1","creditos_ects":12.4,"horas":190}
+{"codigo":43,"codigo_ciclo":9,"nombre":"asdad","curso":"1","creditos_ects":2.0,"horas":2}
+{"codigo":44,"codigo_ciclo":1,"nombre":"Prueba 8","curso":"1","creditos_ects":10.0,"horas":2000}
+{"codigo":45,"codigo_ciclo":1,"nombre":"Programación","curso":"1","creditos_ects":14.0,"horas":256}
+{"codigo":46,"codigo_ciclo":9,"nombre":"Bases de Datos","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":47,"codigo_ciclo":1,"nombre":"Lenguajes de Marcas","curso":"1","creditos_ects":7.0,"horas":128}
+{"codigo":48,"codigo_ciclo":9,"nombre":"Acceso a Datos","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":49,"codigo_ciclo":1,"nombre":"Desarrollo de Interfaces","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":50,"codigo_ciclo":9,"nombre":"Implantación de Sistemas Operativos","curso":"1","creditos_ects":12.0,"horas":224}
+{"codigo":51,"codigo_ciclo":2,"nombre":"Redes Locales","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":52,"codigo_ciclo":2,"nombre":"Seguridad y Alta Disponibilidad","curso":"2","creditos_ects":6.0,"horas":100}
+{"codigo":53,"codigo_ciclo":9,"nombre":"Comunicación Empresarial","curso":"1","creditos_ects":13.66,"horas":160}
+{"codigo":54,"codigo_ciclo":3,"nombre":"Operaciones Administrativas","curso":"1","creditos_ects":12.4,"horas":190}
+{"codigo":55,"codigo_ciclo":9,"nombre":"asdad","curso":"1","creditos_ects":2.0,"horas":2}
+{"codigo":56,"codigo_ciclo":1,"nombre":"Prueba 8","curso":"1","creditos_ects":10.0,"horas":2000}
+{"codigo":57,"codigo_ciclo":4,"nombre":"Programaciu00f3n","curso":"1","creditos_ects":14.0,"horas":256}
+{"codigo":58,"codigo_ciclo":4,"nombre":"Bases de Datos","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":59,"codigo_ciclo":1,"nombre":"Lenguajes de Marcas","curso":"1","creditos_ects":7.0,"horas":128}
+{"codigo":60,"codigo_ciclo":1,"nombre":"Acceso a Datos","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":61,"codigo_ciclo":1,"nombre":"Desarrollo de Interfaces","curso":"2","creditos_ects":9.0,"horas":120}
+{"codigo":62,"codigo_ciclo":2,"nombre":"Implantaciu00f3n de Sistemas Operativos","curso":"1","creditos_ects":12.0,"horas":224}
+{"codigo":63,"codigo_ciclo":4,"nombre":"Redes Locales","curso":"1","creditos_ects":11.0,"horas":192}
+{"codigo":64,"codigo_ciclo":4,"nombre":"Seguridad y Alta Disponibilidad","curso":"2","creditos_ects":6.0,"horas":100}
+{"codigo":65,"codigo_ciclo":4,"nombre":"Comunicaciu00f3n Empresarial","curso":"1","creditos_ects":13.66,"horas":160}
+{"codigo":66,"codigo_ciclo":3,"nombre":"Operaciones Administrativas","curso":"1","creditos_ects":12.4,"horas":190}
+{"codigo":67,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":68,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":69,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":70,"codigo_ciclo":4,"nombre":"a","curso":"2","creditos_ects":2.0,"horas":2}
+{"codigo":71,"codigo_ciclo":4,"nombre":"a","curso":"1","creditos_ects":1.0,"horas":200}
+{"codigo":72,"codigo_ciclo":1,"nombre":"Modulo 1","curso":"2","creditos_ects":50.0,"horas":2000}
+{"codigo":73,"codigo_ciclo":2,"nombre":"Luis","curso":"1","creditos_ects":1.0,"horas":2000}
+{"codigo":74,"codigo_ciclo":1,"nombre":"a","curso":"1","creditos_ects":1.0,"horas":1}

@@ -5,6 +5,7 @@ import Control.SesionDatos;
 import Utils.Validadores;
 import Utils.GsonUtils;
 import com.google.gson.Gson;
+import excepciones.LineaMatricula.LineaInvalidaLineaMatriculaException;
 import excepciones.YaImportadoException;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -14,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelos.LineaMatricula;
 import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
@@ -491,22 +494,26 @@ public class MenuLineaMatricula {
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea);
-
-                // Orden según INSERT_LINEA_MATRICULA:
-                // codigo_matricula, codigo_modulo, repeticion,
-                // calificacion_primera, calificacion_segunda
-                String[] entradas = {
-                    String.valueOf(lineaMatricula.getCod_matricula()),
-                    String.valueOf(lineaMatricula.getCod_modulo()),
-                    String.valueOf(lineaMatricula.getRepeticion()),
-                    String.valueOf(lineaMatricula.getCal_primera()),
-                    String.valueOf(lineaMatricula.getCal_segunda())
-                };
-
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
-                    SesionDatos.getListaLineasMatricula().add(lineaMatricula);
-                    contadorImportados++;
+                try {
+                    LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea);
+                    
+                    // Orden según INSERT_LINEA_MATRICULA:
+                    // codigo_matricula, codigo_modulo, repeticion,
+                    // calificacion_primera, calificacion_segunda
+                    String[] entradas = {
+                        String.valueOf(lineaMatricula.getCod_matricula()),
+                        String.valueOf(lineaMatricula.getCod_modulo()),
+                        String.valueOf(lineaMatricula.getRepeticion()),
+                        String.valueOf(lineaMatricula.getCal_primera()),
+                        String.valueOf(lineaMatricula.getCal_segunda())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
+                        SesionDatos.getListaLineasMatricula().add(lineaMatricula);
+                        contadorImportados++;
+                    }
+                } catch (LineaInvalidaLineaMatriculaException ex) {
+                    Logger.getLogger(MenuLineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -537,19 +544,23 @@ public class MenuLineaMatricula {
 
         for (String linea : lineas) {
             if (!linea.trim().isEmpty()) {
-                LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea.replace(":", ";"));
-
-                String[] entradas = {
-                    String.valueOf(lineaMatricula.getCod_matricula()),
-                    String.valueOf(lineaMatricula.getCod_modulo()),
-                    String.valueOf(lineaMatricula.getRepeticion()),
-                    String.valueOf(lineaMatricula.getCal_primera()),
-                    String.valueOf(lineaMatricula.getCal_segunda())
-                };
-
-                if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
-                    SesionDatos.getListaLineasMatricula().add(lineaMatricula);
-                    contadorImportados++;
+                try {
+                    LineaMatricula lineaMatricula = LineaMatricula.obtenerLineas(linea.replace(":", ";"));
+                    
+                    String[] entradas = {
+                        String.valueOf(lineaMatricula.getCod_matricula()),
+                        String.valueOf(lineaMatricula.getCod_modulo()),
+                        String.valueOf(lineaMatricula.getRepeticion()),
+                        String.valueOf(lineaMatricula.getCal_primera()),
+                        String.valueOf(lineaMatricula.getCal_segunda())
+                    };
+                    
+                    if (GestionBaseDeDatos.insertarSinID(ConsultasSQL.INSERT_LINEA_MATRICULA[1], entradas)) {
+                        SesionDatos.getListaLineasMatricula().add(lineaMatricula);
+                        contadorImportados++;
+                    }
+                } catch (LineaInvalidaLineaMatriculaException ex) {
+                    Logger.getLogger(MenuLineaMatricula.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -692,7 +703,7 @@ public class MenuLineaMatricula {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_LINEA_MATRICULA_TODOS, new String[0], false, true);
         if (SesionDatos.getListaLineasMatricula().isEmpty()) return 0;
 
-        String ruta = Config.rutaFichero(Config.ficheroLineaMatricula, formato);
+        String ruta = Config.ficheroLineaMatricula;
         if ("BINARIO".equals(formato)) {
             GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaLineasMatricula());
         } else {
@@ -716,7 +727,7 @@ public class MenuLineaMatricula {
      * @throws java.lang.Exception 
      */
     public static int importar(String formato) throws Exception {
-        return importar(formato, Config.rutaFichero(Config.ficheroLineaMatricula, formato));
+        return importar(formato, Config.ficheroLineaMatricula);
     }
 
     /**

@@ -41,6 +41,9 @@ public class Config {
     /** Nombre base del fichero de matrículas (sin extensión). */
     public static final String ficheroMatricula = "ficheros/matricula/matricula";
 
+    
+    
+    
     /**
      * Devuelve la ruta completa (sin extensión) al fichero según el formato seleccionado.
      * Estructura: ficheros/FORMATO/nombreBase
@@ -49,6 +52,7 @@ public class Config {
      * @param formato    Formato del fichero: "CSV", "TXT", "JSON" o "BINARIO".
      * @return Ruta base sin extensión lista para pasarla a GestionFicheros.
      */
+    /*
     public static String rutaFichero(String nombreBase, String formato) {
         String dir = switch (formato.toUpperCase()) {
             case "CSV"     -> "ficheros/CSV/";
@@ -59,5 +63,5 @@ public class Config {
         };
         return dir + nombreBase;
     }
-
+    */
 }

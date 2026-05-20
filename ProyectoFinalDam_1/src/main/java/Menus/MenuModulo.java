@@ -649,7 +649,7 @@ public class MenuModulo {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MODULO_TODOS, new String[0], false, true);
         if (SesionDatos.getListaModulos().isEmpty()) return 0;
 
-        String ruta = Config.rutaFichero(Config.ficheroModulo, formato);
+        String ruta = Config.ficheroModulo;
         if ("BINARIO".equals(formato)) {
             GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaModulos());
         } else {
@@ -673,7 +673,7 @@ public class MenuModulo {
      * @throws java.lang.Exception 
      */
     public static int importar(String formato) throws Exception {
-        return importar(formato, Config.rutaFichero(Config.ficheroModulo, formato));
+        return importar(formato, Config.ficheroModulo);
     }
 
     /**

@@ -647,7 +647,7 @@ public class MenuMatricula {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
         if (SesionDatos.getListaMatriculas().isEmpty()) return 0;
 
-        String ruta = Config.rutaFichero(Config.ficheroMatricula, formato);
+        String ruta = Config.ficheroMatricula;
         if ("BINARIO".equals(formato)) {
             GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaMatriculas());
         } else {
@@ -671,7 +671,7 @@ public class MenuMatricula {
      * @throws java.lang.Exception
      */
     public static int importar(String formato) throws Exception {
-        return importar(formato, Config.rutaFichero(Config.ficheroMatricula, formato));
+        return importar(formato, Config.ficheroMatricula);
     }
 
     /**

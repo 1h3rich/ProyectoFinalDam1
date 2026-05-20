@@ -683,7 +683,7 @@ public class MenuAlumno {
      * @throws java.lang.Exception
      */
     public static int importar(String formato) throws Exception {
-        return importar(formato, Config.rutaFichero(Config.ficheroAlumno, formato));
+        return importar(formato, Config.ficheroAlumno);
     }
 
     /**
@@ -818,7 +818,7 @@ public class MenuAlumno {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);
         if (SesionDatos.getListaAlumnos().isEmpty()) return 0;
 
-        String ruta = Config.rutaFichero(Config.ficheroAlumno, formato);
+        String ruta = Config.ficheroAlumno;
         if ("BINARIO".equals(formato)) {
             GestionFicheros.guardarToBinario(ruta, SesionDatos.getListaAlumnos());
         } else {
