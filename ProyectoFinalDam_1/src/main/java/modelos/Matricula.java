@@ -18,6 +18,10 @@ import interfaces.InterpolaridadDeDatos;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author isard
+ */
 public class Matricula implements InterpolaridadDeDatos, Serializable, Comparable<Matricula> {
 
     private static final long serialVersionUID = 1L; //Esto es para poder importar los datos de binario a base de datos sin problemas

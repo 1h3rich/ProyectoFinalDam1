@@ -105,7 +105,7 @@ public class MenuBorrar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonBorrarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarAlumnoActionPerformed
-        ElimarAlumno elimarAlumno = new ElimarAlumno();
+        EliminarAlumno elimarAlumno = new EliminarAlumno();
         elimarAlumno.setVisible(true);
     }//GEN-LAST:event_jButtonBorrarAlumnoActionPerformed
 

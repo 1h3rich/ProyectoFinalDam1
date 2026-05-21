@@ -11,6 +11,8 @@ import excepciones.Ciclo.HorasMayor0Exception;
 import excepciones.Modulo.CreditosMayor0Exception;
 import excepciones.Modulo.CursoVacioException;
 import excepciones.Modulo.NombreVacioException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelos.Modulo;
 import servicios.BaseDeDatos.ConsultasSQL;
@@ -222,7 +224,11 @@ public class ModificarModulo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardar1ActionPerformed
-        modificarModulo();
+        try {
+            modificarModulo();
+        } catch (NombreVacioException | CursoVacioException | CreditosMayor0Exception | HorasMayor0Exception | CodigMayor0Exception ex) {
+            Logger.getLogger(ModificarModulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonGuardar1ActionPerformed
 
     private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
@@ -295,7 +301,7 @@ public class ModificarModulo extends javax.swing.JFrame {
     }
 
     /** Valida los campos del formulario y actualiza el módulo actual en la base de datos. */
-    private void modificarModulo() {
+    private void modificarModulo() throws NombreVacioException, CursoVacioException, CreditosMayor0Exception, HorasMayor0Exception, CodigMayor0Exception {
         String nombre = jTextFieldNombre.getText().trim();
         String curso = jComboBoxCurso.getSelectedItem().toString();
         String creditos = jTextFieldCreditos.getText().trim();

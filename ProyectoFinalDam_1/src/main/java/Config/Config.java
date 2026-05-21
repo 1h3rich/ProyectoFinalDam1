@@ -44,24 +44,5 @@ public class Config {
     
     
     
-    /**
-     * Devuelve la ruta completa (sin extensión) al fichero según el formato seleccionado.
-     * Estructura: ficheros/FORMATO/nombreBase
-     *
-     * @param nombreBase Nombre base del fichero (p.ej. Config.ficheroAlumno).
-     * @param formato    Formato del fichero: "CSV", "TXT", "JSON" o "BINARIO".
-     * @return Ruta base sin extensión lista para pasarla a GestionFicheros.
-     */
-    /*
-    public static String rutaFichero(String nombreBase, String formato) {
-        String dir = switch (formato.toUpperCase()) {
-            case "CSV"     -> "ficheros/CSV/";
-            case "TXT"     -> "ficheros/TXT/";
-            case "JSON"    -> "ficheros/JSON/";
-            case "BINARIO" -> "ficheros/BINARIO/";
-            default -> throw new IllegalArgumentException("Formato no reconocido: " + formato);
-        };
-        return dir + nombreBase;
-    }
-    */
+   
 }
