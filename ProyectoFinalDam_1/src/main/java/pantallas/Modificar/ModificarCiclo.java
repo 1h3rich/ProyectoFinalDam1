@@ -6,7 +6,14 @@ package pantallas.Modificar;
  */
 import Control.SesionDatos;
 import Utils.Validadores;
+import excepciones.Ciclo.AñoNoValidoException;
+import excepciones.Ciclo.DenominacionVaciaException;
+import excepciones.Ciclo.FamiliaVaciaException;
+import excepciones.Ciclo.HorasMayor0Exception;
+import excepciones.Ciclo.NivelVacioException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Ciclo;
@@ -296,7 +303,11 @@ public class ModificarCiclo extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldNivelActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        modificarCiclo();
+        try {
+            modificarCiclo();
+        } catch (DenominacionVaciaException | FamiliaVaciaException | NivelVacioException | HorasMayor0Exception | AñoNoValidoException ex) {
+            Logger.getLogger(ModificarCiclo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -400,7 +411,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
      * Valida los campos del formulario y actualiza el ciclo actual en la base
      * de datos.
      */
-    private void modificarCiclo() {
+    private void modificarCiclo() throws DenominacionVaciaException, FamiliaVaciaException, NivelVacioException, HorasMayor0Exception, AñoNoValidoException {
         if (ciclo == null) {
             JOptionPane.showMessageDialog(this, "No hay ciclo para modificar.");
             return;

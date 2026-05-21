@@ -1,15 +1,9 @@
-{"codigo":2,"nombre":"Paula","fechaNacimiento":"2002-08-21","domicilio":"Avenida Central 5, Zaragoza, Aragón","telefono":"600333444","correo":"paula.lopez@email.com"}
-{"codigo":3,"nombre":"Miguel","fechaNacimiento":"2001-11-02","domicilio":"Calle Norte 8, Madrid, Madrid","telefono":"600555666","correo":"miguel.navarro@email.com"}
-{"codigo":4,"nombre":"Lucía","fechaNacimiento":"2004-05-17","domicilio":"Calle Sur 22, Valencia, Comunidad Valenciana","telefono":"600777888","correo":"lucia.martinez@email.com"}
-{"codigo":5,"nombre":"Juan","fechaNacimiento":"2000-01-01","domicilio":"Calle Pez 3, Madrid, Madrid","telefono":"600100001","correo":"juan.perez@email.com"}
-{"codigo":6,"nombre":"Ana","fechaNacimiento":"2000-02-02","domicilio":"Calle Luna 7, Sevilla, Andalucía","telefono":"600200002","correo":"ana.garcia@email.com"}
-{"codigo":7,"nombre":"Luis","fechaNacimiento":"2000-03-03","domicilio":"Avenida España 14, Valencia, Comunidad Valenciana","telefono":"600300003","correo":"luis.rodri@email.com"}
-{"codigo":8,"nombre":"Elena","fechaNacimiento":"2000-04-04","domicilio":"Calle Ronda 9, Barcelona, Cataluña","telefono":"600400004","correo":"elena.sanz@email.com"}
-{"codigo":11,"nombre":"Luis","fechaNacimiento":"2000-03-02","domicilio":"Calle Perez 12, Zaragoza, Zaragoza","telefono":"564765435","correo":"aaa@h.com"}
-{"codigo":12,"nombre":"Luis","fechaNacimiento":"2007-09-23","domicilio":"Avenida Santa Isabel 18, Zaragoza, Zaragoza","telefono":"123456789","correo":"a@gmail.con"}
-{"codigo":13,"nombre":"Luis","fechaNacimiento":"2002-03-13","domicilio":"aVENIDA SANTA ISABEL 18, ZARAGOZA, ZARAGOZA","telefono":"123456789","correo":"A@GMAIL.COM"}
-{"codigo":21,"nombre":"Luis","fechaNacimiento":"2002-03-13","domicilio":"Avenida Santa Isabel 18, Zaragoza ,Zaragoza","telefono":"987654321","correo":"Alguien@gmail.com"}
-{"codigo":26,"nombre":"Luis","fechaNacimiento":"2002-03-13","domicilio":"Avenida Santa Isabel 18,  Zaragoza , Zaragoza","telefono":"123456788","correo":"Alguien1@gmail.com"}
-{"codigo":28,"nombre":"a","fechaNacimiento":"2002-02-13","domicilio":"Avenida Santa Isabel 18, Zaragoza, Zaragoza","telefono":"987654321","correo":"Alguien2@gmail.com"}
-{"codigo":29,"nombre":"a","fechaNacimiento":"2002-02-13","domicilio":"Avenida Santa Isabel 18, Zaragoza, Zaragoza","telefono":"123456789","correo":"aa@gmail.com"}
-{"codigo":30,"nombre":"Ricardo","fechaNacimiento":"2003-03-13","domicilio":"Calle Mayor 12, Zaragoza, Aragón","telefono":"600111222","correo":"ricardo.garcia@email.com"}
+{"codigo":1,"nombre":"Ricardo","fechaNacimiento":"2003-03-13","domicilio":"Calle Mayor 12, Zaragoza, Aragón","telefono":"600111222","correo":"ricardo.garcia@email.com"}
+{"codigo":2,"nombre":"Paula","fechaNacimiento":"2002-08-21","domicilio":"Avenida Central 5, Zaragoza","telefono":"600333444","correo":"paula.lopez@email.com"}
+{"codigo":3,"nombre":"Miguel","fechaNacimiento":"2001-11-02","domicilio":"Calle Norte 8, Madrid","telefono":"600555666","correo":"miguel.navarro@email.com"}
+{"codigo":4,"nombre":"Lucía","fechaNacimiento":"2004-05-17","domicilio":"Calle Sur 22, Valencia, Valencia","telefono":"999888777","correo":"lucia.martinez@email.com"}
+{"codigo":5,"nombre":"Juan","fechaNacimiento":"2000-01-01","correo":"juan.perez@email.com"}
+{"codigo":6,"nombre":"Ana","fechaNacimiento":"2000-02-02","correo":"ana.garcia@email.com"}
+{"codigo":7,"nombre":"Luis","fechaNacimiento":"2000-03-03","correo":"luis.rodri@email.com"}
+{"codigo":8,"nombre":"Elena","fechaNacimiento":"2000-04-04","correo":"elena.sanz@email.com"}
+{"codigo":10,"nombre":"Ricardo","fechaNacimiento":"2002-03-13","domicilio":"Avenida m 123, z, z","telefono":"000000000","correo":"r@gmail.com"}
