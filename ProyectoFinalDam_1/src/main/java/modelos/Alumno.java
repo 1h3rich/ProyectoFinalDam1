@@ -22,6 +22,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa a un alumno matriculado en el centro de formación.
+ *
+ * <p>Cada alumno dispone de un código único autogenerado (clave primaria),
+ * datos personales básicos y métodos para persistir su información en
+ * distintos formatos (CSV, JSON, TXT y binario). La clase implementa
+ * {@link InterpolaridadDeDatos} para uniformizar el acceso a ficheros,
+ * {@link Serializable} para la persistencia binaria y {@link Comparable}
+ * para ordenación natural por código dentro de colecciones como {@code TreeSet}.</p>
+ *
+ * <p><b>Invariante:</b> el código siempre es un entero positivo y todos
+ * los campos de texto son no nulos y no vacíos.</p>
  *
  * @author isard
  */

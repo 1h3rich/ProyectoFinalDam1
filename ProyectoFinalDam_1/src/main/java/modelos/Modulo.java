@@ -20,6 +20,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa un módulo formativo perteneciente a un {@link Ciclo} del centro de formación.
+ *
+ * <p>Un módulo es la unidad curricular mínima en la que un alumno puede ser evaluado.
+ * Cada módulo pertenece a exactamente un {@link Ciclo} (referenciado por {@code codigo_ciclo}),
+ * tiene un nombre, el curso en que se imparte, los créditos ECTS y las horas lectivas.</p>
+ *
+ * <p>La clase implementa {@link InterpolaridadDeDatos} para la persistencia uniforme
+ * en CSV, JSON, TXT y binario; {@link Serializable} para la serialización binaria;
+ * y {@link Comparable} para la ordenación natural por código dentro de colecciones
+ * como {@code TreeSet}.</p>
+ *
+ * <p><b>Invariante:</b> el código es siempre un entero positivo, las horas y los
+ * créditos ECTS son estrictamente positivos, y el nombre y el curso son cadenas
+ * no vacías.</p>
  *
  * @author isard
  */

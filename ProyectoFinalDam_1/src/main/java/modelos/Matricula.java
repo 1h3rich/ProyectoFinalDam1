@@ -19,6 +19,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa la matrícula de un alumno en el centro de formación para un año académico concreto.
+ *
+ * <p>Una matrícula vincula a un {@link Alumno} con un año académico determinado.
+ * De ella cuelgan una o más {@link LineaMatricula líneas de matrícula}, cada una
+ * correspondiente a un módulo específico. Contiene además el estado actual de la
+ * matrícula ("Activa" / "No activa") y el importe económico asociado.</p>
+ *
+ * <p>La clase implementa {@link InterpolaridadDeDatos} para la persistencia uniforme
+ * en CSV, JSON, TXT y binario; {@link Serializable} para la serialización binaria;
+ * y {@link Comparable} para la ordenación natural por código dentro de colecciones
+ * como {@code TreeSet}.</p>
+ *
+ * <p><b>Invariante:</b> el código es siempre un entero positivo, el año académico
+ * está en el rango [1900, 3000], el estado es "Activa" o "No activa" y el importe
+ * no es negativo.</p>
  *
  * @author isard
  */

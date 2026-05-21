@@ -21,6 +21,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa un ciclo formativo ofertado por el centro de formación.
+ *
+ * <p>Un ciclo agrupa varios {@link Modulo módulos} y es la entidad a la que un
+ * alumno se vincula a través de una {@link Matricula}. Cada ciclo tiene un código
+ * único autogenerado (clave primaria), una denominación oficial, una familia
+ * profesional, un nivel educativo, un número de horas totales y el año de su
+ * currículum.</p>
+ *
+ * <p>La clase implementa {@link InterpolaridadDeDatos} para la persistencia
+ * uniforme en CSV, JSON, TXT y binario; {@link Serializable} para la
+ * serialización binaria; y {@link Comparable} para la ordenación natural
+ * por código dentro de colecciones como {@code TreeSet}.</p>
+ *
+ * <p><b>Invariante:</b> el código siempre es un entero positivo, las horas son
+ * estrictamente positivas y el año del currículum se encuentra en el rango
+ * [1900, 3000].</p>
  *
  * @author isard
  */

@@ -19,6 +19,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa una línea de matrícula que asocia un módulo concreto a una matrícula.
+ *
+ * <p>Una línea de matrícula actúa como tabla intermedia (relación N:M) entre
+ * {@link Matricula} y {@link Modulo}: indica qué módulo está incluido en
+ * una matrícula determinada, cuántas veces lo ha cursado el alumno
+ * (repetición) y las calificaciones obtenidas en la primera y segunda
+ * convocatoria.</p>
+ *
+ * <p>La clave compuesta está formada por {@code cod_matricula} + {@code cod_modulo}.
+ * La clase implementa {@link InterpolaridadDeDatos} para la persistencia uniforme
+ * en CSV, JSON, TXT y binario, y {@link Serializable} para la serialización binaria.</p>
+ *
+ * <p><b>Invariante:</b> ambos códigos son enteros positivos, la repetición es
+ * no negativa y las calificaciones se encuentran en el rango [0.0, 10.0].</p>
  *
  * @author isard
  */
