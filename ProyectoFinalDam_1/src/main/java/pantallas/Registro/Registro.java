@@ -72,6 +72,11 @@ public class Registro extends javax.swing.JFrame {
         jlbTotalInsertados.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlbTotalInsertados.setText("Total insertado en sesion: 0 registro(s)");
 
+        tabbedPane.setForeground(new java.awt.Color(255, 255, 255));
+
+        jScrollTodos.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollTodos.setForeground(new java.awt.Color(0, 0, 0));
+
         tablaTodos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -86,6 +91,9 @@ public class Registro extends javax.swing.JFrame {
         jScrollTodos.setViewportView(tablaTodos);
 
         tabbedPane.addTab("tab1", jScrollTodos);
+
+        jScrollAlumnos.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollAlumnos.setForeground(new java.awt.Color(0, 0, 0));
 
         tablaAlumnos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -102,6 +110,9 @@ public class Registro extends javax.swing.JFrame {
 
         tabbedPane.addTab("tab2", jScrollAlumnos);
 
+        jScrollCiclos.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollCiclos.setForeground(new java.awt.Color(0, 0, 0));
+
         tablaCiclos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -116,6 +127,9 @@ public class Registro extends javax.swing.JFrame {
         jScrollCiclos.setViewportView(tablaCiclos);
 
         tabbedPane.addTab("tab3", jScrollCiclos);
+
+        jScrollModulos.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollModulos.setForeground(new java.awt.Color(0, 0, 0));
 
         tablaModulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -132,6 +146,9 @@ public class Registro extends javax.swing.JFrame {
 
         tabbedPane.addTab("tab4", jScrollModulos);
 
+        jScrollMatriculas.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollMatriculas.setForeground(new java.awt.Color(0, 0, 0));
+
         tablaMatriculas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -146,6 +163,9 @@ public class Registro extends javax.swing.JFrame {
         jScrollMatriculas.setViewportView(tablaMatriculas);
 
         tabbedPane.addTab("tab5", jScrollMatriculas);
+
+        jScrollLineasMatricula.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollLineasMatricula.setForeground(new java.awt.Color(0, 0, 0));
 
         tablaLineas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -162,6 +182,8 @@ public class Registro extends javax.swing.JFrame {
 
         tabbedPane.addTab("tab6", jScrollLineasMatricula);
 
+        btnCerrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setForeground(new java.awt.Color(0, 0, 0));
         btnCerrar.setText("Cerrar");
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,15 +201,13 @@ public class Registro extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(btnCerrar)
                         .addGap(480, 480, 480)
                         .addComponent(jlbTotalInsertados))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addGap(832, 832, 832))
@@ -206,9 +226,9 @@ public class Registro extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCerrar)
                     .addComponent(jlbTotalInsertados))

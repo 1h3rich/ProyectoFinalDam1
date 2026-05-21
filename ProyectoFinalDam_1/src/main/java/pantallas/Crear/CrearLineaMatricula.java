@@ -477,8 +477,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
             }
 
         } else {
-            GestionBaseDeDatos.cancelarTransaccion();
-            JOptionPane.showMessageDialog(this, "Error al añadir el módulo. Se ha cancelado todo el proceso.");
+            JOptionPane.showMessageDialog(this, "Este módulo ya está añadido a esta matrícula. Selecciona otro.");
         }
     }
 

@@ -43,6 +43,7 @@ public class CrearCiclo extends javax.swing.JFrame {
         });
 
         setTitle("Crear ciclo");
+        jComboBoxNivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"basico", "medio", "superior"}));
     }
 
     /** Pide confirmación y, si el usuario acepta, cancela la transacción activa y cierra la ventana. */
@@ -72,7 +73,6 @@ public class CrearCiclo extends javax.swing.JFrame {
         jTextFieldFamiliaProfresional = new javax.swing.JTextField();
         jTextFieldAñoCurricular = new javax.swing.JTextField();
         jTextFieldHoras = new javax.swing.JTextField();
-        jTextFieldNivel = new javax.swing.JTextField();
         jLabelInfoDenominacion = new javax.swing.JLabel();
         jLabelInfoFamiliaProfesional = new javax.swing.JLabel();
         jLabelInfoNombre3 = new javax.swing.JLabel();
@@ -82,8 +82,8 @@ public class CrearCiclo extends javax.swing.JFrame {
         jLabelTitulo = new javax.swing.JLabel();
         jButtonCancelar = new javax.swing.JButton();
         jTextFieldDenominacion = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jComboBoxNivel = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,15 +104,6 @@ public class CrearCiclo extends javax.swing.JFrame {
         jTextFieldHoras.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldHoras.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldHoras.setPreferredSize(new java.awt.Dimension(64, 128));
-
-        jTextFieldNivel.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldNivel.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldNivel.setPreferredSize(new java.awt.Dimension(64, 128));
-        jTextFieldNivel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNivelActionPerformed(evt);
-            }
-        });
 
         jLabelInfoDenominacion.setText("Denominación:");
 
@@ -151,9 +142,11 @@ public class CrearCiclo extends javax.swing.JFrame {
         jTextFieldDenominacion.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldDenominacion.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel1.setText("Básico, medio o superior.");
-
         jLabel2.setText("Ej: 2024");
+
+        jComboBoxNivel.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxNivel.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBoxNivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -182,18 +175,16 @@ public class CrearCiclo extends javax.swing.JFrame {
                                 .addGap(84, 84, 84)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jTextFieldHoras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldNivel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jTextFieldDenominacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxNivel, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)))
+                        .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(163, 163, 163)
                         .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,9 +201,8 @@ public class CrearCiclo extends javax.swing.JFrame {
                     .addComponent(jLabelInfoFamiliaProfesional))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoNombre3)
-                    .addComponent(jLabel1))
+                    .addComponent(jComboBoxNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -235,10 +225,6 @@ public class CrearCiclo extends javax.swing.JFrame {
     private void jTextFieldFamiliaProfresionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFamiliaProfresionalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldFamiliaProfresionalActionPerformed
-
-    private void jTextFieldNivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNivelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNivelActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         int opcion = JOptionPane.showConfirmDialog(
@@ -304,7 +290,7 @@ public class CrearCiclo extends javax.swing.JFrame {
     private void crearCiclo() {
 
         String familia = jTextFieldFamiliaProfresional.getText().trim();
-        String nivel = jTextFieldNivel.getText().trim();
+        String nivel = jComboBoxNivel.getSelectedItem().toString();
         String horasTexto = jTextFieldHoras.getText().trim();
         String anioTexto = jTextFieldAñoCurricular.getText().trim();
         String denominacion = jTextFieldDenominacion.getText().trim();
@@ -383,7 +369,7 @@ public class CrearCiclo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox<String> jComboBoxNivel;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelInfoAñoCurricular;
     private javax.swing.JLabel jLabelInfoDenominacion;
@@ -395,6 +381,5 @@ public class CrearCiclo extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldDenominacion;
     private javax.swing.JTextField jTextFieldFamiliaProfresional;
     private javax.swing.JTextField jTextFieldHoras;
-    private javax.swing.JTextField jTextFieldNivel;
     // End of variables declaration//GEN-END:variables
 }

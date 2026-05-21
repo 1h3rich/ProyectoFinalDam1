@@ -6,6 +6,11 @@ package pantallas.Modificar;
  */
 import Control.SesionDatos;
 import Utils.Validadores;
+import excepciones.Ciclo.AñoNoValidoException;
+import excepciones.Ciclo.DenominacionVaciaException;
+import excepciones.Ciclo.FamiliaVaciaException;
+import excepciones.Ciclo.HorasMayor0Exception;
+import excepciones.Ciclo.NivelVacioException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -35,6 +40,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jTextFieldCodigo.setEditable(false);
+        jComboBoxNivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"basico", "medio", "superior"}));
     }
 
     /**
@@ -49,7 +55,6 @@ public class ModificarCiclo extends javax.swing.JFrame {
         jTextFieldFamiliaProfresional = new javax.swing.JTextField();
         jTextFieldAñoCurricular = new javax.swing.JTextField();
         jTextFieldHoras = new javax.swing.JTextField();
-        jTextFieldNivel = new javax.swing.JTextField();
         jLabelInfoCodigo = new javax.swing.JLabel();
         jLabelInfoDenominacion = new javax.swing.JLabel();
         jLabelInfoFamiliaProfesional = new javax.swing.JLabel();
@@ -64,8 +69,8 @@ public class ModificarCiclo extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButtonGuardar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
-        jLabelInfoNombre5 = new javax.swing.JLabel();
         jLabelInfoNombre6 = new javax.swing.JLabel();
+        jComboBoxNivel = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,15 +91,6 @@ public class ModificarCiclo extends javax.swing.JFrame {
         jTextFieldHoras.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldHoras.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldHoras.setPreferredSize(new java.awt.Dimension(64, 128));
-
-        jTextFieldNivel.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldNivel.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldNivel.setPreferredSize(new java.awt.Dimension(64, 128));
-        jTextFieldNivel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNivelActionPerformed(evt);
-            }
-        });
 
         jLabelInfoCodigo.setBackground(new java.awt.Color(255, 255, 255));
         jLabelInfoCodigo.setForeground(new java.awt.Color(0, 0, 0));
@@ -189,13 +185,13 @@ public class ModificarCiclo extends javax.swing.JFrame {
             }
         });
 
-        jLabelInfoNombre5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelInfoNombre5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelInfoNombre5.setText("Básico, medio o superior");
-
         jLabelInfoNombre6.setBackground(new java.awt.Color(255, 255, 255));
         jLabelInfoNombre6.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre6.setText("Ej: 2024");
+
+        jComboBoxNivel.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxNivel.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBoxNivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -221,21 +217,19 @@ public class ModificarCiclo extends javax.swing.JFrame {
                                     .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jTextFieldDenominacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jTextFieldFamiliaProfresional, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldNivel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jTextFieldHoras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jTextFieldAñoCurricular, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxNivel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButtonCancelar)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButtonGuardar)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelInfoNombre5)
-                            .addComponent(jLabelInfoNombre6)))
+                        .addComponent(jLabelInfoNombre6))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(299, 299, 299)
                         .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(455, 455, Short.MAX_VALUE))
+                .addGap(557, 557, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,8 +256,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelInfoNombre3)
-                            .addComponent(jTextFieldNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelInfoNombre5))
+                            .addComponent(jComboBoxNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelInfoNombre4)
@@ -290,10 +283,6 @@ public class ModificarCiclo extends javax.swing.JFrame {
     private void jTextFieldCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCodigoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldCodigoActionPerformed
-
-    private void jTextFieldNivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNivelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNivelActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         modificarCiclo();
@@ -348,6 +337,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
         setTitle("Modificar ciclo");
         jButtonGuardar.setText("Guardar cambios");
         jTextFieldCodigo.setEditable(false);
+        jComboBoxNivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"basico", "medio", "superior"}));
         if (ciclo != null) {
             cargarDatosCiclo();
             cargarModulosEnTabla();
@@ -408,7 +398,7 @@ public class ModificarCiclo extends javax.swing.JFrame {
 
         String denominacion = jTextFieldDenominacion.getText().trim();
         String familia = jTextFieldFamiliaProfresional.getText().trim();
-        String nivel = jTextFieldNivel.getText().trim();
+        String nivel = jComboBoxNivel.getSelectedItem().toString();
         String horas = jTextFieldHoras.getText().trim();
         String anio = jTextFieldAñoCurricular.getText().trim();
 
@@ -451,11 +441,17 @@ public class ModificarCiclo extends javax.swing.JFrame {
             return;
         }
 
-        ciclo.setDenominacion(denominacion);
-        ciclo.setFamiliaProfesional(familia);
-        ciclo.setNivel(nivel);
-        ciclo.setHoras(horasVal);
-        ciclo.setAñoCurriculum(anioVal);
+        try {
+            ciclo.setDenominacion(denominacion);
+            ciclo.setFamiliaProfesional(familia);
+            ciclo.setNivel(nivel);
+            ciclo.setHoras(horasVal);
+            ciclo.setAñoCurriculum(anioVal);
+        } catch (DenominacionVaciaException | FamiliaVaciaException | NivelVacioException
+                | HorasMayor0Exception | AñoNoValidoException e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar los datos: " + e.getMessage());
+            return;
+        }
 
         String[] entradas = {
             ciclo.getDenominacion(),
@@ -483,7 +479,13 @@ public class ModificarCiclo extends javax.swing.JFrame {
         jTextFieldCodigo.setText(String.valueOf(ciclo.getCodigo()));
         jTextFieldDenominacion.setText(ciclo.getDenominacion());
         jTextFieldFamiliaProfresional.setText(ciclo.getFamiliaProfesional());
-        jTextFieldNivel.setText(ciclo.getNivel());
+        String nivelActual = ciclo.getNivel();
+        for (int i = 0; i < jComboBoxNivel.getItemCount(); i++) {
+            if (jComboBoxNivel.getItemAt(i).equalsIgnoreCase(nivelActual)) {
+                jComboBoxNivel.setSelectedIndex(i);
+                break;
+            }
+        }
         jTextFieldHoras.setText(String.valueOf(ciclo.getHoras()));
         jTextFieldAñoCurricular.setText(String.valueOf(ciclo.getAñoCurriculum()));
     }
@@ -522,13 +524,13 @@ public class ModificarCiclo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JComboBox<String> jComboBoxNivel;
     private javax.swing.JLabel jLabelInfoAñoCurricular;
     private javax.swing.JLabel jLabelInfoCodigo;
     private javax.swing.JLabel jLabelInfoDenominacion;
     private javax.swing.JLabel jLabelInfoFamiliaProfesional;
     private javax.swing.JLabel jLabelInfoNombre3;
     private javax.swing.JLabel jLabelInfoNombre4;
-    private javax.swing.JLabel jLabelInfoNombre5;
     private javax.swing.JLabel jLabelInfoNombre6;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanel1;
@@ -539,6 +541,5 @@ public class ModificarCiclo extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldDenominacion;
     private javax.swing.JTextField jTextFieldFamiliaProfresional;
     private javax.swing.JTextField jTextFieldHoras;
-    private javax.swing.JTextField jTextFieldNivel;
     // End of variables declaration//GEN-END:variables
 }
