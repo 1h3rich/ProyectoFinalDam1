@@ -116,6 +116,16 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
 
         int idModulo = mapaModulos.get(nombreModulo);
 
+        DefaultTableModel check = GestionBaseDeDatos.obtenerTableModel(
+                "SELECT codigo FROM modulo WHERE codigo = ? AND codigo_ciclo = ?",
+                new String[]{String.valueOf(idModulo), String.valueOf(idCiclo)}
+        );
+
+        if (check.getRowCount() > 0) {
+            JOptionPane.showMessageDialog(this, "Módulo ya añadido");
+            return;
+        }
+
         String[] entradas = {
             String.valueOf(idCiclo),
             String.valueOf(idModulo)
@@ -127,7 +137,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
         );
 
         if (asignado) {
-            JOptionPane.showMessageDialog(this, "Módulo añadido al ciclo.");
+            JOptionPane.showMessageDialog(this, "Módulo añadido");
             cargarModulosExistentes();
             actualizarContador();
         } else {

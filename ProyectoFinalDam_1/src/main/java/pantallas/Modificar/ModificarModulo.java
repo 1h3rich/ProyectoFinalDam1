@@ -6,6 +6,13 @@ package pantallas.Modificar;
 
 import Control.SesionDatos;
 import Utils.Validadores;
+import excepciones.Alumno.CodigMayor0Exception;
+import excepciones.Ciclo.HorasMayor0Exception;
+import excepciones.Modulo.CreditosMayor0Exception;
+import excepciones.Modulo.CursoVacioException;
+import excepciones.Modulo.NombreVacioException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelos.Modulo;
 import servicios.BaseDeDatos.ConsultasSQL;
@@ -31,6 +38,7 @@ public class ModificarModulo extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jTextFieldCod_Ciclo.setEditable(false);
+        jComboBoxCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2"}));
     }
 
     /**
@@ -46,17 +54,16 @@ public class ModificarModulo extends javax.swing.JFrame {
         jLabelTitulo = new javax.swing.JLabel();
         jButtonGuardar1 = new javax.swing.JButton();
         jTextFieldNombre = new javax.swing.JTextField();
-        jTextFieldCurso = new javax.swing.JTextField();
         jTextFieldCreditos = new javax.swing.JTextField();
         jTextFieldCod_Ciclo = new javax.swing.JTextField();
         jLabelInfoNombre = new javax.swing.JLabel();
         jTextFieldHoras = new javax.swing.JTextField();
         jLabelInfoCurso = new javax.swing.JLabel();
         jLabelInfoCreditos = new javax.swing.JLabel();
-        jLabelCurso = new javax.swing.JLabel();
         jLabelInfoNombre3 = new javax.swing.JLabel();
         jLabelCurso1 = new javax.swing.JLabel();
         jLabelInfoNombre4 = new javax.swing.JLabel();
+        jComboBoxCurso = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,11 +100,6 @@ public class ModificarModulo extends javax.swing.JFrame {
             }
         });
 
-        jTextFieldCurso.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldCurso.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldCurso.setMinimumSize(new java.awt.Dimension(64, 128));
-        jTextFieldCurso.setPreferredSize(new java.awt.Dimension(64, 128));
-
         jTextFieldCreditos.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldCreditos.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCreditos.setMinimumSize(new java.awt.Dimension(64, 128));
@@ -128,8 +130,6 @@ public class ModificarModulo extends javax.swing.JFrame {
         jLabelInfoCreditos.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoCreditos.setText("Creditos");
 
-        jLabelCurso.setText("1 o 2");
-
         jLabelInfoNombre3.setBackground(new java.awt.Color(255, 255, 255));
         jLabelInfoNombre3.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre3.setText("Horas:");
@@ -139,6 +139,10 @@ public class ModificarModulo extends javax.swing.JFrame {
         jLabelInfoNombre4.setBackground(new java.awt.Color(255, 255, 255));
         jLabelInfoNombre4.setForeground(new java.awt.Color(0, 0, 0));
         jLabelInfoNombre4.setText("Codigo del Ciclo:");
+
+        jComboBoxCurso.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxCurso.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBoxCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,17 +167,15 @@ public class ModificarModulo extends javax.swing.JFrame {
                                     .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelCurso))
                             .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabelCurso1))
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextFieldCod_Ciclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jComboBoxCurso, javax.swing.GroupLayout.Alignment.LEADING, 0, 1, Short.MAX_VALUE)
+                                .addComponent(jTextFieldNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addComponent(jButtonCancelar)
@@ -192,9 +194,8 @@ public class ModificarModulo extends javax.swing.JFrame {
                     .addComponent(jLabelInfoNombre))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoCurso)
-                    .addComponent(jLabelCurso))
+                    .addComponent(jComboBoxCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,7 +213,7 @@ public class ModificarModulo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar1)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -223,7 +224,11 @@ public class ModificarModulo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardar1ActionPerformed
-        modificarModulo();
+        try {
+            modificarModulo();
+        } catch (NombreVacioException | CursoVacioException | CreditosMayor0Exception | HorasMayor0Exception | CodigMayor0Exception ex) {
+            Logger.getLogger(ModificarModulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonGuardar1ActionPerformed
 
     private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
@@ -287,6 +292,7 @@ public class ModificarModulo extends javax.swing.JFrame {
         setTitle("Modificar Modulo");
         jButtonGuardar1.setText("Modificar Modulo");
         jTextFieldCod_Ciclo.setEditable(false);
+        jComboBoxCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2"}));
         if (modulo != null) {
             cargarDatosModulo();
         } else {
@@ -295,19 +301,15 @@ public class ModificarModulo extends javax.swing.JFrame {
     }
 
     /** Valida los campos del formulario y actualiza el módulo actual en la base de datos. */
-    private void modificarModulo() {
+    private void modificarModulo() throws NombreVacioException, CursoVacioException, CreditosMayor0Exception, HorasMayor0Exception, CodigMayor0Exception {
         String nombre = jTextFieldNombre.getText().trim();
-        String curso = jTextFieldCurso.getText().trim();
+        String curso = jComboBoxCurso.getSelectedItem().toString();
         String creditos = jTextFieldCreditos.getText().trim();
         String horas = jTextFieldHoras.getText().trim();
         String codigo_ciclo = jTextFieldCod_Ciclo.getText().trim();
 
         if (nombre.isBlank()) {
             JOptionPane.showMessageDialog(this, "El nombre del módulo no puede estar vacío.");
-            return;
-        }
-        if (curso.isBlank()) {
-            JOptionPane.showMessageDialog(this, "El campo Curso no puede estar vacío (ej. 1 o 2).");
             return;
         }
         if (creditos.isBlank()) {
@@ -347,11 +349,17 @@ public class ModificarModulo extends javax.swing.JFrame {
             return;
         }
 
-        modulo.setNombre(nombre);
-        modulo.setCurso(curso);
-        modulo.setCreditos_ects(credits);
-        modulo.setHoras(hors);
-        modulo.setCodigo_ciclo(cod_ciclo);
+        try {
+            modulo.setNombre(nombre);
+            modulo.setCurso(curso);
+            modulo.setCreditos_ects(credits);
+            modulo.setHoras(hors);
+            modulo.setCodigo_ciclo(cod_ciclo);
+        } catch (NombreVacioException | CursoVacioException | CreditosMayor0Exception
+                | HorasMayor0Exception | CodigMayor0Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar los datos: " + e.getMessage());
+            return;
+        }
 
         String[] entradas = {
             String.valueOf(modulo.getCodigo_ciclo()),
@@ -376,18 +384,17 @@ public class ModificarModulo extends javax.swing.JFrame {
         String creditos = String.valueOf(modulo.getCreditos_ects());
         String horas = String.valueOf(modulo.getHoras());
         String codigo_ciclo = String.valueOf(modulo.getCodigo_ciclo());
-        
+
         jTextFieldNombre.setText(modulo.getNombre());
-        jTextFieldCurso.setText(modulo.getCurso());
+        jComboBoxCurso.setSelectedItem(modulo.getCurso());
         jTextFieldCreditos.setText(creditos);
         jTextFieldCod_Ciclo.setText(codigo_ciclo);
         jTextFieldHoras.setText(horas);
-
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar1;
-    private javax.swing.JLabel jLabelCurso;
+    private javax.swing.JComboBox<String> jComboBoxCurso;
     private javax.swing.JLabel jLabelCurso1;
     private javax.swing.JLabel jLabelInfoCreditos;
     private javax.swing.JLabel jLabelInfoCurso;
@@ -397,7 +404,6 @@ public class ModificarModulo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextFieldCod_Ciclo;
     private javax.swing.JTextField jTextFieldCreditos;
-    private javax.swing.JTextField jTextFieldCurso;
     private javax.swing.JTextField jTextFieldHoras;
     private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables

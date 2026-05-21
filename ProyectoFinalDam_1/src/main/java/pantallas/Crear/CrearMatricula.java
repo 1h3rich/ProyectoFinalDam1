@@ -50,6 +50,7 @@ public class CrearMatricula extends javax.swing.JFrame {
         });
 
         jButtonGuardar.setText("Crear matrícula");
+        jComboBoxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"parcial", "completa", "anulada"}));
     }
 
     /**
@@ -85,14 +86,13 @@ public class CrearMatricula extends javax.swing.JFrame {
         jLabelInfoCodigoAlumno = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
         jButtonGuardar = new javax.swing.JButton();
-        jTextFieldEstado = new javax.swing.JTextField();
         jTextFieldImporte = new javax.swing.JTextField();
         jTextFieldCodigoAlumno = new javax.swing.JTextField();
         jTextFieldAnioAcademico = new javax.swing.JTextField();
         jButtonCancelar = new javax.swing.JButton();
-        jLabelInfoActiva = new javax.swing.JLabel();
         jLabelInfoEuros = new javax.swing.JLabel();
         jLabelInfoEuros1 = new javax.swing.JLabel();
+        jComboBoxEstado = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -118,11 +118,6 @@ public class CrearMatricula extends javax.swing.JFrame {
                 jButtonGuardarActionPerformed(evt);
             }
         });
-
-        jTextFieldEstado.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldEstado.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldEstado.setMinimumSize(new java.awt.Dimension(64, 128));
-        jTextFieldEstado.setPreferredSize(new java.awt.Dimension(64, 128));
 
         jTextFieldImporte.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldImporte.setForeground(new java.awt.Color(0, 0, 0));
@@ -151,11 +146,13 @@ public class CrearMatricula extends javax.swing.JFrame {
             }
         });
 
-        jLabelInfoActiva.setText("'Parcial', 'Completa' o 'Anulada'");
-
         jLabelInfoEuros.setText("Euros");
 
         jLabelInfoEuros1.setText("Ej: 2024");
+
+        jComboBoxEstado.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxEstado.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBoxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -189,15 +186,14 @@ public class CrearMatricula extends javax.swing.JFrame {
                                                 .addComponent(jTextFieldAnioAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabelInfoEuros1))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabelInfoEuros))
                                             .addComponent(jTextFieldCodigoAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jTextFieldEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(jComboBoxEstado, javax.swing.GroupLayout.Alignment.LEADING, 0, 1, Short.MAX_VALUE)
+                                                    .addComponent(jTextFieldImporte, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabelInfoActiva))))))))
+                                                .addComponent(jLabelInfoEuros)))
+                                        .addGap(140, 140, 140))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -210,9 +206,8 @@ public class CrearMatricula extends javax.swing.JFrame {
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoEstado)
-                    .addComponent(jLabelInfoActiva))
+                    .addComponent(jComboBoxEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,7 +226,7 @@ public class CrearMatricula extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         pack();
@@ -299,7 +294,7 @@ public class CrearMatricula extends javax.swing.JFrame {
      */
     private void crearMatricula() {
 
-        String estado = jTextFieldEstado.getText().trim();
+        String estado = jComboBoxEstado.getSelectedItem().toString();
         String importeTexto = jTextFieldImporte.getText().trim().replace(",", ".");
         String anioAcademico = jTextFieldAnioAcademico.getText().trim();
         String codigoAlumnoTexto = jTextFieldCodigoAlumno.getText().trim();
@@ -374,7 +369,7 @@ public class CrearMatricula extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
-    private javax.swing.JLabel jLabelInfoActiva;
+    private javax.swing.JComboBox<String> jComboBoxEstado;
     private javax.swing.JLabel jLabelInfoAnioAcademico;
     private javax.swing.JLabel jLabelInfoCodigoAlumno;
     private javax.swing.JLabel jLabelInfoEstado;
@@ -384,7 +379,6 @@ public class CrearMatricula extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextFieldAnioAcademico;
     private javax.swing.JTextField jTextFieldCodigoAlumno;
-    private javax.swing.JTextField jTextFieldEstado;
     private javax.swing.JTextField jTextFieldImporte;
     // End of variables declaration//GEN-END:variables
 }

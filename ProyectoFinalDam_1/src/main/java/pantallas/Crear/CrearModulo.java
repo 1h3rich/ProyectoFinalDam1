@@ -69,6 +69,8 @@ public class CrearModulo extends javax.swing.JFrame {
         setTitle("Crear módulo");
         jButtonGuardar.setText("Crear módulo");
 
+        jComboBoxCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2"}));
+
         jComboBoxCiclos.removeAllItems();
         jComboBoxCiclos.addActionListener(e -> cicloSeleccionado());
     }
@@ -123,13 +125,12 @@ public class CrearModulo extends javax.swing.JFrame {
         jLabelTitulo = new javax.swing.JLabel();
         jButtonGuardar = new javax.swing.JButton();
         jTextFieldNombre = new javax.swing.JTextField();
-        jTextFieldCurso = new javax.swing.JTextField();
         jTextFieldCreditos = new javax.swing.JTextField();
         jTextFieldHoras = new javax.swing.JTextField();
         jButtonCancelar = new javax.swing.JButton();
-        jLabelCurso = new javax.swing.JLabel();
         jLabelCurso1 = new javax.swing.JLabel();
         jComboBoxCiclos = new javax.swing.JComboBox<>();
+        jComboBoxCurso = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,11 +169,6 @@ public class CrearModulo extends javax.swing.JFrame {
             }
         });
 
-        jTextFieldCurso.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldCurso.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldCurso.setMinimumSize(new java.awt.Dimension(64, 128));
-        jTextFieldCurso.setPreferredSize(new java.awt.Dimension(64, 128));
-
         jTextFieldCreditos.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldCreditos.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldCreditos.setMinimumSize(new java.awt.Dimension(64, 128));
@@ -196,50 +192,52 @@ public class CrearModulo extends javax.swing.JFrame {
             }
         });
 
-        jLabelCurso.setText("1 o 2");
-
         jLabelCurso1.setText("Desde 0 hasta 99'99 ");
 
         jComboBoxCiclos.setBackground(new java.awt.Color(255, 255, 255));
         jComboBoxCiclos.setForeground(new java.awt.Color(0, 0, 0));
         jComboBoxCiclos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jComboBoxCurso.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxCurso.setForeground(new java.awt.Color(0, 0, 0));
+        jComboBoxCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(124, 124, 124)
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelInfoNombre4)
-                                .addGap(86, 86, 86))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelInfoCreditos, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelInfoCurso, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextFieldHoras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldCurso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxCiclos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelCurso)
-                            .addComponent(jLabelCurso1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonCancelar)
-                        .addGap(33, 33, 33)
-                        .addComponent(jButtonGuardar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelInfoNombre4)
+                                        .addGap(86, 86, 86))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabelInfoCreditos, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelInfoCurso, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelInfoNombre, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelInfoNombre3, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jTextFieldHoras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxCiclos, 0, 155, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxCurso, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelCurso1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButtonCancelar)
+                                .addGap(33, 33, 33)
+                                .addComponent(jButtonGuardar)))))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -251,19 +249,16 @@ public class CrearModulo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelInfoNombre))
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelInfoCurso)
+                    .addComponent(jComboBoxCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelInfoCurso))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelInfoCreditos)
-                            .addComponent(jLabelCurso1)))
-                    .addComponent(jLabelCurso))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelInfoCreditos)
+                    .addComponent(jLabelCurso1))
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelInfoNombre3)
                     .addComponent(jTextFieldHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -275,7 +270,7 @@ public class CrearModulo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         pack();
@@ -368,16 +363,12 @@ public class CrearModulo extends javax.swing.JFrame {
     private void crearModulo() {
 
         String nombre = jTextFieldNombre.getText().trim();
-        String curso = jTextFieldCurso.getText().trim();
+        String curso = jComboBoxCurso.getSelectedItem().toString();
         String creditosTexto = jTextFieldCreditos.getText().trim();
         String horasTexto = jTextFieldHoras.getText().trim();
 
         if (!Validadores.validarTextoNoVacio(nombre)) {
             JOptionPane.showMessageDialog(this, "El nombre del módulo no puede estar vacío.");
-            return;
-        }
-        if (!Validadores.validarTextoNoVacio(curso)) {
-            JOptionPane.showMessageDialog(this, "El campo Curso no puede estar vacío (ej. 1 o 2).");
             return;
         }
         if (!Validadores.validarTextoNoVacio(creditosTexto)) {
@@ -445,7 +436,7 @@ public class CrearModulo extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JComboBox<String> jComboBoxCiclos;
-    private javax.swing.JLabel jLabelCurso;
+    private javax.swing.JComboBox<String> jComboBoxCurso;
     private javax.swing.JLabel jLabelCurso1;
     private javax.swing.JLabel jLabelInfoCreditos;
     private javax.swing.JLabel jLabelInfoCurso;
@@ -454,7 +445,6 @@ public class CrearModulo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelInfoNombre4;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextFieldCreditos;
-    private javax.swing.JTextField jTextFieldCurso;
     private javax.swing.JTextField jTextFieldHoras;
     private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
