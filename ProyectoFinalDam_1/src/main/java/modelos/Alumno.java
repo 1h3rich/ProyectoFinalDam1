@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa un alumno del centro de formación.
  *
  * @author isard
  */
@@ -47,11 +48,12 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     /**
      * Creación manual de nuevo alumno.
      *
-     * @param nombre
-     * @param fechaNacimiento
-     * @param domicilio
-     * @param telefono
-     * @param correo
+     * @param nombre Nombre completo del alumno.
+     * @param fechaNacimiento Fecha de nacimiento (no puede ser futura).
+     * @param domicilio Domicilio postal del alumno.
+     * @param telefono Teléfono de contacto (9 dígitos).
+     * @param correo Correo electrónico del alumno.
+     * @throws CodigMayor0Exception si el código generado automáticamente es 0 o negativo.
      */
     public Alumno(String nombre,
                   LocalDate fechaNacimiento,
@@ -90,12 +92,13 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     /**
      * Creación desde base de datos / fichero.
      *
-     * @param codigo
-     * @param nombre
-     * @param fechaNacimiento
-     * @param domicilio
-     * @param telefono
-     * @param correo
+     * @param codigo Código identificador del alumno (clave primaria).
+     * @param nombre Nombre completo del alumno.
+     * @param fechaNacimiento Fecha de nacimiento del alumno.
+     * @param domicilio Domicilio postal del alumno.
+     * @param telefono Teléfono de contacto (9 dígitos).
+     * @param correo Correo electrónico del alumno.
+     * @throws CodigMayor0Exception si el código es 0 o negativo.
      */
     public Alumno(int codigo,
                   String nombre,
@@ -155,32 +158,56 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // ===================== GETTERS ===================================================================================================================================================================
     // =================================================================================================================================================================================================
 
-    /** @return Código único del alumno (clave primaria). */
+    /**
+     * Retorna el código único del alumno (clave primaria).
+     *
+     * @return Código único del alumno (clave primaria).
+     */
     public int getCodigo() {
         return codigo;
     }
 
-    /** @return Nombre completo del alumno. */
+    /**
+     * Retorna el nombre completo del alumno.
+     *
+     * @return Nombre completo del alumno.
+     */
     public String getNombre() {
         return nombre;
     }
 
-    /** @return Fecha de nacimiento del alumno. */
+    /**
+     * Retorna la fecha de nacimiento del alumno.
+     *
+     * @return Fecha de nacimiento del alumno.
+     */
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    /** @return Domicilio postal del alumno. */
+    /**
+     * Retorna el domicilio postal del alumno.
+     *
+     * @return Domicilio postal del alumno.
+     */
     public String getDomicilio() {
         return domicilio;
     }
 
-    /** @return Teléfono de contacto (9 dígitos). */
+    /**
+     * Retorna el teléfono de contacto del alumno (9 dígitos).
+     *
+     * @return Teléfono de contacto del alumno (9 dígitos).
+     */
     public String getTelefono() {
         return telefono;
     }
 
-    /** @return Correo electrónico del alumno. */
+    /**
+     * Retorna el correo electrónico del alumno.
+     *
+     * @return Correo electrónico del alumno.
+     */
     public String getCorreo() {
         return correo;
     }
@@ -193,7 +220,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * Actualiza el nombre del alumno tras validar que no esté vacío.
      *
      * @param nombre Nuevo nombre del alumno.
-     * @throws IllegalArgumentException si el nombre es nulo o vacío.
+     * @throws AlumnoVacioException si el nombre es nulo o vacío.
      */
     public void setNombre(String nombre) throws AlumnoVacioException {
         if (!Validadores.validarTextoNoVacio(nombre)) {
@@ -206,8 +233,8 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     /**
      * Actualiza la fecha de nacimiento tras comprobar que no es nula ni futura.
      *
-     * @param temp
-     * @throws IllegalArgumentException si la fecha es nula o posterior a hoy.
+     * @param temp Nueva fecha de nacimiento en formato ISO (yyyy-MM-dd).
+     * @throws FechaNoValidaException si la fecha es nula o posterior a la fecha actual.
      */
     public void setFechaNacimiento(String temp) throws FechaNoValidaException {
         if (!Validadores.validarFechaNacimiento(temp)) {
@@ -221,7 +248,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * Actualiza el domicilio tras validar que no esté vacío.
      *
      * @param domicilio Nuevo domicilio del alumno.
-     * @throws IllegalArgumentException si el domicilio es nulo o vacío.
+     * @throws DomicilioVacioException si el domicilio es nulo o vacío.
      */
     public void setDomicilio(String domicilio) throws DomicilioVacioException {
         if (!Validadores.validarTextoNoVacio(domicilio)) {
@@ -235,7 +262,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * Actualiza el teléfono tras validar que tenga exactamente 9 dígitos.
      *
      * @param telefono Nuevo teléfono del alumno.
-     * @throws IllegalArgumentException si el teléfono no cumple el formato de 9 dígitos.
+     * @throws TelefonoInvalidoException si el teléfono no tiene exactamente 9 dígitos.
      */
     public void setTelefono(String telefono) throws TelefonoInvalidoException {
         if (!Validadores.validarTelefono(telefono)) {
@@ -249,7 +276,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      * Actualiza el correo electrónico tras validar su formato básico.
      *
      * @param correo Nuevo correo electrónico del alumno.
-     * @throws IllegalArgumentException si el correo no tiene formato válido.
+     * @throws CorreoNoValidoException si el correo no tiene un formato válido.
      */
     public void setCorreo(String correo) throws CorreoNoValidoException {
         if (!Validadores.validarCorreo(correo)) {
@@ -335,9 +362,10 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // =========================================================
 
     /**
-     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados por codigo
-     * @param otro
-     * @return
+     * Compara dos alumnos por código para el orden natural en TreeSet.
+     *
+     * @param otro Alumno con el que comparar.
+     * @return Negativo si este alumno tiene código menor, positivo si mayor, 0 si son iguales.
      */
     @Override
     public int compareTo(Alumno otro){
@@ -351,7 +379,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
      *
      * @param linea Cadena con 6 campos separados por ";": codigo;nombre;fecha;domicilio;telefono;correo.
      * @return Alumno construido con los datos de la línea.
-     * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
+     * @throws LineaInvalidaAlumnoException si la línea no tiene exactamente 6 campos.
      */
     public static Alumno obtenerLineas(String linea) throws LineaInvalidaAlumnoException {
         String[] partes = linea.split(";", -1);
@@ -405,7 +433,7 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     /**
      * Devuelve las matrículas que pertenecen a este alumno.La relación correcta está en Matricula.codigo_alumno.
      *
-     * @return
+     * @return Lista de matrículas asociadas a este alumno.
      */
     public ArrayList<Matricula> obtenerMatriculasDelAlumno() {
         ArrayList<Matricula> matriculasDelAlumno = new ArrayList<>();

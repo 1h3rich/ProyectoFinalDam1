@@ -9,6 +9,9 @@ package servicios.BaseDeDatos;
  */
 public class ConsultasSQL {
 
+    /** Clase de utilidad — no instanciar. */
+    private ConsultasSQL() {}
+
     // =========================================================
     // ================= Creacion Base De Datos ================
     // =========================================================

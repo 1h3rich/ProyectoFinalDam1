@@ -5,6 +5,7 @@
 package pantallas.Creditos;
 
 /**
+ * Pantalla oculta con contenido sorpresa (easter egg).
  *
  * @author rich
  */
@@ -12,11 +13,11 @@ public class NoHagasClick extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NoHagasClick.class.getName());
 
-    /**
-     * Creates new form NoHagasClick
-     */
     private static final String URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLAvTudpluapjkEu8uFO-ub_fO1ezRsg_0";
 
+    /**
+     * Crea el formulario NoHagasClick e inicializa los componentes.
+     */
     public NoHagasClick() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -83,7 +84,9 @@ public class NoHagasClick extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * Punto de entrada para pruebas aisladas del formulario.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

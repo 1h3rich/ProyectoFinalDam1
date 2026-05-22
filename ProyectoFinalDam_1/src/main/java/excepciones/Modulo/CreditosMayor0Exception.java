@@ -5,6 +5,7 @@
 package excepciones.Modulo;
 
 /**
+ * Se lanza cuando el número de créditos del módulo es 0 o negativo.
  *
  * @author isard
  */

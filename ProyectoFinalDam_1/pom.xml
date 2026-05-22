@@ -22,6 +22,17 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.12.0</version>
+                <configuration>
+                    <!-- Keep html/reference/syntax/accessibility checks but skip 'missing'
+                         (doclint:missing checks private fields in JDK 21 regardless of show level,
+                          which conflicts with NetBeans GEN-BEGIN:variables auto-generated code) -->
+                    <doclint>html,reference,syntax,accessibility</doclint>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.5.2</version>
                 <executions>

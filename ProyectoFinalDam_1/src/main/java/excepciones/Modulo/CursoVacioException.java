@@ -5,6 +5,7 @@
 package excepciones.Modulo;
 
 /**
+ * Se lanza cuando el curso al que pertenece el módulo está vacío o es nulo.
  *
  * @author isard
  */

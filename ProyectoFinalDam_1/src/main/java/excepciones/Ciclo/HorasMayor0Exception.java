@@ -5,6 +5,7 @@
 package excepciones.Ciclo;
 
 /**
+ * Se lanza cuando el número de horas del ciclo es 0 o negativo.
  *
  * @author isard
  */

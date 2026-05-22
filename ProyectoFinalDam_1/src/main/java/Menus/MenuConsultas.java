@@ -15,6 +15,9 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
  */
 public class MenuConsultas {
 
+    /** Clase de utilidad; no instanciable. */
+    private MenuConsultas() {}
+
     // =========================================================
     // =================== MENÚ PRINCIPAL ======================
     // =========================================================

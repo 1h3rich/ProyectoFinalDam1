@@ -5,6 +5,7 @@
 package excepciones.Ciclo;
 
 /**
+ * Se lanza cuando una línea CSV no tiene los 6 campos necesarios para construir un Ciclo.
  *
  * @author isard
  */

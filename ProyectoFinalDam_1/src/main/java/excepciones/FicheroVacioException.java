@@ -5,6 +5,7 @@
 package excepciones;
 
 /**
+ * Se lanza cuando el fichero de datos está vacío y no se puede leer.
  *
  * @author isard
  */

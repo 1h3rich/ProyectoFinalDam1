@@ -32,6 +32,9 @@ import servicios.Ficheros.GestionFicheros;
  */
 public class MenuAlumno {
 
+    /** Clase de utilidad; no instanciable. */
+    private MenuAlumno() {}
+
     /**
      * Formato de fecha usado en la entrada de datos por teclado.
      */
@@ -678,9 +681,10 @@ public class MenuAlumno {
 
     /**
      * Importa alumnos desde la ruta por defecto según el formato.
-     * @param formato
-     * @return 
-     * @throws java.lang.Exception
+     *
+     * @param formato Formato de importación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de alumnos importados.
+     * @throws Exception si el formato no es reconocido o el fichero tiene estructura incorrecta.
      */
     public static int importar(String formato) throws Exception {
         return importar(formato, Config.ficheroAlumno);
@@ -689,10 +693,11 @@ public class MenuAlumno {
     /**
      * Importa alumnos desde una ruta base personalizada.
      * El código del fichero se ignora; la BD asigna el siguiente código disponible.
-     * @param formato
-     * @param rutaBase
-     * @return 
-     * @throws java.lang.Exception
+     *
+     * @param formato  Formato de importación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @param rutaBase Ruta base del fichero (sin extensión).
+     * @return Número de alumnos importados.
+     * @throws Exception si el formato no es reconocido o el fichero tiene estructura incorrecta.
      */
     public static int importar(String formato, String rutaBase) throws Exception {
         return switch (formato) {
@@ -813,6 +818,12 @@ public class MenuAlumno {
         }
     }
 
+    /**
+     * Exporta todos los alumnos de la base de datos al formato indicado.
+     *
+     * @param formato Formato de exportación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de alumnos exportados, o 0 si la lista está vacía o hay error.
+     */
     public static int exportar(String formato) {
         SesionDatos.getListaAlumnos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_ALUMNO_TODOS, new String[0], false, true);

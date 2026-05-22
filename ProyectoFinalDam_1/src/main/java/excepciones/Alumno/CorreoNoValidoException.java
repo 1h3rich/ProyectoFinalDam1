@@ -5,6 +5,7 @@
 package excepciones.Alumno;
 
 /**
+ * Se lanza cuando el correo electrónico no tiene un formato válido.
  *
  * @author isard
  */

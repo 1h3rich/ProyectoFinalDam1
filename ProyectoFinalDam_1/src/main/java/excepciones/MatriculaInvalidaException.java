@@ -5,6 +5,7 @@
 package excepciones;
 
 /**
+ * Se lanza cuando los datos de una matrícula no superan la validación.
  *
  * @author isard
  */

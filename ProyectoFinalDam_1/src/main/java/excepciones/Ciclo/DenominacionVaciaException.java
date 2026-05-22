@@ -5,6 +5,7 @@
 package excepciones.Ciclo;
 
 /**
+ * Se lanza cuando la denominación del ciclo está vacía o es nula.
  *
  * @author isard
  */

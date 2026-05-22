@@ -11,6 +11,10 @@ package Config;
  * @author 1DAM
  */
 public class Config {
+
+    /** Clase de utilidad — no instanciar. */
+    private Config() {}
+
     // SQL
 
     /** URL JDBC de conexión a la base de datos MySQL/MariaDB. */

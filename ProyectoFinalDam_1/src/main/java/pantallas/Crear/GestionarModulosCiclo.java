@@ -25,7 +25,7 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
     /**
      * Creates new form GestionarModulosCiclo
      *
-     * @param idCiclo
+     * @param idCiclo Código del ciclo al que se asociarán los módulos.
      */
     public GestionarModulosCiclo(int idCiclo) {
         initComponents();
@@ -321,7 +321,9 @@ public class GestionarModulosCiclo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Punto de entrada para pruebas aisladas del formulario.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

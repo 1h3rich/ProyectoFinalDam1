@@ -5,6 +5,7 @@
 package excepciones.Matricula;
 
 /**
+ * Se lanza cuando el año académico de la matrícula no tiene un formato válido.
  *
  * @author isard
  */

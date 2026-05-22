@@ -5,6 +5,7 @@
 package excepciones.Alumno;
 
 /**
+ * Se lanza cuando el teléfono no tiene exactamente 9 dígitos numéricos.
  *
  * @author isard
  */

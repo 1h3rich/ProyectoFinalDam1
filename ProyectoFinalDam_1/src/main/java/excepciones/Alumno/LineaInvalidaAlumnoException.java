@@ -5,6 +5,7 @@
 package excepciones.Alumno;
 
 /**
+ * Se lanza cuando una línea CSV no tiene los 6 campos necesarios para construir un Alumno.
  *
  * @author isard
  */

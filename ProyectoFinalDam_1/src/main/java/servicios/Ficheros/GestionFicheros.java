@@ -20,9 +20,8 @@ import java.util.logging.*;
  */
 public class GestionFicheros {
 
-    
-   
-   
+    /** No instanciar: clase de utilidad estática. */
+    private GestionFicheros() {}
 
     //==========================================================================================================================================================
     //======SAVE================================================================================================================================================
@@ -70,8 +69,8 @@ public class GestionFicheros {
     /**
      * Guarda un objeto en binario, se le ha de pasar la lista con el tipo
      *
-     * @param direccion
-     * @param lista 
+     * @param direccion Ruta base del fichero (sin extensión .dat).
+     * @param lista     Colección de objetos serializables a persistir.
      */
     public static void guardarToBinario(String direccion, Collection<?> lista) { //He puesto un Collection<?> para poderle pasar tanto TreeSet como ArrayList de cualquier objeto, hacieno uso de polimorfismo
 
@@ -93,9 +92,9 @@ public class GestionFicheros {
     /**
      * Carga desde TXT o CSV pasandole la direccion y la extension
      *
-     * @param direccion
-     * @param terminacion
-     * @return
+     * @param direccion   Ruta base del fichero (sin extensión).
+     * @param terminacion Extensión del fichero (.txt o .csv).
+     * @return Lista de líneas leídas, o {@code null} si el fichero no existe.
      */
     public static ArrayList<String> leerTxtCsv(String direccion, String terminacion) {
         ArrayList<String> lineas = new ArrayList<>();
@@ -120,8 +119,8 @@ public class GestionFicheros {
     /**
      * Carga desde Json, solo hace falta pasarle la direccion
      *
-     * @param direccion
-     * @return
+     * @param direccion Ruta base del fichero JSON (sin extensión .json).
+     * @return Lista de líneas leídas, o {@code null} si el fichero no existe.
      */
     public static ArrayList<String> leerJson(String direccion) {
         ArrayList<String> lineas = new ArrayList<>();
@@ -146,8 +145,8 @@ public class GestionFicheros {
     /**
      * Carga desde binario, solo hace falta pasarle la direccion
      *
-     * @param direccion
-     * @return
+     * @param direccion Ruta base del fichero binario (sin extensión .dat).
+     * @return Lista de objetos deserializados.
      */
     public static ArrayList<String> leerBinario(String direccion) {
         if (!Validadores.comprobarFicheroLectura(direccion, ".dat")) {

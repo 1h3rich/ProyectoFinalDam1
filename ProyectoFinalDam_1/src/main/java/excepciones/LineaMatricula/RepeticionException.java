@@ -5,6 +5,7 @@
 package excepciones.LineaMatricula;
 
 /**
+ * Se lanza cuando se detecta un módulo repetido dentro de la misma matrícula.
  *
  * @author isard
  */

@@ -3,7 +3,6 @@ package servicios.BaseDeDatos;
 import Config.Config;
 import Control.SesionDatos;
 import Utils.ItemCombo;
-import excepciones.YaImportadoException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,6 +20,9 @@ import modelos.*;
  */
 public class GestionBaseDeDatos {
 
+    /** No instanciar: clase de utilidad estática. */
+    private GestionBaseDeDatos() {}
+
     /**
      * Conexión activa con la base de datos; {@code null} si aún no se ha
      * establecido o fue cerrada.
@@ -35,7 +37,7 @@ public class GestionBaseDeDatos {
     /**
      * Conecta Java con la base de datos MySQL.
      *
-     * @return
+     * @return {@code true} si la conexión se estableció con éxito.
      */
     public static boolean vincularBDD() {
         try {
@@ -295,8 +297,8 @@ public class GestionBaseDeDatos {
     /**
      * Inserta datos en la base de datos. Se usa para INSERT.
      *
-     * @param datosInsertar
-     * @param entradas
+     * @param datosInsertar Array con la SQL y los metadatos de la tabla.
+     * @param entradas      Valores a insertar como parámetros de la sentencia.
      */
     public static void insertarDatos(String[] datosInsertar, String[] entradas) {
         ejecutarActualizacion(datosInsertar[1], entradas, "Filas insertadas");
@@ -306,8 +308,9 @@ public class GestionBaseDeDatos {
     /**
      * Actualiza filas de la base de datos. Se usa para UPDATE.
      *
-     * @param datosActualizacion
-     * @param entradas
+     * @param datosActualizacion Array con la SQL de actualización.
+     * @param entradas           Valores para los parámetros de la sentencia.
+     * @return {@code true} si la actualización afectó al menos una fila.
      */
     public static boolean actualizarFila(String[] datosActualizacion, String[] entradas) {
         return ejecutarActualizacion(datosActualizacion[0], entradas, "Filas actualizadas");
@@ -316,8 +319,8 @@ public class GestionBaseDeDatos {
     /**
      * Elimina filas de la base de datos.Se usa para DELETE.
      *
-     * @param datosEliminar
-     * @param entradas
+     * @param datosEliminar Array con la SQL de eliminación.
+     * @param entradas      Valores para los parámetros de la sentencia.
      */
     public static void eliminarFila(String[] datosEliminar, String[] entradas) {
         ejecutarActualizacion(datosEliminar[0], entradas, "Filas eliminadas");

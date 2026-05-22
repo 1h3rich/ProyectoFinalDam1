@@ -5,6 +5,7 @@
 package excepciones;
 
 /**
+ * Se lanza cuando se intenta insertar un ciclo que ya existe en la base de datos.
  *
  * @author isard
  */

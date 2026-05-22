@@ -5,6 +5,7 @@
 package excepciones.Ciclo;
 
 /**
+ * Se lanza cuando la familia profesional del ciclo está vacía o es nula.
  *
  * @author isard
  */

@@ -34,7 +34,7 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     /**
      * Creates new form FormularioLineaMatriucla
      *
-     * @param idMatricula
+     * @param idMatricula Código de la matrícula a la que se añaden módulos.
      */
     public CrearLineaMatricula(int idMatricula) {
         initComponents();
@@ -355,7 +355,9 @@ public class CrearLineaMatricula extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxCiclosActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Punto de entrada para pruebas aisladas del formulario.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

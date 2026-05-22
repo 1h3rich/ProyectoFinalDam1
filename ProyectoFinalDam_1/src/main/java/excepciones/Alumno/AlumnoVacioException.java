@@ -5,6 +5,7 @@
 package excepciones.Alumno;
 
 /**
+ * Se lanza cuando el nombre del alumno está vacío o es nulo.
  *
  * @author isard
  */

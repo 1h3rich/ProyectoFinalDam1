@@ -5,6 +5,7 @@
 package excepciones.Alumno;
 
 /**
+ * Se lanza cuando el código identificador es 0 o negativo.
  *
  * @author isard
  */

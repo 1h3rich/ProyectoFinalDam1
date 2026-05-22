@@ -5,6 +5,7 @@
 package excepciones.Matricula;
 
 /**
+ * Se lanza cuando una línea CSV no tiene los campos necesarios para construir una Matrícula.
  *
  * @author isard
  */

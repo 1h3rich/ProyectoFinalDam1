@@ -5,6 +5,7 @@
 package excepciones.Matricula;
 
 /**
+ * Se lanza cuando el importe de la matrícula es negativo.
  *
  * @author isard
  */

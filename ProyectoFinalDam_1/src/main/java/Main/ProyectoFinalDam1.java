@@ -20,6 +20,9 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
  */
 public class ProyectoFinalDam1 {
 
+    /** Clase de utilidad; no instanciable. */
+    private ProyectoFinalDam1() {}
+
     /**
      * Scanner compartido con todos los submenús de la aplicación.
      */

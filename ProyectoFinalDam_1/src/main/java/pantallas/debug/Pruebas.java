@@ -5,6 +5,7 @@
 package pantallas.debug;
 
 /**
+ * Ventana de depuración para pruebas de componentes Swing.
  *
  * @author 1DAM
  */
@@ -51,7 +52,9 @@ public class Pruebas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * Punto de entrada para pruebas aisladas del formulario.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

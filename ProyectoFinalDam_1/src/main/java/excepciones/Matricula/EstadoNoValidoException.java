@@ -5,6 +5,7 @@
 package excepciones.Matricula;
 
 /**
+ * Se lanza cuando el estado de la matrícula no es uno de los valores permitidos.
  *
  * @author isard
  */

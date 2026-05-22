@@ -5,6 +5,7 @@
 package excepciones.LineaMatricula;
 
 /**
+ * Se lanza cuando el módulo asociado a una línea de matrícula es nulo.
  *
  * @author isard
  */

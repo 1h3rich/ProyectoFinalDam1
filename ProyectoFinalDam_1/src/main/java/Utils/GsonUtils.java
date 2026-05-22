@@ -14,6 +14,9 @@ import java.time.LocalDate;
  */
 public class GsonUtils {
 
+    /** No instanciar: clase de utilidad estática. */
+    private GsonUtils() {}
+
     private static final Gson INSTANCE = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class,
                     (JsonSerializer<LocalDate>) (src, type, ctx) -> new JsonPrimitive(src.toString()))
@@ -21,6 +24,11 @@ public class GsonUtils {
                     (JsonDeserializer<LocalDate>) (json, type, ctx) -> LocalDate.parse(json.getAsString()))
             .create();
 
+    /**
+     * Retorna la instancia preconfigurada de Gson con soporte para LocalDate.
+     *
+     * @return Instancia singleton de Gson.
+     */
     public static Gson get() {
         return INSTANCE;
     }

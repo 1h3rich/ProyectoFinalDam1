@@ -5,6 +5,7 @@
 package excepciones.Modulo;
 
 /**
+ * Se lanza cuando el nombre del módulo está vacío o es nulo.
  *
  * @author isard
  */

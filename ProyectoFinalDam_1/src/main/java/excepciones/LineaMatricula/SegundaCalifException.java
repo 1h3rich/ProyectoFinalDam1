@@ -5,6 +5,7 @@
 package excepciones.LineaMatricula;
 
 /**
+ * Se lanza cuando la segunda calificación tiene un valor fuera del rango [0, 10].
  *
  * @author isard
  */

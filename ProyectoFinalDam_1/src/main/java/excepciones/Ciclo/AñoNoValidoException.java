@@ -5,6 +5,7 @@
 package excepciones.Ciclo;
 
 /**
+ * Se lanza cuando el año del currículum está fuera del rango válido [1900, 3000].
  *
  * @author isard
  */

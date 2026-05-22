@@ -155,7 +155,9 @@ public class Menu_Modificar extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCicloActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Punto de entrada para pruebas aisladas del formulario.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

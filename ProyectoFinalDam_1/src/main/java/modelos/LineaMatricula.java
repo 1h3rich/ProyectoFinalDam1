@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa una línea de matrícula que asocia un módulo con una matrícula.
  *
  * @author isard
  */
@@ -43,11 +44,13 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      *
      * Se usa cuando ya tienes una matrícula y un módulo creados.
      *
-     * @param matricula
-     * @param modulo
-     * @param repeticion
-     * @param cal_primera
-     * @param cal_segunda
+     * @param matricula  Matrícula a la que pertenece esta línea.
+     * @param modulo     Módulo al que corresponde esta línea.
+     * @param repeticion Número de veces que el alumno ha cursado el módulo.
+     * @param cal_primera Calificación de primera convocatoria (0.0–10.0).
+     * @param cal_segunda Calificación de segunda convocatoria (0.0–10.0).
+     * @throws MatriculaNotNullException si la matrícula es null.
+     * @throws ModuloNotNullException si el módulo es null.
      */
     public LineaMatricula(Matricula matricula,
             Modulo modulo,
@@ -93,11 +96,11 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      *
      * Se usa cuando ya tienes directamente los códigos.
      *
-     * @param cod_matricula
-     * @param cod_modulo
-     * @param repeticion
-     * @param cal_primera
-     * @param cal_segunda
+     * @param cod_matricula Código de la matrícula asociada.
+     * @param cod_modulo   Código del módulo asociado.
+     * @param repeticion   Número de repetición del módulo.
+     * @param cal_primera  Calificación de primera convocatoria (0.0–10.0).
+     * @param cal_segunda  Calificación de segunda convocatoria (0.0–10.0).
      */
     public LineaMatricula(int cod_matricula,
             int cod_modulo,
@@ -158,27 +161,47 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
     // ===================== GETTERS ===========================
     // =========================================================
 
-    /** @return Código de la matrícula a la que pertenece esta línea (parte de la clave compuesta). */
+    /**
+     * Retorna código de la matrícula a la que pertenece esta línea (parte de la clave compuesta).
+     *
+     * @return Código de la matrícula a la que pertenece esta línea (parte de la clave compuesta).
+     */
     public int getCod_matricula() {
         return cod_matricula;
     }
 
-    /** @return Código del módulo al que corresponde esta línea (parte de la clave compuesta). */
+    /**
+     * Retorna código del módulo al que corresponde esta línea (parte de la clave compuesta).
+     *
+     * @return Código del módulo al que corresponde esta línea (parte de la clave compuesta).
+     */
     public int getCod_modulo() {
         return cod_modulo;
     }
 
-    /** @return Número de veces que el alumno ha cursado el módulo (0 = primera vez). */
+    /**
+     * Retorna número de veces que el alumno ha cursado el módulo (0 = primera vez).
+     *
+     * @return Número de veces que el alumno ha cursado el módulo (0 = primera vez).
+     */
     public int getRepeticion() {
         return repeticion;
     }
 
-    /** @return Calificación de la primera convocatoria (0.0–10.0; 0 si aún no evaluado). */
+    /**
+     * Retorna calificación de la primera convocatoria (0.0–10.0; 0 si aún no evaluado).
+     *
+     * @return Calificación de la primera convocatoria (0.0–10.0; 0 si aún no evaluado).
+     */
     public double getCal_primera() {
         return cal_primera;
     }
 
-    /** @return Calificación de la segunda convocatoria (0.0–10.0; 0 si aún no evaluado). */
+    /**
+     * Retorna calificación de la segunda convocatoria (0.0–10.0; 0 si aún no evaluado).
+     *
+     * @return Calificación de la segunda convocatoria (0.0–10.0; 0 si aún no evaluado).
+     */
     public double getCal_segunda() {
         return cal_segunda;
     }
@@ -191,7 +214,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * Cambia el código de matrícula tras validar que sea positivo.
      *
      * @param cod_matricula Nuevo código de matrícula.
-     * @throws IllegalArgumentException si el código es 0 o negativo.
+     * @throws CodigMayor0Exception si el código de matrícula es 0 o negativo.
      */
     public void setCod_matricula(int cod_matricula) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(cod_matricula)) {
@@ -205,7 +228,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * Cambia el código de módulo tras validar que sea positivo.
      *
      * @param cod_modulo Nuevo código de módulo.
-     * @throws IllegalArgumentException si el código es 0 o negativo.
+     * @throws CodigMayor0Exception si el código del módulo es 0 o negativo.
      */
     public void setCod_modulo(int cod_modulo) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(cod_modulo)) {
@@ -219,7 +242,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * Actualiza el número de repetición tras validar que sea no negativo.
      *
      * @param repeticion Nuevo número de repetición.
-     * @throws IllegalArgumentException si la repetición es negativa.
+     * @throws RepeticionException si la repetición es negativa.
      */
     public void setRepeticion(int repeticion) throws RepeticionException {
         if (!Validadores.validarRepeticion(repeticion)) {
@@ -233,7 +256,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * Actualiza la calificación de primera convocatoria tras validar el rango [0, 10].
      *
      * @param cal_primera Nueva calificación de primera convocatoria.
-     * @throws IllegalArgumentException si la calificación está fuera del rango válido.
+     * @throws PrimeraCalifException si la calificación está fuera del rango [0, 10].
      */
     public void setCal_primera(double cal_primera) throws PrimeraCalifException {
         if (!Validadores.validarCalificacion(cal_primera)) {
@@ -247,7 +270,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      * Actualiza la calificación de segunda convocatoria tras validar el rango [0, 10].
      *
      * @param cal_segunda Nueva calificación de segunda convocatoria.
-     * @throws IllegalArgumentException si la calificación está fuera del rango válido.
+     * @throws SegundaCalifException si la calificación está fuera del rango [0, 10].
      */
     public void setCal_segunda(double cal_segunda) throws SegundaCalifException {
         if (!Validadores.validarCalificacion(cal_segunda)) {
@@ -333,7 +356,7 @@ public class LineaMatricula implements InterpolaridadDeDatos, Serializable {
      *
      * @param linea Cadena con 5 campos: cod_matricula;cod_modulo;repeticion;cal_primera;cal_segunda.
      * @return LineaMatricula construida con los datos de la línea.
-     * @throws IllegalArgumentException si la línea no tiene exactamente 5 campos.
+     * @throws LineaInvalidaLineaMatriculaException si la línea no tiene exactamente 5 campos.
      */
     public static LineaMatricula obtenerLineas(String linea) throws LineaInvalidaLineaMatriculaException {
         String[] partes = linea.split(";", -1);

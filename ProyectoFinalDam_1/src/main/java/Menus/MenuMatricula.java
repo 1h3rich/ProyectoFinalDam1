@@ -33,6 +33,9 @@ import servicios.Ficheros.GestionFicheros;
  */
 public class MenuMatricula {
 
+    /** Clase de utilidad; no instanciable. */
+    private MenuMatricula() {}
+
     /** Lista de matrículas insertadas durante la ejecución actual. */
     private static final ArrayList<Matricula> matriculasSesion = new ArrayList<>();
 
@@ -642,6 +645,12 @@ public class MenuMatricula {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
     }
 
+    /**
+     * Exporta todos los matrículas de la base de datos al formato indicado.
+     *
+     * @param formato Formato de exportación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de matrículas exportados, o 0 si la lista está vacía o hay error.
+     */
     public static int exportar(String formato) {
         SesionDatos.getListaMatriculas().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_MATRICULA_TODOS, new String[0], false, true);
@@ -666,9 +675,10 @@ public class MenuMatricula {
 
     /**
      * Importa matrículas desde la ruta por defecto según el formato.
-     * @param formato
-     * @return 
-     * @throws java.lang.Exception
+     *
+     * @param formato Formato de importación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de matrículas importadas.
+     * @throws Exception si el formato no es reconocido o el fichero tiene estructura incorrecta.
      */
     public static int importar(String formato) throws Exception {
         return importar(formato, Config.ficheroMatricula);
@@ -677,10 +687,11 @@ public class MenuMatricula {
     /**
      * Importa matrículas desde una ruta base personalizada.
      * El código del fichero se ignora; la BD asigna el siguiente código disponible.
-     * @param formato
-     * @param rutaBase
-     * @return 
-     * @throws java.lang.Exception
+     *
+     * @param formato  Formato de importación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @param rutaBase Ruta base del fichero (sin extensión).
+     * @return Número de matrículas importadas.
+     * @throws Exception si el formato no es reconocido o el fichero tiene estructura incorrecta.
      */
     public static int importar(String formato, String rutaBase) throws Exception {
         return switch (formato) {

@@ -1,6 +1,12 @@
 package servicios.BaseDeDatos;
 
+/**
+ * Sentencias SQL de los ejercicios de consulta multitabla predefinidos.
+ */
 public class ConsultasEjercicios {
+
+    /** Clase de utilidad — no instanciar. */
+    private ConsultasEjercicios() {}
 
     /**
      * Consultar la denominación, la familia profesional y el nivel de todos los

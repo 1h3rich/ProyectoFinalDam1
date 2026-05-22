@@ -37,6 +37,9 @@ import modelos.Modulo;
  */
 public class SesionDatos {
 
+    /** Clase de utilidad; no instanciable. */
+    private SesionDatos() {}
+
     // =========================================================
     // ======= COLECCIÓN 1: TreeSet (orden natural) ============
     // =========================================================
@@ -138,8 +141,8 @@ public class SesionDatos {
     /**
      * Registra un alumno insertado en esta sesión.
      *
-     * @param alumno Alumno recién insertado con su ID ya asignado por la BD.
-     * @param datosBaseDeDatos
+     * @param alumno           Alumno recién insertado con su ID ya asignado por la BD.
+     * @param datosBaseDeDatos true si el dato proviene de la BD (no se registra en sesión).
      */
     public static void registrarAlumno(Alumno alumno, boolean datosBaseDeDatos) {
         listaAlumnos.add(alumno);
@@ -157,8 +160,8 @@ public class SesionDatos {
     /**
      * Registra un ciclo insertado en esta sesión.
      *
-     * @param ciclo Ciclo recién insertado con su ID ya asignado por la BD.
-     * @param datosBaseDeDatos
+     * @param ciclo            Ciclo recién insertado con su ID ya asignado por la BD.
+     * @param datosBaseDeDatos true si el dato proviene de la BD (no se registra en sesión).
      */
     public static void registrarCiclo(Ciclo ciclo, boolean datosBaseDeDatos) {
         listaCiclos.add(ciclo);
@@ -176,8 +179,8 @@ public class SesionDatos {
     /**
      * Registra un módulo insertado en esta sesión.
      *
-     * @param modulo Módulo recién insertado con su ID ya asignado por la BD.
-     * @param datosBaseDeDatos
+     * @param modulo           Módulo recién insertado con su ID ya asignado por la BD.
+     * @param datosBaseDeDatos true si el dato proviene de la BD (no se registra en sesión).
      */
     public static void registrarModulo(Modulo modulo, boolean datosBaseDeDatos) {
         listaModulos.add(modulo);
@@ -195,9 +198,8 @@ public class SesionDatos {
     /**
      * Registra una matrícula insertada en esta sesión.
      *
-     * @param matricula Matrícula recién insertada con su ID ya asignado por la
-     * BD.
-     * @param datosBaseDeDatos
+     * @param matricula        Matrícula recién insertada con su ID ya asignado por la BD.
+     * @param datosBaseDeDatos true si el dato proviene de la BD (no se registra en sesión).
      */
     public static void registrarMatricula(Matricula matricula, boolean datosBaseDeDatos) {
         listaMatriculas.add(matricula);
@@ -216,8 +218,8 @@ public class SesionDatos {
     /**
      * Registra una línea de matrícula insertada en esta sesión.
      *
-     * @param linea LineaMatricula recién insertada.
-     * @param datosBaseDeDatos
+     * @param linea            LineaMatricula recién insertada.
+     * @param datosBaseDeDatos true si el dato proviene de la BD (no se registra en sesión).
      */
     public static void registrarLineaMatricula(LineaMatricula linea, boolean datosBaseDeDatos) {
         listaLineasMatricula.add(linea);

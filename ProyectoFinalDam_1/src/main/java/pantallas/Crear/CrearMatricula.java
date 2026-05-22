@@ -23,7 +23,7 @@ public class CrearMatricula extends javax.swing.JFrame {
     /**
      * Creates new form FormularioMatricula
      *
-     * @param idAlumno
+     * @param idAlumno Código del alumno para el que se crea la matrícula.
      */
     public CrearMatricula(int idAlumno) {
         initComponents();
@@ -255,7 +255,9 @@ public class CrearMatricula extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Punto de entrada para pruebas aisladas del formulario.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

@@ -33,6 +33,9 @@ import servicios.Ficheros.GestionFicheros;
  */
 public class MenuCiclo {
 
+    /** Clase de utilidad; no instanciable. */
+    private MenuCiclo() {}
+
     /**
      * Lista de ciclos insertados durante la ejecución actual.
      */
@@ -680,6 +683,12 @@ public class MenuCiclo {
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
     }
 
+    /**
+     * Exporta todos los ciclos de la base de datos al formato indicado.
+     *
+     * @param formato Formato de exportación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de ciclos exportados, o 0 si la lista está vacía o hay error.
+     */
     public static int exportar(String formato) {
         SesionDatos.getListaCiclos().clear();
         GestionBaseDeDatos.realizarConsultaSQL(ConsultasSQL.SAVE_CICLO_TODOS, new String[0], false, true);
@@ -704,9 +713,10 @@ public class MenuCiclo {
 
     /**
      * Importa ciclos desde la ruta por defecto según el formato.
-     * @param formato
-     * @return 
-     * @throws java.lang.Exception
+     *
+     * @param formato Formato de importación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de ciclos importados.
+     * @throws Exception si el formato no es reconocido o el fichero tiene estructura incorrecta.
      */
     public static int importar(String formato) throws Exception {
         return importar(formato, Config.ficheroCiclo);
@@ -715,10 +725,11 @@ public class MenuCiclo {
     /**
      * Importa ciclos desde una ruta base personalizada.
      * El código del fichero se ignora; la BD asigna el siguiente código disponible.
-     * @param formato
-     * @param rutaBase
-     * @return 
-     * @throws java.lang.Exception
+     *
+     * @param formato  Formato de importación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @param rutaBase Ruta base del fichero (sin extensión).
+     * @return Número de ciclos importados.
+     * @throws Exception si el formato no es reconocido o el fichero tiene estructura incorrecta.
      */
     public static int importar(String formato, String rutaBase) throws Exception {
         return switch (formato) {

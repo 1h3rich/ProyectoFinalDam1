@@ -23,6 +23,7 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
+ * Ventana de depuración que muestra resultados de consultas SQL en una JTable.
  *
  * @author isard
  */
@@ -93,7 +94,7 @@ public class VisorTabla extends javax.swing.JFrame {
      * 2. jTable.setModel(modelo) → conecta el modelo al JTable; la tabla se
      * actualiza al instante
      *
-     * 3. TableRowSorter<>(modelo) → añade ordenación por clic en cabecera sin
+     * 3. {@code TableRowSorter<>(modelo)} → añade ordenación por clic en cabecera sin
      * cambiar los datos
      *
      * 4. jTable.getSelectedRow() / convertRowIndexToModel() → obtiene la fila
@@ -107,8 +108,6 @@ public class VisorTabla extends javax.swing.JFrame {
      * VisorTabla(tabla).setVisible(true);
      *
      * =====================================================================
-     *
-     * @author 1DAM
      */
     
 

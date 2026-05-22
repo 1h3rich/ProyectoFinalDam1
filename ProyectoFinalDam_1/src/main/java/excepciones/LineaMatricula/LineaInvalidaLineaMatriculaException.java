@@ -5,6 +5,7 @@
 package excepciones.LineaMatricula;
 
 /**
+ * Se lanza cuando una línea CSV no tiene los campos necesarios para construir una LineaMatricula.
  *
  * @author isard
  */

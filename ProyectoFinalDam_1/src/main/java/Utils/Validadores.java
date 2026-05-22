@@ -9,18 +9,22 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
+ * Colección de métodos estáticos de validación usados en todo el dominio.
  *
  * @author Rich
  */
 public class Validadores {
 
+    /** Clase de utilidad; no instanciable. */
+    private Validadores() {}
+
     /**
      * Comprueba que el fichero se pueda leer, se le pasa la direccion y la
      * extension Si no, no permite leerlo.
      *
-     * @param type
-     * @param temp
-     * @return
+     * @param type Ruta base del fichero (sin extensión).
+     * @param temp Extensión del fichero (p.ej. ".csv", ".txt").
+     * @return true si el fichero existe y no está vacío, false en caso contrario.
      */
     public static boolean comprobarFicheroLectura(String type, String temp) {
         File archivo = new File(type + temp);
@@ -39,11 +43,11 @@ public class Validadores {
     }
 
     /**
-     * Compruba que se pueda escribir, sino, lo crea.
+     * Comprueba que se pueda escribir en el fichero; si no existe, lo crea.
      *
-     * @param type
-     * @param temp
-     * @return
+     * @param type Ruta base del fichero (sin extensión).
+     * @param temp Extensión del fichero (p.ej. ".csv", ".txt").
+     * @return true si el fichero es accesible para escritura, false en caso contrario.
      */
     public static boolean comprobarFicheroEscritura(String type, String temp) {
         File archivo = new File(type + temp);
@@ -168,7 +172,7 @@ public class Validadores {
     /**
      * Comprueba que la fecha de nacimiento no sea nula ni posterior a la fecha actual.
      *
-     * @param temp
+     * @param temp Fecha en formato ISO (yyyy-MM-dd) a validar.
      * @return true si la fecha es válida y no está en el futuro.
      */
     public static boolean validarFechaNacimiento(String temp) {

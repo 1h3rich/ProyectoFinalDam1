@@ -9,8 +9,8 @@ package interfaces;
  * (CSV, JSON, TXT, binario) e importación desde esos mismos formatos.
  *
  * @author Ricardo
- * @autor Luis
- * @autor David
+ * @author Luis
+ * @author David
  */
 public interface InterpolaridadDeDatos {
 
@@ -38,13 +38,25 @@ public interface InterpolaridadDeDatos {
     /** Lee el fichero TXT y reemplaza la lista de objetos en sesión. */
     public void objFromTXT();
 
-    /** @return Representación del objeto en formato CSV (separador ";"). */
+    /**
+     * Serializa el objeto en formato CSV con separador ";".
+     *
+     * @return Representación del objeto en formato CSV.
+     */
     public String toCSV();
 
-    /** @return Representación del objeto en formato JSON. */
+    /**
+     * Serializa el objeto en formato JSON.
+     *
+     * @return Representación del objeto en formato JSON.
+     */
     public String toJSON();
 
-    /** @return Representación del objeto en formato TXT (equivalente a CSV). */
+    /**
+     * Serializa el objeto en formato TXT (equivalente al CSV con ";").
+     *
+     * @return Representación del objeto en formato TXT.
+     */
     public String toTXT();
 
 }

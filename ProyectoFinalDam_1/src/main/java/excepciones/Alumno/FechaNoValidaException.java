@@ -5,6 +5,7 @@
 package excepciones.Alumno;
 
 /**
+ * Se lanza cuando la fecha de nacimiento es nula o posterior a la fecha actual.
  *
  * @author isard
  */

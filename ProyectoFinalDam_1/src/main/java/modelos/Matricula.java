@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa la matrícula de un alumno en un ciclo formativo.
  *
  * @author isard
  */
@@ -41,10 +42,10 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     /**
      * Creación manual de nueva matrícula.
      *
-     * @param codigo_alumno
-     * @param año_academico
-     * @param estado
-     * @param importe
+     * @param codigo_alumno Código del alumno que se matricula.
+     * @param año_academico Año académico de la matrícula.
+     * @param estado        Estado inicial ("Activa" o "No activa").
+     * @param importe       Importe económico de la matrícula.
      */
     public Matricula(int codigo_alumno,
             int año_academico,
@@ -74,11 +75,11 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     /**
      * Creación desde base de datos / fichero.
      *
-     * @param codigo
-     * @param codigo_alumno
-     * @param año_academico
-     * @param estado
-     * @param importe
+     * @param codigo        Código identificador de la matrícula (clave primaria).
+     * @param codigo_alumno Código del alumno matriculado.
+     * @param año_academico Año académico de la matrícula.
+     * @param estado        Estado ("Activa" o "No activa").
+     * @param importe       Importe económico de la matrícula.
      */
     public Matricula(int codigo,
             int codigo_alumno,
@@ -125,27 +126,47 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
     // ===================== GETTERS ===========================
     // =========================================================
 
-    /** @return Código único de la matrícula (clave primaria). */
+    /**
+     * Retorna código único de la matrícula (clave primaria).
+     *
+     * @return Código único de la matrícula (clave primaria).
+     */
     public int getCodigo() {
         return codigo;
     }
 
-    /** @return Código del alumno al que pertenece esta matrícula (clave foránea). */
+    /**
+     * Retorna código del alumno al que pertenece esta matrícula (clave foránea).
+     *
+     * @return Código del alumno al que pertenece esta matrícula (clave foránea).
+     */
     public int getCodigo_alumno() {
         return codigo_alumno;
     }
 
-    /** @return Año académico de la matrícula (p.ej. 2024). */
+    /**
+     * Retorna año académico de la matrícula (p.ej. 2024).
+     *
+     * @return Año académico de la matrícula (p.ej. 2024).
+     */
     public int getAño_academico() {
         return año_academico;
     }
 
-    /** @return Estado de la matrícula ("Activa" o "No activa"). */
+    /**
+     * Retorna estado de la matrícula ("Activa" o "No activa").
+     *
+     * @return Estado de la matrícula ("Activa" o "No activa").
+     */
     public String getEstado() {
         return estado;
     }
 
-    /** @return Importe económico de la matrícula. */
+    /**
+     * Retorna importe económico de la matrícula.
+     *
+     * @return Importe económico de la matrícula.
+     */
     public double getImporte() {
         return importe;
     }
@@ -158,7 +179,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * Cambia el alumno asociado a la matrícula, validando que el código sea positivo.
      *
      * @param codigo_alumno Nuevo código del alumno.
-     * @throws IllegalArgumentException si el código es 0 o negativo.
+     * @throws CodigMayor0Exception si el código del alumno es 0 o negativo.
      */
     public void setCodigo_alumno(int codigo_alumno) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(codigo_alumno)) {
@@ -172,7 +193,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * Actualiza el año académico tras validar que esté en el rango [1900, 3000].
      *
      * @param año_academico Nuevo año académico.
-     * @throws IllegalArgumentException si el año está fuera del rango válido.
+     * @throws AñoAcademicoException si el año está fuera del rango [1900, 3000].
      */
     public void setAño_academico(int año_academico) throws AñoAcademicoException {
         if (!Validadores.validarAñoAcademico(año_academico)) {
@@ -186,7 +207,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * Actualiza el estado de la matrícula tras validar que sea "Activa" o "No activa".
      *
      * @param estado Nuevo estado ("Activa" o "No activa").
-     * @throws IllegalArgumentException si el estado no es uno de los valores válidos.
+     * @throws EstadoNoValidoException si el estado no es "Activa" ni "No activa".
      */
     public void setEstado(String estado) throws EstadoNoValidoException {
         if (!Validadores.validarEstado(estado)) {
@@ -200,7 +221,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * Actualiza el importe de la matrícula tras validar que no sea negativo.
      *
      * @param importe Nuevo importe.
-     * @throws IllegalArgumentException si el importe es negativo.
+     * @throws ImporteNoValidoException si el importe es negativo.
      */
     public void setImporte(double importe) throws ImporteNoValidoException {
         if (!Validadores.validarImporte(importe)) {
@@ -272,8 +293,8 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados
      * por codigo
      *
-     * @param otro
-     * @return
+     * @param otro Matrícula con la que se compara.
+     * @return Resultado negativo, cero o positivo según si este código es menor, igual o mayor.
      */
     @Override
     public int compareTo(Matricula otro) {
@@ -285,7 +306,7 @@ public class Matricula implements InterpolaridadDeDatos, Serializable, Comparabl
      *
      * @param linea Cadena con 5 campos: codigo;codigo_alumno;anio_academico;estado;importe.
      * @return Matrícula construida con los datos de la línea.
-     * @throws IllegalArgumentException si la línea no tiene exactamente 5 campos.
+     * @throws LineaInvalidaMatriculaException si la línea no tiene exactamente 5 campos.
      */
     public static Matricula obtenerLineas(String linea) throws LineaInvalidaMatriculaException {
         String[] partes = linea.split(";", -1);

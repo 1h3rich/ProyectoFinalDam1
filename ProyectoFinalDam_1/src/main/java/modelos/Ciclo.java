@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa un ciclo formativo del centro.
  *
  * @author isard
  */
@@ -44,11 +45,12 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     /**
      * Creación manual de nuevo ciclo.
      *
-     * @param denominacion
-     * @param familiaProfesional
-     * @param nivel
-     * @param horas
-     * @param añoCurriculum
+     * @param denominacion Nombre oficial del ciclo formativo.
+     * @param familiaProfesional Familia profesional a la que pertenece.
+     * @param nivel Nivel del ciclo (básico, medio o superior).
+     * @param horas Número total de horas lectivas.
+     * @param añoCurriculum Año de publicación del currículum.
+     * @throws CodigMayor0Exception si el código generado automáticamente es 0 o negativo.
      */
     public Ciclo(String denominacion,
             String familiaProfesional,
@@ -93,12 +95,13 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     /**
      * Creación desde base de datos / fichero.
      *
-     * @param codigo
-     * @param denominacion
-     * @param familiaProfesional
-     * @param nivel
-     * @param horas
-     * @param añoCurriculum
+     * @param codigo Código identificador del ciclo (clave primaria).
+     * @param denominacion Nombre oficial del ciclo formativo.
+     * @param familiaProfesional Familia profesional a la que pertenece.
+     * @param nivel Nivel del ciclo (básico, medio o superior).
+     * @param horas Número total de horas lectivas.
+     * @param añoCurriculum Año de publicación del currículum.
+     * @throws CodigMayor0Exception si el código es 0 o negativo.
      */
     public Ciclo(int codigo,
             String denominacion,
@@ -159,32 +162,56 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // ===================== GETTERS ===========================
     // =========================================================
 
-    /** @return Código único del ciclo (clave primaria). */
+    /**
+     * Retorna el código único del ciclo (clave primaria).
+     *
+     * @return Código único del ciclo (clave primaria).
+     */
     public int getCodigo() {
         return codigo;
     }
 
-    /** @return Nombre oficial del ciclo formativo. */
+    /**
+     * Retorna el nombre oficial del ciclo formativo.
+     *
+     * @return Nombre oficial del ciclo formativo.
+     */
     public String getDenominacion() {
         return denominacion;
     }
 
-    /** @return Familia profesional a la que pertenece el ciclo. */
+    /**
+     * Retorna la familia profesional a la que pertenece el ciclo.
+     *
+     * @return Familia profesional a la que pertenece el ciclo.
+     */
     public String getFamiliaProfesional() {
         return familiaProfesional;
     }
 
-    /** @return Nivel del ciclo (básico, medio o superior). */
+    /**
+     * Retorna el nivel del ciclo (básico, medio o superior).
+     *
+     * @return Nivel del ciclo (básico, medio o superior).
+     */
     public String getNivel() {
         return nivel;
     }
 
-    /** @return Número total de horas lectivas del ciclo. */
+    /**
+     * Retorna el número total de horas lectivas del ciclo.
+     *
+     * @return Número total de horas lectivas del ciclo.
+     */
     public int getHoras() {
         return horas;
     }
 
-    /** @return Año de publicación del currículum del ciclo. */
+    /**
+     * Retorna el año de publicación del currículum del ciclo.
+     *
+     * @return Año de publicación del currículum del ciclo.
+     */
     public int getAñoCurriculum() {
         return añoCurriculum;
     }
@@ -197,7 +224,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * Actualiza la denominación del ciclo tras validar que no esté vacía.
      *
      * @param denominacion Nueva denominación del ciclo.
-     * @throws IllegalArgumentException si la denominación es nula o vacía.
+     * @throws DenominacionVaciaException si la denominación es nula o vacía.
      */
     public void setDenominacion(String denominacion) throws DenominacionVaciaException {
         if (!Validadores.validarTextoNoVacio(denominacion)) {
@@ -211,7 +238,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * Actualiza la familia profesional tras validar que no esté vacía.
      *
      * @param familiaProfesional Nueva familia profesional.
-     * @throws IllegalArgumentException si es nula o vacía.
+     * @throws FamiliaVaciaException si la familia profesional es nula o vacía.
      */
     public void setFamiliaProfesional(String familiaProfesional) throws FamiliaVaciaException {
         if (!Validadores.validarTextoNoVacio(familiaProfesional)) {
@@ -225,7 +252,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * Actualiza el nivel del ciclo tras validar que no esté vacío.
      *
      * @param nivel Nuevo nivel del ciclo.
-     * @throws IllegalArgumentException si es nulo o vacío.
+     * @throws NivelVacioException si el nivel es nulo o vacío.
      */
     public void setNivel(String nivel) throws NivelVacioException {
         if (!Validadores.validarNivel(nivel)) {
@@ -239,7 +266,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * Actualiza el número de horas del ciclo tras validar que sea mayor que 0.
      *
      * @param horas Nuevas horas totales del ciclo.
-     * @throws IllegalArgumentException si las horas son 0 o negativas.
+     * @throws HorasMayor0Exception si las horas son 0 o negativas.
      */
     public void setHoras(int horas) throws HorasMayor0Exception {
         if (!Validadores.validarHorasCiclo(horas)) {
@@ -253,7 +280,7 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * Actualiza el año del currículum tras validar que esté en el rango [1900, 3000].
      *
      * @param añoCurriculum Nuevo año del currículum.
-     * @throws IllegalArgumentException si el año está fuera del rango válido.
+     * @throws AñoNoValidoException si el año está fuera del rango [1900, 3000].
      */
     public void setAñoCurriculum(int añoCurriculum) throws AñoNoValidoException {
         if (!Validadores.validarAñoCurriculum(añoCurriculum)) {
@@ -340,11 +367,10 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
     // ===================== MÉTODOS ===========================
     // =========================================================
     /**
-     * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados
-     * por codigo
+     * Compara dos ciclos por código para el orden natural en TreeSet.
      *
-     * @param otro
-     * @return
+     * @param otro Ciclo con el que comparar.
+     * @return Negativo si este ciclo tiene código menor, positivo si mayor, 0 si son iguales.
      */
     @Override
     public int compareTo(Ciclo otro) {
@@ -356,7 +382,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      *
      * @param linea Cadena con 6 campos: codigo;denominacion;familia;nivel;horas;anio_curriculo.
      * @return Ciclo construido con los datos de la línea.
-     * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
+     * @throws LineaInvalidaCicloException si la línea no tiene exactamente 6 campos.
+     * @throws CodigMayor0Exception si el código del ciclo es 0 o negativo.
      */
     public static Ciclo obtenerLineas(String linea) throws LineaInvalidaCicloException, CodigMayor0Exception {
         String[] partes = linea.split(";", -1);
@@ -405,6 +432,8 @@ public class Ciclo implements InterpolaridadDeDatos, Serializable, Comparable<Ci
      * Devuelve los módulos que pertenecen a este ciclo.
      *
      * La relación correcta está en Modulo.codigo_ciclo.
+     *
+     * @return Lista de módulos cuyo código_ciclo coincide con este ciclo.
      */
     public ArrayList<Modulo> obtenerModulosDelCiclo() {
         ArrayList<Modulo> modulosDelCiclo = new ArrayList<>();

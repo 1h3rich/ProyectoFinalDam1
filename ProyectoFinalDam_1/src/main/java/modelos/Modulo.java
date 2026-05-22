@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Representa un módulo formativo perteneciente a un ciclo.
  *
  * @author isard
  */
@@ -43,11 +44,12 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     /**
      * Creación manual de nuevo módulo.
      *
-     * @param codigo_ciclo
-     * @param nombre
-     * @param curso
-     * @param creditos_ects
-     * @param horas
+     * @param codigo_ciclo  Código del ciclo al que pertenece el módulo.
+     * @param nombre        Nombre del módulo.
+     * @param curso         Curso en que se imparte (p.ej. "primero", "segundo").
+     * @param creditos_ects Créditos ECTS asignados al módulo.
+     * @param horas         Horas lectivas del módulo.
+     * @throws CodigMayor0Exception si el código generado automáticamente es 0 o negativo.
      */
     public Modulo(int codigo_ciclo,
             String nombre,
@@ -90,12 +92,13 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     /**
      * Creación desde base de datos / fichero.
      *
-     * @param codigo
-     * @param codigo_ciclo
-     * @param nombre
-     * @param curso
-     * @param creditos_ects
-     * @param horas
+     * @param codigo        Código único del módulo (clave primaria).
+     * @param codigo_ciclo  Código del ciclo al que pertenece el módulo.
+     * @param nombre        Nombre del módulo.
+     * @param curso         Curso en que se imparte (p.ej. "primero", "segundo").
+     * @param creditos_ects Créditos ECTS asignados al módulo.
+     * @param horas         Horas lectivas del módulo.
+     * @throws CodigMayor0Exception si el código es 0 o negativo.
      */
     public Modulo(int codigo,
             int codigo_ciclo,
@@ -154,32 +157,56 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     // ===================== GETTERS ===========================
     // =========================================================
 
-    /** @return Código único del módulo (clave primaria). */
+    /**
+     * Retorna el código único del módulo (clave primaria).
+     *
+     * @return Código único del módulo (clave primaria).
+     */
     public int getCodigo() {
         return codigo;
     }
 
-    /** @return Código del ciclo al que pertenece el módulo (clave foránea). */
+    /**
+     * Retorna el código del ciclo al que pertenece el módulo.
+     *
+     * @return Código del ciclo al que pertenece el módulo (clave foránea).
+     */
     public int getCodigo_ciclo() {
         return codigo_ciclo;
     }
 
-    /** @return Nombre del módulo. */
+    /**
+     * Retorna el nombre del módulo.
+     *
+     * @return Nombre del módulo.
+     */
     public String getNombre() {
         return nombre;
     }
 
-    /** @return Curso en que se imparte el módulo (primero o segundo). */
+    /**
+     * Retorna el curso en que se imparte el módulo.
+     *
+     * @return Curso en que se imparte el módulo (primero o segundo).
+     */
     public String getCurso() {
         return curso;
     }
 
-    /** @return Créditos ECTS asignados al módulo. */
+    /**
+     * Retorna los créditos ECTS asignados al módulo.
+     *
+     * @return Créditos ECTS asignados al módulo.
+     */
     public double getCreditos_ects() {
         return creditos_ects;
     }
 
-    /** @return Número de horas lectivas del módulo. */
+    /**
+     * Retorna el número de horas lectivas del módulo.
+     *
+     * @return Número de horas lectivas del módulo.
+     */
     public int getHoras() {
         return horas;
     }
@@ -192,7 +219,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * Cambia el ciclo al que pertenece el módulo, validando que el código sea positivo.
      *
      * @param codigo_ciclo Nuevo código del ciclo.
-     * @throws IllegalArgumentException si el código es 0 o negativo.
+     * @throws CodigMayor0Exception si el código es 0 o negativo.
      */
     public void setCodigo_ciclo(int codigo_ciclo) throws CodigMayor0Exception {
         if (!Validadores.validarCodigoPositivo(codigo_ciclo)) {
@@ -206,7 +233,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * Actualiza el nombre del módulo tras validar que no esté vacío.
      *
      * @param nombre Nuevo nombre del módulo.
-     * @throws IllegalArgumentException si el nombre es nulo o vacío.
+     * @throws NombreVacioException si el nombre es nulo o vacío.
      */
     public void setNombre(String nombre) throws NombreVacioException {
         if (!Validadores.validarTextoNoVacio(nombre)) {
@@ -220,7 +247,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * Actualiza el curso del módulo tras validar que no esté vacío.
      *
      * @param curso Nuevo curso (p.ej. "primero", "segundo").
-     * @throws IllegalArgumentException si el curso es nulo o vacío.
+     * @throws CursoVacioException si el curso es nulo o vacío.
      */
     public void setCurso(String curso) throws CursoVacioException {
         if (!Validadores.validarCurso(curso)) {
@@ -234,7 +261,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * Actualiza los créditos ECTS del módulo tras validar que sean positivos.
      *
      * @param creditos_ects Nuevos créditos ECTS.
-     * @throws IllegalArgumentException si los créditos son 0 o negativos.
+     * @throws CreditosMayor0Exception si los créditos son 0 o negativos.
      */
     public void setCreditos_ects(double creditos_ects) throws CreditosMayor0Exception {
         if (!Validadores.validarCreditosEcts(creditos_ects)) {
@@ -248,7 +275,7 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * Actualiza las horas del módulo tras validar que sean estrictamente positivas.
      *
      * @param horas Nuevo número de horas lectivas.
-     * @throws IllegalArgumentException si las horas son 0 o negativas.
+     * @throws HorasMayor0Exception si las horas son 0 o negativas.
      */
     public void setHoras(int horas) throws HorasMayor0Exception {
         if (!Validadores.validarHorasModulo(horas)) {
@@ -338,8 +365,8 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      * Este metodo es para poder añadir datos al TreeSet, en este caso ordenados
      * por codigo
      *
-     * @param otro
-     * @return
+     * @param otro Módulo con el que se compara.
+     * @return Resultado negativo, cero o positivo según si este código es menor, igual o mayor.
      */
     @Override
     public int compareTo(Modulo otro) {
@@ -351,7 +378,8 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
      *
      * @param linea Cadena con 6 campos: codigo;codigo_ciclo;nombre;curso;creditos_ects;horas.
      * @return Módulo construido con los datos de la línea.
-     * @throws IllegalArgumentException si la línea no tiene exactamente 6 campos.
+     * @throws CodigMayor0Exception si el código de la línea es 0 o negativo.
+     * @throws LineaInvalidaModuloException si la línea no tiene exactamente 6 campos.
      */
     public static Modulo obtenerLineas(String linea) throws CodigMayor0Exception, LineaInvalidaModuloException {
         String[] partes = linea.split(";", -1);
@@ -526,13 +554,21 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
                 + horas;
     }
 
-    /** @return Cadena JSON con todos los campos del módulo. */
+    /**
+     * Serializa el módulo en formato JSON.
+     *
+     * @return Cadena JSON con todos los campos del módulo.
+     */
     @Override
     public String toJSON() {
         return new Gson().toJson(this);
     }
 
-    /** @return Cadena idéntica a {@link #toCSV()}. */
+    /**
+     * Serializa el módulo en formato TXT (mismo separador que CSV).
+     *
+     * @return Cadena idéntica a {@link #toCSV()}.
+     */
     @Override
     public String toTXT() {
         return codigo + ";"
@@ -547,7 +583,11 @@ public class Modulo implements InterpolaridadDeDatos, Serializable, Comparable<M
     // ===================== TO STRING =========================
     // =========================================================
 
-    /** @return Representación legible del módulo para depuración y logs. */
+    /**
+     * Retorna una representación legible del módulo para depuración y logs.
+     *
+     * @return Representación legible del módulo.
+     */
     @Override
     public String toString() {
         return "Modulo{"

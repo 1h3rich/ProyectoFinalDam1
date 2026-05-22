@@ -5,6 +5,7 @@
 package excepciones.Modulo;
 
 /**
+ * Se lanza cuando una línea CSV no tiene los campos necesarios para construir un Módulo.
  *
  * @author isard
  */

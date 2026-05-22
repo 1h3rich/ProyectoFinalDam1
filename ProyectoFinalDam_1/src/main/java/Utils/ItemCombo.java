@@ -25,7 +25,11 @@ public class ItemCombo {
         this.texto = texto;
     }
 
-    /** @return Identificador numérico asociado a este elemento. */
+    /**
+     * Retorna el identificador numérico asociado a este elemento.
+     *
+     * @return Identificador numérico asociado a este elemento.
+     */
     public int getId() {
         return id;
     }
