@@ -25,18 +25,14 @@ public class NoHagasClick extends javax.swing.JFrame {
     }
 
     private void mostrarUrl() {
-        javafx.embed.swing.JFXPanel fxPanel = new javafx.embed.swing.JFXPanel();
-
-        jPanelVideo.setLayout(new java.awt.BorderLayout());
-        jPanelVideo.add(fxPanel, java.awt.BorderLayout.CENTER);
-
-        javafx.application.Platform.runLater(() -> {
-            javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
-            webView.getEngine().load(URL);
-            javafx.scene.Scene scene = new javafx.scene.Scene(
-                    new javafx.scene.layout.StackPane(webView));
-            fxPanel.setScene(scene);
-        });
+        if (java.awt.Desktop.isDesktopSupported()) {
+            try {
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(URL));
+            } catch (java.io.IOException | java.net.URISyntaxException ex) {
+                logger.log(java.util.logging.Level.SEVERE, "No se pudo abrir el navegador", ex);
+            }
+        }
+        dispose();
     }
 
     /**
