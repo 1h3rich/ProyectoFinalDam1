@@ -29,6 +29,45 @@
                          (doclint:missing checks private fields in JDK 21 regardless of show level,
                           which conflicts with NetBeans GEN-BEGIN:variables auto-generated code) -->
                     <doclint>html,reference,syntax,accessibility</doclint>
+
+                    <!-- Títulos y metadatos -->
+                    <windowtitle>CRISS — Sistema de Gestión de Centro de Formación</windowtitle>
+                    <doctitle><![CDATA[<strong style="font-size:1.4em;letter-spacing:-0.02em">CRISS</strong>
+                        <span style="font-weight:400;color:#475569;font-size:0.75em;display:block;margin-top:4px">
+                            Sistema de Gestión de Centro de Formación &nbsp;&middot;&nbsp;
+                            Java 21 + Swing + MySQL &nbsp;&middot;&nbsp; DAM1 · 2026
+                        </span>]]></doctitle>
+                    <header><![CDATA[<span style="font-weight:800;color:#ffffff;font-size:15px;letter-spacing:-0.02em">CRISS</span>&nbsp;
+                        <span style="color:#64748b;font-size:11px">Sistema de Gestión de Centro de Formación</span>]]></header>
+                    <footer><![CDATA[<span style="color:#64748b;font-size:11px">&copy; 2026 isard &middot; DAM1 &middot; ProyectoFinalDam1</span>]]></footer>
+                    <bottom><![CDATA[<div style="text-align:center;color:#94a3b8;font-size:11px;padding:6px 0">
+                        Generado con Maven Javadoc Plugin 3.12 &middot; Java 21 &middot; 2026-05-31
+                    </div>]]></bottom>
+
+                    <!-- Página de resumen del proyecto -->
+                    <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
+
+                    <!-- Tema visual personalizado (añadido encima del CSS por defecto) -->
+                    <additionalJOptions>
+                        <additionalJOption>--add-stylesheet</additionalJOption>
+                        <additionalJOption>${project.basedir}/src/main/javadoc/stylesheet-custom.css</additionalJOption>
+                    </additionalJOptions>
+
+                    <!-- Mostrar miembros protegidos y públicos -->
+                    <show>protected</show>
+
+                    <!-- Incluir autor y versión en la salida -->
+                    <author>true</author>
+                    <version>true</version>
+                    <use>true</use>
+
+                    <!-- Directorio de salida dentro de Info/ (fuera de target/) -->
+                    <outputDirectory>${project.basedir}/Info/Javadoc</outputDirectory>
+                    <reportOutputDirectory>${project.basedir}/Info/Javadoc</reportOutputDirectory>
+
+                    <!-- Eliminar páginas opcionales para reducir archivos sueltos -->
+                    <nohelp>true</nohelp>
+                    <notree>true</notree>
                 </configuration>
             </plugin>
             <plugin>

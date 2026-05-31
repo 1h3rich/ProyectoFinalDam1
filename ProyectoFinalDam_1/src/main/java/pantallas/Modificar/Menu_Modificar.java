@@ -13,10 +13,15 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Ventana principal del módulo de modificación. Muestra botones para abrir
- * el formulario de cada entidad (Alumno, Ciclo, Módulo, Matrícula, LineaMatrícula).
+ * Menú de selección del módulo de modificación del sistema CRISS.
  *
- * @author rich
+ * <p>Presenta un botón por cada entidad modificable (Alumno, Ciclo, Módulo,
+ * Matrícula y Línea de Matrícula). Al pulsar un botón, se abre el formulario
+ * de edición correspondiente. Se abre desde {@link pantallas.PantallaPrincipal}
+ * y se cierra sin afectar a la ventana principal.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Menu_Modificar extends javax.swing.JFrame {
     

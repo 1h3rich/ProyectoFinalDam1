@@ -12,16 +12,25 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para crear una nueva matrícula asociada a un alumno. El
- * código del alumno se recibe del formulario anterior y no es editable; tras
- * insertar la matrícula, abre el formulario de creación de líneas de matrícula.
+ * Formulario Swing para crear una nueva matrícula asociada a un alumno.
  *
- * @author Rich
+ * <p>Recibe el código del alumno del formulario anterior ({@link CrearAlumno}) y lo
+ * muestra en un campo de solo lectura. El usuario introduce el año académico, elige
+ * el estado (JComboBox: "parcial", "completa", "anulada") e indica el importe.
+ * Los campos se validan con {@link Utils.Validadores} antes del {@code INSERT}. Tras
+ * insertar la matrícula, se añade a la lista de sesión y se abre automáticamente
+ * {@link CrearLineaMatricula} con el código de la nueva matrícula. El cierre solicita
+ * confirmación y, si el usuario acepta, cancela la transacción activa.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class CrearMatricula extends javax.swing.JFrame {
 
     /**
-     * Creates new form FormularioMatricula
+     * Inicializa el formulario de creación de matrícula para el alumno indicado,
+     * establece el código de alumno como no editable y configura el cierre con
+     * confirmación.
      *
      * @param idAlumno Código del alumno para el que se crea la matrícula.
      */

@@ -10,11 +10,18 @@ import servicios.BaseDeDatos.ConsultasEjercicios;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para ejecutar los nueve ejercicios SQL predefinidos.
- * Permite seleccionar un ejercicio, muestra su descripción y, al pulsar Actualizar,
- * solicita los parámetros necesarios y presenta el resultado en una tabla.
+ * Formulario Swing para ejecutar los nueve ejercicios SQL predefinidos del módulo de consultas.
  *
- * @author 1DAM
+ * <p>Muestra un JComboBox numerado del 1 al 9; al seleccionar un ejercicio, se actualiza
+ * un área de texto con la descripción de la consulta. Al pulsar "Actualizar" se solicitan
+ * mediante {@code JOptionPane} los parámetros necesarios (nivel, curso, año académico,
+ * denominación…) y se ejecuta la consulta correspondiente de
+ * {@link servicios.BaseDeDatos.ConsultasEjercicios}, mostrando el resultado en una JTable.
+ * Si no se puede conectar con la BD, el botón Actualizar se deshabilita. Se abre desde
+ * {@link SeleccionConsultas} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Ejercicios extends javax.swing.JFrame {
 
@@ -31,7 +38,8 @@ public class Ejercicios extends javax.swing.JFrame {
     };
 
     /**
-     * Creates new form Ejercicios
+     * Inicializa el formulario de ejercicios SQL, configura la ventana, actualiza
+     * la descripción inicial y comprueba la conexión con la BD.
      */
     public Ejercicios() {
         initComponents();

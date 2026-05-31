@@ -12,15 +12,21 @@ import java.awt.Dimension;
 
 /**
  * Formulario Swing para eliminar un alumno de la base de datos.
- * Busca alumnos por teléfono y correo, los muestra en una tabla y, tras
- * confirmar los datos, borra el alumno junto con sus matrículas y líneas de matrícula.
  *
- * @author Rich
+ * <p>El usuario introduce el teléfono y el correo del alumno. Al pulsar «Actualizar»,
+ * se ejecuta una consulta que muestra el alumno coincidente en una tabla. Una vez
+ * seleccionada la fila, el botón «Eliminar alumno» invoca una transacción que borra
+ * en cascada: primero las líneas de matrícula, luego las matrículas y finalmente el
+ * alumno. Si la transacción falla, se realiza rollback automático.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class EliminarAlumno extends javax.swing.JFrame {
 
     /**
-     * Creates new form FormularioAlumno
+     * Inicializa el formulario de eliminación de alumnos, configura la ventana
+     * y carga los datos iniciales de la tabla.
      */
     public EliminarAlumno() {
         initComponents();

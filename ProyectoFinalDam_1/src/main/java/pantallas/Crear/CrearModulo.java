@@ -14,15 +14,25 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para registrar un nuevo módulo formativo en la base de
- * datos. Puede usarse de forma autónoma o vinculado a un ciclo concreto; en ese
- * caso el código del ciclo se recibe por constructor y no es editable.
+ * Formulario Swing para registrar un nuevo módulo formativo en la base de datos.
  *
- * @author Rich
+ * <p>Dispone de dos constructores: uno sin argumentos (permite seleccionar el ciclo
+ * libremente mediante JComboBox) y otro que recibe el {@code idCiclo} del ciclo padre,
+ * preseleccionándolo y bloqueando el combo. También recoge nombre, curso (JComboBox
+ * "1" o "2"), créditos ECTS y horas. Los campos se validan con {@link Utils.Validadores}
+ * antes del {@code INSERT}. Al guardar se actualiza la lista de módulos en sesión y
+ * se regresa a {@link GestionarModulosCiclo}. El cierre solicita confirmación y cancela
+ * la transacción activa si el usuario acepta. Se abre desde
+ * {@link pantallas.PantallaPrincipal} o desde {@link GestionarModulosCiclo}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class CrearModulo extends javax.swing.JFrame {
 
+    /** Identificador del ciclo seleccionado en el combo; -1 si no hay selección válida. */
     private int idCicloSeleccionado = -1;
+    /** Mapa de etiqueta de ciclo a su código entero, para resolver la selección del combo. */
     private final HashMap<String, Integer> mapaCiclos = new HashMap<>();
 
     /**

@@ -14,15 +14,31 @@ import pantallas.Modificar.Menu_Modificar;
 import pantallas.Registro.Registro;
 
 /**
- * Ventana principal de la aplicación. Centraliza el acceso a todas las funcionalidades:
- * crear, modificar, borrar registros, consultas, exportación e importación de datos.
+ * Ventana principal del sistema CRISS — Centro de Formación.
  *
- * @author 1DAM
+ * <p>Hub de navegación que da acceso a todas las funcionalidades de la aplicación
+ * mediante botones agrupados por categoría:</p>
+ * <ul>
+ *   <li><b>Crear</b> — da de alta alumnos, ciclos y módulos.</li>
+ *   <li><b>Modificar</b> — edita registros existentes en la BD.</li>
+ *   <li><b>Borrar</b> — elimina registros con confirmación.</li>
+ *   <li><b>Consultas</b> — consultas simples y multitabla (9 ejercicios).</li>
+ *   <li><b>Guardar</b> — exporta datos a TXT/CSV/JSON/binario.</li>
+ *   <li><b>Cargar</b> — importa datos desde fichero a la BD.</li>
+ *   <li><b>Registro</b> — muestra los objetos insertados en esta sesión.</li>
+ *   <li><b>Créditos</b> — muestra los autores del proyecto.</li>
+ * </ul>
+ * <p>Se instancia y se hace visible desde {@link Main.ProyectoFinalDam1#main} al
+ * arrancar la aplicación, antes de establecer la conexión con la base de datos.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class PantallaPrincipal extends javax.swing.JFrame {
 
     /**
-     * Creates new form Pantalla
+     * Construye la ventana principal e inicializa los componentes Swing generados
+     * por el editor de formularios de NetBeans. Centra la ventana en la pantalla.
      */
     public PantallaPrincipal() {
         initComponents();   

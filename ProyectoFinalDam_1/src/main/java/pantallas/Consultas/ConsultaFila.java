@@ -13,18 +13,27 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para consultas unitabla filtradas por un parámetro.
- * Según la entidad elegida muestra un campo de teléfono, un combo de ciclos o uno de módulos
- * y, al pulsar Actualizar, carga los registros que coinciden con el filtro.
  *
- * @author 1DAM
+ * <p>Según la entidad seleccionada en el JComboBox principal, el formulario muestra
+ * el control de filtro adecuado: un campo de texto de teléfono para buscar Alumnos,
+ * un JComboBox de ciclos para filtrar Módulos por ciclo, o un JComboBox de módulos
+ * para filtrar Líneas de Matrícula. Al pulsar "Actualizar" se ejecuta la consulta SQL
+ * correspondiente y se muestran los resultados en una JTable con soporte de ordenación.
+ * Se abre desde {@link SeleccionConsultas} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ConsultaFila extends javax.swing.JFrame {
 
+    /** Tabla Swing que muestra los resultados de la consulta filtrada. */
     private JTable tabla;
+    /** Panel de desplazamiento que contiene la tabla de resultados. */
     private JScrollPane scrollPane;
 
     /**
-     * Creates new form ConsultaFila
+     * Inicializa el formulario de consultas filtradas, configura la ventana,
+     * inicializa la tabla de resultados y establece conexión con la BD.
      */
     public ConsultaFila() {
         initComponents();

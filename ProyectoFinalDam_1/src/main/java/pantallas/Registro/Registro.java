@@ -5,16 +5,24 @@
 package pantallas.Registro;
 
 /**
- * Pantalla de gestión de matrículas del centro de formación.
+ * Ventana de registro de datos insertados durante la sesión actual.
  *
- * @author rich
+ * <p>Muestra en pestañas separadas los objetos de cada entidad (alumnos, ciclos,
+ * módulos, matrículas y líneas de matrícula) que han sido creados en esta ejecución,
+ * recuperándolos de {@link Control.SesionDatos}. También presenta un resumen global
+ * con el total de registros insertados. Se abre de forma no modal desde
+ * {@link pantallas.PantallaPrincipal}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Registro extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Registro.class.getName());
 
     /**
-     * Creates new form Registro
+     * Inicializa el panel de registro, configura las pestañas y carga los datos
+     * actuales de sesión en las tablas correspondientes.
      */
     public Registro() {
         initComponents();

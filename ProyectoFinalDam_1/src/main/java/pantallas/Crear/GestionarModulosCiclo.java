@@ -12,18 +12,29 @@ import java.util.HashMap;
 
 /**
  * Formulario Swing para gestionar los módulos asociados a un ciclo durante su creación.
- * Permite añadir módulos existentes o crear nuevos, muestra un contador de módulos
- * añadidos y habilita el botón Finalizar cuando se alcanzan los cinco mínimos requeridos.
  *
- * @author Rich
+ * <p>Se abre automáticamente tras crear un ciclo en {@link CrearCiclo}. Muestra un
+ * JComboBox con todos los módulos disponibles en la BD para "Añadir módulo existente"
+ * (lo asocia al ciclo mediante un {@code UPDATE}), y un botón "Crear nuevo módulo"
+ * que abre {@link CrearModulo} con el ciclo preseleccionado. Un contador indica cuántos
+ * módulos se han añadido; el botón "Finalizar" (que confirma la transacción) permanece
+ * deshabilitado hasta que se alcancen los cinco módulos mínimos requeridos. El cierre
+ * solicita confirmación y, si el usuario acepta, cancela la transacción activa.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class GestionarModulosCiclo extends javax.swing.JFrame {
 
+    /** Código del ciclo al que se asociarán los módulos durante esta sesión. */
     private int idCiclo;
+    /** Mapa de etiqueta de módulo a su código entero, para resolver la selección del combo. */
     private HashMap<String, Integer> mapaModulos = new HashMap<>();
 
     /**
-     * Creates new form GestionarModulosCiclo
+     * Inicializa el formulario de gestión de módulos del ciclo indicado, configura
+     * los botones y el cierre con confirmación, carga los módulos disponibles en el
+     * combo y actualiza el contador inicial.
      *
      * @param idCiclo Código del ciclo al que se asociarán los módulos.
      */

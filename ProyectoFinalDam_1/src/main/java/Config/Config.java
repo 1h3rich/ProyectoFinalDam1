@@ -8,7 +8,7 @@ package Config;
  * Centraliza todos los parámetros de configuración de la aplicación:
  * credenciales de la base de datos y nombres base de los ficheros de exportación.
  *
- * @author 1DAM
+ * @author isard
  */
 public class Config {
 

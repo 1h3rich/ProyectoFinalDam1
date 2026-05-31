@@ -29,7 +29,7 @@ import servicios.Ficheros.GestionFicheros;
  *
  * Estados válidos: Activa, No activa.
  *
- * @author 1DAM
+ * @author isard
  */
 public class MenuMatricula {
 
@@ -702,6 +702,15 @@ public class MenuMatricula {
         };
     }
 
+    /**
+     * Importa matrículas desde un fichero TXT o CSV, insertando cada registro en la BD
+     * con el siguiente código disponible (ignora el código del fichero).
+     *
+     * @param formato   "TXT" para separador «;» o "CSV" para separador «:».
+     * @param rutaBase  Ruta base del fichero sin extensión.
+     * @return Número de matrículas insertadas correctamente.
+     * @throws Exception si el fichero no tiene exactamente 5 campos por línea.
+     */
     private static int importarMatriculasDesdeTxtCsv(String formato, String rutaBase) throws Exception {
         String extension = "CSV".equals(formato) ? ".csv" : ".txt";
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(rutaBase, extension);
@@ -740,6 +749,14 @@ public class MenuMatricula {
         return contador;
     }
 
+    /**
+     * Importa matrículas desde un fichero JSON (un objeto por línea), insertando cada
+     * registro en la BD con el siguiente código disponible.
+     *
+     * @param rutaBase Ruta base del fichero sin extensión {@code .json}.
+     * @return Número de matrículas insertadas correctamente.
+     * @throws Exception si la primera línea válida no representa una matrícula bien formada.
+     */
     private static int importarMatriculasDesdeJson(String rutaBase) throws Exception {
         ArrayList<String> lineas = GestionFicheros.leerJson(rutaBase);
 
@@ -779,6 +796,14 @@ public class MenuMatricula {
         return contador;
     }
 
+    /**
+     * Importa matrículas desde un fichero binario serializado ({@code .dat}),
+     * insertando cada registro en la BD con el siguiente código disponible.
+     *
+     * @param rutaBase Ruta base del fichero sin extensión {@code .dat}.
+     * @return Número de matrículas insertadas correctamente.
+     * @throws Exception si el fichero no contiene una colección de {@link modelos.Matricula}.
+     */
     private static int importarMatriculasDesdeBinario(String rutaBase) throws Exception {
         if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
             return 0;

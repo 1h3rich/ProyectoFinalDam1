@@ -8,9 +8,12 @@ import com.google.gson.JsonSerializer;
 import java.time.LocalDate;
 
 /**
- * Gson preconfigurado con adaptadores para java.time.LocalDate.
- * Serializa LocalDate como "YYYY-MM-DD" en lugar del objeto anidado
+ * Gson preconfigurado con adaptadores para {@code java.time.LocalDate}.
+ * Serializa {@code LocalDate} como {@code "YYYY-MM-DD"} en lugar del objeto anidado
  * que produce Gson por defecto, incompatible con Java 21.
+ *
+ * @author isard
+ * @version 1.0
  */
 public class GsonUtils {
 

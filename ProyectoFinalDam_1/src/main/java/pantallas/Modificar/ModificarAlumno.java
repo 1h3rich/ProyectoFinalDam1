@@ -18,14 +18,22 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para consultar y modificar los datos de un alumno existente.
- * Muestra la lista completa de alumnos en una tabla y carga el seleccionado en
- * los campos de edición.
  *
- * @author Rich
+ * <p>Muestra todos los alumnos en una tabla ordenada por nombre. Al seleccionar
+ * una fila, los datos del alumno se cargan en los campos de texto (nombre, correo,
+ * domicilio y teléfono). La fecha de nacimiento se muestra pero no es editable.
+ * Al pulsar "Guardar" se validan los datos mediante {@link Utils.Validadores},
+ * se ejecuta {@code UPDATE} en la BD y se actualiza la lista de alumnos en sesión.
+ * Se abre desde {@link Menu_Modificar} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ModificarAlumno extends javax.swing.JFrame {
 
+    /** Alumno actualmente seleccionado en la tabla y pendiente de guardar. */
     Alumno alumno;
+    /** Modelo de datos de la tabla de alumnos, sin celdas editables directamente. */
     private DefaultTableModel modeloTabla;
 
     /**

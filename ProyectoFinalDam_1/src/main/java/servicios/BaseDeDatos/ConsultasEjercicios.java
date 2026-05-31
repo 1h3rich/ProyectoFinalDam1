@@ -1,7 +1,15 @@
 package servicios.BaseDeDatos;
 
 /**
- * Sentencias SQL de los ejercicios de consulta multitabla predefinidos.
+ * Sentencias SQL de los nueve ejercicios de consulta multitabla predefinidos
+ * en el enunciado del proyecto.
+ *
+ * <p>Cada constante es un array donde el índice 0 contiene la sentencia SQL
+ * completa lista para ejecutar con {@code PreparedStatement}. Los parámetros de
+ * filtrado se sustituyen mediante marcadores {@code ?}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ConsultasEjercicios {
 

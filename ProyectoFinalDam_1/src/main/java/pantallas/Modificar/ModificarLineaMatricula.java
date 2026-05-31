@@ -14,14 +14,25 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para consultar y modificar líneas de matrícula existentes.
- * Muestra todas las líneas en una tabla y permite editar la repetición y calificaciones.
  *
- * @author Rich
+ * <p>Carga en una tabla todas las líneas de matrícula de la BD (código de matrícula,
+ * código de módulo, repetición y calificaciones primera y segunda). Al seleccionar
+ * una fila, los campos editables se rellenan con los valores actuales. Solo se
+ * pueden modificar la repetición y ambas calificaciones; la clave compuesta
+ * (cod_matricula + cod_modulo) es de solo lectura. Tras guardar, ofrece la opción
+ * de abrir también {@link ModificarMatricula} para editar la matrícula asociada.
+ * Se abre desde {@link Menu_Modificar} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ModificarLineaMatricula extends javax.swing.JFrame {
 
+    /** Código de matrícula de la línea actualmente seleccionada; -1 si no hay selección. */
     private int selectedCodMatricula = -1;
+    /** Código de módulo de la línea actualmente seleccionada; -1 si no hay selección. */
     private int selectedCodModulo = -1;
+    /** Modelo de datos de la tabla de líneas de matrícula, sin celdas editables directamente. */
     private DefaultTableModel modeloTabla;
 
     /**

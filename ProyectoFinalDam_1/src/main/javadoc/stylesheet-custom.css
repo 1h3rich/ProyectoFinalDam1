@@ -1,0 +1,697 @@
+/* ================================================================
+   CRISS — Custom JavaDoc Theme
+   Sistema de Gestión de Centro de Formación
+   ProyectoFinalDam1 · DAM1 · 2026
+   ================================================================ */
+
+/* ---- Override CSS variables ---- */
+:root {
+    /* Fonts */
+    --body-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Arial, sans-serif;
+    --block-font-family: Georgia, 'Times New Roman', serif;
+    --code-font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'DejaVu Sans Mono', monospace;
+    --body-font-size: 14px;
+    --code-font-size: 13px;
+
+    /* Text */
+    --body-text-color: #1e293b;
+    --block-text-color: #374151;
+
+    /* Backgrounds */
+    --body-background-color: #f8fafc;
+    --section-background-color: #f1f5f9;
+    --detail-background-color: #ffffff;
+
+    /* Navbar — dark navy */
+    --navbar-background-color: #0f172a;
+    --navbar-text-color: #cbd5e1;
+
+    /* Subnav */
+    --subnav-background-color: #1e293b;
+
+    /* Selected tab — vivid blue */
+    --selected-background-color: #2563eb;
+    --selected-text-color: #ffffff;
+    --selected-link-color: #ffffff;
+
+    /* Table rows */
+    --even-row-color: #ffffff;
+    --odd-row-color: #f8fafc;
+
+    /* Title */
+    --title-color: #0f172a;
+
+    /* Links */
+    --link-color: #2563eb;
+    --link-color-active: #1d4ed8;
+
+    /* Code/snippet blocks */
+    --snippet-background-color: #0f172a;
+    --snippet-text-color: #e2e8f0;
+    --snippet-highlight-color: #fbbf24;
+
+    /* Borders */
+    --border-color: #e2e8f0;
+    --table-border-color: #e2e8f0;
+
+    /* Search */
+    --search-input-background-color: #1e293b;
+    --search-input-text-color: #f1f5f9;
+    --search-input-placeholder-color: #64748b;
+    --search-tag-highlight-color: #fbbf24;
+
+    /* Copy button */
+    --copy-icon-brightness: 180%;
+    --copy-button-background-color-active: rgba(255,255,255,0.15);
+}
+
+/* ================================================================
+   GLOBAL
+   ================================================================ */
+
+body {
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+}
+
+a:link, a:visited {
+    transition: color 0.15s ease;
+}
+
+a[href]:hover, a[href]:focus {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+
+.top-nav {
+    background: var(--navbar-background-color) !important;
+    border-bottom: 1px solid #1e3a5f;
+    padding: 0 8px;
+}
+
+.bottom-nav {
+    background: var(--navbar-background-color) !important;
+    border-top: 1px solid #1e3a5f;
+}
+
+.top-nav ul.nav-list > li > a {
+    color: #94a3b8 !important;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    text-transform: uppercase;
+}
+
+.top-nav ul.nav-list > li > a:hover,
+.top-nav ul.nav-list > li > a:focus {
+    color: #ffffff !important;
+    background: rgba(255,255,255,0.08);
+    text-decoration: none;
+}
+
+.top-nav ul.nav-list > li.nav-bar-cell1-rev {
+    background: var(--selected-background-color);
+    border-radius: 6px;
+}
+
+.top-nav ul.nav-list > li.nav-bar-cell1-rev > a {
+    color: #ffffff !important;
+}
+
+/* Sub-nav (breadcrumb + class tabs) */
+.sub-nav {
+    background: #1e293b !important;
+    border-bottom: 1px solid #2d3f5a;
+    padding: 4px 12px;
+}
+
+.sub-nav .nav-list > li > a {
+    color: #94a3b8 !important;
+    font-size: 12px;
+    transition: color 0.15s;
+}
+
+.sub-nav .nav-list > li > a:hover {
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.sub-nav .nav-list > li.nav-bar-cell1-rev {
+    background: var(--selected-background-color);
+    border-radius: 4px;
+}
+
+.sub-nav .nav-list > li.nav-bar-cell1-rev > a {
+    color: #ffffff !important;
+}
+
+/* ================================================================
+   SEARCH BAR
+   ================================================================ */
+
+#search-input {
+    background: var(--search-input-background-color) !important;
+    color: var(--search-input-text-color) !important;
+    border: 1px solid #2d3f5a !important;
+    border-radius: 8px !important;
+    padding: 5px 12px !important;
+    font-size: 13px;
+    outline: none;
+    width: 260px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#search-input:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.25) !important;
+}
+
+#search-input::placeholder {
+    color: var(--search-input-placeholder-color);
+}
+
+/* ================================================================
+   PAGE HEADER (title area)
+   ================================================================ */
+
+.header {
+    padding: 24px 40px 16px;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.header h1.title {
+    color: var(--title-color);
+    font-size: 1.75em;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 4px;
+    border-left: 4px solid var(--selected-background-color);
+    padding-left: 14px;
+}
+
+.header h2, .header .sub-title {
+    color: #475569;
+    font-size: 1em;
+    font-weight: 400;
+    padding-left: 18px;
+}
+
+/* ================================================================
+   OVERVIEW PAGE
+   ================================================================ */
+
+.overview-summary .table-header, .summary-table .table-header {
+    background: var(--navbar-background-color) !important;
+    color: #e2e8f0 !important;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+}
+
+/* ================================================================
+   SUMMARY TABLES
+   ================================================================ */
+
+.summary-table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(15,23,42,0.06);
+    border: 1px solid var(--border-color) !important;
+    margin-bottom: 24px;
+}
+
+.summary-table tbody tr:hover > td,
+.summary-table tbody tr:hover > th {
+    background: #eff6ff !important;
+    transition: background 0.1s;
+}
+
+.col-first, .col-second, .col-last,
+.col-constructor-name, .col-deprecated-item-name, .col-summary-item-name {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.col-first code, .col-summary-item-name code {
+    font-weight: 600;
+}
+
+/* Caption header on summary tables */
+section.summary > ul > li > div.caption,
+.caption-index > caption {
+    background: var(--navbar-background-color) !important;
+    color: #e2e8f0 !important;
+    border-radius: 8px 8px 0 0;
+    padding: 10px 16px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 12px;
+    text-transform: uppercase;
+    border: none;
+}
+
+/* ================================================================
+   MEMBER DETAIL CARDS
+   ================================================================ */
+
+.member-details {
+    margin-top: 4px;
+}
+
+section.detail {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+section.detail:hover {
+    box-shadow: 0 3px 12px rgba(37,99,235,0.10);
+    border-color: #bfdbfe;
+}
+
+/* Method name heading */
+section.detail > h3 {
+    color: var(--title-color);
+    font-size: 1.05em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ================================================================
+   MEMBER SIGNATURE
+   ================================================================ */
+
+div.member-signature {
+    font-family: var(--code-font-family) !important;
+    background: #f0f4f8;
+    border-left: 3px solid var(--selected-background-color);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 16px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    line-height: 1.5;
+    color: #0f172a;
+}
+
+div.member-signature .return-type a {
+    color: #7c3aed !important;
+}
+
+div.member-signature .member-name {
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+div.member-signature .parameters {
+    color: #374151;
+}
+
+/* ================================================================
+   CODE BLOCKS
+   ================================================================ */
+
+pre {
+    background: #0f172a !important;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.55;
+    overflow-x: auto;
+    border: 1px solid #1e3a5f;
+}
+
+code:not(pre code) {
+    font-family: var(--code-font-family);
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.snippet-container {
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+    border: 1px solid #1e3a5f;
+}
+
+/* ================================================================
+   JAVADOC TAGS (@param, @return, @throws…)
+   ================================================================ */
+
+dl.notes {
+    margin: 12px 0 0;
+}
+
+dl.notes > dt {
+    font-weight: 700;
+    color: #1e40af;
+    text-transform: uppercase;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+dl.notes > dd {
+    margin-left: 18px;
+    color: var(--block-text-color);
+    line-height: 1.6;
+    margin-bottom: 4px;
+}
+
+/* Param names in bold */
+dl.notes > dd > code {
+    font-weight: 600;
+}
+
+/* ================================================================
+   INHERITED MEMBERS
+   ================================================================ */
+
+.inherited-list {
+    margin-bottom: 16px;
+}
+
+.inherited-list > h3 {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #475569;
+    border-left: 3px solid #cbd5e1;
+    padding-left: 10px;
+}
+
+/* ================================================================
+   SECTION CAPTIONS (Method Summary, Field Summary…)
+   ================================================================ */
+
+section.summary h2 {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--title-color);
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--selected-background-color);
+    padding-bottom: 6px;
+    display: inline-block;
+}
+
+/* ================================================================
+   DEPRECATION NOTICE
+   ================================================================ */
+
+.deprecation-block {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 16px;
+    color: #78350f;
+    margin: 8px 0;
+}
+
+/* ================================================================
+   INHERITANCE TREE
+   ================================================================ */
+
+ul.inheritance {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin: 8px 0;
+    font-family: var(--code-font-family);
+    font-size: 13px;
+}
+
+/* ================================================================
+   PACKAGE INDEX (overview-summary)
+   ================================================================ */
+
+.all-packages-table .col-first a,
+.packages-summary .col-first a {
+    font-weight: 600;
+    font-size: 13.5px;
+}
+
+.all-packages-table .col-second,
+.packages-summary .col-second {
+    color: #475569;
+}
+
+/* ================================================================
+   ANNOTATIONS
+   ================================================================ */
+
+.annotations {
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+/* ================================================================
+   COPY TO CLIPBOARD
+   ================================================================ */
+
+.copy-to-clipboard {
+    opacity: 0.6;
+    transition: opacity 0.15s, background 0.15s;
+    border-radius: 6px;
+}
+
+.copy-to-clipboard:hover {
+    opacity: 1;
+    background: rgba(37,99,235,0.12);
+}
+
+/* ================================================================
+   SCROLLBAR (Webkit)
+   ================================================================ */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ================================================================
+   FOCUS / ACCESSIBILITY
+   ================================================================ */
+
+:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+/* ================================================================
+   OVERVIEW PAGE — clases específicas de overview.html
+   ================================================================ */
+
+.criss-overview { max-width: 960px; margin: 0 auto; padding: 8px 0 32px; }
+
+.criss-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 32px;
+    color: #e2e8f0;
+}
+h1.criss-hero-title {
+    font-size: 2.2em;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    margin: 0 0 6px;
+    font-family: var(--body-font-family);
+    border: none;
+    padding: 0;
+}
+.criss-subtitle {
+    color: #94a3b8;
+    font-size: 1.05em;
+    margin: 0 0 18px;
+}
+.badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e2e8f0;
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+}
+.badge.blue  { background: rgba(37,99,235,0.4);  border-color: #3b82f6; }
+.badge.green { background: rgba(22,163,74,0.35); border-color: #4ade80; }
+.badge.amber { background: rgba(217,119,6,0.35); border-color: #fbbf24; }
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+.card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+}
+.card h3 {
+    font-size: 0.95em;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+.card ul {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    font-size: 13.5px;
+    line-height: 1.7;
+}
+.card ul li { margin-bottom: 2px; }
+
+.section-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: #0f172a;
+    border-left: 4px solid #2563eb;
+    padding-left: 14px;
+    margin: 32px 0 16px;
+}
+
+.pkg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(15,23,42,0.06);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 32px;
+}
+.pkg-table caption {
+    display: none;
+}
+.pkg-table th {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.pkg-table td {
+    padding: 9px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+}
+.pkg-table tr:last-child td { border-bottom: none; }
+.pkg-table tr:nth-child(even) td { background: #f8fafc; }
+.pkg-table tr:hover td { background: #eff6ff; }
+.pkg-table .pkg-name { font-family: monospace; font-weight: 700; color: #1d4ed8; white-space: nowrap; }
+.pkg-table .pkg-desc { color: #475569; }
+
+.arch-diagram {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 24px 28px;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 12.5px;
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    overflow-x: auto;
+}
+.arch-diagram .a-layer    { color: #e2e8f0; font-weight: 700; }
+.arch-diagram .a-modelos  { color: #4ade80; }
+.arch-diagram .a-servicios{ color: #60a5fa; }
+.arch-diagram .a-menus    { color: #f59e0b; }
+.arch-diagram .a-pantallas{ color: #f472b6; }
+.arch-diagram .a-utils    { color: #a78bfa; }
+
+.overview-footer {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12.5px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ================================================================
+   MISC IMPROVEMENTS
+   ================================================================ */
+
+/* Nicer horizontal rules */
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 20px 0;
+}
+
+/* Index-all page: letter groups */
+.index-letter-section-heading {
+    background: var(--navbar-background-color);
+    color: #e2e8f0;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+/* Table borders */
+table {
+    border-collapse: collapse;
+}
+
+/* Help page */
+.help-section {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+}

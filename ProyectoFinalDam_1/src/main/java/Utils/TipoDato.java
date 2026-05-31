@@ -8,7 +8,7 @@ package Utils;
  * Identifica el tipo de entidad del modelo sobre el que opera una pantalla o servicio.
  * Se usa para parametrizar operaciones genéricas de importación, exportación y visualización.
  *
- * @author Rich
+ * @author isard
  */
 public enum TipoDato {
     /** Entidad alumno. */

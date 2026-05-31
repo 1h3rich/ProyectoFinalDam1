@@ -5,17 +5,23 @@
 package pantallas.Eliminar;
 
 /**
- * Ventana de menú para el módulo de eliminación.
- * Ofrece acceso a los formularios de borrado de alumnos y ciclos.
+ * Menú de selección del módulo de eliminación del sistema CRISS.
  *
- * @author rich
+ * <p>Presenta tres botones que abren el formulario de borrado correspondiente:
+ * {@link pantallas.Eliminar.EliminarAlumno}, {@link pantallas.Eliminar.EliminarCiclo}
+ * y {@link pantallas.Eliminar.EliminarModulo}. Se abre desde
+ * {@link pantallas.PantallaPrincipal} y se cierra sin afectar a la ventana principal.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class MenuBorrar extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuBorrar.class.getName());
 
     /**
-     * Creates new form MenuBorrar
+     * Inicializa el menú de borrado y configura DISPOSE_ON_CLOSE para no cerrar
+     * la ventana principal al cerrarse.
      */
     public MenuBorrar() {
         initComponents();

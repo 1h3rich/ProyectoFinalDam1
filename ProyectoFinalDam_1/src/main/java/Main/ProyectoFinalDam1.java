@@ -16,7 +16,7 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
  * El Scanner se crea aquí y se comparte con todos los submenús para evitar que
  * se cierre prematuramente.
  *
- * @author 1DAM
+ * @author isard
  */
 public class ProyectoFinalDam1 {
 

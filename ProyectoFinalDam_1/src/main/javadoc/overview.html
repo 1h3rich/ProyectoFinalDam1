@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"/></head>
+<body>
+
+<div class="criss-overview">
+
+  <!-- HERO -->
+  <div class="criss-hero">
+    <h1 class="criss-hero-title">CRISS</h1>
+    <p class="criss-subtitle">Centro de Recursos e Informaci&oacute;n para Sistemas de Servicios</p>
+    <span class="badge blue">Java 21</span>
+    <span class="badge blue">Swing</span>
+    <span class="badge green">MySQL</span>
+    <span class="badge">Maven</span>
+    <span class="badge amber">DAM1 &middot; 2026</span>
+  </div>
+
+  <!-- DESCRIPCIÓN -->
+  <p>
+    <strong>CRISS</strong> es un sistema de gesti&oacute;n integral para un Centro de Formaci&oacute;n Profesional.
+    Permite administrar el ciclo de vida completo de las entidades educativas &mdash;alumnos, ciclos formativos,
+    m&oacute;dulos, matr&iacute;culas y l&iacute;neas de matr&iacute;cula&mdash; tanto desde una interfaz de
+    <strong>consola interactiva</strong> como desde una <strong>interfaz gr&aacute;fica Swing</strong>.
+  </p>
+  <p>
+    La aplicaci&oacute;n combina persistencia en base de datos MySQL con soporte de importaci&oacute;n/exportaci&oacute;n a
+    m&uacute;ltiples formatos de fichero (CSV, JSON, TXT, Binario), procesamiento concurrente con
+    <code>SwingWorker</code>, y un sistema de sesi&oacute;n en memoria basado en colecciones Java.
+  </p>
+
+  <!-- TARJETAS DE CARACTERÍSTICAS -->
+  <h2 class="section-title">Caracter&iacute;sticas</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>&#128101; Gesti&oacute;n de Alumnos</h3>
+      <ul>
+        <li>Alta, baja y modificaci&oacute;n de alumnos</li>
+        <li>Validaci&oacute;n de tel&eacute;fono, correo y fecha</li>
+        <li>Consulta individual y global</li>
+        <li>Importaci&oacute;n/exportaci&oacute;n multiformato</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>&#127979; Ciclos y M&oacute;dulos</h3>
+      <ul>
+        <li>Gesti&oacute;n de ciclos formativos y familias</li>
+        <li>M&oacute;dulos con cr&eacute;ditos ECTS y horas</li>
+        <li>Eliminaci&oacute;n en cascada</li>
+        <li>Gesti&oacute;n gr&aacute;fica de m&oacute;dulos del ciclo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>&#128196; Matr&iacute;culas</h3>
+      <ul>
+        <li>Matr&iacute;culas por a&ntilde;o acad&eacute;mico</li>
+        <li>L&iacute;neas de matr&iacute;cula con calificaciones</li>
+        <li>Control de repetici&oacute;n de m&oacute;dulo</li>
+        <li>Consulta de matr&iacute;culas del alumno</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>&#128190; Persistencia</h3>
+      <ul>
+        <li>Base de datos MySQL con transacciones</li>
+        <li>Sesi&oacute;n en memoria (TreeSet / ArrayList)</li>
+        <li>Exportaci&oacute;n a CSV, JSON, TXT, Binario</li>
+        <li>Importaci&oacute;n concurrente (SwingWorker)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>&#128269; Consultas SQL</h3>
+      <ul>
+        <li>9 ejercicios de consulta multitabla</li>
+        <li>Visor de resultados en tabla gr&aacute;fica</li>
+        <li>Consulta filtrada por par&aacute;metro</li>
+        <li>Consulta completa por entidad</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>&#9881; Infraestructura</h3>
+      <ul>
+        <li>22 excepciones de dominio personalizadas</li>
+        <li>Validadores reutilizables</li>
+        <li>Registro de sesi&oacute;n auditado</li>
+        <li>Pantalla de cr&eacute;ditos y no-click</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ARQUITECTURA -->
+  <h2 class="section-title">Arquitectura en capas</h2>
+
+  <div class="arch-diagram">
+    <span>+-------------------------------------------------------------+</span><br/>
+    <span class="a-layer">|  PUNTO DE ENTRADA                                             |</span><br/>
+    <span>|    </span><span class="a-utils">Main.ProyectoFinalDam1</span><span>  ---&gt;  men&uacute; principal por consola       |</span><br/>
+    <span>+-------------------------------------------------------------+</span><br/>
+    <span class="a-layer">|  VISTA - CONSOLA                       VISTA - SWING          |</span><br/>
+    <span>|    </span><span class="a-menus">Menus.MenuAlumno</span><span>             </span><span class="a-pantallas">pantallas.PantallaPrincipal   |</span><br/>
+    <span>|    </span><span class="a-menus">Menus.MenuCiclo</span><span>              </span><span class="a-pantallas">pantallas.Crear*              |</span><br/>
+    <span>|    </span><span class="a-menus">Menus.MenuModulo</span><span>             </span><span class="a-pantallas">pantallas.Modificar*          |</span><br/>
+    <span>|    </span><span class="a-menus">Menus.MenuMatricula</span><span>          </span><span class="a-pantallas">pantallas.Eliminar*           |</span><br/>
+    <span>|    </span><span class="a-menus">Menus.MenuLineaMatricula</span><span>     </span><span class="a-pantallas">pantallas.Consulta*           |</span><br/>
+    <span>|    </span><span class="a-menus">Menus.MenuConsultas</span><span>          </span><span class="a-pantallas">pantallas.Concurrencia.*      |</span><br/>
+    <span>+-------------------------------------------------------------+</span><br/>
+    <span class="a-layer">|  SERVICIOS                                                    |</span><br/>
+    <span>|    </span><span class="a-servicios">GestionBaseDeDatos</span><span>  ---&gt;  JDBC + transacciones              |</span><br/>
+    <span>|    </span><span class="a-servicios">SesionDatos</span><span>         ---&gt;  cach&eacute; en memoria                  |</span><br/>
+    <span>|    </span><span class="a-servicios">GestionFicheros</span><span>     ---&gt;  I/O ficheros multiformato         |</span><br/>
+    <span>+-------------------------------------------------------------+</span><br/>
+    <span class="a-layer">|  MODELOS                                                      |</span><br/>
+    <span>|    </span><span class="a-modelos">Alumno  Ciclo  Modulo  Matricula  LineaMatricula             |</span><br/>
+    <span>|    implements  InterpolaridadDeDatos, Serializable, Comparable |</span><br/>
+    <span>+-------------------------------------------------------------+</span><br/>
+    <span class="a-layer">|  INFRAESTRUCTURA                                              |</span><br/>
+    <span>|    </span><span class="a-utils">Config</span><span>  </span><span class="a-utils">Utils.Validadores</span><span>  </span><span class="a-utils">excepciones.*</span><span>  (x22)            |</span><br/>
+    <span>+-------------------------------------------------------------+</span>
+  </div>
+
+  <!-- TABLA DE PAQUETES -->
+  <h2 class="section-title">Paquetes</h2>
+
+  <table class="pkg-table">
+    <caption>Descripci&oacute;n de paquetes del proyecto CRISS</caption>
+    <thead>
+      <tr>
+        <th>Paquete</th>
+        <th>Contenido</th>
+        <th>Clases</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="pkg-name">modelos</td>
+        <td class="pkg-desc">Entidades de dominio: <code>Alumno</code>, <code>Ciclo</code>, <code>Modulo</code>, <code>Matricula</code>, <code>LineaMatricula</code>.
+          Implementan <code>InterpolaridadDeDatos</code>, <code>Serializable</code> y <code>Comparable&lt;T&gt;</code>.</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">interfaces</td>
+        <td class="pkg-desc">Contrato de serializaci&oacute;n multiformato: <code>InterpolaridadDeDatos</code> define 11 m&eacute;todos
+          de exportaci&oacute;n e importaci&oacute;n (CSV, JSON, TXT, Binario).</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">servicios</td>
+        <td class="pkg-desc"><code>GestionBaseDeDatos</code> (JDBC + transacciones), <code>SesionDatos</code> (cach&eacute; Singleton),
+          <code>GestionFicheros</code> (I/O), <code>ConsultasSQL</code> y <code>ConsultasEjercicios</code>.</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">Menus</td>
+        <td class="pkg-desc">Men&uacute;s de consola interactivos para cada entidad del sistema y para las consultas.
+          Gestionan el flujo de entrada del usuario por teclado.</td>
+        <td>6</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">pantallas</td>
+        <td class="pkg-desc">Interfaces gr&aacute;ficas Swing: creaci&oacute;n, modificaci&oacute;n, eliminaci&oacute;n, consulta,
+          concurrencia (importaci&oacute;n/exportaci&oacute;n), registro de sesi&oacute;n y cr&eacute;ditos.</td>
+        <td>28</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">Control</td>
+        <td class="pkg-desc">Controlador de interfaz gr&aacute;fica que act&uacute;a como hub de navegaci&oacute;n entre pantallas Swing.</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">excepciones</td>
+        <td class="pkg-desc">22 excepciones de dominio personalizadas (<code>AlumnoVacioException</code>, <code>FechaNoValidaException</code>,
+          <code>TelefonoInvalidoException</code>, etc.) para validaci&oacute;n de entidades.</td>
+        <td>22</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">Utils</td>
+        <td class="pkg-desc"><code>Validadores</code> con m&eacute;todos de validaci&oacute;n reutilizables, <code>ItemCombo</code> para JComboBox,
+          <code>TipoDato</code> y <code>GsonUtils</code> para serializaci&oacute;n JSON.</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">Config</td>
+        <td class="pkg-desc">Clase de constantes est&aacute;ticas: cadena de conexi&oacute;n MySQL, credenciales
+          y rutas de ficheros de exportaci&oacute;n/importaci&oacute;n por entidad.</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td class="pkg-name">Main</td>
+        <td class="pkg-desc">Punto de entrada. Inicializa la conexi&oacute;n a base de datos, carga los datos en sesi&oacute;n
+          y lanza el men&uacute; principal o la interfaz gr&aacute;fica.</td>
+        <td>1</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TECNOLOGÍAS -->
+  <h2 class="section-title">Tecnolog&iacute;as</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>Java 21</h3>
+      <ul>
+        <li>Collections: TreeSet, ArrayList, LinkedHashMap</li>
+        <li>Concurrencia: SwingWorker, ExecutorService</li>
+        <li>java.io / java.nio para ficheros</li>
+        <li>Generics y Comparable&lt;T&gt;</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Swing (javax.swing)</h3>
+      <ul>
+        <li>JFrame, JPanel, JTable, JComboBox</li>
+        <li>DefaultTableModel para resultados SQL</li>
+        <li>SwingUtilities.invokeLater</li>
+        <li>Dise&ntilde;ado con NetBeans GUI Builder</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>MySQL + JDBC</h3>
+      <ul>
+        <li>Conector MySQL JDBC 8.x</li>
+        <li>Transacciones (commit/rollback)</li>
+        <li>PreparedStatement contra SQL injection</li>
+        <li>Esquema: alumnos, ciclos, modulos, matriculas</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Maven</h3>
+      <ul>
+        <li>maven-compiler-plugin (Java 21)</li>
+        <li>maven-shade-plugin (fat JAR ejecutable)</li>
+        <li>maven-javadoc-plugin 3.12</li>
+        <li>Gson 2.x para serializaci&oacute;n JSON</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="overview-footer">
+    ProyectoFinalDam1 &mdash; CRISS &middot; 1DAM &middot; 2026 &middot; isard
+  </p>
+
+</div>
+</body>
+</html>

@@ -13,16 +13,24 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Formulario Swing para registrar un nuevo alumno en la base de datos. Recoge
- * nombre, correo, fecha de nacimiento, domicilio y teléfono; tras insertar el
- * alumno, abre automáticamente el formulario de creación de matrícula.
+ * Formulario Swing para registrar un nuevo alumno en la base de datos.
  *
- * @author Rich
+ * <p>Recoge nombre, correo, fecha de nacimiento (formato AAAA-MM-DD), domicilio
+ * (formato "TipoVía Nombre Número, Localidad, Provincia") y teléfono (9 dígitos).
+ * Todos los campos se validan con {@link Utils.Validadores} antes de ejecutar el
+ * {@code INSERT}. Tras insertar el alumno correctamente, se añade a la lista de
+ * sesión y se abre automáticamente {@link CrearMatricula} con el código del nuevo
+ * alumno. El cierre de ventana solicita confirmación y, si el usuario acepta,
+ * cancela la transacción activa. Se abre desde {@link pantallas.PantallaPrincipal}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class CrearAlumno extends javax.swing.JFrame {
 
     /**
-     * Creates new form FormularioAlumno
+     * Inicializa el formulario de creación de alumnos, centra la ventana y
+     * registra el listener de confirmación de cierre.
      */
     public CrearAlumno() {
         initComponents();

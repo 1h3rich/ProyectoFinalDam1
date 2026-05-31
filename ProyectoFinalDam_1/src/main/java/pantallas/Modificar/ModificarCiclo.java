@@ -23,17 +23,25 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para modificar un ciclo formativo existente.
- * Recibe el ciclo a editar en el constructor y carga sus datos y módulos automáticamente.
  *
- * @author Rich
+ * <p>Dispone de dos constructores: uno sin argumentos (para uso genérico) y otro
+ * que recibe el {@link modelos.Ciclo} a editar, carga sus datos en los campos de texto
+ * y muestra en una tabla los módulos asociados al ciclo. El nivel se elige mediante
+ * {@code JComboBox} con opciones "basico", "medio" y "superior". El código es de
+ * solo lectura para evitar cambios accidentales de PK. Al pulsar "Guardar cambios"
+ * se validan los datos con {@link Utils.Validadores}, se persisten en la BD con
+ * {@link servicios.BaseDeDatos.GestionBaseDeDatos#actualizarFila} y se actualiza
+ * la lista de ciclos en sesión. Se abre desde {@link Menu_Modificar} y se cierra
+ * con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ModificarCiclo extends javax.swing.JFrame {
 
+    /** Ciclo formativo actualmente cargado en el formulario y pendiente de persistir. */
     private Ciclo ciclo;
 
-    /**
-     * Creates new form FormularioCiclo
-     */
     /**
      * Abre el formulario vacío de modificación de ciclos sin ningún ciclo preseleccionado.
      * El campo código se muestra bloqueado para evitar ediciones accidentales.

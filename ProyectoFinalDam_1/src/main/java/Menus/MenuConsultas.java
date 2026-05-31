@@ -11,7 +11,7 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
  * algunas de las cuales solicitan parámetros al usuario (nivel de ciclo,
  * curso de módulo, año académico, denominación de ciclo).
  *
- * @author 1DAM
+ * @author isard
  */
 public class MenuConsultas {
 

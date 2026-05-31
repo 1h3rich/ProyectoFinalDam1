@@ -13,18 +13,27 @@ import servicios.BaseDeDatos.*;
 
 /**
  * Formulario Swing para consultas multitabla completas.
- * Permite seleccionar una entidad en un JComboBox y muestra todos sus registros
- * en una tabla con soporte de ordenación.
  *
- * @author 1DAM
+ * <p>Permite seleccionar la entidad a consultar mediante un JComboBox (Alumnos,
+ * Ciclos, Módulos, Matrículas, Líneas de Matrícula). Al cambiar la selección se
+ * lanza automáticamente la consulta correspondiente en la BD y se muestran todos
+ * los registros en una JTable con soporte de ordenación por columnas. Se establece
+ * conexión con la BD en el constructor; si falla, el combo queda deshabilitado.
+ * Se abre desde {@link SeleccionConsultas} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ConsultaCompleta extends javax.swing.JFrame {
 
+    /** Tabla Swing que muestra los resultados de la consulta seleccionada. */
     private JTable tabla;
+    /** Panel de desplazamiento que contiene la tabla de resultados. */
     private JScrollPane scrollPane;
 
     /**
-     * Creates new form ConsultaCompleta
+     * Inicializa el formulario de consultas completas, configura la ventana,
+     * inicializa la tabla de resultados y establece conexión con la BD.
      */
     public ConsultaCompleta() {
         initComponents();

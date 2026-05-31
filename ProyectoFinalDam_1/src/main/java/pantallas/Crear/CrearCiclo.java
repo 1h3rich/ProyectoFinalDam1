@@ -13,15 +13,24 @@ import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
  * Formulario Swing para registrar un nuevo ciclo formativo en la base de datos.
- * Recoge denominación, familia profesional, nivel, horas y año curricular;
- * tras insertar el ciclo, abre el formulario de gestión de módulos del ciclo creado.
  *
- * @author Rich
+ * <p>Recoge denominación, familia profesional, nivel (JComboBox: "basico", "medio",
+ * "superior"), número de horas (entero positivo) y año curricular. Todos los campos
+ * se validan con {@link Utils.Validadores} antes de ejecutar el {@code INSERT}.
+ * Tras insertar el ciclo, se añade a la lista de sesión y se abre automáticamente
+ * {@link GestionarModulosCiclo} para asociar módulos al nuevo ciclo. El cierre de
+ * ventana solicita confirmación y, si el usuario acepta, cancela la transacción
+ * activa. Se abre desde {@link pantallas.PantallaPrincipal}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class CrearCiclo extends javax.swing.JFrame {
 
     /**
-     * Creates new form FormularioCiclo
+     * Inicializa el formulario de creación de ciclos, centra la ventana y llama
+     * a {@link #configurarVentana()} para aplicar título, cierre con confirmación
+     * y modelo del combo de niveles.
      */
     public CrearCiclo() {
         initComponents();

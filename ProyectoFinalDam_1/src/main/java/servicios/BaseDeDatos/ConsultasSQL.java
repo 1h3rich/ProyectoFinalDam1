@@ -5,7 +5,7 @@ package servicios.BaseDeDatos;
  * Cada constante es un array donde el índice 0 es la sentencia SQL y los
  * siguientes son los nombres de columna a mostrar.
  *
- * @author 1DAM
+ * @author isard
  */
 public class ConsultasSQL {
 

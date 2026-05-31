@@ -14,14 +14,26 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para modificar una matrícula existente.
- * Muestra la lista de alumnos y, al seleccionar uno, carga su matrícula más reciente para editarla.
  *
- * @author Rich
+ * <p>Muestra una tabla con todos los alumnos (código, nombre y teléfono). Al
+ * seleccionar un alumno, se consulta su matrícula más reciente (la de mayor
+ * código) y se cargan el año académico, el estado y el importe en los campos
+ * del formulario. El estado se elige mediante {@code JComboBox} con las opciones
+ * "parcial", "completa" y "anulada". Al pulsar "Siguiente" se validan los datos
+ * con {@link Utils.Validadores}, se ejecuta {@code UPDATE} en la BD y se actualiza
+ * la lista de matrículas en sesión. Se abre desde {@link Menu_Modificar} y se
+ * cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ModificarMatricula extends javax.swing.JFrame {
 
+    /** Código de la matrícula actualmente seleccionada; -1 si no hay selección. */
     private int selectedMatriculaCodigo = -1;
+    /** Código del alumno cuya matrícula está cargada; -1 si no hay selección. */
     private int selectedCodigoAlumno = -1;
+    /** Modelo de datos de la tabla de alumnos, sin celdas editables directamente. */
     private DefaultTableModel modeloTablaAlumnos;
 
     /**

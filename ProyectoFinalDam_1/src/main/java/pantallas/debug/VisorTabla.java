@@ -23,14 +23,21 @@ import servicios.BaseDeDatos.ConsultasSQL;
 import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
- * Ventana de depuración que muestra resultados de consultas SQL en una JTable.
+ * Ventana de depuración para visualizar cualquier tabla de la base de datos.
+ *
+ * <p>Muestra los resultados de consultas SELECT en una {@code JTable} con soporte de
+ * ordenación por columna y doble clic para ver el detalle de la fila seleccionada.
+ * No forma parte del flujo normal de usuario; se invoca desde entornos de desarrollo
+ * para verificar el estado de la BD.</p>
  *
  * @author isard
+ * @version 1.0
  */
 public class VisorTabla extends javax.swing.JFrame {
 
     /**
-     * Creates new form VisorTabla
+     * Construye el visor de tabla e inicializa los componentes Swing.
+     * La ventana se centra en la pantalla y puede cerrarse sin cerrar la aplicación.
      */
     public VisorTabla() {
         initComponents();

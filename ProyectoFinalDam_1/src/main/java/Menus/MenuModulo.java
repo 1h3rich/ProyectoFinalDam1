@@ -28,7 +28,7 @@ import servicios.Ficheros.GestionFicheros;
  * Incluye operaciones CRUD, exportación/importación de ficheros
  * y visualización de datos insertados durante la sesión.
  *
- * @author 1DAM
+ * @author isard
  */
 public class MenuModulo {
 
@@ -704,6 +704,15 @@ public class MenuModulo {
         };
     }
 
+    /**
+     * Importa módulos desde un fichero TXT o CSV, insertando cada registro en la BD
+     * con el siguiente código disponible (ignora el código del fichero).
+     *
+     * @param formato   "TXT" para separador «;» o "CSV" para separador «:».
+     * @param rutaBase  Ruta base del fichero sin extensión.
+     * @return Número de módulos insertados correctamente.
+     * @throws Exception si el fichero no tiene exactamente 6 campos por línea.
+     */
     private static int importarModulosDesdeTxtCsv(String formato, String rutaBase) throws Exception {
         String extension = "CSV".equals(formato) ? ".csv" : ".txt";
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(rutaBase, extension);
@@ -742,6 +751,14 @@ public class MenuModulo {
         return contador;
     }
 
+    /**
+     * Importa módulos desde un fichero JSON (un objeto por línea), insertando cada
+     * registro en la BD con el siguiente código disponible.
+     *
+     * @param rutaBase Ruta base del fichero sin extensión {@code .json}.
+     * @return Número de módulos insertados correctamente.
+     * @throws Exception si la primera línea válida no representa un módulo bien formado.
+     */
     private static int importarModulosDesdeJson(String rutaBase) throws Exception {
         ArrayList<String> lineas = GestionFicheros.leerJson(rutaBase);
 
@@ -782,6 +799,14 @@ public class MenuModulo {
         return contador;
     }
 
+    /**
+     * Importa módulos desde un fichero binario serializado ({@code .dat}),
+     * insertando cada registro en la BD con el siguiente código disponible.
+     *
+     * @param rutaBase Ruta base del fichero sin extensión {@code .dat}.
+     * @return Número de módulos insertados correctamente.
+     * @throws Exception si el fichero no contiene una colección de {@link modelos.Modulo}.
+     */
     private static int importarModulosDesdeBinario(String rutaBase) throws Exception {
         if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
             return 0;

@@ -7,7 +7,7 @@ package excepciones;
 /**
  * Excepción genérica de la aplicación para errores de negocio no contemplados por excepciones específicas.
  *
- * @author 1DAM
+ * @author isard
  */
 public class ErrorGenerico extends Exception{
 

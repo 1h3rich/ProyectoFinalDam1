@@ -34,7 +34,7 @@ import servicios.Ficheros.GestionFicheros;
  * Las calificaciones se introducen como valores entre 0.0 y 10.0. Si aún no hay
  * calificación, el usuario puede introducir 0.0.
  *
- * @author 1DAM
+ * @author isard
  */
 public class MenuLineaMatricula {
 
@@ -758,6 +758,15 @@ public class MenuLineaMatricula {
         };
     }
 
+    /**
+     * Importa líneas de matrícula desde un fichero TXT o CSV, insertando cada
+     * registro en la BD (la clave es compuesta, se inserta tal cual del fichero).
+     *
+     * @param formato   "TXT" para separador «;» o "CSV" para separador «:».
+     * @param rutaBase  Ruta base del fichero sin extensión.
+     * @return Número de líneas insertadas correctamente.
+     * @throws Exception si el fichero no tiene exactamente 5 campos por línea.
+     */
     private static int importarLineasDesdeTxtCsv(String formato, String rutaBase) throws Exception {
         String extension = "CSV".equals(formato) ? ".csv" : ".txt";
         ArrayList<String> lineas = GestionFicheros.leerTxtCsv(rutaBase, extension);
@@ -796,6 +805,14 @@ public class MenuLineaMatricula {
         return contador;
     }
 
+    /**
+     * Importa líneas de matrícula desde un fichero JSON (un objeto por línea),
+     * insertando cada registro directamente con los códigos del fichero.
+     *
+     * @param rutaBase Ruta base del fichero sin extensión {@code .json}.
+     * @return Número de líneas insertadas correctamente.
+     * @throws Exception si la primera línea válida no representa una línea de matrícula bien formada.
+     */
     private static int importarLineasDesdeJson(String rutaBase) throws Exception {
         ArrayList<String> lineas = GestionFicheros.leerJson(rutaBase);
 
@@ -835,6 +852,14 @@ public class MenuLineaMatricula {
         return contador;
     }
 
+    /**
+     * Importa líneas de matrícula desde un fichero binario serializado ({@code .dat}),
+     * insertando cada registro directamente con los códigos del fichero.
+     *
+     * @param rutaBase Ruta base del fichero sin extensión {@code .dat}.
+     * @return Número de líneas insertadas correctamente.
+     * @throws Exception si el fichero no contiene una colección de {@link modelos.LineaMatricula}.
+     */
     private static int importarLineasDesdeBinario(String rutaBase) throws Exception {
         if (!Validadores.comprobarFicheroLectura(rutaBase, ".dat")) {
             return 0;

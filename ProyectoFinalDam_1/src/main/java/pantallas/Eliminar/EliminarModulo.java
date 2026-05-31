@@ -14,10 +14,16 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para eliminar un módulo de un ciclo formativo.
- * Permite seleccionar el ciclo, luego el módulo, y elimina el módulo
- * junto con sus líneas de matrícula asociadas (CASCADE en BD).
  *
- * @author Rich
+ * <p>La selección se realiza en dos pasos: primero se elige el ciclo en un
+ * JComboBox, lo que carga los módulos de ese ciclo en un segundo JComboBox;
+ * luego se selecciona el módulo a eliminar. Al confirmar, invoca
+ * {@link servicios.BaseDeDatos.GestionBaseDeDatos#eliminarModuloPorCodigo} que
+ * elimina el módulo y, por el constraint CASCADE de la BD, también borra las
+ * líneas de matrícula asociadas.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class EliminarModulo extends javax.swing.JFrame {
 
@@ -28,7 +34,8 @@ public class EliminarModulo extends javax.swing.JFrame {
     private HashMap<String, Integer> mapaModulos = new HashMap<>();
 
     /**
-     * Creates new form FormularioCiclo
+     * Inicializa el formulario de eliminación de módulos, configura la ventana
+     * y carga los ciclos disponibles en el primer combo.
      */
     public EliminarModulo() {
         initComponents();

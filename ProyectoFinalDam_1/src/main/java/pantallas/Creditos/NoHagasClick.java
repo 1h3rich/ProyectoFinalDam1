@@ -5,9 +5,15 @@
 package pantallas.Creditos;
 
 /**
- * Pantalla oculta con contenido sorpresa (easter egg).
+ * Easter egg de la aplicación CRISS.
  *
- * @author rich
+ * <p>Formulario que se abre al pulsar el botón trampa de {@link pantallas.Creditos.Creditos}.
+ * Al construirse, intenta abrir la URL {@value #URL} en el navegador predeterminado del
+ * sistema mediante {@code java.awt.Desktop}. Si el escritorio no está disponible, la
+ * ventana se descarta sin hacer nada visible. No pertenece al flujo normal de usuario.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class NoHagasClick extends javax.swing.JFrame {
     

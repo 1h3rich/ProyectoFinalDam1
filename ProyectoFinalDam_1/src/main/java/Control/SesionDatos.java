@@ -33,7 +33,7 @@ import modelos.Modulo;
  * = new Alumno(id, nombre, fecha, domicilio, telefono, correo);
  * SesionDatos.registrarAlumno(a); }
  *
- * @author 1DAM
+ * @author isard
  */
 public class SesionDatos {
 

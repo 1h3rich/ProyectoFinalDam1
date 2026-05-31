@@ -8,13 +8,24 @@ import Menus.MenuModulo;
 import javax.swing.JOptionPane;
 
 /**
- * Pantalla de importación de datos desde ficheros al sistema.
+ * Formulario Swing para importar datos desde fichero a la base de datos.
+ *
+ * <p>Permite seleccionar la entidad a importar en un JComboBox y el formato del
+ * fichero de entrada (TXT, CSV, JSON o binario serializado) mediante cuatro botones.
+ * Incluye un checkbox «Otro» que habilita un JTextField para especificar una ruta
+ * personalizada en lugar de la ruta por defecto definida en {@link Config.Config}.
+ * Valida la estructura del fichero antes de insertar y muestra en un JOptionPane
+ * el número de registros importados o el error producido.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Importar extends javax.swing.JFrame {
     
 
     /**
-     * Creates new form Importar
+     * Inicializa el formulario de importación, centra la ventana y carga las
+     * entidades disponibles en el combo de selección.
      */
     public Importar() {
         initComponents();
@@ -199,6 +210,14 @@ public class Importar extends javax.swing.JFrame {
     // Lógica de importación
     // -------------------------------------------------------------------------
 
+    /**
+     * Coordina la importación: resuelve la ruta (por defecto o personalizada),
+     * detecta el formato si se usa ruta personalizada y muestra el resultado en
+     * un {@code JOptionPane}.
+     *
+     * @param entidad Nombre de la entidad a importar ("TODO", "ALUMNADO", etc.).
+     * @param formato Formato seleccionado por el botón pulsado ("TXT", "CSV", "JSON" o "BINARIO").
+     */
     private void ejecutarImportacion(String entidad, String formato) {
         String ruta = jTextField1.getText().trim();
 
@@ -247,6 +266,12 @@ public class Importar extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Infiere el formato de importación a partir de la extensión del fichero.
+     *
+     * @param ruta Ruta completa del fichero con extensión.
+     * @return "CSV", "TXT", "JSON" o "BINARIO" según la extensión; {@code null} si no se reconoce.
+     */
     private String detectarFormatoPorExtension(String ruta) {
         if (ruta.endsWith(".csv"))  return "CSV";
         if (ruta.endsWith(".txt"))  return "TXT";
@@ -255,11 +280,27 @@ public class Importar extends javax.swing.JFrame {
         return null;
     }
 
+    /**
+     * Elimina la extensión de una ruta de fichero para obtener la ruta base.
+     *
+     * @param ruta Ruta completa del fichero (con extensión).
+     * @return Ruta sin la extensión final; la ruta original si no contiene punto.
+     */
     private String quitarExtension(String ruta) {
         int posicion = ruta.lastIndexOf('.');
         return posicion > 0 ? ruta.substring(0, posicion) : ruta;
     }
 
+    /**
+     * Delega la importación a {@link #importarTodo} o {@link #importarUna} según
+     * si la entidad seleccionada es "TODO" o una concreta.
+     *
+     * @param entidad  Entidad a importar ("TODO" o una entidad concreta).
+     * @param formato  Formato del fichero de entrada.
+     * @param rutaBase Ruta base sin extensión, o {@code null} para usar la ruta por defecto.
+     * @return Total de registros importados.
+     * @throws Exception si el fichero tiene un formato incorrecto o la entidad no es reconocida.
+     */
     private int importarEntidad(String entidad, String formato, String rutaBase) throws Exception {
         if ("TODO".equals(entidad)) {
             return importarTodo(formato);
@@ -267,6 +308,14 @@ public class Importar extends javax.swing.JFrame {
         return importarUna(entidad, formato, rutaBase);
     }
 
+    /**
+     * Importa todas las entidades en orden (Ciclo → Módulo → Alumno → Matrícula →
+     * LineaMatrícula) usando las rutas por defecto.
+     *
+     * @param formato Formato del fichero de entrada.
+     * @return Total de registros importados entre todas las entidades.
+     * @throws Exception si alguna entidad falla durante la importación.
+     */
     private int importarTodo(String formato) throws Exception {
         int total = 0;
         total += MenuCiclo.importar(formato);
@@ -277,6 +326,15 @@ public class Importar extends javax.swing.JFrame {
         return total;
     }
 
+    /**
+     * Importa una única entidad usando la ruta por defecto o la ruta personalizada.
+     *
+     * @param entidad  Entidad a importar ("ALUMNADO", "CICLOS", "MODULOS", "MATRICULAS" o "LINEA MATRICULA").
+     * @param formato  Formato del fichero de entrada.
+     * @param rutaBase Ruta base sin extensión, o {@code null} para usar la ruta por defecto.
+     * @return Número de registros importados.
+     * @throws Exception si la entidad no es reconocida o el fichero tiene formato incorrecto.
+     */
     private int importarUna(String entidad, String formato, String rutaBase) throws Exception {
         if (rutaBase != null) {
             return switch (entidad) {

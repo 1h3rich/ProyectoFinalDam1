@@ -5,16 +5,23 @@
 package pantallas.Creditos;
 
 /**
- * Pantalla de créditos de la aplicación.
+ * Ventana de créditos de la aplicación CRISS.
  *
- * @author rich
+ * <p>Muestra los nombres de los autores del proyecto. Incluye un botón trampa
+ * con la etiqueta «No hagas click» que, al pulsarlo, abre
+ * {@link pantallas.Creditos.NoHagasClick} — un easter egg que lanza el navegador
+ * predeterminado con el vídeo «Never Gonna Give You Up». Se abre de forma no
+ * modal desde {@link pantallas.PantallaPrincipal}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Creditos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Creditos.class.getName());
 
     /**
-     * Creates new form Creditos
+     * Inicializa el formulario de créditos y configura DISPOSE_ON_CLOSE.
      */
     public Creditos() {
         initComponents();

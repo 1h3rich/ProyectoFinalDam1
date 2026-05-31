@@ -16,7 +16,7 @@ import modelos.*;
  * métodos para CRUD, consultas y obtención de modelos de tabla para componentes
  * Swing.
  *
- * @author 1DAM
+ * @author isard
  */
 public class GestionBaseDeDatos {
 

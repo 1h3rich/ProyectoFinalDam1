@@ -7,7 +7,7 @@ package Utils;
 /**
  * Elemento para poblar un JComboBox asociando un identificador numérico con el texto visible.
  *
- * @author Rich
+ * @author isard
  */
 public class ItemCombo {
 

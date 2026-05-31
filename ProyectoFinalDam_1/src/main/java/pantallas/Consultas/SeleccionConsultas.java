@@ -7,15 +7,22 @@ package pantallas.Consultas;
 import javax.swing.JOptionPane;
 
 /**
- * Menú de selección del módulo de consultas.
- * Permite navegar a las consultas unitabla, multitabla o a los ejercicios SQL.
+ * Menú de selección del módulo de consultas del sistema CRISS.
  *
- * @author Rich
+ * <p>Presenta tres botones que abren el formulario de consulta correspondiente:
+ * {@link ConsultaFila} (consultas unitabla con filtro), {@link ConsultaCompleta}
+ * (consultas multitabla sin filtro) y {@link Ejercicios} (los nueve ejercicios SQL
+ * predefinidos). El cierre de esta ventana solicita confirmación al usuario.
+ * Se abre desde {@link pantallas.PantallaPrincipal} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class SeleccionConsultas extends javax.swing.JFrame {
 
     /**
-     * Creates new form SeleccionConsultas
+     * Inicializa el menú de consultas, centra la ventana y registra el listener
+     * de confirmación de cierre.
      */
     public SeleccionConsultas() {
         initComponents();

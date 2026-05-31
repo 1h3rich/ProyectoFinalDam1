@@ -291,12 +291,18 @@ public class Alumno implements InterpolaridadDeDatos, Serializable, Comparable<A
     // =========================================================
     
     /**
-     * Valida que los datos estén introducidos correctamente.
-     * @param nombre
-     * @param fechaNacimiento
-     * @param domicilio
-     * @param telefono
-     * @param correo 
+     * Valida todos los campos de un alumno antes de asignarlos.
+     *
+     * @param nombre          Nombre completo del alumno (no puede ser nulo ni vacío).
+     * @param fechaNacimiento Fecha de nacimiento (no puede ser futura).
+     * @param domicilio       Domicilio postal (no puede ser nulo ni vacío).
+     * @param telefono        Teléfono de contacto (debe tener exactamente 9 dígitos).
+     * @param correo          Correo electrónico (debe tener formato usuario@dominio.ext).
+     * @throws AlumnoVacioException     si el nombre es nulo o vacío.
+     * @throws FechaNoValidaException   si la fecha es nula o posterior a hoy.
+     * @throws DomicilioVacioException  si el domicilio es nulo o vacío.
+     * @throws TelefonoInvalidoException si el teléfono no tiene exactamente 9 dígitos.
+     * @throws CorreoNoValidoException  si el correo no tiene un formato válido.
      */
     private static void validarDatos(String nombre,
                                      LocalDate fechaNacimiento,

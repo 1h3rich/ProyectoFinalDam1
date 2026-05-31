@@ -12,15 +12,21 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para eliminar un ciclo formativo de la base de datos.
- * Muestra todos los ciclos en una tabla y, tras confirmación, elimina el seleccionado
- * junto con sus módulos y las líneas de matrícula asociadas.
  *
- * @author Rich
+ * <p>Muestra todos los ciclos en una tabla con soporte de selección de fila. Al pulsar
+ * el botón de eliminar, se pide confirmación mediante {@code JOptionPane} y se ejecuta
+ * la transacción que borra en cascada: líneas de matrícula de los módulos del ciclo,
+ * módulos del ciclo y finalmente el propio ciclo. Si alguna operación falla, se realiza
+ * rollback automático.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class EliminarCiclo extends javax.swing.JFrame {
 
     /**
-     * Creates new form FormularioCiclo
+     * Inicializa el formulario de eliminación de ciclos, configura la ventana
+     * y carga todos los ciclos en la tabla.
      */
     public EliminarCiclo() {
         initComponents();

@@ -20,16 +20,24 @@ import servicios.BaseDeDatos.GestionBaseDeDatos;
 
 /**
  * Formulario Swing para modificar un módulo formativo existente.
- * Recibe el módulo a editar en el constructor y carga sus datos automáticamente.
  *
- * @author Rich
+ * <p>Dispone de dos constructores: uno sin argumentos (para uso genérico) y otro
+ * que recibe el {@link modelos.Modulo} a editar y precarga sus campos (nombre, curso,
+ * créditos ECTS, horas y código de ciclo). El código de ciclo es de solo lectura
+ * para evitar reasignaciones de módulo entre ciclos. El curso se selecciona con
+ * {@code JComboBox} ("1" o "2"). Al pulsar "Modificar Modulo" se validan los datos
+ * con {@link Utils.Validadores}, se persisten con
+ * {@link servicios.BaseDeDatos.GestionBaseDeDatos#actualizarFila} y se actualiza
+ * la lista de módulos en sesión. Se abre desde {@link Menu_Modificar} o desde
+ * {@link ModificarCiclo} y se cierra con DISPOSE_ON_CLOSE.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class ModificarModulo extends javax.swing.JFrame {
 
+    /** Módulo formativo actualmente cargado en el formulario y pendiente de persistir. */
     private Modulo modulo;
-    /**
-     * Creates new form FormularioModul
-     */
     /**
      * Abre el formulario vacío de modificación de módulos sin ningún módulo preseleccionado.
      * El campo código de ciclo se bloquea para impedir reasignaciones de ciclo desde este formulario.

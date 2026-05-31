@@ -5,14 +5,19 @@
 package pantallas.debug;
 
 /**
- * Ventana de depuración para pruebas de componentes Swing.
+ * Ventana de pruebas de componentes Swing para uso interno en desarrollo.
  *
- * @author 1DAM
+ * <p>Banco de pruebas que contiene un {@code JFileChooser} y otros componentes
+ * experimentales utilizados durante el desarrollo de la aplicación. No forma
+ * parte del flujo de usuario final.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Pruebas extends javax.swing.JFrame {
 
     /**
-     * Creates new form Pruebas
+     * Construye el formulario de pruebas e inicializa los componentes Swing.
      */
     public Pruebas() {
         initComponents();

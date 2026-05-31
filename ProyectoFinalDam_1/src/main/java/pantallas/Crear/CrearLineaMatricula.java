@@ -15,24 +15,38 @@ import modelos.LineaMatricula;
 import servicios.BaseDeDatos.ConsultasSQL;
 
 /**
- * Formulario Swing para añadir líneas de matrícula (módulos) a una matrícula
- * existente. Permite seleccionar un ciclo, introducir repetición y
- * calificaciones, e insertar tantos módulos como se desee antes de confirmar la
- * transacción.
+ * Formulario Swing para añadir líneas de matrícula (módulos) a una matrícula existente.
  *
- * @author Rich
+ * <p>Recibe el código de matrícula del formulario anterior ({@link CrearMatricula}).
+ * El usuario selecciona un ciclo en un primer JComboBox; al cambiar la selección,
+ * se carga automáticamente un segundo JComboBox con los módulos del ciclo elegido.
+ * Opcionalmente se introduce la repetición (obligatoria) y las calificaciones primera
+ * y segunda (opcionales, valor 0 si se dejan en blanco). Se pueden añadir tantos
+ * módulos como se quiera antes de pulsar "Finalizar", que confirma la transacción.
+ * Los módulos añadidos se muestran en una tabla de resumen. El cierre solicita
+ * confirmación y, si el usuario acepta, cancela la transacción activa.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class CrearLineaMatricula extends javax.swing.JFrame {
 
+    /** Código de la matrícula a la que se añaden los módulos; se recibe en el constructor. */
     private int idMatricula = -1;
+    /** Código del ciclo actualmente seleccionado en el primer combo; -1 si no hay selección. */
     private int idCicloSeleccionado = -1;
+    /** Código del módulo actualmente seleccionado en el segundo combo; -1 si no hay selección. */
     private int idModuloSeleccionado = -1;
 
+    /** Mapa de etiqueta de ciclo a su código entero, para resolver la selección del combo. */
     private final HashMap<String, Integer> mapaCiclos = new HashMap<>();
+    /** Mapa de etiqueta de módulo a su código entero, para resolver la selección del combo. */
     private final HashMap<String, Integer> mapaModulos = new HashMap<>();
 
     /**
-     * Creates new form FormularioLineaMatriucla
+     * Inicializa el formulario de creación de líneas de matrícula para la matrícula
+     * indicada, configura la tabla de resumen, carga los ciclos disponibles y
+     * establece el cierre con confirmación.
      *
      * @param idMatricula Código de la matrícula a la que se añaden módulos.
      */

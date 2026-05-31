@@ -12,17 +12,29 @@ import Menus.MenuModulo;
 import javax.swing.JOptionPane;
 
 /**
- * Formulario Swing para exportar los datos en sesión a distintos formatos de fichero
- * (CSV, TXT, JSON, Binario). Permite seleccionar la entidad a exportar mediante un JComboBox.
- * Tras escribir el fichero, sincroniza los mismos datos con la BD para garantizar
- * persistencia aunque el fichero se pierda.
+ * Formulario Swing para exportar todos los registros de una entidad a fichero.
  *
- * @author 1DAM
+ * <p>Carga previamente la entidad seleccionada desde la base de datos para garantizar
+ * que el fichero de salida contenga datos actualizados, no solo los de la sesión actual.
+ * Admite cuatro formatos de exportación seleccionables mediante botones:</p>
+ * <ul>
+ *   <li><b>TXT</b> — separador «;», extensión {@code .txt}.</li>
+ *   <li><b>CSV</b> — separador «:», extensión {@code .csv}.</li>
+ *   <li><b>JSON</b> — un objeto JSON por línea, extensión {@code .json}.</li>
+ *   <li><b>BINARIO</b> — colección Java serializada, extensión {@code .dat}.</li>
+ * </ul>
+ * <p>La entidad a exportar se selecciona en un JComboBox con las opciones: Alumno,
+ * Ciclo, Módulo, Matrícula y Línea de Matrícula. Muestra el número de registros
+ * exportados mediante {@code JOptionPane}.</p>
+ *
+ * @author isard
+ * @version 1.0
  */
 public class Exportar extends javax.swing.JFrame {
 
     /**
-     * Creates new form Guardar
+     * Inicializa el formulario de exportación, precarga los datos de sesión desde
+     * la BD y configura DISPOSE_ON_CLOSE.
      */
     public Exportar() {
         initComponents();
@@ -165,6 +177,13 @@ public class Exportar extends javax.swing.JFrame {
     // =================== LÓGICA DE EXPORTACIÓN ===============
     // =========================================================
 
+    /**
+     * Lanza la exportación de la entidad (o de todas si {@code tabla} es "TODO")
+     * al formato indicado y muestra el resultado en un {@code JOptionPane}.
+     *
+     * @param tabla  Nombre de la entidad seleccionada en el combo ("TODO", "ALUMNADO", etc.).
+     * @param formato Formato de exportación: "TXT", "CSV", "JSON" o "BINARIO".
+     */
     private void ejecutarExportacion(String tabla, String formato) {
         try {
             if ("TODO".equals(tabla)) {
@@ -185,6 +204,15 @@ public class Exportar extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Delega la exportación de una entidad concreta al método estático
+     * correspondiente de su menú.
+     *
+     * @param tabla  Nombre normalizado de la entidad ("ALUMNADO", "CICLOS", etc.).
+     * @param formato Formato de exportación: "TXT", "CSV", "JSON" o "BINARIO".
+     * @return Número de registros exportados.
+     * @throws IllegalArgumentException si {@code tabla} no es reconocida.
+     */
     private int exportarEntidad(String tabla, String formato) {
         return switch (tabla) {
             case "ALUMNADO"        -> MenuAlumno.exportar(formato);

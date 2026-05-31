@@ -11,7 +11,7 @@ import java.time.LocalDate;
 /**
  * Colección de métodos estáticos de validación usados en todo el dominio.
  *
- * @author Rich
+ * @author isard
  */
 public class Validadores {
 
